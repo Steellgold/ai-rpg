@@ -1,5 +1,8 @@
+"use client";
+
 import { useEffect, useRef } from "react";
 import { Renderer, Program, Mesh, Color, Triangle } from "ogl";
+import { useTheme } from "next-themes";
 
 const VERT = `#version 300 es
 in vec2 position;
@@ -102,7 +105,6 @@ void main() {
   float auroraAlpha = smoothstep(midPoint - uBlend * 0.5, midPoint + uBlend * 0.5, intensity);
   
   vec3 auroraColor = intensity * rampColor;
-  
   fragColor = vec4(auroraColor * auroraAlpha, auroraAlpha);
 }
 `;
@@ -116,6 +118,10 @@ interface AuroraProps {
 }
 
 export default function Aurora(props: AuroraProps) {
+  const { theme, setTheme } = useTheme();
+  if (theme === "light") return <></>;
+
+
   const {
     colorStops = ["#00d8ff", "#7cff67", "#00d8ff"],
     amplitude = 1.0,
