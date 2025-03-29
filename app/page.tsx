@@ -28,7 +28,6 @@ const Page = () => {
       aurora: ["#1a254f", "#1b274d", "#233161", "#16264d", "#2f9dd8"]
     },
     {
-      // Propre histoire du joueur, c'est lui qui donne le prompt à l'IA et sa lui fait une histoire pour le RPG 
       title: "Workbench",
       description: "Let your imagination run wild with AI-generated stories.",
       content: "Create your own adventures and characters with the power of AI.",
@@ -36,7 +35,7 @@ const Page = () => {
       image: "/workbench.jpg",
       players: "1",
       // 
-      aurora: ["#887159", "#352a21", "#d9dbd6", "#372d25", "#8a979e"]
+      aurora: ["#12121E", "#d0d0d0", "#020202", "#505050"]
     }
   ];
 
@@ -58,16 +57,6 @@ const Page = () => {
           <Glitch>{t("Title")}</Glitch>
         </h1>
         <p className="text-lg">{t("Description")}</p>
-
-        <div className="mt-4 flex gap-2">
-          <Button variant={"outline"}>
-            {t("Buttons.LearnMore")}
-          </Button>
-
-          <Button>
-            {t("Buttons.GetStarted")}
-          </Button>
-        </div>
 
         <div className="mt-8 flex flex-wrap justify-center gap-4">
           {histories.map((history, index) => (
