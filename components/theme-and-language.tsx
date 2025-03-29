@@ -9,6 +9,7 @@ import { useTranslations } from "next-intl"
 import { useLanguageStore } from "@/lib/hooks/use-lang"
 import { useRouter } from "next/navigation"
 import { Skeleton } from "./ui/skeleton"
+import { cn } from "@/lib/utils"
 
 type Language = {
   code: string
@@ -41,12 +42,15 @@ export const ThemeLanguageSwitcher = () => {
   }
 
   return (
-    <div className="flex items-center bg-background rounded-md border border-input overflow-hidden"> {/* rounded-full */}
+    <div className={"flex items-center rounded-md border bg-background dark:bg-transparent border-input text-black overflow-hidden"}>
       <Button
         variant="ghost"
         size="icon"
         onClick={toggleTheme}
-        className="rounded-l-md rounded-r-none h-9 w-9 border-r border-border"
+        className={cn(
+          "rounded-l-md rounded-r-none h-9 w-9 border-r border-border",
+          "dark:backdrop-blur-sm dark:bg-white/5 dark:text-white dark:hover:bg-white/10 dark:transition dark:duration-200 dark:ease-in-out"
+        )}
       >
         {theme === "dark" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
         <span className="sr-only">Toggle theme</span>
@@ -54,7 +58,9 @@ export const ThemeLanguageSwitcher = () => {
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="rounded-r-md rounded-l-none h-9 px-3 flex items-center gap-1 font-normal">
+          <Button variant="ghost" className={cn("rounded-r-md rounded-l-none h-9 px-3 flex items-center gap-1 font-normal",
+            "dark:backdrop-blur-sm dark:bg-white/5 dark:text-white dark:hover:bg-white/10 dark:transition dark:duration-200 dark:ease-in-out"
+          )}>
             <Globe className="h-3.5 w-3.5 mr-1 opacity-70" />
             {/* {currentLanguage.name} */}
             <ChevronDown className="h-3.5 w-3.5 opacity-70" />
