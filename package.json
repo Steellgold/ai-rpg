@@ -7,7 +7,6 @@
     "build": "prisma generate && prisma migrate deploy && next build",
     "start": "next start",
     "lint": "next lint",
-
     "auth:generate": "pnpx @better-auth/cli@latest generate --config lib/auth/auth.ts",
     "auth:migrate": "pnpx @better-auth/cli@latest migrate --config lib/auth/auth.ts"
   },
@@ -16,7 +15,7 @@
     "@radix-ui/react-label": "^2.1.2",
     "@radix-ui/react-select": "^2.1.6",
     "@radix-ui/react-slot": "^1.1.2",
-    "better-auth": "^1.2.3",
+    "@supabase/ssr": "^0.6.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.13",

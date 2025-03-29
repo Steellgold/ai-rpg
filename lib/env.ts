@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 const zEnv = z.object({
-  BETTER_AUTH_SECRET: z.string(),
-  BETTER_AUTH_URL: z.string(),
+  NEXT_PUBLIC_SUPABASE_URL: z.string(),
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string(),
   DATABASE_URL: z.string(),
 });
 
