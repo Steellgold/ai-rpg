@@ -7,8 +7,7 @@ import "./globals.css";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import { Toaster } from "sonner";
-import { ThemeSwitcher } from "@/components/ui/theme-switcher";
-import { LanguageSelector } from "@/components/language-selector";
+import { ThemeLanguageSwitcher } from "@/components/theme-and-language";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -41,8 +40,7 @@ const Layout: AsyncComponent<PropsWithChildren> = async({ children }) => {
             <Toaster richColors />
 
             <div className="absolute right-4 bottom-4 flex flex-row items-center space-x-1">
-              <ThemeSwitcher />
-              <LanguageSelector />
+              <ThemeLanguageSwitcher />
             </div>
           </NextIntlClientProvider>          
         </ThemeProvider>
