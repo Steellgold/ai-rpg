@@ -8,6 +8,11 @@
       "LearnMore": "Learn More",
       "WriteNow": "Continue to Editor",
       "PlayNow": "Play Now"
+    },
+    
+    "Login": {
+      "Why": "You need an account to start a new adventure.",
+      "Button": "Login"
     }
   },
   "LanguageSelector": {

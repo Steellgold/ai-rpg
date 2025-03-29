@@ -8,6 +8,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import { Toaster } from "sonner";
 import { ThemeLanguageSwitcher } from "@/components/theme-and-language";
+import { Navbar } from "@/components/navbar";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -35,13 +36,11 @@ const Layout: AsyncComponent<PropsWithChildren> = async({ children }) => {
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <NextIntlClientProvider messages={messages}>
+            <Navbar />
+
             {children}
             
             <Toaster richColors />
-
-            <div className="absolute right-4 bottom-4 flex flex-row items-center space-x-1">
-              <ThemeLanguageSwitcher />
-            </div>
           </NextIntlClientProvider>          
         </ThemeProvider>
       </body>

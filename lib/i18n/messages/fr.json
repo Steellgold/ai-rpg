@@ -8,6 +8,11 @@
       "LearnMore": "En savoir plus",
       "WriteNow": "Continuer vers l'Éditeur",
       "PlayNow": "Jouer maintenant"
+    },
+    
+    "Login": {
+      "Why": "Vous avez besoins d'un compte pour commencer une nouvelle aventure.",
+      "Button": "Se connecter"
     }
   },
   "LanguageSelector": {
