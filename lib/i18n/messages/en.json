@@ -1,7 +1,7 @@
 {
   "Page": {
-    "Title": "Hello, World!",
-    "Description": "This is an template for a new NextJS project with i18n support."
+    "Title": "Chronicles of Destiny",
+    "Description": "This is a simple example of a web application"
   },
   "LanguageSelector": {
     "Placeholder": "Select a language",
