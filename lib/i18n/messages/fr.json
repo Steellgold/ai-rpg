@@ -1,7 +1,14 @@
 {
   "Page": {
-    "Title": "Bonjour, le monde !",
-    "Description": "Ceci est un modèle pour un nouveau projet NextJS avec prise en charge de l'i18n."
+    "Title": "Échos du Destin",
+    "Description": "Où vos choix façonnent l'aventure, et chaque décision compte.",
+
+    "Buttons": {
+      "GetStarted": "Commencer",
+      "LearnMore": "En savoir plus",
+      "WriteNow": "Continuer vers l'Éditeur",
+      "PlayNow": "Jouer maintenant"
+    }
   },
   "LanguageSelector": {
     "Placeholder": "Sélectionnez une langue",

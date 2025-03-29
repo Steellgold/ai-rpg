@@ -1,7 +1,14 @@
 {
   "Page": {
     "Title": "Chronicles of Destiny",
-    "Description": "This is a simple example of a web application"
+    "Description": "Where your choices shape the adventure, and every decision counts.",
+
+    "Buttons": {
+      "GetStarted": "Get Started",
+      "LearnMore": "Learn More",
+      "WriteNow": "Continue to Editor",
+      "PlayNow": "Play Now"
+    }
   },
   "LanguageSelector": {
     "Placeholder": "Select a language",
