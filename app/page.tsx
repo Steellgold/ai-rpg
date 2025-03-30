@@ -4,9 +4,8 @@ import { Glitch } from "@/components/glitch";
 import Aurora from "@/components/ui/aurora";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { useSession } from "@/lib/hooks/use-session";
 import { cn } from "@/lib/utils";
-import { ArrowRight, User } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useState } from "react";
@@ -14,7 +13,6 @@ import { useState } from "react";
 const Page = () => {
   const t = useTranslations("Page");
   const [selectedHistory, setSelectedHistory] = useState<typeof histories[0] | null>(null);
-  const { error, isLoading, user } = useSession();
 
   const histories = [
     {
@@ -96,16 +94,12 @@ const Page = () => {
           ))}
         </div>
 
-        {!user && (
+        {/* {!user && (
           <div className="mt-8 flex flex-col items-center gap-4 bg-white/5 p-4 rounded-lg shadow-md border border-white/10">
             <p className="text-lg">{t("Login.Why")}</p>
-            
-            <Button onClick={() => console.log("Sign in clicked")}>
-              <User size={16} />
-              {t("Login.Button")}
-            </Button>
+            <SignInButton Navbar={false} />
           </div>
-        )}
+        )} */}
       </section>
     </main>
   );
