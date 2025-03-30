@@ -11,6 +11,10 @@ const buttonVariants = cva(
       variant: {
         default:
           "bg-primary text-primary-foreground shadow hover:bg-primary/90",
+        navbar: cn(
+          "bg-primary text-primary-foreground shadow hover:bg-primary/90",
+          "dark:backdrop-blur-sm dark:bg-white/5 dark:text-white dark:hover:bg-white/10 transition dark:duration-200 dark:ease-in-out"
+        ),
         destructive:
           "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
         outline:
