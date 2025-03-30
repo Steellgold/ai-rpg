@@ -25,7 +25,10 @@
       }
     },
     "SignIn": {
-      "Label": "Sign In"
+      "Label": {
+        "Out": "Sign Out",
+        "In": "Sign in with Discord"
+      }
     }
   }
 }

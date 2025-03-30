@@ -25,7 +25,10 @@
       }
     },
     "SignIn": {
-      "Label": "Se connecter"
+      "Label": {
+        "Out": "Se déconnecter",
+        "In": "Se connecter avec Discord"
+      }
     }
   }
 }
