@@ -28,7 +28,7 @@ export const ThemeLanguageSwitcher = () => {
   const [currentLanguage, setCurrentLanguage] = useState<Language>(languages[0])
   const [mounted, setMounted] = useState(false)
   
-  const t = useTranslations("LanguageSelector");
+  const t = useTranslations("Navbar.LanguageSelector");
   const router = useRouter();
 
   useEffect(() => {
@@ -42,13 +42,13 @@ export const ThemeLanguageSwitcher = () => {
   }
 
   return (
-    <div className={"flex items-center rounded-md border bg-background dark:bg-transparent border-input text-black overflow-hidden"}>
+    <div className={"flex items-center rounded-md bg-background dark:bg-transparent text-black overflow-hidden"}>
       <Button
         variant="ghost"
         size="icon"
         onClick={toggleTheme}
         className={cn(
-          "rounded-l-md rounded-r-none h-9 w-9 border-r border-border",
+          "rounded-l-md rounded-r-none h-9 w-9",
           "dark:backdrop-blur-sm dark:bg-white/5 dark:text-white dark:hover:bg-white/10 dark:transition dark:duration-200 dark:ease-in-out"
         )}
       >
