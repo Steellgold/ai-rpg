@@ -26,6 +26,7 @@
     "Continue": {
       "Title": "Continuer votre aventure",
       "Description": "Reprenez là où vous vous êtes arrêté et continuez votre voyage.",
+      "Continue": "Reprendre",
 
       "NoGame": "Aucun jeu sauvegardé trouvé",
       "NoGameDescription": "Vous n'avez pas de jeu sauvegardé. Commencez une nouvelle aventure pour en créer un.",

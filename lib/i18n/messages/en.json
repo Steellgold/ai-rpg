@@ -26,6 +26,7 @@
     "Continue": {
       "Title": "Continue your adventure",
       "Description": "Pick up where you left off and continue your journey.",
+      "Continue": "Continue",
 
       "NoGame": "No saved game found",
       "NoGameDescription": "You don't have any saved game. Start a new adventure to create one.",
