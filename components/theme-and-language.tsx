@@ -42,13 +42,13 @@ export const ThemeLanguageSwitcher = () => {
   }
 
   return (
-    <div className={"flex items-center rounded-md bg-background dark:bg-transparent text-black overflow-hidden"}>
+    <div className={"flex items-center rounded-md border dark:border-none bg-background dark:bg-transparent border-input text-black overflow-hidden"}>
       <Button
         variant="ghost"
         size="icon"
         onClick={toggleTheme}
         className={cn(
-          "rounded-l-md rounded-r-none h-9 w-9",
+          "rounded-l-md rounded-r-none h-9 w-9 border-r border-border",
           "dark:backdrop-blur-sm dark:bg-white/5 dark:text-white dark:hover:bg-white/10 dark:transition dark:duration-200 dark:ease-in-out"
         )}
       >
