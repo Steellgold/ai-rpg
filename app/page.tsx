@@ -1,9 +1,11 @@
 "use client";
 
+import { AuthButton } from "@/components/auth-button";
 import { Glitch } from "@/components/glitch";
 import Aurora from "@/components/ui/aurora";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { useSession } from "@/lib/hooks/use-session";
 import { cn } from "@/lib/utils";
 import { ArrowRight } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -11,8 +13,9 @@ import Image from "next/image";
 import { useState } from "react";
 
 const Page = () => {
-  const t = useTranslations("Page");
+  const { user } = useSession();
   const [selectedHistory, setSelectedHistory] = useState<typeof histories[0] | null>(null);
+  const t = useTranslations("Page");
 
   const histories = [
     {
@@ -41,7 +44,7 @@ const Page = () => {
   return (
     <main className="relative overflow-hidden">
       <div className="h-[300px]">
-        <Aurora
+        <Aurora 
           colorStops={
             selectedHistory?.aurora || histories[0].aurora
           }
@@ -57,16 +60,18 @@ const Page = () => {
         </h1>
         <p className="text-lg">{t("Description")}</p>
 
-        <div className="mt-8 flex flex-wrap justify-center gap-4">
+        <div
+          className={cn(
+            "mt-8 mb-8 w-full flex  justify-center gap-4 animate-in fade-in-50 slide-in-from-top-16",
+          )}
+        >
           {histories.map((history, index) => (
-            <Card
-              className={cn("pt-0 mt-4 w-[350px]")}
-              key={index}
-              onClick={() => setSelectedHistory(history)}
-            >
+            <Card  className="pt-0 w-[350px] relative z-[100]" key={index} onClick={() => setSelectedHistory(history)}>
               <Image
-                src={history.image} alt={history.title}
-                width={500} height={300}
+                src={history.image}
+                alt={history.title}
+                width={500}
+                height={300}
                 className="rounded-lg h-[200px] object-cover"
               />
 
@@ -74,32 +79,26 @@ const Page = () => {
                 <CardTitle>{history.title}</CardTitle>
                 <CardDescription>{history.description}</CardDescription>
               </CardHeader>
+                
               <CardContent>
                 <>{history.content}</>
               </CardContent>
 
               {selectedHistory?.title === history.title && (
                 <CardFooter className="flex justify-between">
-                  <Button className="w-full">
-                    {
-                      history.title === "Workbench" ?
-                        (<>{t("Buttons.WriteNow")}</>) :
-                        <>{t("Buttons.PlayNow")}</>
-                    }
-                    <ArrowRight size={16} />
-                  </Button>
+                  {!user ? (
+                    <AuthButton Navbar={false} className="w-full" />
+                  ) : (
+                    <Button className="w-full">
+                      {history.title === "Workbench" ? (<>{t("Buttons.WriteNow")}</>) : <>{t("Buttons.PlayNow")}</>}
+                      <ArrowRight size={16} />
+                    </Button>
+                  )}
                 </CardFooter>
               )}
             </Card>
           ))}
         </div>
-
-        {/* {!user && (
-          <div className="mt-8 flex flex-col items-center gap-4 bg-white/5 p-4 rounded-lg shadow-md border border-white/10">
-            <p className="text-lg">{t("Login.Why")}</p>
-            <SignInButton Navbar={false} />
-          </div>
-        )} */}
       </section>
     </main>
   );
