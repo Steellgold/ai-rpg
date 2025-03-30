@@ -1,8 +1,6 @@
 "use client";
 
 import { AuthButton } from "@/components/auth-button";
-import { Glitch } from "@/components/glitch";
-import Aurora from "@/components/ui/aurora";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useSession } from "@/lib/hooks/use-session";
@@ -11,6 +9,7 @@ import { ArrowRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useState } from "react";
+import { PageLayout } from "./_l";
 
 const Page = () => {
   const { user } = useSession();
@@ -42,65 +41,39 @@ const Page = () => {
   ];
 
   return (
-    <main className="relative overflow-hidden">
-      <div className="h-[300px]">
-        <Aurora 
-          colorStops={
-            selectedHistory?.aurora || histories[0].aurora
-          }
-          blend={0.5}
-          amplitude={1.5}
-          speed={0.5}
-        />
-      </div>
+    <PageLayout aurora={selectedHistory?.aurora || histories[0].aurora}>
+      <div className={cn("mt-8 mb-8 w-full flex  justify-center gap-4 animate-in fade-in-50 slide-in-from-top-16")}>
+        {histories.map((history, index) => (
+          <Card  className="pt-0 w-[350px] relative z-[100]" key={index} onClick={() => setSelectedHistory(history)}>
+            <Image 
+              src={history.image} alt={history.title}
+              width={500} height={300}
+              className="rounded-lg h-[200px] object-cover"
+            />
 
-      <section className="flex flex-col items-center">
-        <h1 className="text-5xl -motion-translate-x-in-100 motion-translate-y-in-75">
-          <Glitch>{t("Title")}</Glitch>
-        </h1>
-        <p className="text-lg">{t("Description")}</p>
-
-        <div
-          className={cn(
-            "mt-8 mb-8 w-full flex  justify-center gap-4 animate-in fade-in-50 slide-in-from-top-16",
-          )}
-        >
-          {histories.map((history, index) => (
-            <Card  className="pt-0 w-[350px] relative z-[100]" key={index} onClick={() => setSelectedHistory(history)}>
-              <Image
-                src={history.image}
-                alt={history.title}
-                width={500}
-                height={300}
-                className="rounded-lg h-[200px] object-cover"
-              />
-
-              <CardHeader className="flex flex-col">
-                <CardTitle>{history.title}</CardTitle>
-                <CardDescription>{history.description}</CardDescription>
-              </CardHeader>
+            <CardHeader className="flex flex-col">
+              <CardTitle>{history.title}</CardTitle>
+              <CardDescription>{history.description}</CardDescription>
+            </CardHeader>
                 
-              <CardContent>
-                <>{history.content}</>
-              </CardContent>
+            <CardContent>{history.content}</CardContent>
 
-              {selectedHistory?.title === history.title && (
-                <CardFooter className="flex justify-between">
-                  {!user ? (
-                    <AuthButton Navbar={false} className="w-full" />
-                  ) : (
-                    <Button className="w-full">
-                      {history.title === "Workbench" ? (<>{t("Buttons.WriteNow")}</>) : <>{t("Buttons.PlayNow")}</>}
-                      <ArrowRight size={16} />
-                    </Button>
-                  )}
-                </CardFooter>
-              )}
-            </Card>
-          ))}
-        </div>
-      </section>
-    </main>
+            {selectedHistory?.title === history.title && (
+              <CardFooter className="flex justify-between">
+                {!user ? (
+                  <AuthButton Navbar={false} className="w-full" />
+                ) : (
+                  <Button className="w-full">
+                    {history.title === "Workbench" ? (<>{t("Buttons.WriteNow")}</>) : <>{t("Buttons.PlayNow")}</>}
+                    <ArrowRight size={16} />
+                  </Button>
+                )}
+              </CardFooter>
+            )}
+          </Card>
+        ))}
+      </div>
+    </PageLayout>
   );
 }
 
