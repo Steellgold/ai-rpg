@@ -1,9 +1,4 @@
-import { createBrowserClient } from "@supabase/ssr";
-import { env } from "@/lib/env";
-import { Database } from "./supabase";
+import { createClient } from "@supabase/supabase-js"
+import { clientEnv } from "@/lib/env/env.client"
 
-export const createClient = () =>
-  createBrowserClient<Database>(
-    env.NEXT_PUBLIC_SUPABASE_URL,
-    env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-  );
+export const supabase = createClient(clientEnv.NEXT_PUBLIC_SUPABASE_URL, clientEnv.NEXT_PUBLIC_SUPABASE_ANON_KEY)
