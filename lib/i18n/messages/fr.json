@@ -10,6 +10,13 @@
       "PlayNow": "Jouer maintenant"
     },
 
+    "Marketplace": {
+      "Title": "Communauté",
+      "Description": "Explorez les aventures créées par d'autres joueurs.",
+      "Button": "Aller à la Communauté",
+      "CommingSoon": "Bientôt disponible"
+    },
+
     "Login": {
       "Why": "Vous avez besoins d'un compte pour commencer une nouvelle aventure.",
       "Button": "Se connecter"

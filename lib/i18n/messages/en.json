@@ -9,6 +9,13 @@
       "WriteNow": "Continue to Editor",
       "PlayNow": "Play Now"
     },
+    
+    "Marketplace": {
+      "Title": "Community",
+      "Description": "Explore adventures created by other players.",
+      "Button": "Go to Marketplace",
+      "CommingSoon": "Coming Soon"
+    },
 
     "Login": {
       "Why": "You need an account to start a new adventure.",
