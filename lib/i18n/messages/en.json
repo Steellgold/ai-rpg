@@ -15,12 +15,17 @@
       "Button": "Login"
     }
   },
-  "LanguageSelector": {
-    "Placeholder": "Select a language",
-    "Label": "Language",
-    "Options": {
-      "en": "English",
-      "fr": "French"
+  "Navbar": {
+    "LanguageSelector": {
+      "Placeholder": "Select a language",
+      "Label": "Language",
+      "Options": {
+        "en": "English",
+        "fr": "French"
+      }
+    },
+    "SignIn": {
+      "Label": "Sign In"
     }
   }
 }
