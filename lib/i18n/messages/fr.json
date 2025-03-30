@@ -15,6 +15,16 @@
       "Button": "Se connecter"
     }
   },
+  "Pages": {
+    "Continue": {
+      "Title": "Continuer votre aventure",
+      "Description": "Reprenez là où vous vous êtes arrêté et continuez votre voyage.",
+
+      "NoGame": "Aucun jeu sauvegardé trouvé",
+      "NoGameDescription": "Vous n'avez pas de jeu sauvegardé. Commencez une nouvelle aventure pour en créer un.",
+      "NewGame": "Commencer une nouvelle aventure"
+    }
+  },
   "Navbar": {
     "LanguageSelector": {
       "Placeholder": "Sélectionnez une langue",
