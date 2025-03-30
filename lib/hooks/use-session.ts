@@ -2,13 +2,15 @@
 
 import type { Session, User } from "@supabase/supabase-js"
 import { useEffect, useState } from "react"
-import { supabase } from "@/lib/supabase/client"
-import { dayJS } from "@/lib/day-js"
+import { clientEnv } from "@/lib/env/env.client"
+import { createClient } from "@/lib/supabase/client"
 
 export const useSession = () => {
-  const [session, setSession] = useState<Session | null>(null)
-  const [user, setUser] = useState<User | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [session, setSession] = useState<Session | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  const supabase = createClient();
 
   useEffect(() => {
     // Get initial session
@@ -23,19 +25,6 @@ export const useSession = () => {
       setSession(session)
       setUser(session?.user ?? null)
       setLoading(false);
-
-      if (session) {
-        supabase.from("User").select("*").eq("id", session.user.id).then(({ data }) => {
-          if (data && data.length === 0) {
-            supabase.from("User").insert({
-              id: session.user.id,
-              email: session.user.email || "",
-              updatedAt: dayJS().toISOString(),
-              createdAt: dayJS().toISOString()
-            })
-          }
-        })
-      }
     })
 
     return () => {
@@ -52,6 +41,9 @@ export const useSession = () => {
         setLoading(true)
         const { error } = await supabase.auth.signInWithOAuth({
           provider: "discord",
+          options: {
+            redirectTo: `${clientEnv.NEXT_PUBLIC_BASE_URL}/auth/callback`
+          },
         })
         return { error }
       },
