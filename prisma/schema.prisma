@@ -40,19 +40,19 @@ model HistoryEntry {
 }
 
 model GameState {
-  id              String         @id @default(cuid())
-  playerName      String
-  characterClass  String
-  currentScene    String         @db.Text
-  lastPlayed      DateTime       @default(now())
-  currentImageUrl String?
-  createdAt       DateTime       @default(now())
-  updatedAt       DateTime       @updatedAt
+  id                   String         @id @default(cuid())
+  playerName           String
+  characterDescription String
+  currentScene         String         @db.Text
+  lastPlayed           DateTime       @default(now())
+  currentImageUrl      String?
+  createdAt            DateTime       @default(now())
+  updatedAt            DateTime       @updatedAt
   // 
-  currentChoices  Choice[]
-  history         HistoryEntry[]
-  user            User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId          String
+  currentChoices       Choice[]
+  history              HistoryEntry[]
+  user                 User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId               String
 
   @@index([userId])
 }

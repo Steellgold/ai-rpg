@@ -107,7 +107,7 @@ export type Database = {
       }
       GameState: {
         Row: {
-          characterClass: string
+          characterDescription: string
           createdAt: string
           currentImageUrl: string | null
           currentScene: string
@@ -118,7 +118,7 @@ export type Database = {
           userId: string
         }
         Insert: {
-          characterClass: string
+          characterDescription: string
           createdAt?: string
           currentImageUrl?: string | null
           currentScene: string
@@ -129,7 +129,7 @@ export type Database = {
           userId: string
         }
         Update: {
-          characterClass?: string
+          characterDescription?: string
           createdAt?: string
           currentImageUrl?: string | null
           currentScene?: string
