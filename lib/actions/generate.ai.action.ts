@@ -1,0 +1,177 @@
+"use server"
+
+import { generateObject } from "ai"
+import { openai } from "@ai-sdk/openai"
+import { z } from "zod"
+import { prisma } from "@/lib/db/prisma"
+import { createClient } from "@/lib/supabase/server"
+import { redirect } from "next/navigation"
+import { generateSceneImage } from "../ai/generate.scene-image"
+
+const characterSchema = z.object({
+  name: z.string().min(1).max(50),
+  description: z.string().min(1).max(200),
+  // 
+  personality: z.string().min(1).max(200).optional(),
+  outfit: z.string().min(1).max(200).optional(),
+  age: z.number().int().optional(),
+  background: z.string().min(1).max(200).optional(),
+  abilities: z.array(z.string()).optional(),
+  relationships: z.array(z.string()).optional(),
+  motivations: z.string().min(1).max(200).optional(),
+  flaws: z.string().min(1).max(200).optional(),
+  backstory: z.string().min(1).max(200).optional()
+})
+
+export const generateHistory = async (text: string, genres?: string[]) => {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error("User not authenticated");
+
+  const user_data = await prisma.user.findUnique({ where: { id: user.id } });
+  if (!user_data) throw new Error("User not found");
+
+  try {
+    if (!text.trim() || text.length < 10) {
+      throw new Error("Le texte est trop court pour être amélioré")
+    }
+
+    const prompt = `
+Improve this text for a narrative game. Make it more captivating, descriptive and immersive, 
+while preserving the main ideas. ${genres ? "Adapt it to the following genre(s): " + genres.join(", ") : ""}
+Answer in the same language as the original text.
+
+Text: ${text}
+    `;
+
+    const { object } = await generateObject({
+      model: openai("gpt-4o"),
+      schema: z.object({
+        title: z.string().min(1).max(100),
+        synopsis: z.string().min(1).max(500),
+        goal: z.string().min(1).max(200),
+        how_story_can_end: z.array(z.string()).min(1).max(5),
+        principal_characters: z.array(characterSchema),
+        secondary_characters: z.array(characterSchema),
+        narrative_style: z.enum(["FirstPerson", "SecondPerson", "ThirdPerson"]),
+        audience: z.enum(["Children", "YoungAdult", "Adult", "All_Ages"]),
+        difficulty: z.enum(["Easy", "Medium", "Hard"]),
+        // Already generate the first scene for directly redirecting the user to the game after the generation
+        first_scene: z.array(z.object({
+          title: z.string().min(1).max(100),
+          text: z.string().max(1600),
+          user_choices: z.array(z.object({
+            label: z.string().min(1).max(100),
+            description: z.string().min(1).max(200)
+          })).min(4).max(4)
+        }))
+      }),
+      prompt
+    });
+
+    const createdStory = await prisma.$transaction(async (tx) => {
+      const story = await tx.story.create({
+        data: {
+          title: object.title,
+          synopsis: object.synopsis,
+          goal: object.goal,
+          possibleEndings: object.how_story_can_end,
+          narrativeStyle: object.narrative_style,
+          audience: object.audience,
+          difficulty: object.difficulty,
+          creatorId: user_data.id,
+        }
+      });
+    
+      await Promise.all(
+        object.principal_characters.map(char => 
+          tx.character.create({
+            data: {
+              name: char.name,
+              description: char.description,
+              personality: char.personality,
+              outfit: char.outfit,
+              age: char.age,
+              background: char.background,
+              abilities: char.abilities || [],
+              relationships: char.relationships || [],
+              motivations: char.motivations,
+              flaws: char.flaws,
+              backstory: char.backstory,
+              isMain: true,
+              storyId: story.id
+            }
+          })
+        )
+      );
+    
+      await Promise.all(
+        object.secondary_characters.map(char => 
+          tx.character.create({
+            data: {
+              name: char.name,
+              description: char.description,
+              personality: char.personality,
+              outfit: char.outfit,
+              age: char.age,
+              background: char.background,
+              abilities: char.abilities || [],
+              relationships: char.relationships || [],
+              motivations: char.motivations,
+              flaws: char.flaws,
+              backstory: char.backstory,
+              isMain: false,
+              storyId: story.id
+            }
+          })
+        )
+      );
+    
+      let createdSceneId = null;
+  
+      if (object.first_scene.length > 0) {
+        const firstSceneData = object.first_scene[0];
+        
+        const createdScene = await tx.scene.create({
+          data: {
+            title: firstSceneData.title,
+            content: firstSceneData.text,
+            order: 1,
+            storyId: story.id,
+            imagePrompt: firstSceneData.text
+          }
+        });
+        
+        createdSceneId = createdScene.id;
+        
+        await Promise.all(
+          firstSceneData.user_choices.map(choice =>
+            tx.choice.create({
+              data: {
+                text: choice.label,
+                description: choice.description,
+                sceneId: createdScene.id,
+              }
+            })
+          )
+        );
+      }
+      
+      return { story, sceneId: createdSceneId, sceneText: object.first_scene[0]?.text };
+    });
+    
+    if (user_data.premium && createdStory.sceneId) {
+      try {
+        const imageResult = await generateSceneImage(createdStory.sceneId, createdStory.sceneText);
+        console.log("Image URL:", imageResult);
+      } catch (error) {
+        console.error("Error generating image:", error);
+      }
+    }
+    
+    redirect(`/${createdStory.story.id}`);
+  } catch (error) {
+    console.error("Error generating story:", error);
+    throw error
+  }
+}
