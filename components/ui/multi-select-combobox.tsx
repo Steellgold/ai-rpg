@@ -29,7 +29,7 @@ export function MultiSelectCombobox({
   selected,
   onChange,
   placeholder = "Select options",
-  emptyMessage = "No options found."
+  emptyMessage = "No options found.",
 }: MultiSelectProps) {
   const [open, setOpen] = React.useState(false)
 
