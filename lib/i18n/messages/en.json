@@ -34,7 +34,14 @@
     },
     "New": {
       "Title": "Create a new adventure",
-      "Description": "Dive into a new story and shape your own destiny."
+      "Description": "Dive into a new story and shape your own destiny.",
+      
+      "AiTextarea": {
+        "SelectGenres": "Select genres",
+        "NoGenresFound": "No genres found",
+        "Placeholder": "Write a summary of your story here...",
+        "Generate": "Generate story"
+      }
     }
   },
   "Navbar": {

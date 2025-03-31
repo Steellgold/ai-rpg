@@ -34,7 +34,14 @@
     },
     "New": {
       "Title": "Créer une nouvelle aventure",
-      "Description": "Lancez-vous dans une nouvelle histoire et façonnez votre propre destin."
+      "Description": "Lancez-vous dans une nouvelle histoire et façonnez votre propre destin.",
+
+      "AiTextarea": {
+        "SelectGenres": "Sélectionnez des thèmes",
+        "NoGenresFound": "Aucun genre trouvé",
+        "Placeholder": "Écrivez un résumé de votre histoire ici...",
+        "Generate": "Générer l'histoire"
+      }
     }
   },
   "Navbar": {
