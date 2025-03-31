@@ -34,81 +34,156 @@ export type Database = {
   }
   public: {
     Tables: {
-      Choice: {
+      Character: {
         Row: {
-          consequence: string | null
-          gameStateId: string | null
+          abilities: string[] | null
+          age: number | null
+          background: string | null
+          backstory: string | null
+          description: string
+          flaws: string | null
           id: string
-          isCustomChoice: boolean
-          isPersonalized: boolean
-          loadingMessage: string | null
-          text: string
+          imageUrl: string | null
+          isMain: boolean
+          motivations: string | null
+          name: string
+          outfit: string | null
+          personality: string | null
+          relationships: string[] | null
+          storyId: string
         }
         Insert: {
-          consequence?: string | null
-          gameStateId?: string | null
+          abilities?: string[] | null
+          age?: number | null
+          background?: string | null
+          backstory?: string | null
+          description: string
+          flaws?: string | null
           id: string
-          isCustomChoice?: boolean
-          isPersonalized?: boolean
-          loadingMessage?: string | null
-          text: string
+          imageUrl?: string | null
+          isMain?: boolean
+          motivations?: string | null
+          name: string
+          outfit?: string | null
+          personality?: string | null
+          relationships?: string[] | null
+          storyId: string
         }
         Update: {
-          consequence?: string | null
-          gameStateId?: string | null
+          abilities?: string[] | null
+          age?: number | null
+          background?: string | null
+          backstory?: string | null
+          description?: string
+          flaws?: string | null
           id?: string
-          isCustomChoice?: boolean
-          isPersonalized?: boolean
-          loadingMessage?: string | null
-          text?: string
+          imageUrl?: string | null
+          isMain?: boolean
+          motivations?: string | null
+          name?: string
+          outfit?: string | null
+          personality?: string | null
+          relationships?: string[] | null
+          storyId?: string
         }
         Relationships: [
           {
-            foreignKeyName: "Choice_gameStateId_fkey"
-            columns: ["gameStateId"]
+            foreignKeyName: "Character_storyId_fkey"
+            columns: ["storyId"]
             isOneToOne: false
-            referencedRelation: "GameState"
+            referencedRelation: "Story"
             referencedColumns: ["id"]
           },
         ]
       }
-      GameState: {
+      Choice: {
         Row: {
-          characterDescription: string
-          createdAt: string
-          currentImageUrl: string | null
-          currentScene: string
+          consequence: string | null
+          description: string | null
+          id: string
+          isCustomChoice: boolean
+          isPersonalized: boolean
+          loadingMessage: string | null
+          sceneId: string
+          text: string
+        }
+        Insert: {
+          consequence?: string | null
+          description?: string | null
+          id: string
+          isCustomChoice?: boolean
+          isPersonalized?: boolean
+          loadingMessage?: string | null
+          sceneId: string
+          text: string
+        }
+        Update: {
+          consequence?: string | null
+          description?: string | null
+          id?: string
+          isCustomChoice?: boolean
+          isPersonalized?: boolean
+          loadingMessage?: string | null
+          sceneId?: string
+          text?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "Choice_sceneId_fkey"
+            columns: ["sceneId"]
+            isOneToOne: false
+            referencedRelation: "Scene"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      GameSave: {
+        Row: {
+          characterClass: string | null
+          characterName: string
+          currentSceneId: string
           id: string
           lastPlayed: string
-          playerName: string
-          updatedAt: string
+          name: string
+          notes: string | null
+          progress: number
+          storyId: string
           userId: string
         }
         Insert: {
-          characterDescription: string
-          createdAt?: string
-          currentImageUrl?: string | null
-          currentScene: string
+          characterClass?: string | null
+          characterName: string
+          currentSceneId: string
           id: string
           lastPlayed?: string
-          playerName: string
-          updatedAt: string
+          name?: string
+          notes?: string | null
+          progress?: number
+          storyId: string
           userId: string
         }
         Update: {
-          characterDescription?: string
-          createdAt?: string
-          currentImageUrl?: string | null
-          currentScene?: string
+          characterClass?: string | null
+          characterName?: string
+          currentSceneId?: string
           id?: string
           lastPlayed?: string
-          playerName?: string
-          updatedAt?: string
+          name?: string
+          notes?: string | null
+          progress?: number
+          storyId?: string
           userId?: string
         }
         Relationships: [
           {
-            foreignKeyName: "GameState_userId_fkey"
+            foreignKeyName: "GameSave_storyId_fkey"
+            columns: ["storyId"]
+            isOneToOne: false
+            referencedRelation: "Story"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "GameSave_userId_fkey"
             columns: ["userId"]
             isOneToOne: false
             referencedRelation: "User"
@@ -116,34 +191,208 @@ export type Database = {
           },
         ]
       }
-      HistoryEntry: {
+      SaveHistory: {
         Row: {
-          choice: string
-          createdAt: string
-          gameStateId: string
+          choiceId: string | null
+          gameSaveId: string
           id: string
-          scene: string
+          sceneId: string
+          timestamp: string
         }
         Insert: {
-          choice: string
-          createdAt?: string
-          gameStateId: string
+          choiceId?: string | null
+          gameSaveId: string
           id: string
-          scene: string
+          sceneId: string
+          timestamp?: string
         }
         Update: {
-          choice?: string
-          createdAt?: string
-          gameStateId?: string
+          choiceId?: string | null
+          gameSaveId?: string
           id?: string
-          scene?: string
+          sceneId?: string
+          timestamp?: string
         }
         Relationships: [
           {
-            foreignKeyName: "HistoryEntry_gameStateId_fkey"
-            columns: ["gameStateId"]
+            foreignKeyName: "SaveHistory_choiceId_fkey"
+            columns: ["choiceId"]
             isOneToOne: false
-            referencedRelation: "GameState"
+            referencedRelation: "Choice"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "SaveHistory_gameSaveId_fkey"
+            columns: ["gameSaveId"]
+            isOneToOne: false
+            referencedRelation: "GameSave"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      Scene: {
+        Row: {
+          content: string
+          id: string
+          imagePrompt: string | null
+          imageUrl: string | null
+          order: number
+          storyId: string
+          title: string
+        }
+        Insert: {
+          content: string
+          id: string
+          imagePrompt?: string | null
+          imageUrl?: string | null
+          order?: number
+          storyId: string
+          title: string
+        }
+        Update: {
+          content?: string
+          id?: string
+          imagePrompt?: string | null
+          imageUrl?: string | null
+          order?: number
+          storyId?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "Scene_storyId_fkey"
+            columns: ["storyId"]
+            isOneToOne: false
+            referencedRelation: "Story"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      SceneCharacter: {
+        Row: {
+          characterId: string
+          id: string
+          role: string | null
+          sceneId: string
+        }
+        Insert: {
+          characterId: string
+          id: string
+          role?: string | null
+          sceneId: string
+        }
+        Update: {
+          characterId?: string
+          id?: string
+          role?: string | null
+          sceneId?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "SceneCharacter_characterId_fkey"
+            columns: ["characterId"]
+            isOneToOne: false
+            referencedRelation: "Character"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "SceneCharacter_sceneId_fkey"
+            columns: ["sceneId"]
+            isOneToOne: false
+            referencedRelation: "Scene"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      SceneTransition: {
+        Row: {
+          choiceId: string
+          destinationSceneId: string
+          id: string
+          sourceSceneId: string
+        }
+        Insert: {
+          choiceId: string
+          destinationSceneId: string
+          id: string
+          sourceSceneId: string
+        }
+        Update: {
+          choiceId?: string
+          destinationSceneId?: string
+          id?: string
+          sourceSceneId?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "SceneTransition_choiceId_fkey"
+            columns: ["choiceId"]
+            isOneToOne: false
+            referencedRelation: "Choice"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "SceneTransition_destinationSceneId_fkey"
+            columns: ["destinationSceneId"]
+            isOneToOne: false
+            referencedRelation: "Scene"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "SceneTransition_sourceSceneId_fkey"
+            columns: ["sourceSceneId"]
+            isOneToOne: false
+            referencedRelation: "Scene"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      Story: {
+        Row: {
+          audience: Database["public"]["Enums"]["Audience"]
+          createdAt: string
+          creatorId: string
+          difficulty: Database["public"]["Enums"]["Difficulty"]
+          goal: string
+          id: string
+          narrativeStyle: Database["public"]["Enums"]["NarrativeStyle"]
+          possibleEndings: string[] | null
+          synopsis: string
+          title: string
+          updatedAt: string
+        }
+        Insert: {
+          audience: Database["public"]["Enums"]["Audience"]
+          createdAt?: string
+          creatorId: string
+          difficulty: Database["public"]["Enums"]["Difficulty"]
+          goal: string
+          id: string
+          narrativeStyle: Database["public"]["Enums"]["NarrativeStyle"]
+          possibleEndings?: string[] | null
+          synopsis: string
+          title: string
+          updatedAt: string
+        }
+        Update: {
+          audience?: Database["public"]["Enums"]["Audience"]
+          createdAt?: string
+          creatorId?: string
+          difficulty?: Database["public"]["Enums"]["Difficulty"]
+          goal?: string
+          id?: string
+          narrativeStyle?: Database["public"]["Enums"]["NarrativeStyle"]
+          possibleEndings?: string[] | null
+          synopsis?: string
+          title?: string
+          updatedAt?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "Story_creatorId_fkey"
+            columns: ["creatorId"]
+            isOneToOne: false
+            referencedRelation: "User"
             referencedColumns: ["id"]
           },
         ]
@@ -151,20 +400,26 @@ export type Database = {
       User: {
         Row: {
           createdAt: string
+          daily_limit_messages: number | null
           email: string
           id: string
+          premium: boolean
           updatedAt: string
         }
         Insert: {
           createdAt?: string
+          daily_limit_messages?: number | null
           email: string
           id: string
+          premium?: boolean
           updatedAt: string
         }
         Update: {
           createdAt?: string
+          daily_limit_messages?: number | null
           email?: string
           id?: string
+          premium?: boolean
           updatedAt?: string
         }
         Relationships: []
@@ -177,7 +432,9 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      Audience: "Children" | "YoungAdult" | "Adult" | "All_Ages"
+      Difficulty: "Easy" | "Medium" | "Hard"
+      NarrativeStyle: "FirstPerson" | "SecondPerson" | "ThirdPerson"
     }
     CompositeTypes: {
       [_ in never]: never
