@@ -13,34 +13,34 @@ import { PageLayout } from "./_l";
 import { Glitch } from "@/components/glitch";
 import { Badge } from "@/components/ui/badge";
 
+const histories = [
+  {
+    title: "Nexus: 2187",
+    description: "A thrilling sci-fi adventure set in a dystopian future.",
+    content: "Explore the depths of space and the mysteries of the universe.",
+    goal: "To uncover the secrets of the Nexus and save humanity.",
+    // 
+    image: "/nexus.jpg",
+    players: "1-4",
+    //
+    aurora: ["#1a254f", "#1b274d", "#233161", "#16264d", "#2f9dd8"]
+  },
+  {
+    title: "Workbench",
+    description: "Let your imagination run wild with AI-generated stories.",
+    content: "Create your own adventures and characters with the power of AI.",
+    // 
+    image: "/workbench.jpg",
+    players: "1",
+    // 
+    aurora: ["#12121E", "#d0d0d0", "#020202", "#505050"]
+  }
+];
+
 const Page = () => {
   const { user } = useSession();
-  const [selectedHistory, setSelectedHistory] = useState<typeof histories[0] | null>(null);
+  const [selectedHistory, setSelectedHistory] = useState<typeof histories[0] | null>(histories[1]);
   const t = useTranslations("Page");
-
-  const histories = [
-    {
-      title: "Nexus: 2187",
-      description: "A thrilling sci-fi adventure set in a dystopian future.",
-      content: "Explore the depths of space and the mysteries of the universe.",
-      goal: "To uncover the secrets of the Nexus and save humanity.",
-      // 
-      image: "/nexus.jpg",
-      players: "1-4",
-      //
-      aurora: ["#1a254f", "#1b274d", "#233161", "#16264d", "#2f9dd8"]
-    },
-    {
-      title: "Workbench",
-      description: "Let your imagination run wild with AI-generated stories.",
-      content: "Create your own adventures and characters with the power of AI.",
-      // 
-      image: "/workbench.jpg",
-      players: "1",
-      // 
-      aurora: ["#12121E", "#d0d0d0", "#020202", "#505050"]
-    }
-  ];
 
   return (
     <PageLayout aurora={selectedHistory?.aurora || histories[0].aurora}>
