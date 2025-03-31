@@ -15,6 +15,7 @@ model User {
   updatedAt            DateTime   @updatedAt
   // 
   daily_limit_messages Int?       @default(15)
+  premium              Boolean    @default(false) // Can generate more than 15 messages per day and access to generate scenes and characters images and avatars
   //
   stories              Story[]
   gameSaves            GameSave[]
