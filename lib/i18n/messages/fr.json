@@ -36,11 +36,15 @@
       "Title": "Créer une nouvelle aventure",
       "Description": "Lancez-vous dans une nouvelle histoire et façonnez votre propre destin.",
 
+      "GeneratingTitle": "Ne bougez pas",
+      "GeneratingDescription": "Votre histoire est entrain d'être générée",
+
       "AiTextarea": {
         "SelectGenres": "Sélectionnez des thèmes",
         "NoGenresFound": "Aucun genre trouvé",
         "Placeholder": "Écrivez un résumé de votre histoire ici...",
-        "Generate": "Générer l'histoire"
+        "Generate": "Générer l'histoire",
+        "Loading": "Génération en cours..."
       }
     }
   },

@@ -35,12 +35,16 @@
     "New": {
       "Title": "Create a new adventure",
       "Description": "Dive into a new story and shape your own destiny.",
+
+      "GeneratingTitle": "Hold on",
+      "GeneratingDescription": "Your story is being generated",
       
       "AiTextarea": {
         "SelectGenres": "Select genres",
         "NoGenresFound": "No genres found",
         "Placeholder": "Write a summary of your story here...",
-        "Generate": "Generate story"
+        "Generate": "Generate story",
+        "Loading": "Generating..."
       }
     }
   },

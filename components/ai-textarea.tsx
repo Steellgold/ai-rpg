@@ -15,8 +15,6 @@ export const AiTextarea = () => {
 
   const [inputValue, setInputValue] = useState("");
 
-  const [objectGenerated, setObjectGenerated] = useState<any>(null);
-
   const [isGenerating, setIsGenerating] = useState(false);
 
   const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
@@ -33,6 +31,11 @@ export const AiTextarea = () => {
   const handleGenerate = async () => {
     if (!inputValue.trim() || inputValue.length < 10) return
     setIsGenerating(true);
+    
+    // Dispatch custom event to notify page component
+    window.dispatchEvent(new CustomEvent('story-generating', { 
+      detail: { isGenerating: true } 
+    }));
 
     try {
       await generateHistory(inputValue, selectedGenres || [])
@@ -43,6 +46,11 @@ export const AiTextarea = () => {
       toast({ title: "Error", description: "An error occurred while enhancing the text.", variant: "destructive" })
     } finally {
       setIsGenerating(false)
+      
+      // Notify page component that generation is complete
+      window.dispatchEvent(new CustomEvent('story-generating', { 
+        detail: { isGenerating: false } 
+      }));
     }
   }
 
@@ -66,7 +74,15 @@ export const AiTextarea = () => {
   }, [inputValue]);
 
   return (
-    <div className="mt-3 w-full max-w-2xl mx-auto">
+    <div className="mt-3 w-full max-w-2xl mx-auto relative">
+      {/* Loading overlay */}
+      {isGenerating && (
+        <div className="absolute inset-0 bg-black/70 backdrop-blur-sm z-10 rounded-lg flex flex-col items-center justify-center">
+          <div className="w-12 h-12 border-4 border-t-transparent border-white rounded-full animate-spin mb-4"></div>
+          <p className="text-white font-medium">{t("AiTextarea.Loading")}</p>
+        </div>
+      )}
+      
       <div className="relative border border-gray-700 rounded-lg p-4 mb-4">
         <textarea
           ref={textareaRef}
@@ -75,7 +91,7 @@ export const AiTextarea = () => {
           onChange={handleInputChange}
           className={cn(
             "w-full h-[100px] bg-transparent border-0 focus:ring-0 focus:outline-none p-0 text-white placeholder-gray-500 resize-none", {
-              "text-opacity-70 animate-pulse": isGenerating
+              "text-opacity-70": isGenerating
             }
           )}
           disabled={isGenerating}
@@ -93,6 +109,7 @@ export const AiTextarea = () => {
             onChange={setSelectedGenres}
             placeholder={t("AiTextarea.SelectGenres")}
             emptyMessage={t("AiTextarea.NoGenresFound")}
+            disabled={isGenerating}
           />
 
           <div className="flex items-center gap-1">
@@ -121,13 +138,6 @@ export const AiTextarea = () => {
           </Button>
         ))}
       </div>
-
-      {objectGenerated && (
-        <pre>
-          {JSON.stringify(objectGenerated, null, 2)}
-        </pre>
-      )}
     </div>
   )
 }
-

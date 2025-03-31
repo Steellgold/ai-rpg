@@ -1,7 +1,6 @@
 "use client"
 
 import * as React from "react"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
@@ -22,6 +21,7 @@ interface MultiSelectProps {
   emptyMessage?: string
   className?: string
   badgeClassName?: string
+  disabled?: boolean
 }
 
 export function MultiSelectCombobox({
@@ -30,27 +30,24 @@ export function MultiSelectCombobox({
   onChange,
   placeholder = "Select options",
   emptyMessage = "No options found.",
+  disabled = false
 }: MultiSelectProps) {
   const [open, setOpen] = React.useState(false)
-
-  // const handleUnselect = (item: string) => {
-  //   onChange(selected.filter((i) => i !== item))
-  // }
 
   const handleSelect = (value: string) => {
     onChange(selected.includes(value) ? selected.filter((item) => item !== value) : [...selected, value])
   }
 
-  // const selectedLabels = selected.map((value) => options.find((option) => option.value === value)?.label || value)
-
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover open={open && !disabled} onOpenChange={(value) => !disabled && setOpen(value)}>
       <PopoverTrigger asChild>
         <Button
           variant="outline"
           role="combobox"
           size={"combobox"}
           aria-expanded={open}
+          disabled={disabled}
+          className={cn(disabled && "opacity-70 cursor-not-allowed")}
         >
           <div className="flex flex-wrap gap-1">
             {selected.length === 0 ? (
@@ -93,4 +90,3 @@ export function MultiSelectCombobox({
     </Popover>
   )
 }
-
