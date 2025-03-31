@@ -1,13 +1,8 @@
 import { PageLayout } from "@/app/_l";
 import { AiTextarea } from "@/components/ai-textarea";
 import { Glitch } from "@/components/glitch";
-import { buttonVariants } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { createClient } from "@/lib/supabase/server";
-import { cn } from "@/lib/utils";
 import { getTranslations } from "next-intl/server";
-import Image from "next/image";
-import Link from "next/link";
 import { unauthorized } from "next/navigation";
 
 const Page = async() => {
