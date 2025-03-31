@@ -9,50 +9,168 @@ datasource db {
 }
 
 model User {
-  id         String      @id
-  email      String      @unique
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
+  id                   String     @id
+  email                String     @unique
+  createdAt            DateTime   @default(now())
+  updatedAt            DateTime   @updatedAt
   // 
-  gameStates GameState[]
+  daily_limit_messages Int?       @default(15)
+  //
+  stories              Story[]
+  gameSaves            GameSave[]
+}
+
+enum Difficulty {
+  Easy
+  Medium
+  Hard
+}
+
+enum NarrativeStyle {
+  FirstPerson
+  SecondPerson
+  ThirdPerson
+}
+
+enum Audience {
+  Children
+  YoungAdult
+  Adult
+  All_Ages
+}
+
+model Story {
+  id              String         @id @default(cuid())
+  title           String
+  synopsis        String         @db.Text
+  goal            String         @db.Text
+  possibleEndings String[]
+  narrativeStyle  NarrativeStyle
+  audience        Audience
+  difficulty      Difficulty
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  //
+  characters      Character[]
+  scenes          Scene[]
+  gameSaves       GameSave[]
+  creator         User           @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  creatorId       String
+
+  @@index([creatorId])
+}
+
+model Character {
+  id               String           @id @default(cuid())
+  name             String
+  description      String           @db.Text
+  personality      String?          @db.Text
+  outfit           String?
+  age              Int?
+  background       String?          @db.Text
+  abilities        String[]
+  relationships    String[]
+  motivations      String?
+  flaws            String?
+  backstory        String?          @db.Text
+  isMain           Boolean          @default(false)
+  imageUrl         String?
+  //
+  story            Story            @relation(fields: [storyId], references: [id], onDelete: Cascade)
+  storyId          String
+  sceneAppearances SceneCharacter[]
+
+  @@index([storyId])
+}
+
+model Scene {
+  id          String            @id @default(cuid())
+  title       String
+  content     String            @db.Text
+  imagePrompt String?           @db.Text
+  imageUrl    String?
+  order       Int               @default(0)
+  //
+  story       Story             @relation(fields: [storyId], references: [id], onDelete: Cascade)
+  storyId     String
+  choices     Choice[]
+  characters  SceneCharacter[]
+  nextScenes  SceneTransition[] @relation("SourceScene")
+  prevScenes  SceneTransition[] @relation("DestinationScene")
+
+  @@index([storyId])
+}
+
+model SceneTransition {
+  id                 String @id @default(cuid())
+  sourceScene        Scene  @relation("SourceScene", fields: [sourceSceneId], references: [id], onDelete: Cascade)
+  sourceSceneId      String
+  destinationScene   Scene  @relation("DestinationScene", fields: [destinationSceneId], references: [id], onDelete: Cascade)
+  destinationSceneId String
+  choiceId           String
+  choice             Choice @relation(fields: [choiceId], references: [id], onDelete: Cascade)
+
+  @@unique([sourceSceneId, choiceId])
+}
+
+model SceneCharacter {
+  id          String    @id @default(cuid())
+  role        String?
+  //
+  scene       Scene     @relation(fields: [sceneId], references: [id], onDelete: Cascade)
+  sceneId     String
+  character   Character @relation(fields: [characterId], references: [id], onDelete: Cascade)
+  characterId String
+
+  @@unique([sceneId, characterId])
 }
 
 model Choice {
-  id             String     @id @default(cuid())
+  id             String            @id @default(cuid())
   text           String
-  consequence    String?
-  isPersonalized Boolean    @default(false)
+  description    String?           @db.Text
+  consequence    String?           @db.Text
+  isPersonalized Boolean           @default(false)
   loadingMessage String?
-  isCustomChoice Boolean    @default(false)
-  // 
-  gameState      GameState? @relation(fields: [gameStateId], references: [id], onDelete: Cascade)
-  gameStateId    String?
+  isCustomChoice Boolean           @default(false)
+  //
+  scene          Scene             @relation(fields: [sceneId], references: [id], onDelete: Cascade)
+  sceneId        String
+  transitions    SceneTransition[]
+  saveHistories  SaveHistory[]
+
+  @@index([sceneId])
 }
 
-model HistoryEntry {
-  id          String    @id @default(cuid())
-  scene       String    @db.Text
-  choice      String
-  createdAt   DateTime  @default(now())
-  // 
-  gameState   GameState @relation(fields: [gameStateId], references: [id], onDelete: Cascade)
-  gameStateId String
-}
-
-model GameState {
-  id                   String         @id @default(cuid())
-  playerName           String
-  characterDescription String
-  currentScene         String         @db.Text
-  lastPlayed           DateTime       @default(now())
-  currentImageUrl      String?
-  createdAt            DateTime       @default(now())
-  updatedAt            DateTime       @updatedAt
-  // 
-  currentChoices       Choice[]
-  history              HistoryEntry[]
-  user                 User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId               String
+model GameSave {
+  id             String        @id @default(cuid())
+  name           String        @default("Sauvegarde")
+  characterName  String
+  characterClass String?
+  lastPlayed     DateTime      @default(now())
+  currentSceneId String
+  progress       Int           @default(0)
+  //
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         String
+  story          Story         @relation(fields: [storyId], references: [id], onDelete: Cascade)
+  storyId        String
+  history        SaveHistory[]
+  notes          String?       @db.Text
 
   @@index([userId])
+  @@index([storyId])
+}
+
+model SaveHistory {
+  id         String   @id @default(cuid())
+  timestamp  DateTime @default(now())
+  //
+  gameSave   GameSave @relation(fields: [gameSaveId], references: [id], onDelete: Cascade)
+  gameSaveId String
+  sceneId    String
+  choiceId   String?
+  choice     Choice?  @relation(fields: [choiceId], references: [id])
+
+  @@index([gameSaveId])
 }
