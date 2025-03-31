@@ -31,6 +31,10 @@
       "NoGame": "Aucun jeu sauvegardé trouvé",
       "NoGameDescription": "Vous n'avez pas de jeu sauvegardé. Commencez une nouvelle aventure pour en créer un.",
       "NewGame": "Commencer une nouvelle aventure"
+    },
+    "New": {
+      "Title": "Créer une nouvelle aventure",
+      "Description": "Lancez-vous dans une nouvelle histoire et façonnez votre propre destin."
     }
   },
   "Navbar": {
@@ -46,6 +50,138 @@
       "Label": {
         "Out": "Se déconnecter",
         "In": "Se connecter avec Discord"
+      }
+    }
+  },
+  "Utils": {
+    "Genres": {
+      "fantasy-medieval": {
+        "label": "Fantasy Médiévale",
+        "description": "Univers de magie et de chevaliers"
+      },
+      "post-apocalyptic": {
+        "label": "Post-Apocalyptique",
+        "description": "Monde après une catastrophe majeure"
+      },
+      "space-opera": {
+        "label": "Space Opera",
+        "description": "Aventures épiques dans l'espace"
+      },
+      "cyberpunk": {
+        "label": "Cyberpunk",
+        "description": "Futur dystopique avec haute technologie"
+      },
+      "steampunk": {
+        "label": "Steampunk",
+        "description": "Technologie à vapeur dans un cadre victorien"
+      },
+      "horror": {
+        "label": "Horreur",
+        "description": "Histoires effrayantes et inquiétantes"
+      },
+      "mystery": {
+        "label": "Mystère",
+        "description": "Énigmes et secrets à découvrir"
+      },
+      "adventure": {
+        "label": "Aventure",
+        "description": "Exploration et découvertes"
+      },
+      "action": {
+        "label": "Action",
+        "description": "Scènes d'action palpitantes"
+      },
+      "romance": {
+        "label": "Romance",
+        "description": "Relations amoureuses au centre de l'intrigue"
+      },
+      "historical": {
+        "label": "Historique",
+        "description": "Basé sur des périodes historiques réelles"
+      },
+      "super-heroes": {
+        "label": "Super-Héros",
+        "description": "Personnages aux capacités extraordinaires"
+      },
+      "urban-fantasy": {
+        "label": "Fantasy Urbaine",
+        "description": "Éléments fantastiques dans un cadre moderne"
+      },
+      "western": {
+        "label": "Western",
+        "description": "Aventures dans l'Ouest américain"
+      },
+      "mythology": {
+        "label": "Mythologie",
+        "description": "Histoires basées sur des mythes et légendes"
+      },
+      "slice-of-life": {
+        "label": "Tranche de Vie",
+        "description": "Histoires du quotidien et relations humaines"
+      },
+      "dark-fantasy": {
+        "label": "Dark Fantasy",
+        "description": "Éléments sombres et sinistres dans un cadre fantastique"
+      },
+      "dystopian": {
+        "label": "Dystopique",
+        "description": "Sociétés futures oppressives et cauchemardesques"
+      },
+      "paranormal": {
+        "label": "Paranormal",
+        "description": "Éléments surnaturels et inexplicables"
+      },
+      "time-travel": {
+        "label": "Voyage dans le Temps",
+        "description": "Histoires impliquant des voyages à travers le temps"
+      },
+      "fantasy": {
+        "label": "Fantasy",
+        "description": "Univers imaginaires avec magie et créatures fantastiques"
+      },
+      "sci-fi": {
+        "label": "Science-Fiction",
+        "description": "Technologie avancée et futurs alternatifs"
+      },
+      "thriller": {
+        "label": "Thriller",
+        "description": "Suspense et tension dans l'intrigue"
+      },
+      "comedy": {
+        "label": "Comédie",
+        "description": "Histoires humoristiques et divertissantes"
+      },
+      "drama": {
+        "label": "Drame",
+        "description": "Conflits émotionnels et relations humaines"
+      },
+      "family": {
+        "label": "Famille",
+        "description": "Histoires centrées sur les relations familiales"
+      },
+      "sports": {
+        "label": "Sport",
+        "description": "Histoires autour du sport et de la compétition"
+      },
+      "music": {
+        "label": "Musique",
+        "description": "Histoires centrées sur la musique et les musiciens"
+      },
+      "food": {
+        "label": "Cuisine",
+        "description": "Histoires autour de la nourriture et de la cuisine"
+      },
+      "travel": {
+        "label": "Voyage",
+        "description": "Histoires d'exploration et de découverte de nouveaux lieux"
+      },
+      "pets": {
+        "label": "Animaux de Compagnie",
+        "description": "Histoires centrées sur les animaux de compagnie et leurs propriétaires"
+      },
+      "supernatural": {
+        "label": "Surnaturel",
+        "description": "Éléments surnaturels et mystiques dans l'intrigue"
       }
     }
   }

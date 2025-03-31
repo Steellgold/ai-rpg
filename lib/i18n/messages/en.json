@@ -31,6 +31,10 @@
       "NoGame": "No saved game found",
       "NoGameDescription": "You don't have any saved game. Start a new adventure to create one.",
       "NewGame": "Start a new adventure"
+    },
+    "New": {
+      "Title": "Create a new adventure",
+      "Description": "Dive into a new story and shape your own destiny."
     }
   },
   "Navbar": {
@@ -46,6 +50,138 @@
       "Label": {
         "Out": "Sign Out",
         "In": "Sign in with Discord"
+      }
+    }
+  },
+  "Utils": {
+    "Genres": {
+      "fantasy-medieval": {
+        "label": "Medieval Fantasy",
+        "description": "World of magic and knights"
+      },
+      "post-apocalyptic": {
+        "label": "Post-Apocalyptic",
+        "description": "World after a major catastrophe"
+      },
+      "space-opera": {
+        "label": "Space Opera",
+        "description": "Epic adventures in space"
+      },
+      "cyberpunk": {
+        "label": "Cyberpunk",
+        "description": "Dystopian future with high technology"
+      },
+      "steampunk": {
+        "label": "Steampunk",
+        "description": "Steam-powered technology in a Victorian setting"
+      },
+      "horror": {
+        "label": "Horror",
+        "description": "Frightening and disturbing stories"
+      },
+      "mystery": {
+        "label": "Mystery",
+        "description": "Puzzles and secrets to discover"
+      },
+      "adventure": {
+        "label": "Adventure",
+        "description": "Exploration and discoveries"
+      },
+      "action": {
+        "label": "Action",
+        "description": "Thrilling action scenes"
+      },
+      "romance": {
+        "label": "Romance",
+        "description": "Love relationships at the center of the plot"
+      },
+      "historical": {
+        "label": "Historical",
+        "description": "Based on real historical periods"
+      },
+      "super-heroes": {
+        "label": "Super-Heroes",
+        "description": "Characters with extraordinary abilities"
+      },
+      "urban-fantasy": {
+        "label": "Urban Fantasy",
+        "description": "Fantastic elements in a modern setting"
+      },
+      "western": {
+        "label": "Western",
+        "description": "Adventures in the American West"
+      },
+      "mythology": {
+        "label": "Mythology",
+        "description": "Stories based on myths and legends"
+      },
+      "slice-of-life": {
+        "label": "Slice of Life",
+        "description": "Everyday stories and human relationships"
+      },
+      "dark-fantasy": {
+        "label": "Dark Fantasy",
+        "description": "Dark and sinister elements in a fantasy setting"
+      },
+      "dystopian": {
+        "label": "Dystopian",
+        "description": "Oppressive and nightmarish future societies"
+      },
+      "paranormal": {
+        "label": "Paranormal",
+        "description": "Supernatural and unexplainable elements"
+      },
+      "time-travel": {
+        "label": "Time Travel",
+        "description": "Stories involving travel through time"
+      },
+      "fantasy": {
+        "label": "Fantasy",
+        "description": "Imaginary worlds with magic and fantastic creatures"
+      },
+      "sci-fi": {
+        "label": "Science Fiction",
+        "description": "Advanced technology and alternative futures"
+      },
+      "thriller": {
+        "label": "Thriller",
+        "description": "Suspense and tension in the plot"
+      },
+      "comedy": {
+        "label": "Comedy",
+        "description": "Humorous and entertaining stories"
+      },
+      "drama": {
+        "label": "Drama",
+        "description": "Emotional conflicts and human relationships"
+      },
+      "family": {
+        "label": "Family",
+        "description": "Stories centered on family relationships"
+      },
+      "sports": {
+        "label": "Sports",
+        "description": "Stories about sports and competition"
+      },
+      "music": {
+        "label": "Music",
+        "description": "Stories centered on music and musicians"
+      },
+      "food": {
+        "label": "Food",
+        "description": "Stories about food and cooking"
+      },
+      "travel": {
+        "label": "Travel",
+        "description": "Stories of exploration and discovering new places"
+      },
+      "pets": {
+        "label": "Pets",
+        "description": "Stories centered on pets and their owners"
+      },
+      "supernatural": {
+        "label": "Supernatural",
+        "description": "Supernatural and mystical elements in the plot"
       }
     }
   }
