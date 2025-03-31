@@ -6,8 +6,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
-import { Toaster } from "sonner";
-import { ThemeLanguageSwitcher } from "@/components/theme-and-language";
+import { Toaster } from "@/components/ui/toaster";
 import { Navbar } from "@/components/navbar";
 
 const geistSans = localFont({
@@ -40,7 +39,7 @@ const Layout: AsyncComponent<PropsWithChildren> = async({ children }) => {
 
             {children}
             
-            <Toaster richColors />
+            <Toaster />
           </NextIntlClientProvider>          
         </ThemeProvider>
       </body>
