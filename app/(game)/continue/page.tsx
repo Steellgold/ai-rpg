@@ -81,14 +81,15 @@ const Page = async() => {
             <CardContent className="flex flex-col gap-4">
               <p className="line-clamp-3">{game.synopsis}</p>
 
-              <div className="flex flex-row items-center justify-between gap-2">
-                <Progress value={game.current_scene} max={game.max_scenes ?? 0} />
-                <Badge variant={"secondary"}>
-                  {game.current_scene}/{game.max_scenes ?? 0}
-                </Badge>
-              </div>
+              {game.max_scenes !== 0 && game.current_scene !== 0 && (
+                <div className="flex flex-row items-center justify-between gap-2">
+                  <Progress value={game.current_scene} max={game.max_scenes ?? 0} />
+                  <Badge variant={"secondary"}>
+                    {game.current_scene}/{game.max_scenes ?? 0}
+                  </Badge>
+                </div>
+              )}
             </CardContent>
-
 
             <CardFooter>
               <Link className={buttonVariants({ variant: "default", className: "w-full" })} href={`/game/${game.id}`}>
