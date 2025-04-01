@@ -21,12 +21,6 @@ model User {
   gameSaves            GameSave[]
 }
 
-enum Difficulty {
-  Easy
-  Medium
-  Hard
-}
-
 enum NarrativeStyle {
   FirstPerson
   SecondPerson
@@ -42,15 +36,19 @@ model Story {
   coverImageUrl   String?
   genre           String[]
   narrativeStyle  NarrativeStyle
-  difficulty      Difficulty
-  createdAt       DateTime       @default(now())
-  updatedAt       DateTime       @updatedAt
   //
   characters      Character[]
+  // 
   scenes          Scene[]
+  max_scenes      Int?           @default(20)
+  current_scene   Int?           @default(0)
+  // 
   gameSaves       GameSave[]
   creator         User           @relation(fields: [creatorId], references: [id], onDelete: Cascade)
   creatorId       String
+  // 
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
 
   @@index([creatorId])
 }
