@@ -44,7 +44,7 @@
         "NoGenresFound": "Aucun genre trouvé",
         "Placeholder": "Écrivez un résumé de votre histoire ici...",
         "Generate": "Générer l'histoire",
-        "Loading": "Génération en cours..."
+        "Loading": "Génération en cours..., cela peut prendre une minute"
       }
     }
   },

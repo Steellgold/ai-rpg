@@ -44,7 +44,7 @@
         "NoGenresFound": "No genres found",
         "Placeholder": "Write a summary of your story here...",
         "Generate": "Generate story",
-        "Loading": "Generating..."
+        "Loading": "Generating..., this may take a minute"
       }
     }
   },
