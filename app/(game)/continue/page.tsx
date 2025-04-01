@@ -1,7 +1,9 @@
 import { PageLayout } from "@/app/_l";
 import { Glitch } from "@/components/glitch";
+import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 import { prisma } from "@/lib/db/prisma";
 import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
@@ -25,6 +27,8 @@ const Page = async() => {
       title: true,
       synopsis: true,
       coverImageUrl: true,
+      max_scenes: true,
+      current_scene: true
     },
   });
 
@@ -63,14 +67,28 @@ const Page = async() => {
             key={index}
           >
             {game.coverImageUrl && (
-              <Image
-                src={game.coverImageUrl} alt={game.coverImageUrl}
-                width={500} height={300}
-                className="rounded-lg h-[200px] object-cover"
-              />
+              <Link href={`/game/${game.id}`}>
+                <Image
+                  src={game.coverImageUrl}
+                  alt={game.title}
+                  width={350}
+                  height={200}
+                  className="rounded-t-lg object-cover"
+                />
+              </Link>
             )}
 
-            <CardContent className="line-clamp-3">{game.synopsis}</CardContent>
+            <CardContent className="flex flex-col gap-4">
+              <p className="line-clamp-3">{game.synopsis}</p>
+
+              <div className="flex flex-row items-center justify-between gap-2">
+                <Progress value={game.current_scene} max={game.max_scenes ?? 0} />
+                <Badge variant={"secondary"}>
+                  {game.current_scene}/{game.max_scenes ?? 0}
+                </Badge>
+              </div>
+            </CardContent>
+
 
             <CardFooter>
               <Link className={buttonVariants({ variant: "default", className: "w-full" })} href={`/game/${game.id}`}>
