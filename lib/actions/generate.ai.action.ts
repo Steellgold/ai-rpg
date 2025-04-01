@@ -53,7 +53,7 @@ Text: ${text}
       model: openai("gpt-4o"),
       schema: z.object({
         title: z.string().min(1).max(100),
-        synopsis: z.string().min(1).max(500),
+        synopsis: z.string().min(1),
         goal: z.string().min(1).max(200),
         how_story_can_end: z.array(z.string()).min(1).max(5),
         principal_characters: z.array(characterSchema),
