@@ -34,6 +34,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      _prisma_migrations: {
+        Row: {
+          applied_steps_count: number
+          checksum: string
+          finished_at: string | null
+          id: string
+          logs: string | null
+          migration_name: string
+          rolled_back_at: string | null
+          started_at: string
+        }
+        Insert: {
+          applied_steps_count?: number
+          checksum: string
+          finished_at?: string | null
+          id: string
+          logs?: string | null
+          migration_name: string
+          rolled_back_at?: string | null
+          started_at?: string
+        }
+        Update: {
+          applied_steps_count?: number
+          checksum?: string
+          finished_at?: string | null
+          id?: string
+          logs?: string | null
+          migration_name?: string
+          rolled_back_at?: string | null
+          started_at?: string
+        }
+        Relationships: []
+      }
       Character: {
         Row: {
           abilities: string[] | null
@@ -349,10 +382,11 @@ export type Database = {
       }
       Story: {
         Row: {
-          audience: Database["public"]["Enums"]["Audience"]
+          coverImageUrl: string | null
           createdAt: string
           creatorId: string
           difficulty: Database["public"]["Enums"]["Difficulty"]
+          genre: string[] | null
           goal: string
           id: string
           narrativeStyle: Database["public"]["Enums"]["NarrativeStyle"]
@@ -362,10 +396,11 @@ export type Database = {
           updatedAt: string
         }
         Insert: {
-          audience: Database["public"]["Enums"]["Audience"]
+          coverImageUrl?: string | null
           createdAt?: string
           creatorId: string
           difficulty: Database["public"]["Enums"]["Difficulty"]
+          genre?: string[] | null
           goal: string
           id: string
           narrativeStyle: Database["public"]["Enums"]["NarrativeStyle"]
@@ -375,10 +410,11 @@ export type Database = {
           updatedAt: string
         }
         Update: {
-          audience?: Database["public"]["Enums"]["Audience"]
+          coverImageUrl?: string | null
           createdAt?: string
           creatorId?: string
           difficulty?: Database["public"]["Enums"]["Difficulty"]
+          genre?: string[] | null
           goal?: string
           id?: string
           narrativeStyle?: Database["public"]["Enums"]["NarrativeStyle"]
@@ -432,7 +468,6 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      Audience: "Children" | "YoungAdult" | "Adult" | "All_Ages"
       Difficulty: "Easy" | "Medium" | "Hard"
       NarrativeStyle: "FirstPerson" | "SecondPerson" | "ThirdPerson"
     }

@@ -33,21 +33,15 @@ enum NarrativeStyle {
   ThirdPerson
 }
 
-enum Audience {
-  Children
-  YoungAdult
-  Adult
-  All_Ages
-}
-
 model Story {
   id              String         @id @default(cuid())
   title           String
   synopsis        String         @db.Text
   goal            String         @db.Text
   possibleEndings String[]
+  coverImageUrl   String?
+  genre           String[]
   narrativeStyle  NarrativeStyle
-  audience        Audience
   difficulty      Difficulty
   createdAt       DateTime       @default(now())
   updatedAt       DateTime       @updatedAt
@@ -145,7 +139,7 @@ model Choice {
 
 model GameSave {
   id             String        @id @default(cuid())
-  name           String        @default("Sauvegarde")
+  name           String        @default("Save")
   characterName  String
   characterClass String?
   lastPlayed     DateTime      @default(now())
@@ -156,6 +150,7 @@ model GameSave {
   userId         String
   story          Story         @relation(fields: [storyId], references: [id], onDelete: Cascade)
   storyId        String
+  // 
   history        SaveHistory[]
   notes          String?       @db.Text
 
