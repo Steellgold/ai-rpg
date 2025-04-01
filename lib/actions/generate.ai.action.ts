@@ -61,6 +61,7 @@ Text: ${text}
         narrative_style: z.enum(["FirstPerson", "SecondPerson", "ThirdPerson"]),
         banner_image_visual_description: z.string().min(1).max(350),
         difficulty: z.enum(["Easy", "Medium", "Hard"]),
+        max_story_scenes: z.number().int().min(1).max(20), // Maximum number of scenes to generate (When user arrive to the maximum, that means the story is finished)
         // Already generate the first scene for directly redirecting the user to the game after the generation
         first_scene: z.array(z.object({
           title: z.string().min(1).max(100),
@@ -85,7 +86,7 @@ Text: ${text}
           goal: object.goal,
           possibleEndings: object.how_story_can_end,
           narrativeStyle: object.narrative_style,
-          difficulty: object.difficulty,
+          max_scenes: object.max_story_scenes,
           creatorId: user_data.id,
           genre: genres || []
         }
