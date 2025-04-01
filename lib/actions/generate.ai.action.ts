@@ -54,7 +54,6 @@ Text: ${text}
         principal_characters: z.array(characterSchema),
         secondary_characters: z.array(characterSchema),
         narrative_style: z.enum(["FirstPerson", "SecondPerson", "ThirdPerson"]),
-        audience: z.enum(["Children", "YoungAdult", "Adult", "All_Ages"]),
         difficulty: z.enum(["Easy", "Medium", "Hard"]),
         // Already generate the first scene for directly redirecting the user to the game after the generation
         first_scene: z.array(z.object({
@@ -77,7 +76,6 @@ Text: ${text}
           goal: object.goal,
           possibleEndings: object.how_story_can_end,
           narrativeStyle: object.narrative_style,
-          audience: object.audience,
           difficulty: object.difficulty,
           creatorId: user_data.id,
         }
