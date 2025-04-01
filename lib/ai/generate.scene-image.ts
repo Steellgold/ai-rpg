@@ -12,6 +12,17 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
 
+export const extractSceneImagePrompt = (narrative: string): string => {
+  const prompt = `
+Based on the following scene description from a fantasy RPG game, create a concise image generation prompt (max 50 words) that captures the main visual elements and atmosphere. Focus on the setting, environment, and mood - not characters or actions.
+
+Scene description:
+${narrative}
+`
+
+  return prompt
+}
+
 export const uploadImageToSupabase = async (imageUrl: string, path: string): Promise<string> => {
   try {
     const response = await fetch(imageUrl)
@@ -79,14 +90,9 @@ export const generateSceneImage = async (sceneId: string, imagePrompt?: string):
       return { success: false, error: "You are not authorized to generate images for this scene." }
     }
 
-    const finalImagePrompt = imagePrompt || scene.imagePrompt || 
-      `Create a detailed fantasy illustration for the following scene: ${scene.title}. 
-      ${scene.content.slice(0, 200)}... 
-      Style: detailed digital art, dramatic lighting, cinematic perspective.`;
-
     const response = await openai.images.generate({
       model: "dall-e-3",
-      prompt: finalImagePrompt,
+      prompt: extractSceneImagePrompt(imagePrompt || scene.content),
       n: 1,
       size: "1792x1024",
       quality: "standard",
@@ -104,10 +110,10 @@ export const generateSceneImage = async (sceneId: string, imagePrompt?: string):
     const permanentImageUrl = await uploadImageToSupabase(tempImageUrl, storagePath)
 
     await prisma.scene.update({
-      where: { id: sceneId },
+      where: { id: sceneId, storyId: scene.storyId },
       data: {
         imageUrl: permanentImageUrl,
-        imagePrompt: finalImagePrompt
+        imagePrompt: extractSceneImagePrompt(imagePrompt || scene.content),
       }
     })
 

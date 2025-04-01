@@ -6,7 +6,12 @@ import { z } from "zod"
 import { prisma } from "@/lib/db/prisma"
 import { createClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
-import { generateSceneImage } from "../ai/generate.scene-image"
+import { extractSceneImagePrompt, generateSceneImage, uploadImageToSupabase } from "../ai/generate.scene-image"
+import { OpenAI as OpenAIClient } from "openai"
+
+const openai_sdk = new OpenAIClient({
+  apiKey: process.env.OPENAI_API_KEY
+});
 
 const characterSchema = z.object({
   name: z.string().min(1).max(50),
@@ -82,6 +87,7 @@ Text: ${text}
           narrativeStyle: object.narrative_style,
           difficulty: object.difficulty,
           creatorId: user_data.id,
+          genre: genres || []
         }
       });
     
@@ -130,7 +136,7 @@ Text: ${text}
       );
     
       let createdSceneId = null;
-  
+
       if (object.first_scene.length > 0) {
         const firstSceneData = object.first_scene[0];
         
@@ -140,7 +146,7 @@ Text: ${text}
             content: firstSceneData.text,
             order: 1,
             storyId: story.id,
-            imagePrompt: firstSceneData.text
+            imagePrompt: firstSceneData.visual_illustration_image_description
           }
         });
         
@@ -163,7 +169,7 @@ Text: ${text}
       
       return { story, sceneId: createdSceneId, sceneText: object.first_scene[0]?.text };
     });
-    
+
     if (user_data.premium && createdStory.sceneId) {
       try {
         const imageResult = await generateSceneImage(createdStory.sceneId, createdStory.sceneText);
@@ -171,6 +177,29 @@ Text: ${text}
       } catch (error) {
         console.error("Error generating image:", error);
       }
+    }
+
+    const { data } = await openai_sdk.images.generate({
+      model: "dall-e-3",
+      prompt: extractSceneImagePrompt(object.banner_image_visual_description),
+      n: 1,
+      size: "1792x1024",
+      quality: "standard",
+      style: "vivid"
+    });
+
+    if (data.length > 0) {
+      const history_banner = data[0];
+      const publicUrl = await uploadImageToSupabase(history_banner.url ?? "", `${createdStory.story.id}/banner`);
+      if (!publicUrl) throw new Error("Failed to upload image to Supabase");
+
+      console.log("STORY ID:", createdStory.story.id);
+      console.log("BANNER IMAGE URL:", publicUrl);
+
+      await prisma.story.update({
+        where: { id: createdStory.story.id, creatorId: user_data.id },
+        data: { coverImageUrl: publicUrl }
+      });
     }
     
     redirect(`/${createdStory.story.id}`);
