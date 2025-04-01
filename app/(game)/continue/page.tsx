@@ -1,7 +1,8 @@
 import { PageLayout } from "@/app/_l";
 import { Glitch } from "@/components/glitch";
 import { buttonVariants } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { prisma } from "@/lib/db/prisma";
 import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
 import { getTranslations } from "next-intl/server";
@@ -14,10 +15,19 @@ const Page = async() => {
 
   const supabase = await createClient();
 
-  const { data: session } = await supabase.auth.getSession();
-  if (!session) return unauthorized();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return unauthorized();
 
-  const { data } = await supabase.from("GameState").select("*").eq("user_id", session.session?.user.id ?? "");
+  const data = await prisma.story.findMany({
+    where: { creatorId: user.id },
+    select: {
+      id: true,
+      title: true,
+      synopsis: true,
+      coverImageUrl: true,
+    },
+  });
+
   if (!data || data.length === 0) return (
     <PageLayout aurora={["#db161a", "#8e0e10", "#5b080a", "#0e0101", "#f21010"]}>
       <section className="flex flex-col items-center">
@@ -44,31 +54,37 @@ const Page = async() => {
         <p className="text-lg">{t("Description")}</p>
       </section>
 
-      <div className="flex flex-col items-center mt-4">
+      <div className="flex flex-wrap gap-4 justify-center mt-4">
         {data.map((game, index) => (
           <Card
-            className={cn("w-[350px] relative z-[100]", {
-              "pt-0": game.currentImageUrl
+            className={cn("w-[350px] relative", {
+              "pt-0": game.coverImageUrl,
             })}
             key={index}
           >
-            {game.currentImageUrl && (
+            {game.coverImageUrl && (
               <Image
-                src={game.currentImageUrl} alt={game.currentImageUrl}
+                src={game.coverImageUrl} alt={game.coverImageUrl}
                 width={500} height={300}
                 className="rounded-lg h-[200px] object-cover"
               />
             )}
 
-            <CardContent className="line-clamp-3">{game.currentScene}</CardContent>
+            <CardContent className="line-clamp-3">{game.synopsis}</CardContent>
 
             <CardFooter>
-              <Link className={buttonVariants({ variant: "default" })} href={`/game/${game.id}`}>
+              <Link className={buttonVariants({ variant: "default", className: "w-full" })} href={`/game/${game.id}`}>
                 {t("Continue")}
               </Link>
             </CardFooter>
           </Card>
         ))}
+
+        <Link href="/new" className="w-[350px] relative flex items-center justify-center border-border border-dashed border-2 rounded-lg hover:bg-accent transition-colors duration-300 ease-in-out">
+          <>
+            {t("NewGame")}
+          </>
+        </Link>
       </div>
     </PageLayout>
   );
