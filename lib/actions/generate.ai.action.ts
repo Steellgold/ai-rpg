@@ -54,14 +54,18 @@ Text: ${text}
         principal_characters: z.array(characterSchema),
         secondary_characters: z.array(characterSchema),
         narrative_style: z.enum(["FirstPerson", "SecondPerson", "ThirdPerson"]),
+        banner_image_visual_description: z.string().min(1).max(350),
         difficulty: z.enum(["Easy", "Medium", "Hard"]),
         // Already generate the first scene for directly redirecting the user to the game after the generation
         first_scene: z.array(z.object({
           title: z.string().min(1).max(100),
           text: z.string().max(1600),
+          visual_illustration_image_description: z.string().min(1).max(350),
           user_choices: z.array(z.object({
-            label: z.string().min(1).max(100),
-            description: z.string().min(1).max(200)
+            label: z.string().min(1).max(50),
+            description: z.string().min(1).max(200),
+            consequence: z.string().min(1).max(200),
+            next_scene_waiting_loader_message: z.string().min(1).max(200),
           })).min(4).max(4)
         }))
       }),
@@ -148,6 +152,8 @@ Text: ${text}
               data: {
                 text: choice.label,
                 description: choice.description,
+                consequence: choice.consequence,
+                loadingMessage: choice.next_scene_waiting_loader_message,
                 sceneId: createdScene.id,
               }
             })
