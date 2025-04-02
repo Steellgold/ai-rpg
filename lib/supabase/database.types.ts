@@ -385,10 +385,12 @@ export type Database = {
           coverImageUrl: string | null
           createdAt: string
           creatorId: string
-          difficulty: Database["public"]["Enums"]["Difficulty"]
+          current_scene: number | null
+          current_scene_id: string | null
           genre: string[] | null
           goal: string
           id: string
+          max_scenes: number | null
           narrativeStyle: Database["public"]["Enums"]["NarrativeStyle"]
           possibleEndings: string[] | null
           synopsis: string
@@ -399,10 +401,12 @@ export type Database = {
           coverImageUrl?: string | null
           createdAt?: string
           creatorId: string
-          difficulty: Database["public"]["Enums"]["Difficulty"]
+          current_scene?: number | null
+          current_scene_id?: string | null
           genre?: string[] | null
           goal: string
           id: string
+          max_scenes?: number | null
           narrativeStyle: Database["public"]["Enums"]["NarrativeStyle"]
           possibleEndings?: string[] | null
           synopsis: string
@@ -413,10 +417,12 @@ export type Database = {
           coverImageUrl?: string | null
           createdAt?: string
           creatorId?: string
-          difficulty?: Database["public"]["Enums"]["Difficulty"]
+          current_scene?: number | null
+          current_scene_id?: string | null
           genre?: string[] | null
           goal?: string
           id?: string
+          max_scenes?: number | null
           narrativeStyle?: Database["public"]["Enums"]["NarrativeStyle"]
           possibleEndings?: string[] | null
           synopsis?: string
@@ -468,7 +474,6 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      Difficulty: "Easy" | "Medium" | "Hard"
       NarrativeStyle: "FirstPerson" | "SecondPerson" | "ThirdPerson"
     }
     CompositeTypes: {
