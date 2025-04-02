@@ -28,27 +28,28 @@ enum NarrativeStyle {
 }
 
 model Story {
-  id              String         @id @default(cuid())
-  title           String
-  synopsis        String         @db.Text
-  goal            String         @db.Text
-  possibleEndings String[]
-  coverImageUrl   String?
-  genre           String[]
-  narrativeStyle  NarrativeStyle
+  id               String         @id @default(cuid())
+  title            String
+  synopsis         String         @db.Text
+  goal             String         @db.Text
+  possibleEndings  String[]
+  coverImageUrl    String?
+  genre            String[]
+  narrativeStyle   NarrativeStyle
   //
-  characters      Character[]
+  characters       Character[]
   // 
-  scenes          Scene[]
-  max_scenes      Int?           @default(20)
-  current_scene   Int?           @default(0)
+  scenes           Scene[]
+  max_scenes       Int?           @default(20)
+  current_scene    Int?           @default(0)
+  current_scene_id String?
   // 
-  gameSaves       GameSave[]
-  creator         User           @relation(fields: [creatorId], references: [id], onDelete: Cascade)
-  creatorId       String
+  gameSaves        GameSave[]
+  creator          User           @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  creatorId        String
   // 
-  createdAt       DateTime       @default(now())
-  updatedAt       DateTime       @updatedAt
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
 
   @@index([creatorId])
 }
