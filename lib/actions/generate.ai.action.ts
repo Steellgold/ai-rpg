@@ -194,12 +194,9 @@ Text: ${text}
       const publicUrl = await uploadImageToSupabase(history_banner.url ?? "", `${createdStory.story.id}/banner`);
       if (!publicUrl) throw new Error("Failed to upload image to Supabase");
 
-      console.log("STORY ID:", createdStory.story.id);
-      console.log("BANNER IMAGE URL:", publicUrl);
-
       await prisma.story.update({
         where: { id: createdStory.story.id, creatorId: user_data.id },
-        data: { coverImageUrl: publicUrl }
+        data: { coverImageUrl: publicUrl, current_scene_id: createdStory.sceneId ?? "" }
       });
     }
     
