@@ -14,7 +14,7 @@ const openai_sdk = new OpenAIClient({
 });
 
 const characterSchema = z.object({
-  name: z.string().min(1).max(50),
+  name: z.string().min(1).max(100),
   description: z.string().min(1).max(200),
   // 
   personality: z.string().min(1).max(200).optional(),
@@ -68,7 +68,7 @@ Text: ${text}
           text: z.string().max(1600),
           visual_illustration_image_description: z.string().min(1).max(350),
           user_choices: z.array(z.object({
-            label: z.string().min(1).max(50),
+            label: z.string().min(1).max(150),
             description: z.string().min(1).max(200),
             consequence: z.string().min(1).max(200),
             next_scene_waiting_loader_message: z.string().min(1).max(200),
