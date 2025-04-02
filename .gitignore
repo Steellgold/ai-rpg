@@ -15,8 +15,6 @@
 
 deno.exe
 
-/supabase
-
 # production
 /build
 
