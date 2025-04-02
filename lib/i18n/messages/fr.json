@@ -35,10 +35,19 @@
     "New": {
       "Title": "Créer une nouvelle aventure",
       "Description": "Lancez-vous dans une nouvelle histoire et façonnez votre propre destin.",
-
+      
       "GeneratingTitle": "Ne bougez pas",
-      "GeneratingDescription": "Votre histoire est entrain d'être générée",
-
+      "GeneratingDescription": "Votre histoire est en cours de génération",
+      "BackToCreator": "Retour au créateur",
+      
+      "GeneratingSteps": {
+        "Pending": "Préparation de votre histoire...",
+        "Processing": "Génération de l'univers et des personnages...",
+        "GeneratingImages": "Création des illustrations...",
+        "Completed": "Finalisation de votre aventure...",
+        "Error": "Une erreur est survenue"
+      },
+      
       "AiTextarea": {
         "SelectGenres": "Sélectionnez des thèmes",
         "NoGenresFound": "Aucun genre trouvé",

@@ -34,17 +34,23 @@
     },
     "New": {
       "Title": "Create a new adventure",
-      "Description": "Dive into a new story and shape your own destiny.",
-
-      "GeneratingTitle": "Hold on",
+      "Description": "Embark on a new story and shape your own destiny.",
+      "GeneratingTitle": "Don't move",
       "GeneratingDescription": "Your story is being generated",
-      
+      "BackToCreator": "Back to creator",
+      "GeneratingSteps": {
+        "Pending": "Preparing your story...",
+        "Processing": "Generating the universe and characters...",
+        "GeneratingImages": "Creating illustrations...",
+        "Completed": "Finalizing your adventure...",
+        "Error": "An error has occurred"
+      },
       "AiTextarea": {
-        "SelectGenres": "Select genres",
+        "SelectGenres": "Select themes",
         "NoGenresFound": "No genres found",
         "Placeholder": "Write a summary of your story here...",
         "Generate": "Generate story",
-        "Loading": "Generating..., this may take a minute"
+        "Loading": "Generation in progress..., this may take a minute"
       }
     }
   },
