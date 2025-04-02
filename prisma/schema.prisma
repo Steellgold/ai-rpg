@@ -8,6 +8,53 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+enum JobStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+}
+
+enum JobStage {
+  INITIALIZED
+  GENERATING_STORY
+  CREATING_STORY
+  CREATING_MAIN_CHARS
+  CREATING_SEC_CHARS
+  CREATING_FIRST_SCENE
+  GENERATING_BANNER
+  UPLOADING_BANNER
+  GENERATING_SCENE_IMG
+  UPLOADING_SCENE_IMG
+  FINALIZING
+}
+
+model Job {
+  id          String    @id @default(cuid())
+  status      JobStatus @default(PENDING)
+  stage       JobStage? @default(INITIALIZED)
+  progress    Int       @default(0)
+  startedAt   DateTime? @default(now())
+  completedAt DateTime?
+  error       String?   @db.Text
+  //
+  input       Json
+  //
+  output      Json?
+  //
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  storyId     String?
+  story       Story?    @relation(fields: [storyId], references: [id], onDelete: SetNull)
+  //
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now()) @updatedAt
+
+  @@index([userId])
+  @@index([status])
+  @@index([stage])
+}
+
 model User {
   id                   String     @id @default(uuid())
   email                String     @unique
@@ -17,6 +64,8 @@ model User {
   //
   stories              Story[]
   gameSaves            GameSave[]
+  // 
+  jobs                 Job[]
   // 
   createdAt            DateTime   @default(now())
   updatedAt            DateTime   @default(now()) @updatedAt
@@ -48,6 +97,8 @@ model Story {
   gameSaves        GameSave[]
   creator          User           @relation(fields: [creatorId], references: [id], onDelete: Cascade)
   creatorId        String
+  // 
+  jobs             Job[]
   // 
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @default(now()) @updatedAt

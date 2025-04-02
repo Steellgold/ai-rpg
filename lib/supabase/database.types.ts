@@ -242,6 +242,69 @@ export type Database = {
           },
         ]
       }
+      Job: {
+        Row: {
+          completedAt: string | null
+          createdAt: string
+          error: string | null
+          id: string
+          input: Json
+          output: Json | null
+          progress: number
+          stage: Database["public"]["Enums"]["JobStage"] | null
+          startedAt: string | null
+          status: Database["public"]["Enums"]["JobStatus"]
+          storyId: string | null
+          updatedAt: string
+          userId: string
+        }
+        Insert: {
+          completedAt?: string | null
+          createdAt?: string
+          error?: string | null
+          id: string
+          input: Json
+          output?: Json | null
+          progress?: number
+          stage?: Database["public"]["Enums"]["JobStage"] | null
+          startedAt?: string | null
+          status?: Database["public"]["Enums"]["JobStatus"]
+          storyId?: string | null
+          updatedAt?: string
+          userId: string
+        }
+        Update: {
+          completedAt?: string | null
+          createdAt?: string
+          error?: string | null
+          id?: string
+          input?: Json
+          output?: Json | null
+          progress?: number
+          stage?: Database["public"]["Enums"]["JobStage"] | null
+          startedAt?: string | null
+          status?: Database["public"]["Enums"]["JobStatus"]
+          storyId?: string | null
+          updatedAt?: string
+          userId?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "Job_storyId_fkey"
+            columns: ["storyId"]
+            isOneToOne: false
+            referencedRelation: "Story"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "Job_userId_fkey"
+            columns: ["userId"]
+            isOneToOne: false
+            referencedRelation: "User"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       SaveHistory: {
         Row: {
           choiceId: string | null
@@ -519,6 +582,19 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
+      JobStage:
+        | "INITIALIZED"
+        | "GENERATING_STORY"
+        | "CREATING_STORY"
+        | "CREATING_MAIN_CHARS"
+        | "CREATING_SEC_CHARS"
+        | "CREATING_FIRST_SCENE"
+        | "GENERATING_BANNER"
+        | "UPLOADING_BANNER"
+        | "GENERATING_SCENE_IMG"
+        | "UPLOADING_SCENE_IMG"
+        | "FINALIZING"
+      JobStatus: "PENDING" | "RUNNING" | "COMPLETED" | "FAILED"
       NarrativeStyle: "FirstPerson" | "SecondPerson" | "ThirdPerson"
     }
     CompositeTypes: {
