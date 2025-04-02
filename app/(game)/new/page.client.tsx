@@ -25,10 +25,10 @@ export const PageClient = () => {
   return (
     <PageLayout>
       <section className="flex flex-col items-center">
-        <h1 className="text-lg xl:text-5xl -motion-translate-x-in-100 motion-translate-y-in-75">
+        <h1 className="text-lg lg:text-5xl -motion-translate-x-in-100 motion-translate-y-in-75">
           <Glitch>{isGenerating ? t("GeneratingTitle") : t("Title")}</Glitch>
         </h1>
-        <p className="text-sm xl:text-lg text-center">{isGenerating ? t("GeneratingDescription") : t("Description")}</p>
+        <p className="text-sm lg:text-lg text-center">{isGenerating ? t("GeneratingDescription") : t("Description")}</p>
       </section>
 
       <div className="flex flex-col items-center mt-4">
