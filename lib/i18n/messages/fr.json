@@ -55,6 +55,29 @@
         "Generate": "Générer l'histoire",
         "Loading": "Génération en cours..., cela peut prendre une minute"
       }
+    },
+    "Story": {
+      "Scenes": "Scènes",
+      "Choose": "Que voulez vous faire ?",
+      "Consequences": "Conséquences",
+      "Confirm": "Je veut faire ça",
+      
+      "DiceRoll": {
+        "Title": "Lancer de dés",
+        "Description": "Le résultat du dé déterminera l'impact de votre choix sur l'histoire",
+        "Result": "Résultat:",
+
+        "Roll": "Lancer le dé",
+        "Rolling": "Lancement du dé...",
+        "Continue": "Continuer l'histoire"
+      },
+
+      "Generating": "Génération",
+
+      "Previous": {
+        "Choices": "Choix précédents",
+        "ChoiceSelected": "Choix sélectionné"
+      }
     }
   },
   "Navbar": {

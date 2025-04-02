@@ -9,6 +9,7 @@ import { Component } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { Prisma } from "@prisma/client";
 import { Check, Expand, ImageUpscale, Pen, Shrink } from "lucide-react";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -67,6 +68,8 @@ export const PageClient: Component<PageClientProps> = ({ story_data: storyData, 
 
   const [show_fullImage, setShowFullImage] = useState(false);
 
+  const t = useTranslations("Pages.Story");
+
   const formatSceneContent = (content: string) => {
     return content.split('\n').map((paragraph, index) => (
       <p key={index} className={cn("mb-4 last:mb-0", { "animate-pulse": loading })}>
@@ -105,7 +108,7 @@ export const PageClient: Component<PageClientProps> = ({ story_data: storyData, 
       else await handleCustomChoice(storyData.id, sceneData.id, selectedChoice.text, diceResult || undefined);
 
     } catch (error) {
-      console.error("Erreur lors de la génération de la scène:", error);
+      console.error("An error occurred while generating the next scene:", error);
       setLoading(false);
     }
   };
@@ -182,7 +185,7 @@ export const PageClient: Component<PageClientProps> = ({ story_data: storyData, 
         <div className="w-1/5">
           <Card className="w-full bg-gray-100/5">
             <CardHeader>
-              <CardTitle>Scènes</CardTitle>
+              <CardTitle>{t("Scenes")}</CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col gap-2">
               {storyData.scenes.map((scene) => (
@@ -254,7 +257,7 @@ export const PageClient: Component<PageClientProps> = ({ story_data: storyData, 
               {!confirmChoice ? (
                 <>
                   <CardHeader>
-                    <CardTitle>Choix</CardTitle>
+                    <CardTitle>{t("Choose")}</CardTitle>
                   </CardHeader>
                   <CardContent className="flex flex-col gap-2">
                     {sceneData.choices.map((choice) => (
@@ -295,12 +298,12 @@ export const PageClient: Component<PageClientProps> = ({ story_data: storyData, 
                     {selectedChoice && (
                       <Card className="w-full bg-gray-100/5 mt-4">
                         <CardHeader>
-                          <CardTitle>Conséquence</CardTitle>
+                          <CardTitle>{t("Consequences")}</CardTitle>
                           <CardDescription>{selectedChoice.consequence}</CardDescription>
                         </CardHeader>
                         <CardFooter className="flex justify-end">
                           <Button variant="outline" className="w-full" onClick={() => setConfirmChoice(true)}>
-                            Confirmer
+                            {t("Confirm")}
                           </Button>
                         </CardFooter>
                       </Card>
@@ -310,9 +313,9 @@ export const PageClient: Component<PageClientProps> = ({ story_data: storyData, 
               ) : (
                 <>
                   <CardHeader>
-                    <CardTitle>Lancez le dé</CardTitle>
+                    <CardTitle>{t("DiceRoll.Title")}</CardTitle>
                     <CardDescription>
-                      Le résultat du dé déterminera l'impact de votre choix sur l'histoire
+                      {t("DiceRoll.Description")}
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="flex flex-col items-center gap-4">
@@ -323,7 +326,7 @@ export const PageClient: Component<PageClientProps> = ({ story_data: storyData, 
                     {diceRolled && (
                       <div className="text-center w-full">
                         <p className="font-bold text-lg">
-                          Résultat: <span className="text-yellow-500">{diceResult}</span>/6
+                          {t("DiceRoll.Result")}&nbsp;<span className="text-yellow-500">{diceResult}</span>/6
                         </p>
                         <p className="text-sm opacity-80 mt-1">
                           {getDiceImpactDescription(diceResult)}
@@ -331,7 +334,7 @@ export const PageClient: Component<PageClientProps> = ({ story_data: storyData, 
                       </div>
                     )}
                     
-                    <div className="grid grid-cols-2 gap-2 w-full mt-4">
+                    <div className="flex flex-col gap-2 w-full">
                       {!diceRolled ? (
                         <Button 
                           variant="outline" 
@@ -339,21 +342,13 @@ export const PageClient: Component<PageClientProps> = ({ story_data: storyData, 
                           onClick={handleRollDice}
                           disabled={isRolling}
                         >
-                          {isRolling ? "Lancement..." : "Lancer le dé"}
+                          {isRolling
+                            ? t("DiceRoll.Rolling")
+                            : t("DiceRoll.Roll")
+                          }
                         </Button>
                       ) : (
                         <>
-                          <Button 
-                            variant="outline" 
-                            className="w-full" 
-                            onClick={() => {
-                              setConfirmChoice(false);
-                              setDiceRolled(false);
-                              setDiceResult(null);
-                            }}
-                          >
-                            Annuler
-                          </Button>
                           <Button 
                             variant="default" 
                             className="w-full bg-yellow-500 hover:bg-yellow-600" 
@@ -362,10 +357,14 @@ export const PageClient: Component<PageClientProps> = ({ story_data: storyData, 
                           >
                             {loading ? (
                               <>
-                                <span className="animate-pulse">Génération...</span>
+                                <span className="animate-pulse">
+                                  {t("Generating")}
+                                </span>
                               </>
                             ) : (
-                              "Continuer"
+                              <>
+                                {t("DiceRoll.Continue")}
+                              </>
                             )}
                           </Button>
                         </>
@@ -388,8 +387,8 @@ export const PageClient: Component<PageClientProps> = ({ story_data: storyData, 
           <div className="w-2/5">
             <Card className="w-full bg-gray-100/5">
               <CardHeader>
-                <CardTitle>Choix</CardTitle>
-                <CardDescription>Choix sélectionné</CardDescription>
+                <CardTitle>{t("Previous.Choices")}</CardTitle>
+                <CardDescription>{t("Previous.ChoiceSelected")}</CardDescription>
               </CardHeader>
               <CardContent className="flex flex-col gap-2">
                 {sceneData.choices.map((choice) => (
