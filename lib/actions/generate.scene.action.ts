@@ -3,13 +3,7 @@
 import { redirect } from "next/navigation"
 import { prisma } from "@/lib/db/prisma"
 import { createClient } from "@/lib/supabase/server"
-import { createClient as createSupabaseClient } from "@supabase/supabase-js"
-import { serverEnv } from "@/lib/env/env.server"
-
-const supabase = createSupabaseClient(
-  serverEnv.NEXT_PUBLIC_SUPABASE_URL,
-  serverEnv.SUPABASE_SERVICE_ROLE_KEY
-);
+import { env } from "@/lib/env/env"
 
 export const generateNextScene = async (
   storyId: string,
@@ -26,36 +20,6 @@ export const generateNextScene = async (
   if (!user_data) throw new Error("User not found");
 
   try {
-    // const response = await fetch(
-    //   `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/generate-scene`,
-    //   {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //       'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}`
-    //     },
-    //     body: JSON.stringify({
-    //       storyId,
-    //       sceneId,
-    //       choiceId,
-    //       diceRoll: diceRoll || 3,
-    //       gameSaveId,
-    //       userId: user.id,
-    //       isPremium: user_data.premium
-    //     })
-    //   }
-    // );
-
-    console.log("Generating next scene with params:", {
-      storyId,
-      sceneId,
-      choiceId,
-      diceRoll: diceRoll || 3,
-      gameSaveId,
-      userId: user.id,
-      isPremium: user_data.premium
-    });
-
     const { data, error } = await supabase.functions.invoke("generate-scene-story", {
       body: {
         storyId,
@@ -72,7 +36,9 @@ export const generateNextScene = async (
       throw new Error(error?.message || "Error generating next scene");
     }
     
-    console.log("Response from Edge Function:", data);
+    if (data.success) {
+      redirect(`${env.NEXT_PUBLIC_BASE_URL}${data.redirect}`);
+    }
   } catch (error) {
     console.error("Error generating next scene:", error);
     throw error;
@@ -94,26 +60,6 @@ export const handleCustomChoice = async (
   if (!user_data) throw new Error("User not found");
 
   try {
-    // const response = await fetch(
-    //   `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/generate-scene`,
-    //   {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //       'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}`
-    //     },
-    //     body: JSON.stringify({
-    //       storyId,
-    //       sceneId,
-    //       customText,
-    //       diceRoll: diceRoll || 3,
-    //       gameSaveId,
-    //       userId: user.id,
-    //       isPremium: user_data.premium
-    //     })
-    //   }
-    // );
-
     const { data, error } = await supabase.functions.invoke("generate-scene-story", {
       body: {
         storyId,
@@ -126,27 +72,13 @@ export const handleCustomChoice = async (
       }
     })
 
-    // if (!response.ok) {
-    //   const errorData = await response.json();
-    //   throw new Error(errorData.error || "Error handling custom choice");
-    // }
-
-    // const result = await response.json();
-    
-    // // Rediriger vers la nouvelle scène
-    // if (result.redirect) {
-    //   redirect(result.redirect);
-    // } else {
-    //   // Fallback au cas où la redirection n'est pas fournie par l'API
-    //   redirect(gameSaveId ? `/${gameSaveId}/${result.scene.id}` : `/${storyId}/${result.scene.id}`);
-    // }
-
     if (!data || error) {
       throw new Error(error?.message || "Error handling custom choice");
     }
 
-    console.log("Response from Edge Function:", data);
-    // Rediriger vers la nouvelle scène    
+    if (data.success) {
+      redirect(`${env.NEXT_PUBLIC_BASE_URL}${data.redirect}`);
+    }
   } catch (error) {
     console.error("Error handling custom choice:", error);
     throw error;
