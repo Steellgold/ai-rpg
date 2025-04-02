@@ -36,8 +36,8 @@
       "Title": "Créer une nouvelle aventure",
       "Description": "Lancez-vous dans une nouvelle histoire et façonnez votre propre destin.",
       
-      "GeneratingTitle": "Ne bougez pas",
-      "GeneratingDescription": "Votre histoire est en cours de génération",
+      "GeneratingTitle": "Génération de l'histoire",
+      "GeneratingDescription": "Vous pouvez aller faire autre chose pendant que nous générons votre histoire, cela peut prendre quelques minutes.",
       "BackToCreator": "Retour au créateur",
       
       "GeneratingSteps": {
