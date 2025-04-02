@@ -159,7 +159,7 @@ Always keep in mind the characters' personalities and the player's previous choi
       schema: z.object({
         title: z.string().min(1).max(100),
         content: z.string().min(100),
-        visual_illustration_image_description: z.string().min(1).max(350),
+        visual_illustration_image_description: z.string().min(1),
         choices: z.array(choiceSchema).min(4).max(4),
         is_ending: z.boolean().default(false),
         ending_type: z.string().optional()
@@ -278,7 +278,7 @@ export const handleCustomChoice = async (
       data: {
         text: customText,
         description: "Customized player selection",
-        consequence: "Consequence based on the player's personalized action",
+        consequence: customText,
         loadingMessage: "The story develops according to your personalized action...",
         isCustomChoice: true,
         sceneId: sceneId,
