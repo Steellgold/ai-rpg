@@ -73,7 +73,11 @@
   
         "Roll": "Roll the die",
         "Rolling": "Roll the die...",
-        "Continue": "Continue the story"
+        "Continue": "Continue the story",
+
+        "ImpactMinor": "Minor impact on the story",
+        "ImpactMedium": "Medium impact on the story",
+        "ImpactMajor": "Major impact on the story"
       },
   
       "Generating": "Generation",

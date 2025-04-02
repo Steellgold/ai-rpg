@@ -72,7 +72,11 @@
 
         "Roll": "Lancer le dé",
         "Rolling": "Lancement du dé...",
-        "Continue": "Continuer l'histoire"
+        "Continue": "Continuer l'histoire",
+
+        "ImpactMinor": "Impact mineur sur l'histoire",
+        "ImpactMedium": "Impact modéré sur l'histoire",
+        "ImpactMajor": "Impact important sur l'histoire"
       },
 
       "Generating": "Génération",

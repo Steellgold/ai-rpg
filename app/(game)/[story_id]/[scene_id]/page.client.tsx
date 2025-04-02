@@ -169,11 +169,11 @@ export const PageClient: Component<PageClientProps> = ({ story_data: storyData, 
     if (!result) return "";
     
     if (result <= 2) {
-      return "Impact minimal sur l'histoire";
+      return t("DiceRoll.ImpactMinor");
     } else if (result <= 4) {
-      return "Impact modéré sur l'histoire";
+      return t("DiceRoll.ImpactMedium");
     } else {
-      return "Impact majeur sur l'histoire";
+      return t("DiceRoll.ImpactMajor");
     }
   };
 
