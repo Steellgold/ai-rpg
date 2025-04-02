@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Chronicles of Destiny: Interactive Storytelling Platform 📚
 
-## Getting Started
+This interactive storytelling platform enables players to create and play through AI-generated narrative adventures ✨. The application leverages modern web technologies to provide an immersive experience where players' choices influence the direction and outcome of their unique stories 🛤️.
 
-First, run the development server:
+[Demo video](https://www.youtube.com/watch?v=b1l7Ia9oimQ) - [Website URL (plz no spam :joy:)](https://ai-rpg.steellgold.fr)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Tech Stack 🛠️
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Frontend 💻
+- Next.js 15 - React framework with App Router 🔄
+- React 19 - JavaScript library for building user interfaces ⚛️
+- TypeScript - Static type checking 📝
+- Tailwind CSS 4 - Utility-first CSS framework 🎨
+- shadcn/ui - Reusable UI components built with Radix UI 🧩
+- next-intl - Internationalization for Next.js (English and French support) 🌍
+- Lucide React - Icon library 🔣
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Backend 🏗️
+- Supabase ⚡
+  - Authentication (Discord OAuth) 🔐
+  - Storage (for image hosting) 🖼️
+  - Database 💾
+  - Edge Functions for AI stories generations 🚀
+- Prisma and Supabase JS SDK 🔌
+- Next.js Server Actions - For handling server-side logic 🖥️
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### AI Features 🤖
+- OpenAI API 🧠
+  - DALL-E 3 - For generating scene images and story covers 🎭
+- AI SDK - Interface for AI-assisted content creation with schemas 📋
+  - OpenAI integration 🔄
 
-## Learn More
+### Environment & Configuration ⚙️
+- Server-only enforced environment variables 🔒
+- zod - Runtime validation of environment variables and data ✅
 
-To learn more about Next.js, take a look at the following resources:
+## Key Features 🔑
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Interactive Storytelling: Dynamic narrative progression based on player choices 📖
+- AI-Generated Content: Stories, scenes, and images created using AI 🎨
+- Genre Selection: Players can select from multiple genres 📚
+- Dice Rolling: Random elements affecting story outcomes 🎲
+- Multilingual Support: English and French interfaces 🌐
+- Visual Theming: Dynamic theming with dark/light mode and visual effects 🌓
+- Progress Tracking: Save and continue stories at any point 💾
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Authentication 🔐
+- The application uses Supabase Authentication with Discord OAuth for user login and session management, with custom middleware for session validation and user creation 👤
 
-## Deploy on Vercel
+## Internationalization 🌍
+- The application supports English and French languages using next-intl, with locale detection from browser preferences and persistent language selection 🗣️
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Deployment 🚀
+- Vercel ▲
