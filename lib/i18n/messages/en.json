@@ -54,7 +54,10 @@
       }
     },
     "Story": {
-      "Scenes": "Scenes",
+      "Scenes": {
+        "Title": "Scenes",
+        "Description": "Here you can see the scenes of your story and go back to them (however, you won't be able to change a choice already made)."
+      },
       "Choose": "What do you want to do?",
       "Consequences": "Consequences",
       "Confirm": "I want to do this",

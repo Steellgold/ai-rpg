@@ -8,7 +8,7 @@ import { generateNextScene, handleCustomChoice } from "@/lib/actions/generate.sc
 import { Component } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { Prisma } from "@prisma/client";
-import { Check, Expand, ImageUpscale, Pen, Shrink } from "lucide-react";
+import { Check, ChevronRight, Expand, ImageUpscale, Pen, Shrink } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
@@ -176,31 +176,40 @@ export const PageClient: Component<PageClientProps> = ({ story_data: storyData, 
 
   return (
     <div className="flex flex-col mt-16 p-4">
-      <div className="flex flex-row gap-2 bg-gray-100/5 p-4 rounded-md">
+      <div className="flex flex-row gap-2 bg-gray-100/5 p-4 rounded-md flex-wrap">
         <Badge variant="outline" className="text-md">{storyData.title}</Badge>
         <Badge variant="outline" className="text-md">{storyData.current_scene}&nbsp;/&nbsp;{storyData.max_scenes}</Badge>
       </div>
 
-      <div className="flex flex-row gap-4 mt-4">
-        <div className="w-1/5">
+      <div className="flex flex-col xl:flex-row gap-4 mt-4">
+        <div className="xl:w-2/5">
           <Card className="w-full bg-gray-100/5">
             <CardHeader>
-              <CardTitle>{t("Scenes")}</CardTitle>
+              <CardTitle>{t("Scenes.Title")}</CardTitle>
+              <CardDescription>{t("Scenes.Description")}</CardDescription>
             </CardHeader>
-            <CardContent className="flex flex-col gap-2">
+            <CardContent className="flex flex-row xl:flex-col gap-0.5 xl:gap-2 items-center flex-wrap">
               {storyData.scenes.map((scene) => (
-                <Link key={scene.id} href={`/${storyData.id}/${scene.id}`} className={buttonVariants({ variant: "outline", className: "w-full" })}>
-                  {scene.title}
-                  {scene.selected_choice_id && (
-                    <Check className="ml-2" size={16} color="green" />
+                <>
+                  <Link key={scene.id} href={`/${storyData.id}/${scene.id}`} className={buttonVariants({
+                    variant: "outline", className: "xl:w-full h-auto justify-start", wrap: true
+                  })}>
+                    {scene.title}
+                    {scene.selected_choice_id && (
+                      <Check className="ml-2" size={16} color="green" />
+                    )}
+                  </Link>
+
+                  {scene.id !== storyData.scenes[storyData.scenes.length - 1].id && (
+                    <ChevronRight className="block xl:hidden" size={16} color="gray" />
                   )}
-                </Link>
+                </>
               ))}
             </CardContent>
           </Card>
         </div>
 
-        <div className="w-4/5">
+        <div className="w-full xl:w-3/5">
           <Card className={cn(
             "w-full bg-gray-100/5", {
               "pt-0": sceneData.imageUrl,
@@ -252,7 +261,7 @@ export const PageClient: Component<PageClientProps> = ({ story_data: storyData, 
         </div>
 
         {!sceneData.selected_choice_id && (
-          <div className="w-2/5">
+          <div className="w-full xl:w-2/5">
             <Card className="w-full bg-gray-100/5">
               {!confirmChoice ? (
                 <>
@@ -264,7 +273,13 @@ export const PageClient: Component<PageClientProps> = ({ story_data: storyData, 
                       <div key={choice.id} className="border border-border rounded-md p-2">
                         <Button
                           variant="outline"
-                          className={cn("w-full", selectedChoice?.id === choice.id ? "bg-yellow-500/10 hover:bg-yellow-500/5 text-white" : "hover:bg-yellow-500/30")}
+                          className={cn(
+                            "w-full h-auto flex items-center justify-start",
+                            selectedChoice?.id === choice.id
+                              ? "bg-yellow-500/10 hover:bg-yellow-500/5 text-white"
+                              : "hover:bg-yellow-500/30"
+                          )}
+                          wrap={false}
                           onClick={() => {
                             if (selectedChoice?.id === choice.id) setSelectedChoice(null);
                             else setSelectedChoice(choice);
@@ -278,7 +293,12 @@ export const PageClient: Component<PageClientProps> = ({ story_data: storyData, 
                           <>
                             <Input
                               placeholder="Votre choix personnalisé"
-                              className={cn("mt-2 w-full", selectedChoice?.id === choice.id ? "bg-yellow-500/10 hover:bg-yellow-500/5 text-white" : "hover:bg-yellow-500/30")}
+                              className={cn(
+                                "mt-2 w-full",
+                                selectedChoice?.id === choice.id
+                                  ? "bg-yellow-500/10 hover:bg-yellow-500/5 text-white"
+                                  : "hover:bg-yellow-500/30"
+                              )}
                               onChange={(e) => {
                                 setSelectedChoice({
                                   ...choice,
