@@ -5,10 +5,11 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { generateNextScene, handleCustomChoice } from "@/lib/actions/generate.scene.action";
+import useShowScenes from "@/lib/hooks/use-show-p.scenes";
 import { Component } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { Prisma } from "@prisma/client";
-import { Check, ChevronRight, Expand, ImageUpscale, Pen, Shrink } from "lucide-react";
+import { Check, ChevronRight, Expand, ImageUpscale, PanelRightClose, PanelRightOpen, Pen, Shrink } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
@@ -65,6 +66,8 @@ export const PageClient: Component<PageClientProps> = ({ story_data: storyData, 
   const [diceResult, setDiceResult] = useState<number | null>(null);
   const [currentFace, setCurrentFace] = useState(1);
   const [diceRolled, setDiceRolled] = useState(false);
+
+  const { showPreviousScenes, toggle } = useShowScenes();
 
   const [show_fullImage, setShowFullImage] = useState(false);
 
@@ -182,34 +185,54 @@ export const PageClient: Component<PageClientProps> = ({ story_data: storyData, 
       </div>
 
       <div className="flex flex-col xl:flex-row gap-4 mt-4">
-        <div className="xl:w-2/5">
-          <Card className="w-full bg-gray-100/5">
-            <CardHeader>
-              <CardTitle>{t("Scenes.Title")}</CardTitle>
-              <CardDescription>{t("Scenes.Description")}</CardDescription>
-            </CardHeader>
-            <CardContent className="flex flex-row xl:flex-col gap-0.5 xl:gap-2 items-center flex-wrap">
-              {storyData.scenes.map((scene) => (
-                <>
-                  <Link key={scene.id} href={`/${storyData.id}/${scene.id}`} className={buttonVariants({
-                    variant: "outline", className: "xl:w-full h-auto justify-start", wrap: true
-                  })}>
-                    {scene.title}
-                    {scene.selected_choice_id && (
-                      <Check className="ml-2" size={16} color="green" />
-                    )}
-                  </Link>
+        <div className={cn({
+          "xl:w-1/5": showPreviousScenes
+        })}>
+          {showPreviousScenes ? (
+            <Card className="w-full bg-gray-100/5">
+              <CardHeader className="pb-0 -mb-2">
+                <div className="flex justify-between items-center">
+                  <CardTitle>{t("Scenes.Title")}</CardTitle>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="bg-white/10 hover:bg-white/20"
+                    onClick={toggle}
+                  >
+                    <PanelRightClose size={16} />
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent className="flex flex-row xl:flex-col gap-0.5 xl:gap-2 items-center flex-wrap">
+                {storyData.scenes.map((scene) => (
+                  <>
+                    <Link key={scene.id} href={`/${storyData.id}/${scene.id}`} className={buttonVariants({
+                      variant: "outline", className: "xl:w-full h-auto justify-start", wrap: true
+                    })}>
+                      {scene.title}
+                      {scene.selected_choice_id && (
+                        <Check className="ml-2" size={16} color="green" />
+                      )}
+                    </Link>
 
-                  {scene.id !== storyData.scenes[storyData.scenes.length - 1].id && (
-                    <ChevronRight className="block xl:hidden" size={16} color="gray" />
-                  )}
-                </>
-              ))}
-            </CardContent>
-          </Card>
+                    {scene.id !== storyData.scenes[storyData.scenes.length - 1].id && (
+                      <ChevronRight className="block xl:hidden" size={16} color="gray" />
+                    )}
+                  </>
+                ))}
+              </CardContent>
+            </Card>
+          ) : (
+            <Button variant="outline" size="icon" className="bg-white/10 hover:bg-white/20" onClick={toggle}>
+              <PanelRightOpen size={16} />
+            </Button>
+          )}
         </div>
 
-        <div className="w-full xl:w-3/5">
+        <div className={cn({
+          "w-full xl:w-3/5": showPreviousScenes,
+          "w-full xl:w-5/5": !showPreviousScenes
+        })}>
           <Card className={cn(
             "w-full bg-gray-100/5", {
               "pt-0": sceneData.imageUrl,
