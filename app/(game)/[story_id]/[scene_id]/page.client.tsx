@@ -1,19 +1,43 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { generateNextScene } from "@/lib/actions/generate.scene.action";
+import { generateNextScene, handleCustomChoice } from "@/lib/actions/generate.scene.action";
 import { Component } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { Prisma } from "@prisma/client";
-import { Expand, ImageUpscale, Pen, Shrink } from "lucide-react";
+import { Check, Expand, ImageUpscale, Pen, Shrink } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 
 type PageClientProps = {
-  story_data: Prisma.StoryGetPayload<{}>;
+  story_data: Prisma.StoryGetPayload<{
+    include: {
+      scenes: {
+        select: {
+          id: true,
+          title: true,
+          content: true,
+          imageUrl: true,
+          imagePrompt: true,
+          choices: {
+            select: {
+              consequence: true,
+              text: true,
+              id: true,
+              isCustomChoice: true,
+              isPersonalized: true,
+              description: true
+            }
+          },
+          selected_choice_id: true,
+        }
+      }
+    }
+  }>;
   scene_data: Prisma.SceneGetPayload<{
     include: {
       choices: {
@@ -77,7 +101,9 @@ export const PageClient: Component<PageClientProps> = ({ story_data: storyData, 
     setLoading(true);
     
     try {
-      await generateNextScene(storyData.id, sceneData.id, selectedChoice.id, diceResult || undefined);
+      if (!selectedChoice.isCustomChoice) await generateNextScene(storyData.id, sceneData.id, selectedChoice.id, diceResult || undefined);
+      else await handleCustomChoice(storyData.id, sceneData.id, selectedChoice.text, diceResult || undefined);
+
     } catch (error) {
       console.error("Erreur lors de la génération de la scène:", error);
       setLoading(false);
@@ -153,6 +179,24 @@ export const PageClient: Component<PageClientProps> = ({ story_data: storyData, 
       </div>
 
       <div className="flex flex-row gap-4 mt-4">
+        <div className="w-1/5">
+          <Card className="w-full bg-gray-100/5">
+            <CardHeader>
+              <CardTitle>Scènes</CardTitle>
+            </CardHeader>
+            <CardContent className="flex flex-col gap-2">
+              {storyData.scenes.map((scene) => (
+                <Link key={scene.id} href={`/${storyData.id}/${scene.id}`} className={buttonVariants({ variant: "outline", className: "w-full" })}>
+                  {scene.title}
+                  {scene.selected_choice_id && (
+                    <Check className="ml-2" size={16} color="green" />
+                  )}
+                </Link>
+              ))}
+            </CardContent>
+          </Card>
+        </div>
+
         <div className="w-4/5">
           <Card className={cn(
             "w-full bg-gray-100/5", {
@@ -204,139 +248,166 @@ export const PageClient: Component<PageClientProps> = ({ story_data: storyData, 
           </Card>
         </div>
 
-        <div className="w-2/5">
-          <Card className="w-full bg-gray-100/5">
-            {!confirmChoice ? (
-              <>
-                <CardHeader>
-                  <CardTitle>Choix</CardTitle>
-                </CardHeader>
-                <CardContent className="flex flex-col gap-2">
-                  {sceneData.choices.map((choice) => (
-                    <div key={choice.id} className="border border-border rounded-md p-2">
-                      <Button
-                        variant="outline"
-                        className={cn("w-full", selectedChoice?.id === choice.id ? "bg-yellow-500/10 hover:bg-yellow-500/5 text-white" : "hover:bg-yellow-500/30")}
-                        onClick={() => {
-                          if (selectedChoice?.id === choice.id) setSelectedChoice(null);
-                          else setSelectedChoice(choice);
-                        }}
-                      >
-                        {choice.text}
-                        {choice.isCustomChoice && <Pen className="ml-2" />}
-                      </Button>
-
-                      {choice.isCustomChoice && selectedChoice?.id === choice.id && (
-                        <>
-                          <Input
-                            placeholder="Votre choix personnalisé"
-                            className={cn("mt-2 w-full", selectedChoice?.id === choice.id ? "bg-yellow-500/10 hover:bg-yellow-500/5 text-white" : "hover:bg-yellow-500/30")}
-                            onChange={(e) => {
-                              setSelectedChoice({
-                                ...choice,
-                                text: e.target.value,
-                              });
-                            }}
-                            value={selectedChoice?.id === choice.id ? selectedChoice.text : ""}
-                            disabled={selectedChoice?.id !== choice.id}
-                          />
-                        </>
-                      )}
- 
-                      <CardDescription className="mt-2">{choice.description}</CardDescription>
-                    </div>
-                  ))}
-
-                  {selectedChoice && (
-                    <Card className="w-full bg-gray-100/5 mt-4">
-                      <CardHeader>
-                        <CardTitle>Conséquence</CardTitle>
-                        <CardDescription>{selectedChoice.consequence}</CardDescription>
-                      </CardHeader>
-                      <CardFooter className="flex justify-end">
-                        <Button variant="outline" className="w-full" onClick={() => setConfirmChoice(true)}>
-                          Confirmer
-                        </Button>
-                      </CardFooter>
-                    </Card>
-                  )}
-                </CardContent>
-              </>
-            ) : (
-              <>
-                <CardHeader>
-                  <CardTitle>Lancez le dé</CardTitle>
-                  <CardDescription>
-                    Le résultat du dé déterminera l'impact de votre choix sur l'histoire
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="flex flex-col items-center gap-4">
-                  <div className="h-20 flex items-center justify-center">
-                    {renderDiceFace(currentFace)}
-                  </div>
-                  
-                  {diceRolled && (
-                    <div className="text-center w-full">
-                      <p className="font-bold text-lg">
-                        Résultat: <span className="text-yellow-500">{diceResult}</span>/6
-                      </p>
-                      <p className="text-sm opacity-80 mt-1">
-                        {getDiceImpactDescription(diceResult)}
-                      </p>
-                    </div>
-                  )}
-                  
-                  <div className="grid grid-cols-2 gap-2 w-full mt-4">
-                    {!diceRolled ? (
-                      <Button 
-                        variant="outline" 
-                        className="w-full col-span-2" 
-                        onClick={handleRollDice}
-                        disabled={isRolling}
-                      >
-                        {isRolling ? "Lancement..." : "Lancer le dé"}
-                      </Button>
-                    ) : (
-                      <>
-                        <Button 
-                          variant="outline" 
-                          className="w-full" 
+        {!sceneData.selected_choice_id && (
+          <div className="w-2/5">
+            <Card className="w-full bg-gray-100/5">
+              {!confirmChoice ? (
+                <>
+                  <CardHeader>
+                    <CardTitle>Choix</CardTitle>
+                  </CardHeader>
+                  <CardContent className="flex flex-col gap-2">
+                    {sceneData.choices.map((choice) => (
+                      <div key={choice.id} className="border border-border rounded-md p-2">
+                        <Button
+                          variant="outline"
+                          className={cn("w-full", selectedChoice?.id === choice.id ? "bg-yellow-500/10 hover:bg-yellow-500/5 text-white" : "hover:bg-yellow-500/30")}
                           onClick={() => {
-                            setConfirmChoice(false);
-                            setDiceRolled(false);
-                            setDiceResult(null);
+                            if (selectedChoice?.id === choice.id) setSelectedChoice(null);
+                            else setSelectedChoice(choice);
                           }}
                         >
-                          Annuler
+                          {choice.text}
+                          {choice.isCustomChoice && <Pen className="ml-2" />}
                         </Button>
-                        <Button 
-                          variant="default" 
-                          className="w-full bg-yellow-500 hover:bg-yellow-600" 
-                          onClick={handleSubmitChoice}
-                          disabled={loading}
-                        >
-                          {loading ? (
-                            <>
-                              <span className="animate-pulse">Génération...</span>
-                            </>
-                          ) : (
-                            "Continuer"
-                          )}
-                        </Button>
-                      </>
+
+                        {choice.isCustomChoice && selectedChoice?.id === choice.id && (
+                          <>
+                            <Input
+                              placeholder="Votre choix personnalisé"
+                              className={cn("mt-2 w-full", selectedChoice?.id === choice.id ? "bg-yellow-500/10 hover:bg-yellow-500/5 text-white" : "hover:bg-yellow-500/30")}
+                              onChange={(e) => {
+                                setSelectedChoice({
+                                  ...choice,
+                                  text: e.target.value,
+                                });
+                              }}
+                              value={selectedChoice?.id === choice.id ? selectedChoice.text : ""}
+                              disabled={selectedChoice?.id !== choice.id}
+                            />
+                          </>
+                        )}
+  
+                        <CardDescription className="mt-2">{choice.description}</CardDescription>
+                      </div>
+                    ))}
+
+                    {selectedChoice && (
+                      <Card className="w-full bg-gray-100/5 mt-4">
+                        <CardHeader>
+                          <CardTitle>Conséquence</CardTitle>
+                          <CardDescription>{selectedChoice.consequence}</CardDescription>
+                        </CardHeader>
+                        <CardFooter className="flex justify-end">
+                          <Button variant="outline" className="w-full" onClick={() => setConfirmChoice(true)}>
+                            Confirmer
+                          </Button>
+                        </CardFooter>
+                      </Card>
                     )}
-                  </div>
-                  
-                  {loading && selectedChoice?.loadingMessage && (
-                    <div className="text-sm mt-4 p-3 bg-yellow-500/10 rounded-md">
-                      <p className="italic">{selectedChoice?.loadingMessage}</p>
+                  </CardContent>
+                </>
+              ) : (
+                <>
+                  <CardHeader>
+                    <CardTitle>Lancez le dé</CardTitle>
+                    <CardDescription>
+                      Le résultat du dé déterminera l'impact de votre choix sur l'histoire
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex flex-col items-center gap-4">
+                    <div className="h-20 flex items-center justify-center">
+                      {renderDiceFace(currentFace)}
                     </div>
-                  )}
-                </CardContent>
-              </>
-            )}
-          </Card>
-        </div>
+                    
+                    {diceRolled && (
+                      <div className="text-center w-full">
+                        <p className="font-bold text-lg">
+                          Résultat: <span className="text-yellow-500">{diceResult}</span>/6
+                        </p>
+                        <p className="text-sm opacity-80 mt-1">
+                          {getDiceImpactDescription(diceResult)}
+                        </p>
+                      </div>
+                    )}
+                    
+                    <div className="grid grid-cols-2 gap-2 w-full mt-4">
+                      {!diceRolled ? (
+                        <Button 
+                          variant="outline" 
+                          className="w-full col-span-2" 
+                          onClick={handleRollDice}
+                          disabled={isRolling}
+                        >
+                          {isRolling ? "Lancement..." : "Lancer le dé"}
+                        </Button>
+                      ) : (
+                        <>
+                          <Button 
+                            variant="outline" 
+                            className="w-full" 
+                            onClick={() => {
+                              setConfirmChoice(false);
+                              setDiceRolled(false);
+                              setDiceResult(null);
+                            }}
+                          >
+                            Annuler
+                          </Button>
+                          <Button 
+                            variant="default" 
+                            className="w-full bg-yellow-500 hover:bg-yellow-600" 
+                            onClick={handleSubmitChoice}
+                            disabled={loading}
+                          >
+                            {loading ? (
+                              <>
+                                <span className="animate-pulse">Génération...</span>
+                              </>
+                            ) : (
+                              "Continuer"
+                            )}
+                          </Button>
+                        </>
+                      )}
+                    </div>
+                    
+                    {loading && selectedChoice?.loadingMessage && (
+                      <div className="text-sm mt-4 p-3 bg-yellow-500/10 rounded-md">
+                        <p className="italic">{selectedChoice?.loadingMessage}</p>
+                      </div>
+                    )}
+                  </CardContent>
+                </>
+              )}
+            </Card>
+          </div>
+        )}
+
+        {sceneData.selected_choice_id && (
+          <div className="w-2/5">
+            <Card className="w-full bg-gray-100/5">
+              <CardHeader>
+                <CardTitle>Choix</CardTitle>
+                <CardDescription>Choix sélectionné</CardDescription>
+              </CardHeader>
+              <CardContent className="flex flex-col gap-2">
+                {sceneData.choices.map((choice) => (
+                  <div key={choice.id} className="border border-border rounded-md p-2">
+                    <Button
+                      variant="outline"
+                      className={cn("w-full", choice.id === sceneData.selected_choice_id ? "bg-yellow-500/10 hover:bg-yellow-500/5 text-white" : "hover:bg-yellow-500/30")}
+                    >
+                      {choice.text}
+                      {choice.isCustomChoice && <Pen className="ml-2" />}
+                    </Button>
+                    <CardDescription className="mt-2">{choice.description}</CardDescription>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          </div>
+        )}
       </div>
     </div>
   );

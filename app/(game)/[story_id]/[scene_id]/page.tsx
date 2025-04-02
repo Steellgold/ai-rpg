@@ -17,7 +17,31 @@ const Page = async ({ params }: PageProps) => {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return unauthorized();
 
-  const story = await prisma.story.findUnique({ where: { id: story_id, creatorId: user.id } });
+  const story = await prisma.story.findUnique({
+    where: { id: story_id, creatorId: user.id },
+    include: {
+      scenes: {
+        select: {
+          id: true,
+          title: true,
+          content: true,
+          imageUrl: true,
+          imagePrompt: true,
+          choices: {
+            select: {
+              consequence: true,
+              text: true,
+              id: true,
+              isCustomChoice: true,
+              isPersonalized: true,
+              description: true
+            }
+          },
+          selected_choice_id: true,
+        }
+      }
+    }
+  });
   if (!story) return notFound();
   
   const scene = await prisma.scene.findUnique({
