@@ -28,6 +28,8 @@ const Page = async ({ params }: PageProps) => {
           consequence: true,
           description: true,
           loadingMessage: true,
+          isCustomChoice: true,
+          isPersonalized: true,
           text: true,
           id: true
         }
@@ -36,7 +38,9 @@ const Page = async ({ params }: PageProps) => {
   });
   if (!scene) return notFound();
 
-  return <PageClient story_data={story} scene_data={scene} />;
+  return (
+    <PageClient story_data={story} scene_data={scene} />
+  );
 }
 
 export default Page;
