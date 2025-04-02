@@ -93,7 +93,7 @@ const Page = async() => {
             </CardContent>
 
             <CardFooter>
-              <Link className={buttonVariants({ variant: "default", className: "w-full" })} href={`/game/${game.id}`}>
+              <Link className={buttonVariants({ variant: "default", className: "w-full" })} href={`/${game.id}/${game.current_scene_id}`}>
                 {t("Continue")}
               </Link>
             </CardFooter>
