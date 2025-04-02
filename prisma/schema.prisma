@@ -11,14 +11,15 @@ datasource db {
 model User {
   id                   String     @id @default(uuid())
   email                String     @unique
-  createdAt            DateTime   @default(now())
-  updatedAt            DateTime   @updatedAt
   // 
   daily_limit_messages Int?       @default(15)
   premium              Boolean    @default(false) // Can generate more than 15 messages per day and access to generate scenes and characters images and avatars
   //
   stories              Story[]
   gameSaves            GameSave[]
+  // 
+  createdAt            DateTime   @default(now())
+  updatedAt            DateTime   @default(now()) @updatedAt
 }
 
 enum NarrativeStyle {
@@ -49,7 +50,7 @@ model Story {
   creatorId        String
   // 
   createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @updatedAt
+  updatedAt        DateTime       @default(now()) @updatedAt
 
   @@index([creatorId])
 }
@@ -73,36 +74,48 @@ model Character {
   story            Story            @relation(fields: [storyId], references: [id], onDelete: Cascade)
   storyId          String
   sceneAppearances SceneCharacter[]
+  // 
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @default(now()) @updatedAt
 
   @@index([storyId])
 }
 
 model Scene {
-  id          String            @id @default(cuid())
-  title       String
-  content     String            @db.Text
-  imagePrompt String?           @db.Text
-  imageUrl    String?
-  order       Int               @default(0)
+  id                 String            @id @default(cuid())
+  title              String
+  content            String            @db.Text
+  imagePrompt        String?           @db.Text
+  imageUrl           String?
+  order              Int               @default(0)
   //
-  story       Story             @relation(fields: [storyId], references: [id], onDelete: Cascade)
-  storyId     String
-  choices     Choice[]
-  characters  SceneCharacter[]
-  nextScenes  SceneTransition[] @relation("SourceScene")
-  prevScenes  SceneTransition[] @relation("DestinationScene")
+  story              Story             @relation(fields: [storyId], references: [id], onDelete: Cascade)
+  storyId            String
+  // 
+  choices            Choice[]
+  selected_choice_id String?
+  // 
+  characters         SceneCharacter[]
+  nextScenes         SceneTransition[] @relation("SourceScene")
+  prevScenes         SceneTransition[] @relation("DestinationScene")
+  // 
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @default(now()) @updatedAt
 
   @@index([storyId])
 }
 
 model SceneTransition {
-  id                 String @id @default(cuid())
-  sourceScene        Scene  @relation("SourceScene", fields: [sourceSceneId], references: [id], onDelete: Cascade)
+  id                 String   @id @default(cuid())
+  sourceScene        Scene    @relation("SourceScene", fields: [sourceSceneId], references: [id], onDelete: Cascade)
   sourceSceneId      String
-  destinationScene   Scene  @relation("DestinationScene", fields: [destinationSceneId], references: [id], onDelete: Cascade)
+  destinationScene   Scene    @relation("DestinationScene", fields: [destinationSceneId], references: [id], onDelete: Cascade)
   destinationSceneId String
   choiceId           String
-  choice             Choice @relation(fields: [choiceId], references: [id], onDelete: Cascade)
+  choice             Choice   @relation(fields: [choiceId], references: [id], onDelete: Cascade)
+  // 
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @default(now()) @updatedAt
 
   @@unique([sourceSceneId, choiceId])
 }
@@ -115,6 +128,9 @@ model SceneCharacter {
   sceneId     String
   character   Character @relation(fields: [characterId], references: [id], onDelete: Cascade)
   characterId String
+  // 
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now()) @updatedAt
 
   @@unique([sceneId, characterId])
 }
@@ -132,6 +148,9 @@ model Choice {
   sceneId        String
   transitions    SceneTransition[]
   saveHistories  SaveHistory[]
+  // 
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @default(now()) @updatedAt
 
   @@index([sceneId])
 }
@@ -152,6 +171,9 @@ model GameSave {
   // 
   history        SaveHistory[]
   notes          String?       @db.Text
+  // 
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @default(now()) @updatedAt
 
   @@index([userId])
   @@index([storyId])
@@ -166,6 +188,9 @@ model SaveHistory {
   sceneId    String
   choiceId   String?
   choice     Choice?  @relation(fields: [choiceId], references: [id])
+  // 
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now()) @updatedAt
 
   @@index([gameSaveId])
 }

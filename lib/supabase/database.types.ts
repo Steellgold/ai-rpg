@@ -73,6 +73,7 @@ export type Database = {
           age: number | null
           background: string | null
           backstory: string | null
+          createdAt: string
           description: string
           flaws: string | null
           id: string
@@ -84,12 +85,14 @@ export type Database = {
           personality: string | null
           relationships: string[] | null
           storyId: string
+          updatedAt: string
         }
         Insert: {
           abilities?: string[] | null
           age?: number | null
           background?: string | null
           backstory?: string | null
+          createdAt?: string
           description: string
           flaws?: string | null
           id: string
@@ -101,12 +104,14 @@ export type Database = {
           personality?: string | null
           relationships?: string[] | null
           storyId: string
+          updatedAt?: string
         }
         Update: {
           abilities?: string[] | null
           age?: number | null
           background?: string | null
           backstory?: string | null
+          createdAt?: string
           description?: string
           flaws?: string | null
           id?: string
@@ -118,6 +123,7 @@ export type Database = {
           personality?: string | null
           relationships?: string[] | null
           storyId?: string
+          updatedAt?: string
         }
         Relationships: [
           {
@@ -132,6 +138,7 @@ export type Database = {
       Choice: {
         Row: {
           consequence: string | null
+          createdAt: string
           description: string | null
           id: string
           isCustomChoice: boolean
@@ -139,9 +146,11 @@ export type Database = {
           loadingMessage: string | null
           sceneId: string
           text: string
+          updatedAt: string
         }
         Insert: {
           consequence?: string | null
+          createdAt?: string
           description?: string | null
           id: string
           isCustomChoice?: boolean
@@ -149,9 +158,11 @@ export type Database = {
           loadingMessage?: string | null
           sceneId: string
           text: string
+          updatedAt?: string
         }
         Update: {
           consequence?: string | null
+          createdAt?: string
           description?: string | null
           id?: string
           isCustomChoice?: boolean
@@ -159,6 +170,7 @@ export type Database = {
           loadingMessage?: string | null
           sceneId?: string
           text?: string
+          updatedAt?: string
         }
         Relationships: [
           {
@@ -174,6 +186,7 @@ export type Database = {
         Row: {
           characterClass: string | null
           characterName: string
+          createdAt: string
           currentSceneId: string
           id: string
           lastPlayed: string
@@ -181,11 +194,13 @@ export type Database = {
           notes: string | null
           progress: number
           storyId: string
+          updatedAt: string
           userId: string
         }
         Insert: {
           characterClass?: string | null
           characterName: string
+          createdAt?: string
           currentSceneId: string
           id: string
           lastPlayed?: string
@@ -193,11 +208,13 @@ export type Database = {
           notes?: string | null
           progress?: number
           storyId: string
+          updatedAt?: string
           userId: string
         }
         Update: {
           characterClass?: string | null
           characterName?: string
+          createdAt?: string
           currentSceneId?: string
           id?: string
           lastPlayed?: string
@@ -205,6 +222,7 @@ export type Database = {
           notes?: string | null
           progress?: number
           storyId?: string
+          updatedAt?: string
           userId?: string
         }
         Relationships: [
@@ -227,24 +245,30 @@ export type Database = {
       SaveHistory: {
         Row: {
           choiceId: string | null
+          createdAt: string
           gameSaveId: string
           id: string
           sceneId: string
           timestamp: string
+          updatedAt: string
         }
         Insert: {
           choiceId?: string | null
+          createdAt?: string
           gameSaveId: string
           id: string
           sceneId: string
           timestamp?: string
+          updatedAt?: string
         }
         Update: {
           choiceId?: string | null
+          createdAt?: string
           gameSaveId?: string
           id?: string
           sceneId?: string
           timestamp?: string
+          updatedAt?: string
         }
         Relationships: [
           {
@@ -266,30 +290,39 @@ export type Database = {
       Scene: {
         Row: {
           content: string
+          createdAt: string
           id: string
           imagePrompt: string | null
           imageUrl: string | null
           order: number
+          selected_choice_id: string | null
           storyId: string
           title: string
+          updatedAt: string
         }
         Insert: {
           content: string
+          createdAt?: string
           id: string
           imagePrompt?: string | null
           imageUrl?: string | null
           order?: number
+          selected_choice_id?: string | null
           storyId: string
           title: string
+          updatedAt?: string
         }
         Update: {
           content?: string
+          createdAt?: string
           id?: string
           imagePrompt?: string | null
           imageUrl?: string | null
           order?: number
+          selected_choice_id?: string | null
           storyId?: string
           title?: string
+          updatedAt?: string
         }
         Relationships: [
           {
@@ -304,21 +337,27 @@ export type Database = {
       SceneCharacter: {
         Row: {
           characterId: string
+          createdAt: string
           id: string
           role: string | null
           sceneId: string
+          updatedAt: string
         }
         Insert: {
           characterId: string
+          createdAt?: string
           id: string
           role?: string | null
           sceneId: string
+          updatedAt?: string
         }
         Update: {
           characterId?: string
+          createdAt?: string
           id?: string
           role?: string | null
           sceneId?: string
+          updatedAt?: string
         }
         Relationships: [
           {
@@ -340,21 +379,27 @@ export type Database = {
       SceneTransition: {
         Row: {
           choiceId: string
+          createdAt: string
           destinationSceneId: string
           id: string
           sourceSceneId: string
+          updatedAt: string
         }
         Insert: {
           choiceId: string
+          createdAt?: string
           destinationSceneId: string
           id: string
           sourceSceneId: string
+          updatedAt?: string
         }
         Update: {
           choiceId?: string
+          createdAt?: string
           destinationSceneId?: string
           id?: string
           sourceSceneId?: string
+          updatedAt?: string
         }
         Relationships: [
           {
@@ -411,7 +456,7 @@ export type Database = {
           possibleEndings?: string[] | null
           synopsis: string
           title: string
-          updatedAt: string
+          updatedAt?: string
         }
         Update: {
           coverImageUrl?: string | null
@@ -454,7 +499,7 @@ export type Database = {
           email: string
           id: string
           premium?: boolean
-          updatedAt: string
+          updatedAt?: string
         }
         Update: {
           createdAt?: string
