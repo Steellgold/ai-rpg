@@ -28,7 +28,8 @@ const Page = async() => {
       synopsis: true,
       coverImageUrl: true,
       max_scenes: true,
-      current_scene: true
+      current_scene: true,
+      current_scene_id: true
     },
   });
 
@@ -41,7 +42,7 @@ const Page = async() => {
         <p className="text-lg">{t("NoGameDescription")}</p>
 
         <div className="flex flex-col items-center mt-4">
-          <Link href="/game/new" className={buttonVariants({ variant: "navbar" })}>
+          <Link href="/new" className={buttonVariants({ variant: "navbar" })}>
             {t("NewGame")}
           </Link>
         </div>
@@ -67,7 +68,7 @@ const Page = async() => {
             key={index}
           >
             {game.coverImageUrl && (
-              <Link href={`/game/${game.id}`}>
+              <Link href={`/${game.id}/${game.current_scene_id}`}>
                 <Image
                   src={game.coverImageUrl}
                   alt={game.title}
