@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/db/prisma";
+import { env } from "@/lib/env/env";
 import { createClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -16,7 +17,7 @@ export async function GET(request: NextRequest, { params }: Params) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) {
     console.error("User not authenticated");
-    return NextResponse.redirect(new URL("/", request.url));
+    return NextResponse.redirect(`${env.NEXT_PUBLIC_BASE_URL}`);
   }
   
   try {
@@ -40,13 +41,14 @@ export async function GET(request: NextRequest, { params }: Params) {
     
     if (story.scenes.length > 0) {
       const targetSceneId = story.current_scene_id || story.scenes[0].id;
-      return NextResponse.redirect(new URL(`/${storyId}/${targetSceneId}`, request.url));
+      return NextResponse.redirect(`${env.NEXT_PUBLIC_BASE_URL}/${storyId}/${targetSceneId}`);
     } else {
       console.warn(`Story ${storyId} has no scenes`);
-      return NextResponse.redirect(new URL("/continue", request.url));
+      // That means normally never happen, but if it does, we redirect to continue
+      return NextResponse.redirect(`${env.NEXT_PUBLIC_BASE_URL}/continue`);
     }
   } catch (error) {
     console.error("Error in story route handler:", error);
-    return NextResponse.redirect(new URL("/continue", request.url));
+    return NextResponse.redirect(`${env.NEXT_PUBLIC_BASE_URL}/continue`);
   }
 }

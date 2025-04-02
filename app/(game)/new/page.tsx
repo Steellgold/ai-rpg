@@ -5,8 +5,8 @@ import { createClient } from "@/lib/supabase/server";
 const Page = async() => {
   const supabase = await createClient();
 
-  const { data: session } = await supabase.auth.getSession();
-  if (!session) return unauthorized();
+  const { data: user } = await supabase.auth.getUser();
+  if (!user) return unauthorized();
 
   return <PageClient />;
 }

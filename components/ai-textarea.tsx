@@ -42,7 +42,7 @@ export const AiTextarea = () => {
 
       toast({ title: "Text Enhanced", description: "The text has been successfully enhanced.", variant: "default" })
     } catch (error) {
-      console.error("Error enhancing text:", error)      
+      console.error("Error enhancing text:", error)
       toast({ title: "Error", description: "An error occurred while enhancing the text.", variant: "destructive" })
     } finally {
       setIsGenerating(false)
