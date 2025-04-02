@@ -13,6 +13,8 @@
 /.next/
 /out/
 
+deno.exe
+
 # production
 /build
 
