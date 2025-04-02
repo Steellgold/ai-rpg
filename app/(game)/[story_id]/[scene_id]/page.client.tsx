@@ -8,7 +8,7 @@ import { generateNextScene } from "@/lib/actions/generate.scene.action";
 import { Component } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { Prisma } from "@prisma/client";
-import { Pen } from "lucide-react";
+import { Expand, ImageUpscale, Pen, Shrink } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -40,6 +40,8 @@ export const PageClient: Component<PageClientProps> = ({ story_data: storyData, 
   const [diceResult, setDiceResult] = useState<number | null>(null);
   const [currentFace, setCurrentFace] = useState(1);
   const [diceRolled, setDiceRolled] = useState(false);
+
+  const [show_fullImage, setShowFullImage] = useState(false);
 
   const formatSceneContent = (content: string) => {
     return content.split('\n').map((paragraph, index) => (
@@ -152,19 +154,36 @@ export const PageClient: Component<PageClientProps> = ({ story_data: storyData, 
 
       <div className="flex flex-row gap-4 mt-4">
         <div className="w-4/5">
-          <Card className="w-full bg-gray-100/5">
+          <Card className={cn(
+            "w-full bg-gray-100/5", {
+              "pt-0": sceneData.imageUrl,
+            }
+          )}>
             {sceneData.imageUrl && (
-              <Image
-                src={sceneData.imageUrl}
-                alt="Scene Image"
-                width={500}
-                height={300}
-                className={cn(
-                  "w-full h-auto rounded-t-md", {
-                    "animate-pulse": loading
-                  }
-                )}
-              />
+              <div className="relative">
+                <Image
+                  src={sceneData.imageUrl}
+                  alt="Scene Image"
+                  width={500}
+                  height={300}
+                  className={cn(
+                    "w-full object-cover rounded-t-md", {
+                      "animate-pulse": loading,
+                      "h-56": !show_fullImage,
+                      "h-auto": show_fullImage,
+                    }
+                  )}
+                />
+
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="absolute top-2 right-2 bg-white/10 hover:bg-white/20"
+                  onClick={() => setShowFullImage(!show_fullImage)}
+                >
+                  {show_fullImage ? <Shrink size={16} /> : <Expand size={16} />}
+                </Button>
+              </div>
             )}
 
             <CardHeader>
