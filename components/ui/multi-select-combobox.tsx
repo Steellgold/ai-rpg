@@ -4,7 +4,7 @@ import * as React from "react"
 import { Button } from "@/components/ui/button"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { Check, ChevronsUpDown, X } from "lucide-react"
+import { Check, ChevronsUpDown, Dna, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 export type Option = {
@@ -42,23 +42,22 @@ export function MultiSelectCombobox({
     <Popover open={open && !disabled} onOpenChange={(value) => !disabled && setOpen(value)}>
       <PopoverTrigger asChild>
         <Button
-          variant="outline"
+          variant="ghost"
           role="combobox"
-          size={"combobox"}
+          size={selected.length > 0 ? "default" : "icon"}
           aria-expanded={open}
           disabled={disabled}
-          className={cn(disabled && "opacity-70 cursor-not-allowed")}
+          className={cn(disabled && "opacity-70 cursor-not-allowed", "h-8 rounded-full text-gray-400 hover:text-gray-300 !border border")}
         >
           <div className="flex flex-wrap gap-1">
             {selected.length === 0 ? (
-              <span className="text-muted-foreground">{placeholder}</span>
+              <Dna className="h-4 w-4" />
             ) : (
-              <span className="flex flex-wrap gap-1">
+              <span className="text-sm text-gray-400 flex flex-row items-center gap-1">
                 {selected.length} genre{selected.length > 1 ? "s" : ""}
               </span>
             )}
           </div>
-          <ChevronsUpDown />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-full p-0" align="start">

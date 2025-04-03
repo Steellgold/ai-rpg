@@ -105,6 +105,20 @@
     }
   },
   "Utils": {
+    "Suggestions": {
+      "TKOK": {
+        "Label": "The Kingdom of Kiyomitsugawa",
+        "Prompt": "The story takes place in the kingdom of Kiyomitsugawa, a prosperous nation bathed by sacred rivers, with landscapes adorned with thousand-year-old cherry trees and majestic mountains. This kingdom, imbued with serenity and ancestral wisdom, is governed by a benevolent king who seeks to maintain peace and harmony among his people. However, dark forces threaten to disturb the tranquility of Kiyomitsugawa, and a young hero must undertake a perilous journey to protect his homeland and uncover the secrets of his ancestral heritage."
+      },
+      "TSC": {
+        "Label": "The Shadow Chronicles",
+        "Prompt": "In the dark kingdom of Umbra, where the sun never shines and the moon casts an eternal glow, a secret society of sorcerers known as the Umbral Guardians protects the fragile balance between light and darkness. When a powerful artifact is stolen, threatening to plunge the world into chaos, a young apprentice named Elara must navigate through the treacherous politics of the Umbral Council and unravel the mysteries of the stolen relic before it's too late. Throughout her journey, she discovers hidden truths about her own past and about the true nature of the shadows that surround her."
+      },
+      "DRA": {
+        "Label": "The Awakening of Dragons",
+        "Prompt": "In the divided world of Drakoria, where dragons were considered legends for a thousand years, glimmering scales begin to appear in the Northern mountains. A young cartographer named Lyra discovers she possesses the rare gift of communicating with these majestic creatures. Born with a scale-shaped birthmark on her wrist, she understands that her destiny is tied to the ancient broken pact between humans and dragons. As human kingdoms prepare for war against these beings they fear, Lyra must journey to the five ancestral nests to understand why the dragons are awakening now and become a mediator between the two species before a devastating war breaks out and consumes the entire world."
+      }
+    },
     "Genres": {
       "fantasy-medieval": {
         "label": "Medieval Fantasy",

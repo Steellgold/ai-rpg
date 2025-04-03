@@ -1,6 +1,6 @@
 {
   "Page": {
-    "Title": "Croniques du Destin",
+    "Title": "Chroniques du Destin",
     "Description": "Où vos choix façonnent l'aventure, et chaque décision compte.",
 
     "Buttons": {
@@ -104,6 +104,20 @@
     }
   },
   "Utils": {
+    "Suggestions": {
+      "TKOK": {
+        "Label": "Le Royaume de Kiyomitsugawa",
+        "Prompt": "L'histoire se déroule dans le royaume de Kiyomitsugawa, une nation prospère baignée par des rivières sacrées, avec des paysages ornés de cerisiers millénaires et de montagnes majestueuses. Ce royaume, imprégné de sérénité et de sagesse ancestrale, est gouverné par un roi bienveillant qui cherche à maintenir la paix et l'harmonie parmi son peuple. Cependant, des forces obscures menacent de troubler la tranquillité de Kiyomitsugawa, et un jeune héros doit entreprendre un périlleux voyage pour protéger sa patrie et percer les secrets de son héritage ancestral."
+      },
+      "TSC": {
+        "Label": "Les Chroniques de l'Ombre",
+        "Prompt": "Dans le royaume obscur d’Umbra, où le soleil ne brille jamais et où la lune projette une lueur éternelle, une société secrète de sorciers connue sous le nom des Gardiens Umbrals protège l’équilibre fragile entre la lumière et l’obscurité. Lorsqu’un artefact puissant est volé, menaçant de plonger le monde dans le chaos, une jeune apprentie nommée Elara doit naviguer à travers les politiques traîtresses du Conseil Umbral et percer les mystères de la relique dérobée avant qu’il ne soit trop tard. Au fil de son voyage, elle découvre des vérités cachées sur son propre passé et sur la véritable nature des ombres qui l’entourent."
+      },
+      "DRA": {
+        "Label": "L'Éveil des Dragons",
+        "Prompt": "Dans le monde divisé de Drakoria, où les dragons étaient considérés comme des légendes depuis mille ans, des écailles luisantes commencent à apparaître dans les montagnes du Nord. Une jeune cartographe nommée Lyra découvre qu'elle possède le don rare de communiquer avec ces créatures majestueuses. Dotée d'une marque de naissance en forme d'écaille sur son poignet, elle comprend que son destin est lié à l'ancien pacte brisé entre humains et dragons. Alors que les royaumes humains se préparent à la guerre contre ces êtres qu'ils craignent, Lyra doit voyager vers les cinq nids ancestraux pour comprendre pourquoi les dragons se réveillent maintenant et devenir une médiatrice entre les deux espèces avant qu'une guerre dévastatrice n'éclate et ne consume le monde entier."
+      }
+    },
     "Genres": {
       "fantasy-medieval": {
         "label": "Fantasy Médiévale",
