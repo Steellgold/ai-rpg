@@ -193,7 +193,7 @@ ${diceRoll == 0 ? "" : "" +
   "\n\n" +
   "\n\n- 1-2: Minimal impact on the story, the action fails." +
   "\n- 3-4: Moderate impact (significant changes in the story), the action succeeds but with a cost or complication." +
-  "\n- 5-6: Major impact (important consequences, dramatic turns), the action succeeds without complications or leads to a significant change in the story." +
+  "\n- 5-6: Major impact (important consequences, dramatic turns), the action succeeds without complications or leads to a significant change in the story."
 }
 
 ## RECENT HISTORY
