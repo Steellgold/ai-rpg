@@ -5,7 +5,6 @@ import { z } from "npm:zod";
 import { createClient } from "jsr:@supabase/supabase-js";
 import { createId } from "npm:@paralleldrive/cuid2";
 import { OpenAI } from "npm:openai";
-
 const registry = createProviderRegistry({
   openai: createOpenAI({
     apiKey: Deno.env.get("OPENAI_API_KEY")
@@ -14,9 +13,8 @@ const registry = createProviderRegistry({
 const openai = new OpenAI({
   apiKey: Deno.env.get("OPENAI_API_KEY")
 });
-
 const choiceSchema = z.object({
-  label: z.string().min(1).max(50),
+  label: z.string().min(1).max(150),
   description: z.string().min(1).max(200),
   consequence: z.string().min(1).max(200),
   next_scene_waiting_loader_message: z.string().min(1).max(200),
@@ -24,7 +22,6 @@ const choiceSchema = z.object({
   is_personalized: z.boolean().default(false),
   is_custom_choice: z.boolean().default(false)
 });
-
 function extractSceneImagePrompt(prompt) {
   return `Create a high-quality, detailed illustration for a narrative game scene. 
 The scene should depict: ${prompt}
@@ -45,7 +42,6 @@ Ensure the image is visually striking and immersive, drawing the viewer into the
 - Avoid any elements that could be considered inappropriate or offensive.
 `;
 }
-
 async function uploadImageToSupabase(imageUrl, path) {
   const supabase = createClient(Deno.env.get("SUPABASE_URL"), Deno.env.get("SERVICE_ROLE_KEY"));
   try {
@@ -64,41 +60,32 @@ async function uploadImageToSupabase(imageUrl, path) {
     return null;
   }
 }
-
-Deno.serve(async (req) => {
+Deno.serve(async (req)=>{
   if (req.method !== "POST") {
     return new Response("Method not allowed", {
       status: 405
     });
   }
-
   const { storyId, sceneId, choiceId, diceRoll = 3, gameSaveId, userId, customText, isPremium = false } = await req.json();
-
   if (!storyId || !sceneId || !(choiceId || customText) || !userId) {
     return new Response(JSON.stringify({
       error: "Missing required fields: storyId, sceneId, choiceId/customText, and userId"
     }), {
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json"
+      },
       status: 400
     });
   }
-
   const supabase = createClient(Deno.env.get("SUPABASE_URL"), Deno.env.get("SERVICE_ROLE_KEY"));
-
   try {
-    const { data: userData, error: userError } = await supabase
-      .from('User')
-      .select('*')
-      .eq('id', userId)
-      .single();
-
+    // Vérifier si l'utilisateur existe et a les permissions
+    const { data: userData, error: userError } = await supabase.from('User').select('*').eq('id', userId).single();
     if (userError || !userData) {
       throw new Error(`Utilisateur non trouvé: ${userError?.message || "ID invalide"}`);
     }
-
-    const { data: story, error: storyError } = await supabase
-      .from('Story')
-      .select(`
+    // Récupérer l'histoire
+    const { data: story, error: storyError } = await supabase.from('Story').select(`
         id, title, synopsis, goal, possibleEndings, narrativeStyle, genre, max_scenes, current_scene, creatorId,
         Character (
           id, name, description, personality, outfit, age, background, abilities, relationships, motivations, flaws, backstory, isMain
@@ -108,73 +95,50 @@ Deno.serve(async (req) => {
             id, text, description, consequence, loadingMessage, isPersonalized, isCustomChoice
           )
         )
-      `)
-      .eq('id', storyId)
-      .order('order', { foreignTable: 'Scene', ascending: true })
-      .single();
-
+      `).eq('id', storyId).order('order', {
+      foreignTable: 'Scene',
+      ascending: true
+    }).single();
     if (storyError || !story) {
       throw new Error(`Histoire non trouvée: ${storyError?.message || "ID invalide"}`);
     }
-
     console.log("Story data:", story.creatorId, userId);
     if (story.creatorId !== userId) {
       throw new Error("You do not have permission to access this story");
     }
-    
     let selectedChoice;
-    let currentScene = story.Scene.find(s => s.id === sceneId);
-    
+    let currentScene = story.Scene.find((s)=>s.id === sceneId);
     if (!currentScene) {
       throw new Error("Not found current scene");
     }
-
     if (customText) {
-      const { data: syntheticChoice, error: choiceError } = await supabase
-        .from('Choice')
-        .insert({
-          id: createId(),
-          text: customText,
-          description: "Choix personnalisé du joueur",
-          consequence: customText,
-          loadingMessage: "L'histoire se développe selon votre action personnalisée...",
-          isCustomChoice: true,
-          sceneId: sceneId
-        })
-        .select()
-        .single();
-
+      const { data: syntheticChoice, error: choiceError } = await supabase.from('Choice').insert({
+        id: createId(),
+        text: customText,
+        description: "Choix personnalisé du joueur",
+        consequence: customText,
+        loadingMessage: "L'histoire se développe selon votre action personnalisée...",
+        isCustomChoice: true,
+        sceneId: sceneId
+      }).select().single();
       if (choiceError) {
         throw new Error(`Erreur lors de la création du choix personnalisé: ${choiceError.message}`);
       }
-      
       selectedChoice = syntheticChoice;
     } else {
-      selectedChoice = currentScene.Choice.find(c => c.id === choiceId);
+      // Récupérer le choix sélectionné
+      selectedChoice = currentScene.Choice.find((c)=>c.id === choiceId);
       if (!selectedChoice) {
         throw new Error("Choix sélectionné non trouvé");
       }
     }
-
-    const sceneHistory = story.Scene
-      .filter(s => s.id !== currentScene.id && (s.order || 0) < (currentScene.order || 0))
-      .sort((a, b) => (a.order || 0) - (b.order || 0))
-      .slice(-5);
-
-    const historyContext = sceneHistory.map(scene => 
-      `Scene:: ${scene.title}\n${scene.content}\nSelected choice: ${
-        scene.selected_choice_id 
-          ? (scene.choices.find(c => c.id === scene.selected_choice_id)?.text || "Aucun choix sélectionné") 
-          : "Aucun choix sélectionné"
-      }`
-    ).join("\n\n");
-
-    const mainCharacters = story.Character.filter(c => c.isMain);
-    const secondaryCharacters = story.Character.filter(c => !c.isMain);
-    
+    // Récupérer l'historique des scènes récentes (5 dernières)
+    const sceneHistory = story.Scene.filter((s)=>s.id !== currentScene.id && (s.order || 0) < (currentScene.order || 0)).sort((a, b)=>(a.order || 0) - (b.order || 0)).slice(-5);
+    const historyContext = sceneHistory.map((scene)=>`Scene:: ${scene.title}\n${scene.content}\nSelected choice: ${scene.selected_choice_id ? scene.choices.find((c)=>c.id === scene.selected_choice_id)?.text || "Aucun choix sélectionné" : "Aucun choix sélectionné"}`).join("\n\n");
+    const mainCharacters = story.Character.filter((c)=>c.isMain);
+    const secondaryCharacters = story.Character.filter((c)=>!c.isMain);
     const newSceneOrder = (currentScene.order || 0) + 1;
     const approachingEnd = newSceneOrder >= (story.max_scenes || 20) - 3;
-
     const prompt = `
 You are the narrator of an interactive text-based game. Based on the following information, generate the next scene of the story.
     
@@ -189,8 +153,7 @@ Narrative Style: ${story.narrativeStyle}
 Genre(s): ${story.genre.join(", ")}
     
 ## MAIN CHARACTERS
-${mainCharacters.map(char =>
-  `- Name: ${char.name}
+${mainCharacters.map((char)=>`- Name: ${char.name}
     Description: ${char.description}
     Personality: ${char.personality || "Undefined"}
     Outfit: ${char.outfit || "Undefined"}
@@ -200,12 +163,10 @@ ${mainCharacters.map(char =>
     Relationships: ${char.relationships?.join(", ") || "Undefined"}
     Motivations: ${char.motivations || "Undefined"}
     Flaws: ${char.flaws || "Undefined"}
-    Backstory: ${char.backstory || "Undefined"}`
-  ).join("\n")}
+    Backstory: ${char.backstory || "Undefined"}`).join("\n")}
     
 ## SECONDARY CHARACTERS
-${secondaryCharacters.map(char =>
-  `- Name: ${char.name}
+${secondaryCharacters.map((char)=>`- Name: ${char.name}
     Description: ${char.description}
     Personality: ${char.personality || "Undefined"}
     Outfit: ${char.outfit || "Undefined"}
@@ -215,8 +176,7 @@ ${secondaryCharacters.map(char =>
     Relationships: ${char.relationships?.join(", ") || "Undefined"}
     Motivations: ${char.motivations || "Undefined"}
     Flaws: ${char.flaws || "Undefined"}
-    Backstory: ${char.backstory || "Undefined"}`
-  ).join("\n")}
+    Backstory: ${char.backstory || "Undefined"}`).join("\n")}
     
 ## CURRENT SCENE
 Title: ${currentScene.title}
@@ -226,13 +186,16 @@ Content: ${currentScene.content}
 Choice: "${selectedChoice.text}"
 Description: ${selectedChoice.description || "No description available"}
 Consequence: ${selectedChoice.consequence || "No consequence defined"}
-    
-## DICE ROLL RESULT
-The player rolled a ${diceRoll} (on a scale of 1 to 6).
-- 1-2: Minimal impact on the story (subtle changes)
-- 3-4: Moderate impact (significant changes in the story)
-- 5-6: Major impact (important consequences, dramatic turns)
-    
+
+${diceRoll == 0 ? "" : "" + 
+  "## DICE ROLL RESULT" +
+  `\nThe player rolled a ${diceRoll} (on a scale of 1 to 6).` +
+  "\n\n" +
+  "\n\n- 1-2: Minimal impact on the story, the action fails." +
+  "\n- 3-4: Moderate impact (significant changes in the story), the action succeeds but with a cost or complication." +
+  "\n- 5-6: Major impact (important consequences, dramatic turns), the action succeeds without complications or leads to a significant change in the story." +
+}
+
 ## RECENT HISTORY
 ${historyContext}
     
@@ -249,9 +212,7 @@ ${historyContext}
     
 Always keep in mind the characters' personalities and the player's previous choices when generating the new scene.
 `;
-    
     console.log("Generating new scene...");
-    
     const model = registry.languageModel("openai:gpt-4o");
     const { object } = await generateObject({
       model,
@@ -265,36 +226,27 @@ Always keep in mind the characters' personalities and the player's previous choi
       }),
       prompt
     });
-
-    const isEnding = object.is_ending || (newSceneOrder >= (story.max_scenes || 20));
-    
+    const isEnding = object.is_ending || newSceneOrder >= (story.max_scenes || 20);
     console.log("Scene generated, updating database...");
-
-    await supabase
-      .from('Scene')
-      .update({ selected_choice_id: selectedChoice.id })
-      .eq('id', currentScene.id);
-    
-    const { data: newScene, error: sceneError } = await supabase
-      .from('Scene')
-      .insert({
-        id: createId(),
-        title: object.title,
-        content: object.content,
-        imagePrompt: object.visual_illustration_image_description,
-        order: newSceneOrder,
-        storyId: story.id
-      })
-      .select()
-      .single();
-    
+    // Mise à jour de la scène actuelle
+    await supabase.from('Scene').update({
+      selected_choice_id: selectedChoice.id
+    }).eq('id', currentScene.id);
+    // Création de la nouvelle scène
+    const { data: newScene, error: sceneError } = await supabase.from('Scene').insert({
+      id: createId(),
+      title: object.title,
+      content: object.content,
+      imagePrompt: object.visual_illustration_image_description,
+      order: newSceneOrder,
+      storyId: story.id
+    }).select().single();
     if (sceneError) {
       throw new Error(`Erreur lors de la création de la scène: ${sceneError.message}`);
     }
-
+    // Créer les choix si ce n'est pas une fin
     if (!isEnding) {
-      const choicePromises = object.choices.map(choice => 
-        supabase.from('Choice').insert({
+      const choicePromises = object.choices.map((choice)=>supabase.from('Choice').insert({
           id: createId(),
           text: choice.label,
           description: choice.description,
@@ -303,31 +255,28 @@ Always keep in mind the characters' personalities and the player's previous choi
           isPersonalized: choice.is_personalized,
           isCustomChoice: choice.is_custom_choice,
           sceneId: newScene.id
-        })
-      );
-      
+        }));
       await Promise.all(choicePromises);
     }
-    
+    // Créer la transition entre les scènes
     await supabase.from('SceneTransition').insert({
       id: createId(),
       sourceSceneId: currentScene.id,
       destinationSceneId: newScene.id,
       choiceId: selectedChoice.id
     });
-    
+    // Mettre à jour l'état actuel de l'histoire
     await supabase.from('Story').update({
       current_scene_id: newScene.id,
       current_scene: newSceneOrder
     }).eq('id', story.id);
-    
+    // Mise à jour de la sauvegarde si gameSaveId est fourni
     if (gameSaveId) {
       await supabase.from('GameSave').update({
         currentSceneId: newScene.id,
         progress: newSceneOrder,
         lastPlayed: new Date().toISOString()
       }).eq('id', gameSaveId);
-      
       await supabase.from('SaveHistory').insert({
         id: createId(),
         gameSaveId: gameSaveId,
@@ -336,9 +285,8 @@ Always keep in mind the characters' personalities and the player's previous choi
         timestamp: new Date().toISOString()
       });
     }
-    
     console.log("Database updated successfully");
-
+    // Génération d'image pour les utilisateurs premium
     if (isPremium) {
       console.log("Generating scene image for premium user...");
       try {
@@ -348,14 +296,12 @@ Always keep in mind the characters' personalities and the player's previous choi
           n: 1,
           size: "1792x1024",
           quality: "standard",
-          style: "vivid"
+          style: "natural"
         });
-        
         if (imageResponse.data.length > 0) {
           console.log("Uploading scene image...");
           const sceneImage = imageResponse.data[0];
           const sceneImageUrl = await uploadImageToSupabase(sceneImage.url ?? "", `${story.id}/scenes/${newScene.id}`);
-          
           if (sceneImageUrl) {
             await supabase.from('Scene').update({
               imageUrl: sceneImageUrl
@@ -364,9 +310,9 @@ Always keep in mind the characters' personalities and the player's previous choi
         }
       } catch (imageError) {
         console.error("Error generating scene image:", imageError);
+      // Continuer même si la génération d'image échoue
       }
     }
-
     return new Response(JSON.stringify({
       success: true,
       scene: {
@@ -379,16 +325,19 @@ Always keep in mind the characters' personalities and the player's previous choi
       },
       redirect: gameSaveId ? `/${gameSaveId}/${newScene.id}` : `/${storyId}/${newScene.id}`
     }), {
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json"
+      },
       status: 200
     });
-
   } catch (error) {
     console.error("Error generating next scene:", error);
     return new Response(JSON.stringify({
       error: error.message
     }), {
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json"
+      },
       status: 400
     });
   }

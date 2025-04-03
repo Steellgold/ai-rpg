@@ -139,15 +139,10 @@ Text: ${text}
               "ThirdPerson"
             ]),
             banner_image_visual_description: z.string().min(1).max(350),
-            difficulty: z.enum([
-              "Easy",
-              "Medium",
-              "Hard"
-            ]),
             max_story_scenes: z.number().int().min(1).max(20),
             first_scene: z.array(z.object({
               title: z.string().min(1).max(100),
-              text: z.string().max(1600),
+              text: z.string().max(3000),
               visual_illustration_image_description: z.string().min(1).max(350),
               user_choices: z.array(z.object({
                 label: z.string().min(1).max(150),
@@ -306,7 +301,7 @@ Text: ${text}
               n: 1,
               size: "1792x1024",
               quality: "standard",
-              style: "vivid"
+              style: "natural"
             });
             await updateJob(supabase, jobId, {
               progress: 90,
