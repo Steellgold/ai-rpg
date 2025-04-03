@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { ISOLang } from "@/lib/types/lang";
 
 export const LanguageSelector = () => {
-  const t = useTranslations("LanguageSelector");
+  const t = useTranslations("Navbar.LanguageSelector");
   const { lang, setLang } = useLanguageStore();
   const router = useRouter();
 
@@ -16,7 +16,7 @@ export const LanguageSelector = () => {
       setLang(e);
       router.refresh();
     }} value={lang}>
-      <SelectTrigger className="w-[180px]">
+      <SelectTrigger className="w-[120px] rounded-md">
         <SelectValue placeholder={t("Placeholder")} />
       </SelectTrigger>
       <SelectContent>
