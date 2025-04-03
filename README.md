@@ -2,7 +2,7 @@
 
 This interactive storytelling platform enables players to create and play through AI-generated narrative adventures ✨. The application leverages modern web technologies to provide an immersive experience where players' choices influence the direction and outcome of their unique stories 🛤️.
 
-[Demo video](https://www.youtube.com/watch?v=b1l7Ia9oimQ) - [Website URL (plz no spam :joy:)](https://ai-rpg.steellgold.fr)
+[Demo video](https://www.youtube.com/watch?v=LS3gtutZYnU) - [Website URL (plz no spam :joy:)](https://ai-rpg.steellgold.fr)
 
 ## Tech Stack 🛠️
 
