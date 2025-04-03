@@ -31,4 +31,6 @@ export const genreIds: string[] = [
   "travel",
   "pets",
   "supernatural"
-];
+] as const;
+
+export type Genre = typeof genreIds[number];

@@ -47,7 +47,9 @@ export function MultiSelectCombobox({
           size={selected.length > 0 ? "default" : "icon"}
           aria-expanded={open}
           disabled={disabled}
-          className={cn(disabled && "opacity-70 cursor-not-allowed", "h-8 rounded-full text-gray-400 hover:text-gray-300 !border border")}
+          className={cn(disabled && "opacity-70 cursor-not-allowed", "h-8 rounded-full text-gray-400 hover:text-gray-300 !border border", {
+            "!w-8": selected.length === 0
+          })}
         >
           <div className="flex flex-wrap gap-1">
             {selected.length === 0 ? (
