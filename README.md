@@ -52,3 +52,6 @@ This interactive storytelling platform enables players to create and play throug
 
 ## Deployment 🚀
 - Vercel ▲
+
+
+Chronicles of Destiny © 2025 by Gaëtan Huszovits is licensed under CC BY-NC 4.0 
