@@ -187,14 +187,11 @@ Choice: "${selectedChoice.text}"
 Description: ${selectedChoice.description || "No description available"}
 Consequence: ${selectedChoice.consequence || "No consequence defined"}
 
-${diceRoll == 0 ? "" : "" + 
-  "## DICE ROLL RESULT" +
-  `\nThe player rolled a ${diceRoll} (on a scale of 1 to 6).` +
-  "\n\n" +
-  "\n\n- 1-2: Minimal impact on the story, the action fails." +
-  "\n- 3-4: Moderate impact (significant changes in the story), the action succeeds but with a cost or complication." +
-  "\n- 5-6: Major impact (important consequences, dramatic turns), the action succeeds without complications or leads to a significant change in the story."
-}
+## DICE ROLL RESULT
+The player rolled a ${diceRoll} (on a scale of 1 to 6).
+- 1-2: Minimal impact on the story, the choice action/consequence fails.
+- 3-4: Moderate impact, the choice action/consequence succeeds but with complications or drawbacks.
+- 5-6: Major impact, the choice action/consequence succeeds spectacularly, leading to significant changes in the story.
 
 ## RECENT HISTORY
 ${historyContext}
