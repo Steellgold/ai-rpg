@@ -2,11 +2,11 @@
 
 import { useState, useRef, useEffect, ReactElement, HTMLAttributes, cloneElement } from "react"
 import { Button } from "@/components/ui/button"
-import { ArrowUpIcon, Crown, Eclipse, Loader } from "lucide-react"
+import { ArrowUpIcon, Crown, Eclipse, Loader, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Component } from "@/lib/types"
 import { MultiSelectCombobox } from "./ui/multi-select-combobox"
-import { genreIds } from "@/lib/genres-ids"
+import { Genre, genreIds } from "@/lib/genres-ids"
 import { useTranslations } from "next-intl";
 import { FaDragon } from "react-icons/fa";
 
@@ -14,12 +14,19 @@ type Suggestion = {
   label: string;
   prompt: string;
   icon: ReactElement;
+  genres: Genre[];
 };
 
 const suggestions: Suggestion[] = [
-  { label: "Suggestions.TKOK.Label", prompt: "Suggestions.TKOK.Prompt", icon: <Crown className="h-4 w-4 text-gray-200" /> },
-  { label: "Suggestions.TSC.Label", prompt: "Suggestions.TSC.Prompt", icon: <Eclipse className="h-4 w-4 text-gray-200" /> },
-  { label: "Suggestions.DRA.Label", prompt: "Suggestions.DRA.Prompt", icon: <FaDragon className="h-4 w-4 text-gray-200" /> },
+  { label: "Suggestions.TKOK.Label", prompt: "Suggestions.TKOK.Prompt", icon: <Crown className="h-4 w-4 text-gray-200" />,
+    genres: ["fantasy-medieval", "adventure", "mythology", "fantasy"]
+  },
+  { label: "Suggestions.TSC.Label", prompt: "Suggestions.TSC.Prompt", icon: <Eclipse className="h-4 w-4 text-gray-200" />,
+    genres: ["dark-fantasy", "mystery", "fantasy", "supernatural"]
+  },
+  { label: "Suggestions.DRA.Label", prompt: "Suggestions.DRA.Prompt", icon: <FaDragon className="h-4 w-4 text-gray-200" />,
+    genres: ["fantasy", "adventure", "mythology", "fantasy-medieval"]
+  },
 ];
 
 export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ className }): ReactElement => {
@@ -89,6 +96,23 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
 
         <div className="flex items-center justify-between p-2 border-t border-[#173a8940]">
           <div className="flex items-center">
+            {(selectedGenres.length > 0 || prompt.length > 0) && (!isGenerating || isInputValid) && (
+              <Button
+                size={"default"}
+                variant="ghost"
+                className="!border border-red-400/20 rounded-full transition-opacity !h-8 hover:bg-red-400/10 cursor-pointer px-2.5 mr-1"
+                onClick={() => {
+                  setPrompt("");
+                  setSelectedGenres([]);
+                  if (textareaRef.current) textareaRef.current.style.height = "auto";
+                }}
+                disabled={isGenerating}
+              >
+                <X className="h-4 w-4 text-red-400" />
+                <span className="text-red-400 text-sm">{t("AiTextarea.Clear")}</span>
+              </Button>
+            )}
+
             <MultiSelectCombobox
               options={genreIds.map((genre) => ({
                 label: `${u("Genres." + genre + ".label")}`,
@@ -134,7 +158,10 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
           <Button
             key={index}
             className="bg-[#1a254f30] text-gray-200 border border-[#173a8940] rounded-full px-4 h-8 flex items-center justify-center cursor-pointer transition-all hover:bg-[#1a254f40] hover:text-gray-100"
-            onClick={() => setPrompt(u(suggestion.prompt))}
+            onClick={() => {
+              setPrompt(u(suggestion.prompt));
+              setSelectedGenres(suggestion.genres);
+            }}
           >
             {cloneElement(suggestion.icon)}
             {u(suggestion.label)}
