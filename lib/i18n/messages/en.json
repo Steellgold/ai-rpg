@@ -55,7 +55,8 @@
         "Placeholder": "Write a summary of your story here...",
         "Generate": "Generate story",
         "Loading": "Generation in progress..., this may take a minute",
-        "Clear": "Clear"
+        "Clear": "Clear",
+        "SignIn": "SIgn in"
       }
     },
     "Story": {

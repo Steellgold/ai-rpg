@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, ReactElement, HTMLAttributes, cloneElement } from "react"
 import { Button } from "@/components/ui/button"
-import { ArrowUpIcon, Crown, Eclipse, Loader, X } from "lucide-react"
+import { ArrowUpIcon, Crown, Eclipse, Loader, User, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Component } from "@/lib/types"
 import { MultiSelectCombobox } from "./ui/multi-select-combobox"
@@ -10,6 +10,8 @@ import { Genre, genreIds } from "@/lib/genres-ids"
 import { useTranslations } from "next-intl";
 import { FaDragon } from "react-icons/fa";
 import { generateHistory } from "@/lib/actions/generate.ai.action"
+import { useSession } from "@/lib/hooks/use-session"
+import { useSearchParams } from "next/navigation"
 
 type Suggestion = {
   label: string;
@@ -32,13 +34,19 @@ const suggestions: Suggestion[] = [
 
 export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ className }): ReactElement => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const searchParams = useSearchParams();
 
-  const [prompt, setPrompt] = useState("");
+  const { user, loading: isLoggingIn, signIn } = useSession();
+
+  const [prompt, setPrompt] = useState(searchParams.get("prompt") || "");
   const [isInputValid, setIsInputValid] = useState(false);
 
   const [isGenerating, setIsGenerating] = useState(false);
-  const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
-  
+  const [selectedGenres, setSelectedGenres] = useState<string[]>(
+    searchParams.get("genres")?.split(",") || []
+  );
+
+
   const u = useTranslations("Utils");
   const t = useTranslations("Pages.New");
 
@@ -129,26 +137,48 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
           </div>
 
           <div className="flex items-center">
-            <Button
-              onClick={handleSend}
-              disabled={!isInputValid}
-              className={cn(
-                "rounded-full transition-opacity",
-                !isInputValid ? "opacity-50 cursor-not-allowed" : "opacity-100", {
-                  "!h-8 !w-8": !isInputValid || isGenerating,
-                  "!h-8 !px-4": isInputValid && !isGenerating,
-                  // 
-                  "bg-blue-600 hover:bg-blue-500": !isGenerating || isInputValid,
-                  "cursor-not-allowed bg-blue-600/50 hover:bg-blue-600/50": isGenerating,
-                }
-              )}
-            >
-              {isGenerating
-                ? <Loader className="animate-spin h-4 w-4 text-gray-400" />
-                : <ArrowUpIcon className="h-4 w-4 text-gray-200" />
-              }
-              {isInputValid && !isGenerating && <span className="text-white">New story</span>}
-            </Button>
+            {user ? (
+              <>
+                <Button
+                  onClick={handleSend}
+                  disabled={!isInputValid}
+                  className={cn(
+                    "rounded-full transition-opacity",
+                    !isInputValid ? "opacity-50 cursor-not-allowed" : "opacity-100", {
+                      "!h-8 !w-8": !isInputValid || isGenerating,
+                      "!h-8 !px-4": isInputValid && !isGenerating,
+                      // 
+                      "bg-blue-600 hover:bg-blue-500": !isGenerating || isInputValid,
+                      "cursor-not-allowed bg-blue-600/50 hover:bg-blue-600/50": isGenerating,
+                    }
+                  )}
+                >
+                  {isGenerating
+                    ? <Loader className="animate-spin h-4 w-4 text-gray-400" />
+                    : <ArrowUpIcon className="h-4 w-4 text-gray-200" />
+                  }
+                  {isInputValid && !isGenerating && <span className="text-white">New story</span>}
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button
+                  onClick={() => signIn.discord(prompt, selectedGenres)}
+                  className={cn(
+                    "!h-8 !px-4 rounded-full transition-opacity bg-blue-600 hover:bg-blue-600",
+                    isLoggingIn ? "opacity-50 cursor-not-allowed" : "opacity-100", {
+                      "cursor-not-allowed bg-blue-600/50 hover:bg-blue-600/50": isLoggingIn,
+                    }
+                  )}
+                >
+                  {isLoggingIn
+                    ? <Loader className="animate-spin h-4 w-4 text-gray-400" />
+                    : <User className="h-4 w-4 text-gray-200" />
+                  }
+                  <span className="text-white">{t("AiTextarea.SignIn")}</span>
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </div>

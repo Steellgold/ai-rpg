@@ -13,14 +13,12 @@ export const useSession = () => {
   const supabase = createClient();
 
   useEffect(() => {
-    // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session)
       setUser(session?.user ?? null)
       setLoading(false)
     })
 
-    // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session)
       setUser(session?.user ?? null)
@@ -37,12 +35,15 @@ export const useSession = () => {
     user,
     loading,
     signIn: {
-      discord: async () => {
+      discord: async (prompt?: string | null, selectedGenres?: string[] | null) => {
         setLoading(true)
+        const encodedPrompt = prompt ? encodeURIComponent(prompt) : null;
         const { error } = await supabase.auth.signInWithOAuth({
           provider: "discord",
           options: {
-            redirectTo: `${clientEnv.NEXT_PUBLIC_BASE_URL}/auth/callback`
+            redirectTo: `${clientEnv.NEXT_PUBLIC_BASE_URL}/auth/callback` +
+              (encodedPrompt ? `?prompt=${encodedPrompt}` : "") +
+              (selectedGenres ? `${encodedPrompt ? "&" : "?"}genres=${selectedGenres.join(",")}` : "")
           },
         })
         return { error }
