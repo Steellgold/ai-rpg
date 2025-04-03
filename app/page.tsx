@@ -1,13 +1,11 @@
 "use client";
 
-import { useSession } from "@/lib/hooks/use-session";
 import { useTranslations } from "next-intl";
 import { PageLayout } from "./_l";
 import { Glitch } from "@/components/glitch";
 import { AiTextarea } from "@/components/textarea";
 
 const Page = () => {
-  const { user } = useSession();
   const t = useTranslations("Page");
 
   return (
