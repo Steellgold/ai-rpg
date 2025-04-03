@@ -68,11 +68,11 @@
   
       "DiceRoll": {
         "Title": "Dice Roll",
-        "Description": "The result of the die will determine the impact of your choice on the story",
+        "Description": "The result of the dice will determine the impact of your choice on the story",
         "Result": "Result:",
   
-        "Roll": "Roll the die",
-        "Rolling": "Roll the die...",
+        "Roll": "Roll the dice",
+        "Rolling": "Roll the dice...",
         "Continue": "Continue the story",
 
         "ImpactMinor": "Minor impact on the story",
