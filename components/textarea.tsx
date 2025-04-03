@@ -9,6 +9,7 @@ import { MultiSelectCombobox } from "./ui/multi-select-combobox"
 import { Genre, genreIds } from "@/lib/genres-ids"
 import { useTranslations } from "next-intl";
 import { FaDragon } from "react-icons/fa";
+import { generateHistory } from "@/lib/actions/generate.ai.action"
 
 type Suggestion = {
   label: string;
@@ -68,11 +69,11 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
   }, [prompt]);
 
 
-  const handleSend = () => {
-    if (prompt.trim()) {
-      setIsGenerating(true);
-      if (textareaRef.current) textareaRef.current.style.height = "auto";
-    }
+  const handleSend = async () => {
+    if (isGenerating) return; // Lmao
+    if (isInputValid) setIsGenerating(true);
+
+    await generateHistory(prompt, selectedGenres || []);
   }
 
   return (
@@ -142,11 +143,10 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
                 }
               )}
             >
-              {isGenerating ? (
-                <Loader className="animate-spin h-4 w-4 text-gray-400" />
-              ) : (
-                <ArrowUpIcon className="h-4 w-4 text-gray-200" />
-              )}
+              {isGenerating
+                ? <Loader className="animate-spin h-4 w-4 text-gray-400" />
+                : <ArrowUpIcon className="h-4 w-4 text-gray-200" />
+              }
               {isInputValid && !isGenerating && <span className="text-white">New story</span>}
             </Button>
           </div>
@@ -159,6 +159,7 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
             key={index}
             className="bg-[#1a254f30] text-gray-200 border border-[#173a8940] rounded-full px-4 h-8 flex items-center justify-center cursor-pointer transition-all hover:bg-[#1a254f40] hover:text-gray-100"
             onClick={() => {
+              if (isGenerating) return;
               setPrompt(u(suggestion.prompt));
               setSelectedGenres(suggestion.genres);
             }}
