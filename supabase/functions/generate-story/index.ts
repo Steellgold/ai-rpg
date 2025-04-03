@@ -266,7 +266,7 @@ Text: ${text}
             n: 1,
             size: "1792x1024",
             quality: "standard",
-            style: "vivid"
+            style: "natural"
           });
           await updateJob(supabase, jobId, {
             progress: 80,
