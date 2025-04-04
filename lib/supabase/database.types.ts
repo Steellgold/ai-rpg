@@ -582,7 +582,13 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      create_user: {
+        Args: {
+          id: string
+          email: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       JobStage:
