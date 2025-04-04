@@ -94,7 +94,7 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
     if (isGenerating) return; // Lmao
     if (isInputValid) setIsGenerating(true);
 
-    await generateHistory(prompt, selectedGenres || []);
+    await generateHistory(prompt, selectedGenres || [], childMode);
   }
 
   return (

@@ -9,7 +9,7 @@ import { redirect } from "next/navigation";
 import { env } from "../env/env";
 import { Database } from "../supabase/database.types";
 
-export const generateHistory = async (text: string, genres?: string[]) => {
+export const generateHistory = async (text: string, genres?: string[], isForChildren?: boolean) => {
   const supabase = await createClient();
   const { data: { session } } = await supabase.auth.getSession();
   if (!session) throw new Error("User not authenticated");
@@ -40,7 +40,8 @@ export const generateHistory = async (text: string, genres?: string[]) => {
       genres: genres || [],
       userId: session.user.id,
       jobId,
-      isPremium: user_data.premium
+      isPremium: user_data.premium,
+      isChildren: isForChildren || false,
     }
   });
 
