@@ -8,7 +8,8 @@ const withNextIntl = createNextIntlPlugin(
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
-      { hostname: "lgbrmzxeblvailzgebur.supabase.co", protocol: "https" }
+      { hostname: "lgbrmzxeblvailzgebur.supabase.co", protocol: "https" },
+      { hostname: "cdn.discordapp.com", protocol: "https" }
     ]
   },
   experimental: {
