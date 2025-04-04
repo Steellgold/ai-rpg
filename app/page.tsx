@@ -1,12 +1,55 @@
-"use client";
-
 import { useTranslations } from "next-intl";
 import { PageLayout } from "./_l";
 import { Glitch } from "@/components/glitch";
 import { AiTextarea } from "@/components/textarea";
+import { getTranslations } from "next-intl/server";
+import { createClient } from "@/lib/supabase/server";
+import { prisma } from "@/lib/db/prisma";
+import { StoryCard } from "@/components/story.card";
 
-const Page = () => {
-  const t = useTranslations("Page");
+const Page = async () => {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  
+  let user_data = null;
+  if (user) {
+    const { data, error } = await supabase.from("User").select("*").eq("id", user?.id).single();
+    if (error) {
+      console.error("Error fetching user data:", error);
+    } else {
+      user_data = data;
+    }
+  }
+  
+  const t = await getTranslations("Page");
+
+  const stories = await prisma.story.findMany({
+    where: {
+      isPublic: true
+    },
+    select: {
+      synopsis: true,
+      title: true,
+      isChildrenStory: true,
+      genre: true,
+      characters: {
+        select: {
+          _count: true
+        }
+      },
+      creator: {
+        select: {
+          id: true,
+          display_name: true,
+          image_url: true
+        }
+      },
+      createdAt: true,
+      coverImageUrl: true,
+      goal: true,
+      id: true
+    }
+  });
 
   return (
     <PageLayout>
@@ -18,7 +61,20 @@ const Page = () => {
 
         <div className="h-12" />
 
-        <AiTextarea />
+        <AiTextarea isPremium={user_data?.premium} />
+      </section>
+
+      <hr className="my-12 border-t border-[#161616]" />
+
+      <section className="flex flex-col items-center w-full max-w-6xl mx-auto">
+        <h2 className="text-3xl">{t("Marketplace.Title")}</h2>
+        <p className="text-lg mb-8">{t("Marketplace.Description")}</p>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
+          {stories.map((story) => (
+            <StoryCard key={story.id} {...story} />
+          ))}
+        </div>
       </section>
     </PageLayout>
   );
