@@ -1,5 +1,6 @@
 "use client";
 
+import { ChildrenStoryTag } from "@/components/children-story.tag";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription, CardFooter } from "@/components/ui/card";
@@ -182,11 +183,7 @@ export const PageClient: Component<PageClientProps> = ({ story_data: storyData, 
       <div className="flex flex-row gap-2 bg-gray-100/5 p-4 rounded-md flex-wrap">
         <Badge variant="outline" className="text-md">
           {storyData.title}
-          {storyData.isChildrenStory && (
-            <Badge className="bg-teal-500/10 text-teal-500 ml-2">
-              {t("ChildrenStory")}
-            </Badge>
-          )}
+          {storyData.isChildrenStory && <ChildrenStoryTag className="ml-2" />}
         </Badge>
         <Badge variant="outline" className="text-md">{storyData.current_scene}&nbsp;/&nbsp;{storyData.max_scenes}</Badge>
       </div>
