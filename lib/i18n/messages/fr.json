@@ -14,7 +14,8 @@
       "Title": "Communauté",
       "Description": "Explorez les aventures créées par d'autres joueurs.",
       "Button": "Aller à la Communauté",
-      "CommingSoon": "Bientôt disponible"
+      "CommingSoon": "Bientôt disponible",
+      "NoStories": "Aucune histoire trouvée"
     },
 
     "Login": {
@@ -56,7 +57,11 @@
         "Loading": "Génération en cours..., cela peut prendre une minute",
         "Clear": "Nettoyer",
         "SignIn": "Se connecter",
-        "ChildModeOff": "Mode enfant activé"
+
+        "ChildModeOff": "Mode enfant activé",
+
+        "PublicModeOn": "Histoire publique",
+        "PublicModeOff": "Histoire privée"
       }
     },
     "Story": {
