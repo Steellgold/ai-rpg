@@ -66,7 +66,7 @@ Deno.serve(async (req)=>{
       status: 405
     });
   }
-  const { storyId, sceneId, choiceId, diceRoll = 3, gameSaveId, userId, customText, isPremium = false } = await req.json();
+  const { storyId, sceneId, choiceId, diceRoll = 3, gameSaveId, userId, customText, isPremium = , isChildren = false } = await req.json();
   if (!storyId || !sceneId || !(choiceId || customText) || !userId) {
     return new Response(JSON.stringify({
       error: "Missing required fields: storyId, sceneId, choiceId/customText, and userId"
@@ -151,6 +151,9 @@ Goal: ${story.goal}
 Possible Endings: ${story.possibleEndings.join(", ")}
 Narrative Style: ${story.narrativeStyle}
 Genre(s): ${story.genre.join(", ")}
+Is for children: ${isChildren ? "Yes" : "No"}
+
+${isChildren ? "The story should be suitable for children, avoiding any inappropriate content like violence, adult themes, or complex language." : ""}
     
 ## MAIN CHARACTERS
 ${mainCharacters.map((char)=>`- Name: ${char.name}

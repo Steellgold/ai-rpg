@@ -84,7 +84,7 @@ Deno.serve(async (req)=>{
       status: 405
     });
   }
-  const { text, genres, userId, jobId, isPremium = false } = await req.json();
+  const { text, genres, userId, jobId, isPremium = false, isChildren = false } = await req.json();
   if (!text || !userId || !jobId) {
     return new Response(JSON.stringify({
       error: "Missing required fields: text, userId, and jobId"
@@ -120,6 +120,8 @@ Improve this text for a narrative game. Make it more captivating, descriptive an
 while preserving the main ideas. ${genres ? "Adapt it to the following genre(s): " + genres.join(", ") : ""}
 Answer in the same language as the original text.
 
+${isChildren ? "Make it suitable for children, avoiding any inappropriate content, violence, or adult themes." : ""}
+
 Text: ${text}
         `;
         const model = registry.languageModel("openai:gpt-4o");
@@ -133,6 +135,7 @@ Text: ${text}
             how_story_can_end: z.array(z.string()).min(1).max(5),
             principal_characters: z.array(characterSchema),
             secondary_characters: z.array(characterSchema),
+            is_children: z.boolean().optional(),
             narrative_style: z.enum([
               "FirstPerson",
               "SecondPerson",
@@ -172,6 +175,7 @@ Text: ${text}
           narrativeStyle: object.narrative_style,
           max_scenes: object.max_story_scenes,
           creatorId: userId,
+          isChildrenStory: object.is_children || isChildren,
           genre: genres || []
         }).select().single();
         if (storyError) {
