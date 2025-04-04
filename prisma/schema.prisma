@@ -85,6 +85,9 @@ model Story {
   possibleEndings  String[]
   coverImageUrl    String?
   genre            String[]
+  // 
+  isChildrenStory  Boolean        @default(false)
+  // 
   narrativeStyle   NarrativeStyle
   //
   characters       Character[]
