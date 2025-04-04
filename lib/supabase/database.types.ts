@@ -498,6 +498,7 @@ export type Database = {
           genre: string[] | null
           goal: string
           id: string
+          isChildrenStory: boolean
           max_scenes: number | null
           narrativeStyle: Database["public"]["Enums"]["NarrativeStyle"]
           possibleEndings: string[] | null
@@ -514,6 +515,7 @@ export type Database = {
           genre?: string[] | null
           goal: string
           id: string
+          isChildrenStory?: boolean
           max_scenes?: number | null
           narrativeStyle: Database["public"]["Enums"]["NarrativeStyle"]
           possibleEndings?: string[] | null
@@ -530,6 +532,7 @@ export type Database = {
           genre?: string[] | null
           goal?: string
           id?: string
+          isChildrenStory?: boolean
           max_scenes?: number | null
           narrativeStyle?: Database["public"]["Enums"]["NarrativeStyle"]
           possibleEndings?: string[] | null
