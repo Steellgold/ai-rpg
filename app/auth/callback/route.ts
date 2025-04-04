@@ -25,7 +25,9 @@ export async function GET(request: Request) {
       try {
         const { data: createdUser, error } = await supabase.rpc('create_user', { 
           id: data.user.id, 
-          email: data.user.email ?? ""
+          email: data.user.email ?? "",
+          image_url: data.user.user_metadata?.avatar_url ?? null,
+          display_name: data.user.user_metadata?.custom_claims.global_name ?? null
         });
 
         console.log('User created:', createdUser, error)
