@@ -499,6 +499,7 @@ export type Database = {
           goal: string
           id: string
           isChildrenStory: boolean
+          isPublic: boolean
           max_scenes: number | null
           narrativeStyle: Database["public"]["Enums"]["NarrativeStyle"]
           possibleEndings: string[] | null
@@ -516,6 +517,7 @@ export type Database = {
           goal: string
           id: string
           isChildrenStory?: boolean
+          isPublic?: boolean
           max_scenes?: number | null
           narrativeStyle: Database["public"]["Enums"]["NarrativeStyle"]
           possibleEndings?: string[] | null
@@ -533,6 +535,7 @@ export type Database = {
           goal?: string
           id?: string
           isChildrenStory?: boolean
+          isPublic?: boolean
           max_scenes?: number | null
           narrativeStyle?: Database["public"]["Enums"]["NarrativeStyle"]
           possibleEndings?: string[] | null
@@ -554,24 +557,30 @@ export type Database = {
         Row: {
           createdAt: string
           daily_limit_messages: number | null
+          display_name: string
           email: string
           id: string
+          image_url: string | null
           premium: boolean
           updatedAt: string
         }
         Insert: {
           createdAt?: string
           daily_limit_messages?: number | null
+          display_name?: string
           email: string
           id: string
+          image_url?: string | null
           premium?: boolean
           updatedAt?: string
         }
         Update: {
           createdAt?: string
           daily_limit_messages?: number | null
+          display_name?: string
           email?: string
           id?: string
+          image_url?: string | null
           premium?: boolean
           updatedAt?: string
         }
@@ -582,13 +591,23 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      create_user: {
-        Args: {
-          id: string
-          email: string
-        }
-        Returns: undefined
-      }
+      create_user:
+        | {
+            Args: {
+              id: string
+              email: string
+            }
+            Returns: undefined
+          }
+        | {
+            Args: {
+              id: string
+              email: string
+              display_name?: string
+              image_url?: string
+            }
+            Returns: undefined
+          }
     }
     Enums: {
       JobStage:
