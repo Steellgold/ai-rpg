@@ -20,12 +20,15 @@ export async function GET(request: Request) {
     const { data, error } = await supabase.auth.exchangeCodeForSession(code)
     
     if (!error && data?.user) {
+      console.log("No errors, and user exist")
+
       try {
-        await supabase.rpc('create_user', { 
+        const { data: createdUser, error } = await supabase.rpc('create_user', { 
           id: data.user.id, 
           email: data.user.email ?? ""
         });
 
+        console.log('User created:', createdUser, error)
       } catch (createUserError) {
         console.error('Error creating user:', createUserError);
       }
@@ -40,6 +43,10 @@ export async function GET(request: Request) {
       } else {
         return NextResponse.redirect(`${origin}${next}?${paramsString}`)
       }
+    } else {
+      console.error('Error exchanging code for session:', error);
+      console.error('Error exchanging code for session: Code:', code);
+      console.error('Error exchanging code for session: Data:', data);
     }
   }
 
