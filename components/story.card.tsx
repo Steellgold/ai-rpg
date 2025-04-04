@@ -83,11 +83,11 @@ export const StoryCard: Component<Prisma.StoryGetPayload<{
         </div>
       </CardContent>
 
-      <CardFooter className="px-6 pt-0">
+      {/* <CardFooter className="gap-1 pt-0">
         <Button variant="outline" className="w-full">
           Fork this story
         </Button>
-      </CardFooter>
+      </CardFooter> */}
     </Card>
   )
 }
