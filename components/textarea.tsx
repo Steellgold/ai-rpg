@@ -2,7 +2,8 @@
 
 import { useState, useRef, useEffect, ReactElement, HTMLAttributes, cloneElement } from "react"
 import { Button } from "@/components/ui/button"
-import { ArrowUpIcon, Baby, Crown, Eclipse, Flower, Loader, Music, TowerControl, User, X } from "lucide-react"
+import { ArrowUpIcon, Baby, Crown, Eclipse, Flower, Loader, Lock, LockOpen, Music, TowerControl, User, X } from "lucide-react"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { cn } from "@/lib/utils"
 import { Component } from "@/lib/types"
 import { MultiSelectCombobox } from "./ui/multi-select-combobox"
@@ -43,7 +44,13 @@ const suggestions: Suggestion[] = [
   }
 ];
 
-export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ className }): ReactElement => {
+export const AiTextarea: Component<
+  HTMLAttributes<HTMLDivElement> & {
+    isPremium?: boolean;
+  }
+> = ({
+  className, isPremium = false
+}): ReactElement => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const searchParams = useSearchParams();
 
@@ -53,6 +60,7 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
   const [isInputValid, setIsInputValid] = useState(false);
 
   const [childMode, setChildMode] = useState(false);
+  const [publicMode, setPublicMode] = useState(false);
 
   const [isGenerating, setIsGenerating] = useState(false);
   const [selectedGenres, setSelectedGenres] = useState<string[]>(
@@ -99,13 +107,6 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
 
   return (
     <div className="flex flex-col items-center w-full gap-4">
-
-{/* <div className={cn("rounded-xl overflow-hidden w-full bg-[#070910] border border-[#173a8940]", className)}>
-            "w-full resize-none py-4 px-4 outline-none bg-transparent text-gray-200 placeholder:text-gray-500 min-h-[86px]", {
-              "animate-pulse italic text-gray-400": isGenerating
-            }
-
-        <div className="flex items-center justify-between p-2 border-t border-[#173a8940]"> */}
       <div className={cn("rounded-xl overflow-hidden w-full", className, {
         "bg-teal-500/10 border border-teal-500/30": childMode,
         "bg-[#070910] border border-[#173a8940]": !childMode
@@ -181,6 +182,33 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
                 })}>
                   {t("AiTextarea.ChildModeOff")}</span>
               )}
+            </Button>
+
+            <Button
+              size={"default"}
+              variant="ghost"
+              className={cn(
+                "!border rounded-full transition-opacity !h-8 cursor-pointer px-2 ml-1", {
+                  "border-teal-400/20 hover:bg-teal-400/10": publicMode,
+                  "border-gray-400/20 hover:bg-gray-400/10": !publicMode && !isPremium,
+                  "border-red-400/20 hover:bg-red-400/10": !publicMode && isPremium,
+                }
+              )}
+              onClick={() => setPublicMode(!publicMode)}
+              disabled={isGenerating || isLoggingIn || !isPremium}
+            >
+              <Lock className={cn("h-4 w-4", {
+                "text-teal-400": publicMode,
+                "text-red-200": !publicMode && isPremium,
+                "text-gray-200": !publicMode && !isPremium
+              })} />
+              <span className={cn("text-sm", {
+                "text-teal-400": publicMode,
+                "text-red-200": !publicMode && isPremium,
+                "text-gray-200": !publicMode && !isPremium
+              })}>
+                {publicMode ? t("AiTextarea.PublicModeOn") : t("AiTextarea.PublicModeOff")}
+              </span>
             </Button>
           </div>
 
