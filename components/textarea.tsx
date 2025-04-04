@@ -60,7 +60,7 @@ export const AiTextarea: Component<
   const [isInputValid, setIsInputValid] = useState(false);
 
   const [childMode, setChildMode] = useState(false);
-  const [publicMode, setPublicMode] = useState(false);
+  const [publicMode, setPublicMode] = useState(true);
 
   const [isGenerating, setIsGenerating] = useState(false);
   const [selectedGenres, setSelectedGenres] = useState<string[]>(
@@ -188,7 +188,7 @@ export const AiTextarea: Component<
               size={"default"}
               variant="ghost"
               className={cn(
-                "!border rounded-full transition-opacity !h-8 cursor-pointer px-2 ml-1", {
+                "!border rounded-full transition-opacity !h-8 cursor-pointer px-2.5 ml-1", {
                   "border-teal-400/20 hover:bg-teal-400/10": publicMode,
                   "border-gray-400/20 hover:bg-gray-400/10": !publicMode && !isPremium,
                   "border-red-400/20 hover:bg-red-400/10": !publicMode && isPremium,
@@ -197,11 +197,17 @@ export const AiTextarea: Component<
               onClick={() => setPublicMode(!publicMode)}
               disabled={isGenerating || isLoggingIn || !isPremium}
             >
-              <Lock className={cn("h-4 w-4", {
-                "text-teal-400": publicMode,
-                "text-red-200": !publicMode && isPremium,
-                "text-gray-200": !publicMode && !isPremium
-              })} />
+              {cloneElement(
+                publicMode
+                  ? <LockOpen className="h-4 w-4" />
+                  : <Lock className="h-4 w-4" />, {
+                    className: cn("h-4 w-4", {
+                      "text-teal-400": publicMode,
+                      "text-red-200": !publicMode && isPremium,
+                      "text-gray-200": !publicMode && !isPremium
+                    })
+              })}
+
               <span className={cn("text-sm", {
                 "text-teal-400": publicMode,
                 "text-red-200": !publicMode && isPremium,

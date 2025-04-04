@@ -61,8 +61,8 @@
 
         "ChildModeOff": "Child mode enabled",
 
-        "PublicModeOn": "Public mode enabled",
-        "PublicModeOff": "Public mode disabled"
+        "PublicModeOn": "Public",
+        "PublicModeOff": "Private"
       }
     },
     "Story": {
