@@ -69,6 +69,8 @@
       "Consequences": "Consequences",
       "Confirm": "I want to do this",
   
+      "ChildrenStory": "Children's story",
+
       "DiceRoll": {
         "Title": "Dice Roll",
         "Description": "The result of the dice will determine the impact of your choice on the story",

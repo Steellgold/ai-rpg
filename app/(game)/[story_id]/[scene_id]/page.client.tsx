@@ -180,7 +180,14 @@ export const PageClient: Component<PageClientProps> = ({ story_data: storyData, 
   return (
     <div className="flex flex-col mt-16 p-4">
       <div className="flex flex-row gap-2 bg-gray-100/5 p-4 rounded-md flex-wrap">
-        <Badge variant="outline" className="text-md">{storyData.title}</Badge>
+        <Badge variant="outline" className="text-md">
+          {storyData.title}
+          {storyData.isChildrenStory && (
+            <Badge className="bg-teal-500/10 text-teal-500 ml-2">
+              {t("ChildrenStory")}
+            </Badge>
+          )}
+        </Badge>
         <Badge variant="outline" className="text-md">{storyData.current_scene}&nbsp;/&nbsp;{storyData.max_scenes}</Badge>
       </div>
 
