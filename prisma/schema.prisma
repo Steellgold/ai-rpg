@@ -58,6 +58,8 @@ model Job {
 model User {
   id                   String     @id @default(uuid())
   email                String     @unique
+  display_name         String     @default("User")
+  image_url            String?
   // 
   daily_limit_messages Int?       @default(15)
   premium              Boolean    @default(false) // Can generate more than 15 messages per day and access to generate scenes and characters images and avatars
