@@ -56,7 +56,8 @@
         "Generate": "Generate story",
         "Loading": "Generation in progress..., this may take a minute",
         "Clear": "Clear",
-        "SignIn": "SIgn in"
+        "SignIn": "Sign in",
+        "ChildModeOff": "Child mode enabled"
       }
     },
     "Story": {
@@ -119,6 +120,18 @@
       "DRA": {
         "Label": "The Awakening of Dragons",
         "Prompt": "In the divided world of Drakoria, where dragons were considered legends for a thousand years, glimmering scales begin to appear in the Northern mountains. A young cartographer named Lyra discovers she possesses the rare gift of communicating with these majestic creatures. Born with a scale-shaped birthmark on her wrist, she understands that her destiny is tied to the ancient broken pact between humans and dragons. As human kingdoms prepare for war against these beings they fear, Lyra must journey to the five ancestral nests to understand why the dragons are awakening now and become a mediator between the two species before a devastating war breaks out and consumes the entire world."
+      },
+      "WG": {
+        "Label": "The Wishing Garden",
+        "Prompt": "The story takes place in the small village of Roseville, surrounded by enchanted forests and crossed by a crystal-clear river. In the center of the village lies a mysterious garden where, it is said, magical flowers grant the wishes of pure-hearted children. When the flowers begin to lose their colors and magic, Emma, an 8-year-old girl who has always believed in the garden's magic, discovers she can hear the whispers of plants. Accompanied by her friend Lucas and a talking squirrel named Hazel, Emma must travel through the enchanted forest to find the four essences of the seasons and restore life to the Wishing Garden before all magic disappears from the village. During her journey, she will learn the importance of friendship, courage, and protecting nature."
+      },
+      "SL": {
+        "Label": "The Star Lighthouse Keepers",
+        "Prompt": "On the island of Lumina, an ancient and majestic lighthouse shines with a special light that guides not only boats but also stars in the night sky. For generations, Martin's family, a 9-year-old boy, has maintained this lighthouse and ensured that its light never goes out. When strange dark clouds begin to cover the island and stars disappear one by one from the sky, Martin discovers a secret message left by his grandfather: the lighthouse is actually a link between our world and that of the constellations. With the help of his new neighbor Lily and a small stellar dragon fallen from the sky, Martin must solve ancient riddles hidden on the island, restart the forgotten mechanisms of the lighthouse, and restore the connection with the star kingdom before darkness completely covers the sky and navigators can no longer find their way."
+      },
+      "AO": {
+        "Label": "The Animal Orchestra",
+        "Prompt": "In the harmonious valley of Melodia, animals and humans have always lived in perfect harmony thanks to the magical music played during the Great Concert of Seasons. Each animal possesses a unique instrument which, when played in orchestra, maintains the balance of nature. But when the instruments begin to mysteriously disappear and the valley gradually falls into silence, plants wither and relations between animals and humans become tense. Sophie, a young girl passionate about music who can understand animal language through her enchanted flute, is chosen by the wise owl Maestro to find the lost instruments. Accompanied by her new animal friends - a drum-playing rabbit, an otter violinist, and a fox clarinetist - Sophie must travel through the four regions of the valley, face her fears, and discover who is trying to break the harmony of Melodia, while learning that the most beautiful music comes from cooperation and friendship."
       }
     },
     "Genres": {

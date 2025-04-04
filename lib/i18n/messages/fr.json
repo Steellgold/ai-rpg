@@ -55,7 +55,8 @@
         "Generate": "Générer l'histoire",
         "Loading": "Génération en cours..., cela peut prendre une minute",
         "Clear": "Nettoyer",
-        "SignIn": "Se connecter"
+        "SignIn": "Se connecter",
+        "ChildModeOff": "Mode enfant activé"
       }
     },
     "Story": {
@@ -118,6 +119,18 @@
       "DRA": {
         "Label": "L'Éveil des Dragons",
         "Prompt": "Dans le monde divisé de Drakoria, où les dragons étaient considérés comme des légendes depuis mille ans, des écailles luisantes commencent à apparaître dans les montagnes du Nord. Une jeune cartographe nommée Lyra découvre qu'elle possède le don rare de communiquer avec ces créatures majestueuses. Dotée d'une marque de naissance en forme d'écaille sur son poignet, elle comprend que son destin est lié à l'ancien pacte brisé entre humains et dragons. Alors que les royaumes humains se préparent à la guerre contre ces êtres qu'ils craignent, Lyra doit voyager vers les cinq nids ancestraux pour comprendre pourquoi les dragons se réveillent maintenant et devenir une médiatrice entre les deux espèces avant qu'une guerre dévastatrice n'éclate et ne consume le monde entier."
+      },
+      "WG": {
+        "Label": "Le Jardin des Souhaits",
+        "Prompt": "L'histoire se déroule dans le petit village de Roseville, entouré de forêts enchantées et traversé par une rivière aux eaux cristallines. Au centre du village se trouve un jardin mystérieux où, dit-on, les fleurs magiques exaucent les vœux des enfants au cœur pur. Lorsque les fleurs commencent à perdre leurs couleurs et leur magie, Emma, une fillette de 8 ans qui a toujours cru en la magie du jardin, découvre qu'elle peut entendre les murmures des plantes. Accompagnée de son ami Lucas et d'un écureuil parlant nommé Noisette, Emma doit parcourir la forêt enchantée pour trouver les quatre essences des saisons et redonner vie au Jardin des Souhaits avant que toute magie ne disparaisse du village. Durant son voyage, elle apprendra l'importance de l'amitié, du courage et de la protection de la nature."
+      },
+      "SL": {
+        "Label": "Les Gardiens du Phare Étoilé",
+        "Prompt": "Sur l'île de Lumina, un phare ancien et majestueux brille d'une lumière spéciale qui guide non seulement les bateaux, mais aussi les étoiles dans le ciel nocturne. Depuis des générations, la famille de Martin, 9 ans, entretient ce phare et veille à ce que sa lumière ne s'éteigne jamais. Quand d'étranges nuages sombres commencent à recouvrir l'île et que les étoiles disparaissent une à une du ciel, Martin découvre un message secret laissé par son grand-père : le phare est en réalité un lien entre notre monde et celui des constellations. Avec l'aide de sa nouvelle voisine Lily et d'un petit dragon stellaire tombé du ciel, Martin doit résoudre des énigmes anciennes dissimulées sur l'île, remettre en marche les mécanismes oubliés du phare et restaurer la connexion avec le royaume des étoiles avant que l'obscurité ne recouvre définitivement le ciel et que les navigateurs ne puissent plus retrouver leur chemin."
+      },
+      "AO": {
+        "Label": "L'Orchestre des Animaux",
+        "Prompt": "Dans la vallée harmonieuse de Mélodia, les animaux et les humains ont toujours vécu en parfaite harmonie grâce à la musique magique jouée lors du Grand Concert des Saisons. Chaque animal possède un instrument unique qui, lorsqu'il est joué en orchestre, maintient l'équilibre de la nature. Mais quand les instruments commencent mystérieusement à disparaître et que la vallée sombre peu à peu dans le silence, les plantes se fanent et les relations entre animaux et humains se tendent. Sophie, une jeune fille passionnée de musique qui peut comprendre le langage des animaux grâce à sa flûte enchantée, est choisie par le sage hibou Maestro pour retrouver les instruments perdus. Accompagnée de ses nouveaux amis animaux - un lapin joueur de tambour, une loutre violoniste et un renard clarinettiste - Sophie doit voyager à travers les quatre régions de la vallée, affronter ses peurs et découvrir qui cherche à briser l'harmonie de Mélodia, tout en apprenant que la plus belle musique vient de la coopération et de l'amitié."
       }
     },
     "Genres": {
