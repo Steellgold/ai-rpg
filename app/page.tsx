@@ -6,6 +6,7 @@ import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/db/prisma";
 import { StoryCard } from "@/components/story.card";
+import { Badge } from "@/components/ui/badge";
 
 const Page = async () => {
   const supabase = await createClient();
@@ -64,15 +65,21 @@ const Page = async () => {
         <AiTextarea isPremium={user_data?.premium} />
       </section>
 
-      <hr className="my-12 border-t border-[#161616]" />
+      <hr className="my-56 border-t border-[#161616]" />
 
       <section className="flex flex-col items-center w-full max-w-6xl mx-auto">
-        <h2 className="text-3xl">{t("Marketplace.Title")}</h2>
+        <h2 className="flex flex-row gap-2 text-3xl items-center">
+          {t("Marketplace.Title")}
+          <Badge className="border-indigo-500 bg-indigo-500 text-white" variant="outline">BETA</Badge>
+        </h2>
+
         <p className="text-lg mb-8">{t("Marketplace.Description")}</p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
+        <div className="flex flex-wrap justify-center gap-4 w-full">
           {stories.map((story) => (
-            <StoryCard key={story.id} {...story} />
+            <div key={story.id} className="w-[calc(100%/3-1rem)] flex justify-center">
+              <StoryCard {...story} />
+            </div>
           ))}
         </div>
       </section>
@@ -81,25 +88,3 @@ const Page = async () => {
 }
 
 export default Page;
-
-{/* <Card className="pt-0 pb-0 w-full relative z-[100] mx-auto flex flex-row items-center justify-between mt-4 animate-in fade-in-50 slide-in-from-top-16">
-        <div className="p-6">
-          <CardTitle>
-            {t("Marketplace.Title")} <Badge variant="outline" className="ml-2">{t("Marketplace.CommingSoon")}</Badge>
-          </CardTitle>
-          <CardDescription className="mt-2">{t("Marketplace.Description")}</CardDescription>
-
-          <div className="flex flex-col items-center mt-4">
-            <Button className="w-full" disabled>
-              {t("Marketplace.Button")}
-              <ArrowRight size={16} />
-            </Button>
-          </div>
-        </div>
-  
-        <Image 
-          src="/marketplace.jpg" alt="Marketplace"
-          width={300} height={300}
-          className="rounded-tr-lg rounded-br-lg h-[200px] w-[300px] object-cover"
-        />
-      </Card> */}
