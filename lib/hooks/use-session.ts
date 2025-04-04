@@ -41,7 +41,7 @@ export const useSession = () => {
         const { error } = await supabase.auth.signInWithOAuth({
           provider: "discord",
           options: {
-            redirectTo: `${clientEnv.NEXT_PUBLIC_BASE_URL}/auth/callback` +
+            redirectTo: `${clientEnv.NEXT_PUBLIC_BASE_URL}/continue` +
               (encodedPrompt ? `?prompt=${encodedPrompt}` : "") +
               (selectedGenres ? `${encodedPrompt ? "&" : "?"}genres=${selectedGenres.join(",")}` : "")
           },
