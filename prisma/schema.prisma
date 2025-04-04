@@ -87,6 +87,7 @@ model Story {
   genre            String[]
   // 
   isChildrenStory  Boolean        @default(false)
+  isPublic         Boolean        @default(false)
   // 
   narrativeStyle   NarrativeStyle
   //
