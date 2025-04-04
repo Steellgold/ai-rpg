@@ -66,7 +66,7 @@ Deno.serve(async (req)=>{
       status: 405
     });
   }
-  const { storyId, sceneId, choiceId, diceRoll = 3, gameSaveId, userId, customText, isPremium = , isChildren = false } = await req.json();
+  const { storyId, sceneId, choiceId, diceRoll = 3, gameSaveId, userId, customText, isPremium = false, isChildren = false } = await req.json();
   if (!storyId || !sceneId || !(choiceId || customText) || !userId) {
     return new Response(JSON.stringify({
       error: "Missing required fields: storyId, sceneId, choiceId/customText, and userId"
