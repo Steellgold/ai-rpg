@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, ReactElement, HTMLAttributes, cloneElement } from "react"
 import { Button } from "@/components/ui/button"
-import { ArrowUpIcon, Baby, Crown, Eclipse, Flower, Loader, Lock, LockOpen, Music, TowerControl, User, X } from "lucide-react"
+import { ArrowUpIcon, Baby, Crown, Eclipse, Flower, Loader, Lock, LockOpen, Music, Pickaxe, TowerControl, User, X } from "lucide-react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { cn } from "@/lib/utils"
 import { Component } from "@/lib/types"
@@ -61,6 +61,7 @@ export const AiTextarea: Component<
 
   const [childMode, setChildMode] = useState(false);
   const [publicMode, setPublicMode] = useState(true);
+  const [items, setItems] = useState(false);
 
   const [isGenerating, setIsGenerating] = useState(false);
   const [selectedGenres, setSelectedGenres] = useState<string[]>(
@@ -180,6 +181,32 @@ export const AiTextarea: Component<
                   "text-gray-200": !childMode
                 })}>
                   {t("AiTextarea.ChildModeOff")}</span>
+              )}
+            </Button>
+
+            <Button
+              size={"default"}
+              variant="ghost"
+              className={cn(
+                "!border rounded-full transition-opacity !h-8 cursor-pointer px-2 ml-1", {
+                  "!w-8": !items,
+                  "border-indigo-400/20 hover:bg-indigo-400/10": items && isPremium,
+                  "border-gray-400/20 hover:bg-gray-400/10": !items
+                }
+              )}
+              onClick={() => isPremium && setItems(!items)}
+              disabled={isGenerating || isLoggingIn || !isPremium}
+            >
+              <Pickaxe className={cn("h-4 w-4", {
+                "text-indigo-400": items && isPremium,
+                "text-gray-200": !items
+              })} />
+              {items && (
+                <span className={cn("text-sm", {
+                  "text-indigo-400": items && isPremium,
+                  "text-gray-200": !items
+                })}>
+                  {t("AiTextarea.ItemsEnabled")}</span>
               )}
             </Button>
 

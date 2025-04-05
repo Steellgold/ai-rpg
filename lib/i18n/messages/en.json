@@ -45,6 +45,8 @@
       "GeneratingSteps": {
         "Pending": "Preparing your story...",
         "Processing": "Generating the universe and characters...",
+        "GeneratingItems": "Creating items and objects...",
+        "GeneratingScenes": "Building your first scene...",
         "GeneratingImages": "Creating illustrations...",
         "Completed": "Finalizing your adventure...",
         "Error": "An error has occurred"
@@ -62,7 +64,10 @@
         "ChildModeOff": "Child mode enabled",
 
         "PublicModeOn": "Public",
-        "PublicModeOff": "Private"
+        "PublicModeOff": "Private",
+
+        "ItemsEnabled": "Items enabled",
+        "ItemsDisabled": "Items disabled"
       }
     },
     "Story": {
