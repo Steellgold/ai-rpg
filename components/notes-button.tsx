@@ -83,7 +83,7 @@ export const NotesButton: Component<NotesButtonProps> = ({ notes: ogNotes, story
         {!isExpanded && (
           <Button onClick={() => setIsExpanded(true)} className="flex items-center gap-2 px-4 py-2" variant="outline">
             <StickyNote className="h-4 w-4" />
-            {t("Notes", { count: notes.split(" ").length })}
+            {t(notes.length === 0 ? "NoNotes" : "Notes", { count: notes.length === 0 ? 0 : notes.split(" ").length })}
           </Button>
         )}
       </div>

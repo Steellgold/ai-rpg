@@ -99,7 +99,8 @@
       "Notes": {
         "Title": "Notes",
         "Saving": "Sauvegarde des notes...",
-        "Notes": "Notes ({count} mot(s))"
+        "Notes": "Notes ({count} mot(s))",
+        "NoNotes": "Notes"
       },
 
       "CharacterCard": {

@@ -100,7 +100,8 @@
       "Notes": {
         "Title": "Notes",
         "Saving": "Saving...",
-        "Notes": "Notes ({count} word(s))"
+        "Notes": "Notes ({count} word(s))",
+        "NoNotes": "Notes"
       },
 
       "CharacterCard": {
