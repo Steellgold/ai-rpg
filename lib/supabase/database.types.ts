@@ -502,6 +502,7 @@ export type Database = {
           isPublic: boolean
           max_scenes: number | null
           narrativeStyle: Database["public"]["Enums"]["NarrativeStyle"]
+          notes: string | null
           possibleEndings: string[] | null
           synopsis: string
           title: string
@@ -520,6 +521,7 @@ export type Database = {
           isPublic?: boolean
           max_scenes?: number | null
           narrativeStyle: Database["public"]["Enums"]["NarrativeStyle"]
+          notes?: string | null
           possibleEndings?: string[] | null
           synopsis: string
           title: string
@@ -538,6 +540,7 @@ export type Database = {
           isPublic?: boolean
           max_scenes?: number | null
           narrativeStyle?: Database["public"]["Enums"]["NarrativeStyle"]
+          notes?: string | null
           possibleEndings?: string[] | null
           synopsis?: string
           title?: string
