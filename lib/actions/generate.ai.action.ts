@@ -11,10 +11,10 @@ import { Database } from "../supabase/database.types";
 
 export const generateHistory = async (text: string, genres?: string[], isForChildren?: boolean) => {
   const supabase = await createClient();
-  const { data: { session } } = await supabase.auth.getSession();
-  if (!session) throw new Error("User not authenticated");
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error("User not authenticated");
 
-  const user_data = await prisma.user.findUnique({ where: { id: session.user.id } });
+  const user_data = await prisma.user.findUnique({ where: { id: user.id } });
   if (!user_data) throw new Error("User not found");
 
   const supabase_role_key = createSupabaseClient<Database>(
@@ -26,7 +26,7 @@ export const generateHistory = async (text: string, genres?: string[], isForChil
   const job = await prisma.job.create({
     data: {
       id: jobId,
-      userId: session.user.id,
+      userId: user.id,
       stage: "INITIALIZED",
       input: { text, genres: genres || [] }
     }
@@ -38,7 +38,7 @@ export const generateHistory = async (text: string, genres?: string[], isForChil
     body: {
       text,
       genres: genres || [],
-      userId: session.user.id,
+      userId: user.id,
       jobId,
       isPremium: user_data.premium,
       isChildren: isForChildren || false,
