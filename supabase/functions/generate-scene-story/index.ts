@@ -111,27 +111,58 @@ Deno.serve(async (req)=>{
     if (!currentScene) {
       throw new Error("Not found current scene");
     }
+
     if (customText) {
-      const { data: syntheticChoice, error: choiceError } = await supabase.from('Choice').insert({
-        id: createId(),
-        text: customText,
-        description: "Choix personnalisé du joueur",
-        consequence: customText,
-        loadingMessage: "L'histoire se développe selon votre action personnalisée...",
-        isCustomChoice: true,
-        sceneId: sceneId
-      }).select().single();
-      if (choiceError) {
-        throw new Error(`Erreur lors de la création du choix personnalisé: ${choiceError.message}`);
+      // Find the existing custom choice instead of creating a new one
+      const existingCustomChoice = currentScene.Choice.find(c => c.isCustomChoice);
+      
+      if (existingCustomChoice) {
+        // Update the existing custom choice with the player's text
+        const { data: updatedChoice, error: updateError } = await supabase
+          .from('Choice')
+          .update({
+            text: customText,
+            consequence: customText
+          })
+          .eq('id', existingCustomChoice.id)
+          .select()
+          .single();
+          
+        if (updateError) {
+          throw new Error(`Erreur lors de la mise à jour du choix personnalisé: ${updateError.message}`);
+        }
+        
+        selectedChoice = updatedChoice;
+      } else {
+        // Fallback: Create a new choice if no custom choice exists (should not happen normally)
+        const { data: syntheticChoice, error: choiceError } = await supabase
+          .from('Choice')
+          .insert({
+            id: createId(),
+            text: customText,
+            description: "Choix personnalisé du joueur",
+            consequence: customText,
+            loadingMessage: "L'histoire se développe selon votre action personnalisée...",
+            isCustomChoice: true,
+            sceneId: sceneId
+          })
+          .select()
+          .single();
+          
+        if (choiceError) {
+          throw new Error(`Erreur lors de la création du choix personnalisé: ${choiceError.message}`);
+        }
+        
+        selectedChoice = syntheticChoice;
       }
-      selectedChoice = syntheticChoice;
     } else {
       // Récupérer le choix sélectionné
-      selectedChoice = currentScene.Choice.find((c)=>c.id === choiceId);
+      selectedChoice = currentScene.Choice.find((c) => c.id === choiceId);
       if (!selectedChoice) {
         throw new Error("Choix sélectionné non trouvé");
       }
     }
+
     // Récupérer l'historique des scènes récentes (5 dernières)
     const sceneHistory = story.Scene.filter((s)=>s.id !== currentScene.id && (s.order || 0) < (currentScene.order || 0)).sort((a, b)=>(a.order || 0) - (b.order || 0)).slice(-5);
     const historyContext = sceneHistory.map((scene)=>`Scene:: ${scene.title}\n${scene.content}\nSelected choice: ${scene.selected_choice_id ? scene.choices.find((c)=>c.id === scene.selected_choice_id)?.text || "Aucun choix sélectionné" : "Aucun choix sélectionné"}`).join("\n\n");
