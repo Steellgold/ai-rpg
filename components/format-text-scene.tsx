@@ -17,100 +17,110 @@ const escapeRegExp = (string: string): string => {
 
 export const formatSceneContent = (content: string, characters: PageClientProps["story_data"]["characters"], loading = false) => {
   return content.split("\n").map((paragraph, index) => {
-    const segments: (string | { character: typeof characters[0], originalText: string })[] = [paragraph];
-    const sortedCharacters = [...characters].sort((a, b) => b.name.length - a.name.length);
-    
-    for (const character of sortedCharacters) {
-      const newSegments: typeof segments = [];
-      const nameParts = [character.name, ...character.name.split(' ')].filter(part => part.length > 1);
-      
-      for (const segment of segments) {
-        if (typeof segment !== 'string') {
-          newSegments.push(segment);
-          continue;
-        }
-        
-        let currentText = segment;
-        let lastIndex = 0;
-        let found = false;
-        
-        for (const namePart of nameParts) {
-          const normalizedPart = escapeRegExp(namePart);
-          const regex = new RegExp(`\\b${normalizedPart}\\b`, 'gi');
-          
-          let match;
-          while ((match = regex.exec(currentText)) !== null) {
-            found = true;
-            if (match.index > lastIndex) {
-              newSegments.push(currentText.substring(lastIndex, match.index));
-            }
-            
-            newSegments.push({
-              character,
-              originalText: match[0]
-            });
-            
-            lastIndex = match.index + match[0].length;
-          }
-          
-          if (!found) {
-            const normalizedSegment = normalizeString(currentText);
-            const normalizedNamePart = normalizeString(namePart);
-            
-            let normIndex = normalizedSegment.indexOf(normalizedNamePart);
-            
-            while (normIndex !== -1) {
-              const beforeChar = normIndex === 0 ? ' ' : normalizedSegment[normIndex - 1];
-              const afterChar = normIndex + normalizedNamePart.length >= normalizedSegment.length 
-                ? ' ' 
-                : normalizedSegment[normIndex + normalizedNamePart.length];
-              
-              const isWordBoundaryBefore = /\W/.test(beforeChar) || beforeChar === ' ';
-              const isWordBoundaryAfter = /\W/.test(afterChar) || afterChar === ' ';
-              
-              if (isWordBoundaryBefore && isWordBoundaryAfter) {
-                found = true;
-                if (normIndex > lastIndex) {
-                  newSegments.push(currentText.substring(lastIndex, normIndex));
-                }
-                
-                const originalText = currentText.substring(normIndex, normIndex + namePart.length);
-                newSegments.push({
-                  character,
-                  originalText
-                });
-                
-                lastIndex = normIndex + namePart.length;
-              }
-
-              normIndex = normalizedSegment.indexOf(normalizedNamePart, normIndex + 1);
-            }
-          }
-        }
-        
-        if (lastIndex < currentText.length) {
-          newSegments.push(currentText.substring(lastIndex));
-        }
-      }
-      
-      segments.length = 0;
-      segments.push(...newSegments);
+    type Replacement = {
+      start: number;
+      end: number;
+      character: typeof characters[0];
     }
     
-    const renderedSegments = segments.map((segment, segmentIndex) => {
-      if (typeof segment === 'string') {
-        return segment;
-      } else {
-        return <CharacterMention 
-          key={`${segment.character.id}-${segmentIndex}-${index}`} 
-          character={segment.character} 
-        />;
+    const replacements: Replacement[] = [];
+    
+    const sortedCharacters = [...characters].sort((a, b) => b.name.length - a.name.length);
+    for (const character of sortedCharacters) {
+      const nameParts = [character.name, ...character.name.split(' ')].filter(part => part.length > 1);
+      
+      for (const namePart of nameParts) {
+        const regex = new RegExp(`\\b${escapeRegExp(namePart)}\\b`, 'gi');
+        let match: RegExpExecArray | null;
+        
+        while ((match = regex.exec(paragraph)) !== null) {
+          const overlaps = replacements.some(r => 
+            (match!.index >= r.start && match!.index < r.end) || 
+            (match!.index + match![0].length > r.start && match!.index + match![0].length <= r.end)
+          );
+          
+          if (!overlaps) {
+            replacements.push({
+              start: match.index,
+              end: match.index + match[0].length,
+              character
+            });
+          }
+        }
+        
+        const normalizedParagraph = normalizeString(paragraph);
+        const normalizedPart = normalizeString(namePart);
+        let normalizedIndex = 0;
+        
+        while ((normalizedIndex = normalizedParagraph.indexOf(normalizedPart, normalizedIndex)) !== -1) {
+          const beforeChar = normalizedIndex === 0 ? ' ' : normalizedParagraph[normalizedIndex - 1];
+          const afterChar = normalizedIndex + normalizedPart.length >= normalizedParagraph.length
+            ? ' ' 
+            : normalizedParagraph[normalizedIndex + normalizedPart.length];
+
+          const isWordBoundaryBefore = /[\s,.;:!?()[\]{}'"<>\/\\-]/.test(beforeChar) || normalizedIndex === 0;
+          const isWordBoundaryAfter = /[\s,.;:!?()[\]{}'"<>\/\\-]/.test(afterChar) || normalizedIndex + normalizedPart.length === normalizedParagraph.length;
+          
+          if (isWordBoundaryBefore && isWordBoundaryAfter) {
+            const overlaps = replacements.some(r => 
+              (normalizedIndex >= r.start && normalizedIndex < r.end) || 
+              (normalizedIndex + namePart.length > r.start && normalizedIndex + namePart.length <= r.end)
+            );
+            
+            if (!overlaps) {
+              replacements.push({
+                start: normalizedIndex,
+                end: normalizedIndex + namePart.length,
+                character
+              });
+            }
+          }
+          
+          normalizedIndex += normalizedPart.length;
+        }
       }
+    }
+    
+    replacements.sort((a, b) => {
+      if (a.start !== b.start) return a.start - b.start;
+      return (b.end - b.start) - (a.end - a.start);
     });
+    
+    const filteredReplacements: Replacement[] = [];
+    let lastEnd = -1;
+    
+    for (const r of replacements) {
+      if (r.start >= lastEnd) {
+        filteredReplacements.push(r);
+        lastEnd = r.end;
+      }
+    }
+    
+    const segments: ReactNode[] = [];
+    let lastPos = 0;
+    
+    for (const replacement of filteredReplacements) {
+      if (replacement.start > lastPos) {
+        segments.push(paragraph.substring(lastPos, replacement.start));
+      }
+      
+      segments.push(
+        <CharacterMention 
+          key={`${replacement.character.id}-${replacement.start}-${index}`}
+          character={replacement.character}
+        />
+      );
+      
+      lastPos = replacement.end;
+    }
+    
+    if (lastPos < paragraph.length) {
+      segments.push(paragraph.substring(lastPos));
+    }
     
     return (
       <p key={index} className={cn("mb-4 last:mb-0", { "animate-pulse": loading })}>
-        {renderedSegments}
+        {segments.length > 0 ? segments : paragraph}
       </p>
     );
   });
