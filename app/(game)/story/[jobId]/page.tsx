@@ -20,6 +20,7 @@ const Page: Component<Params> = ({ params }) => {
   const [status, setStatus] = useState<string>("PENDING");
   const [progress, setProgress] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);
+  const [hasItems, setHasItems] = useState<boolean>(false);
   const router = useRouter();
   const supabase = createClient();
   const t = useTranslations("Pages.New");
@@ -38,6 +39,10 @@ const Page: Component<Params> = ({ params }) => {
           .single();
 
         if (fetchError) throw fetchError;
+
+        if (data.input && typeof data.input === 'object' && 'items' in data.input) {
+          setHasItems(Boolean(data.input.items));
+        }
 
         updateJobStatus(data);
 
@@ -75,6 +80,7 @@ const Page: Component<Params> = ({ params }) => {
         CREATING_STORY: 30,
         CREATING_MAIN_CHARS: 40,
         CREATING_SEC_CHARS: 50,
+        GENERATING_ITEMS: 55,
         CREATING_FIRST_SCENE: 60,
         GENERATING_BANNER: 70,
         UPLOADING_BANNER: 80,
@@ -82,7 +88,8 @@ const Page: Component<Params> = ({ params }) => {
         UPLOADING_SCENE_IMG: 95,
         FINALIZING: 99,
         COMPLETED: 100,
-        ERROR: 0
+        ERROR: 0,
+        FAILED: 0
       };
 
       const newProgress = progressMap[currentStatus] || progress;
@@ -90,7 +97,7 @@ const Page: Component<Params> = ({ params }) => {
 
       if (currentStatus === 'COMPLETED' && jobData.storyId) {
         router.push(`/${jobData.storyId}`);
-      } else if (currentStatus === 'ERROR') {
+      } else if (currentStatus === 'FAILED' || currentStatus === 'ERROR') {
         setError(jobData.error || "An error occurred");
       }
     };
@@ -106,11 +113,31 @@ const Page: Component<Params> = ({ params }) => {
 
   const statusMessages = {
     PENDING: t("GeneratingSteps.Pending"),
+    INITIALIZED: t("GeneratingSteps.Pending"),
     GENERATING_STORY: t("GeneratingSteps.Processing"),
+    CREATING_STORY: t("GeneratingSteps.Processing"),
+    CREATING_MAIN_CHARS: t("GeneratingSteps.Processing"),
+    CREATING_SEC_CHARS: t("GeneratingSteps.Processing"),
+    GENERATING_ITEMS: t("GeneratingSteps.GeneratingItems"),
+    CREATING_FIRST_SCENE: t("GeneratingSteps.GeneratingScenes"),
     GENERATING_BANNER: t("GeneratingSteps.GeneratingImages"),
+    UPLOADING_BANNER: t("GeneratingSteps.GeneratingImages"),
+    GENERATING_SCENE_IMG: t("GeneratingSteps.GeneratingImages"),
+    UPLOADING_SCENE_IMG: t("GeneratingSteps.GeneratingImages"),
+    FINALIZING: t("GeneratingSteps.Completed"),
     COMPLETED: t("GeneratingSteps.Completed"),
+    FAILED: t("GeneratingSteps.Error"),
     ERROR: t("GeneratingSteps.Error")
   };
+
+  const generationSteps = [
+    { key: 'PENDING', label: t("GeneratingSteps.Pending"), progress: 10 },
+    { key: 'GENERATING_STORY', label: t("GeneratingSteps.Processing"), progress: 30 },
+    ...(hasItems ? [{ key: 'GENERATING_ITEMS', label: t("GeneratingSteps.GeneratingItems"), progress: 55 }] : []),
+    { key: 'CREATING_FIRST_SCENE', label: t("GeneratingSteps.GeneratingScenes"), progress: 60 },
+    { key: 'GENERATING_BANNER', label: t("GeneratingSteps.GeneratingImages"), progress: 80 },
+    { key: 'COMPLETED', label: t("GeneratingSteps.Completed"), progress: 100 }
+  ];
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-4">
@@ -139,16 +166,11 @@ const Page: Component<Params> = ({ params }) => {
           </div>
           
           <div className="space-y-2">
-            {[
-              { key: 'PENDING', label: t("GeneratingSteps.Pending") },
-              { key: 'GENERATING_STORY', label: t("GeneratingSteps.Processing") },
-              { key: 'GENERATING_BANNER', label: t("GeneratingSteps.GeneratingImages") },
-              { key: 'COMPLETED', label: t("GeneratingSteps.Completed") }
-            ].map(({ key, label }) => (
+            {generationSteps.map(({ key, label, progress: stepProgress }) => (
               <div key={key} className="flex justify-between items-center">
                 <span>{label}</span>
-                <Badge variant={status === key ? "default" : "outline"}>
-                  {progress >= (key === 'COMPLETED' ? 100 : (key === 'GENERATING_BANNER' ? 70 : 30)) ? "✓" : "..."}
+                <Badge variant={status === key ? "default" : progress >= stepProgress ? "success" : "outline"}>
+                  {progress >= stepProgress ? "✓" : "..."}
                 </Badge>
               </div>
             ))}
