@@ -40,6 +40,24 @@ const Page = async ({ params }: PageProps) => {
           },
           selected_choice_id: true,
         }
+      },
+      characters: {
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          personality: true,
+          outfit: true,
+          age: true,
+          background: true,
+          abilities: true,
+          relationships: true,
+          motivations: true,
+          flaws: true,
+          backstory: true,
+          isMain: true,
+          imageUrl: true
+        }
       }
     }
   });

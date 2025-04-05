@@ -1,6 +1,7 @@
 "use client";
 
 import { ChildrenStoryTag } from "@/components/children-story.tag";
+import { formatSceneContent } from "@/components/format-text-scene";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription, CardFooter } from "@/components/ui/card";
@@ -16,7 +17,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
-type PageClientProps = {
+export type PageClientProps = {
   story_data: Prisma.StoryGetPayload<{
     include: {
       scenes: {
@@ -37,6 +38,24 @@ type PageClientProps = {
             }
           },
           selected_choice_id: true,
+        }
+      },
+      characters: {
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          personality: true,
+          outfit: true,
+          age: true,
+          background: true,
+          abilities: true,
+          relationships: true,
+          motivations: true,
+          flaws: true,
+          backstory: true,
+          isMain: true,
+          imageUrl: true
         }
       }
     }
@@ -74,14 +93,6 @@ export const PageClient: Component<PageClientProps> = ({ story_data: storyData, 
 
   const t = useTranslations("Pages.Story");
 
-  const formatSceneContent = (content: string) => {
-    return content.split('\n').map((paragraph, index) => (
-      <p key={index} className={cn("mb-4 last:mb-0", { "animate-pulse": loading })}>
-        {paragraph}
-      </p>
-    ));
-  };
-  
   const handleRollDice = () => {
     if (isRolling) return;
     
@@ -281,7 +292,11 @@ export const PageClient: Component<PageClientProps> = ({ story_data: storyData, 
               <CardDescription className={cn({
                 "animate-pulse": loading,
               })}>
-                {formatSceneContent(sceneData.content)}
+                {formatSceneContent(
+                  sceneData.content,
+                  storyData.characters,
+                  loading
+                )}
               </CardDescription>
             </CardContent>
           </Card>
