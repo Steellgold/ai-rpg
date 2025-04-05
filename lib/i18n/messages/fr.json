@@ -94,6 +94,12 @@
       "Previous": {
         "Choices": "Choix précédents",
         "ChoiceSelected": "Choix sélectionné"
+      },
+
+      "Notes": {
+        "Title": "Notes",
+        "Saving": "Sauvegarde des notes...",
+        "Notes": "Notes ({count} mot(s))"
       }
     }
   },
