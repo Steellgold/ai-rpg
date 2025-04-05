@@ -69,9 +69,15 @@
         "Title": "Scènes",
         "Description": "Ici vous pouvez voir les scènes de votre histoire et y retourner (néammoins, vous ne pourrez pas changer un choix déjà fait)."
       },
+
       "Choose": "Que voulez vous faire ?",
       "Consequences": "Conséquences",
       "Confirm": "Je veut faire ça",
+
+      "CustomChoice": "Choix personnalisé",
+      "PersonalizedChoice": "Choix thématisé",
+
+      "CustomChoicePlaceholder": "Écrivez votre choix ici...",
 
       "ChildrenStory": "Histoire pour enfants",
       

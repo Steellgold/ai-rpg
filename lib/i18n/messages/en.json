@@ -73,6 +73,10 @@
       "Choose": "What do you want to do?",
       "Consequences": "Consequences",
       "Confirm": "I want to do this",
+
+      "CustomChoice": "Custom choice",
+      "PersonalizedChoice": "Thematic choice",
+      "CustomChoicePlaceholder": "Write your choice here...",
   
       "ChildrenStory": "Children's story",
 

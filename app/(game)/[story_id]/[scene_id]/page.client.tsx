@@ -4,18 +4,19 @@ import { ChildrenStoryTag } from "@/components/children-story.tag";
 import { formatSceneContent } from "@/components/format-text-scene";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle, CardContent, CardDescription, CardFooter } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import { generateNextScene, handleCustomChoice } from "@/lib/actions/generate.scene.action";
 import useShowScenes from "@/lib/hooks/use-show-p.scenes";
 import { Component } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { Prisma } from "@prisma/client";
-import { Check, ChevronRight, Expand, ImageUpscale, PanelRightClose, PanelRightOpen, Pen, Shrink } from "lucide-react";
+import { Check, ChevronRight, Expand, PanelRightClose, PanelRightOpen, Shrink } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { ChoiceComponent } from "@/components/choice";
+import { DiceCube } from "@/components/dice";
 
 export type PageClientProps = {
   story_data: Prisma.StoryGetPayload<{
@@ -86,10 +87,9 @@ export const PageClient: Component<PageClientProps> = ({ story_data: storyData, 
   const [diceResult, setDiceResult] = useState<number | null>(null);
   const [currentFace, setCurrentFace] = useState(1);
   const [diceRolled, setDiceRolled] = useState(false);
+  const [show_fullImage, setShowFullImage] = useState(false);
 
   const { showPreviousScenes, toggle } = useShowScenes();
-
-  const [show_fullImage, setShowFullImage] = useState(false);
 
   const t = useTranslations("Pages.Story");
 
@@ -99,9 +99,7 @@ export const PageClient: Component<PageClientProps> = ({ story_data: storyData, 
     setIsRolling(true);
     setDiceRolled(false);
     
-    const rollInterval = setInterval(() => {
-      setCurrentFace(Math.floor(Math.random() * 6) + 1);
-    }, 100);
+    const rollInterval = setInterval(() => setCurrentFace(Math.floor(Math.random() * 6) + 1), 100);
     
     setTimeout(() => {
       clearInterval(rollInterval);
@@ -128,64 +126,16 @@ export const PageClient: Component<PageClientProps> = ({ story_data: storyData, 
     }
   };
   
-  const renderDiceFace = (face: number) => {
-    const dotPositions = {
-      1: ["center"],
-      2: ["top-left", "bottom-right"],
-      3: ["top-left", "center", "bottom-right"],
-      4: ["top-left", "top-right", "bottom-left", "bottom-right"],
-      5: ["top-left", "top-right", "center", "bottom-left", "bottom-right"],
-      6: ["top-left", "top-right", "middle-left", "middle-right", "bottom-left", "bottom-right"],
-    };
-
-    const positions = dotPositions[face as keyof typeof dotPositions] || [];
-
-    return (
-      <div className="w-16 h-16 bg-white rounded-lg shadow-lg flex flex-wrap justify-center items-center p-2 relative">
-        {positions.map((position, index) => {
-          let positionClass = "";
-
-          switch (position) {
-            case "top-left":
-              positionClass = "absolute top-2 left-2";
-              break;
-            case "top-right":
-              positionClass = "absolute top-2 right-2";
-              break;
-            case "middle-left":
-              positionClass = "absolute top-1/2 left-2 -translate-y-1/2";
-              break;
-            case "middle-right":
-              positionClass = "absolute top-1/2 right-2 -translate-y-1/2";
-              break;
-            case "bottom-left":
-              positionClass = "absolute bottom-2 left-2";
-              break;
-            case "bottom-right":
-              positionClass = "absolute bottom-2 right-2";
-              break;
-            case "center":
-              positionClass = "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2";
-              break;
-            default:
-              positionClass = "";
-          }
-
-          return <div key={index} className={`w-2.5 h-2.5 bg-black rounded-full ${positionClass}`} />;
-        })}
-      </div>
-    );
+  const handleSelectChoice = (choice: typeof sceneData.choices[0]) => {
+    setSelectedChoice(choice);
   };
-  
-  const getDiceImpactDescription = (result: number | null) => {
-    if (!result) return "";
-    
-    if (result <= 2) {
-      return t("DiceRoll.ImpactMinor");
-    } else if (result <= 4) {
-      return t("DiceRoll.ImpactMedium");
-    } else {
-      return t("DiceRoll.ImpactMajor");
+
+  const handleCustomTextChange = (text: string) => {
+    if (selectedChoice) {
+      setSelectedChoice({
+        ...selectedChoice,
+        text: text,
+      });
     }
   };
 
@@ -312,63 +262,22 @@ export const PageClient: Component<PageClientProps> = ({ story_data: storyData, 
                   </CardHeader>
                   <CardContent className="flex flex-col gap-2">
                     {sceneData.choices.map((choice) => (
-                      <div key={choice.id} className="border border-border rounded-md p-2">
-                        <Button
-                          variant="outline"
-                          className={cn(
-                            "w-full h-auto flex items-center justify-start",
-                            selectedChoice?.id === choice.id
-                              ? "bg-yellow-500/10 hover:bg-yellow-500/5 text-white"
-                              : "hover:bg-yellow-500/30"
-                          )}
-                          wrap={false}
-                          onClick={() => {
-                            if (selectedChoice?.id === choice.id) setSelectedChoice(null);
-                            else setSelectedChoice(choice);
-                          }}
-                        >
-                          {choice.text}
-                          {choice.isCustomChoice && <Pen className="ml-2" />}
-                        </Button>
-
-                        {choice.isCustomChoice && selectedChoice?.id === choice.id && (
-                          <>
-                            <Input
-                              placeholder="Votre choix personnalisé"
-                              className={cn(
-                                "mt-2 w-full",
-                                selectedChoice?.id === choice.id
-                                  ? "bg-yellow-500/10 hover:bg-yellow-500/5 text-white"
-                                  : "hover:bg-yellow-500/30"
-                              )}
-                              onChange={(e) => {
-                                setSelectedChoice({
-                                  ...choice,
-                                  text: e.target.value,
-                                });
-                              }}
-                              value={selectedChoice?.id === choice.id ? selectedChoice.text : ""}
-                              disabled={selectedChoice?.id !== choice.id}
-                            />
-                          </>
-                        )}
-  
-                        <CardDescription className="mt-2">{choice.description}</CardDescription>
-                      </div>
+                      <ChoiceComponent
+                        key={choice.id}
+                        choice={choice}
+                        isSelected={selectedChoice?.id === choice.id}
+                        // @ts-ignore
+                        onSelect={handleSelectChoice}
+                        onCustomTextChange={handleCustomTextChange}
+                      />
                     ))}
 
                     {selectedChoice && (
-                      <Card className="w-full bg-gray-100/5 mt-4">
-                        <CardHeader>
-                          <CardTitle>{t("Consequences")}</CardTitle>
-                          <CardDescription>{selectedChoice.consequence}</CardDescription>
-                        </CardHeader>
-                        <CardFooter className="flex justify-end">
-                          <Button variant="outline" className="w-full" onClick={() => setConfirmChoice(true)}>
-                            {t("Confirm")}
-                          </Button>
-                        </CardFooter>
-                      </Card>
+                      <div className="flex flex-col gap-2 mt-4">
+                        <Button variant="navbar" className="w-full" onClick={() => setConfirmChoice(true)}>
+                          {t("Confirm")}
+                        </Button>
+                      </div>
                     )}
                   </CardContent>
                 </>
@@ -382,19 +291,8 @@ export const PageClient: Component<PageClientProps> = ({ story_data: storyData, 
                   </CardHeader>
                   <CardContent className="flex flex-col items-center gap-4">
                     <div className="h-20 flex items-center justify-center">
-                      {renderDiceFace(currentFace)}
+                      <DiceCube face={currentFace} size="md" displayType="dots" />
                     </div>
-                    
-                    {diceRolled && (
-                      <div className="text-center w-full">
-                        <p className="font-bold text-lg">
-                          {t("DiceRoll.Result")}&nbsp;<span className="text-yellow-500">{diceResult}</span>/6
-                        </p>
-                        <p className="text-sm opacity-80 mt-1">
-                          {getDiceImpactDescription(diceResult)}
-                        </p>
-                      </div>
-                    )}
                     
                     <div className="flex flex-col gap-2 w-full">
                       {!diceRolled ? (
@@ -404,10 +302,7 @@ export const PageClient: Component<PageClientProps> = ({ story_data: storyData, 
                           onClick={handleRollDice}
                           disabled={isRolling}
                         >
-                          {isRolling
-                            ? t("DiceRoll.Rolling")
-                            : t("DiceRoll.Roll")
-                          }
+                          {isRolling ? t("DiceRoll.Rolling") : t("DiceRoll.Roll")}
                         </Button>
                       ) : (
                         <>
@@ -448,22 +343,22 @@ export const PageClient: Component<PageClientProps> = ({ story_data: storyData, 
         {sceneData.selected_choice_id && (
           <div className="w-2/5">
             <Card className="w-full bg-gray-100/5">
-              <CardHeader>
-                <CardTitle>{t("Previous.Choices")}</CardTitle>
-                <CardDescription>{t("Previous.ChoiceSelected")}</CardDescription>
+              <CardHeader className="flex flex-row justify-between items-center">
+                <div>
+                  <CardTitle>{t("Previous.Choices")}</CardTitle>
+                  <CardDescription>{t("Previous.ChoiceSelected")}</CardDescription>
+                </div>
+
+                {sceneData.diceRoll !== 0 && <DiceCube face={sceneData.diceRoll ?? 1} size="md" displayType="dots" />}
               </CardHeader>
               <CardContent className="flex flex-col gap-2">
                 {sceneData.choices.map((choice) => (
-                  <div key={choice.id} className="border border-border rounded-md p-2">
-                    <Button
-                      variant="outline"
-                      className={cn("w-full", choice.id === sceneData.selected_choice_id ? "bg-yellow-500/10 hover:bg-yellow-500/5 text-white" : "hover:bg-yellow-500/30")}
-                    >
-                      {choice.text}
-                      {choice.isCustomChoice && <Pen className="ml-2" />}
-                    </Button>
-                    <CardDescription className="mt-2">{choice.description}</CardDescription>
-                  </div>
+                  <ChoiceComponent
+                    key={choice.id}
+                    choice={choice}
+                    isSelected={choice.id === sceneData.selected_choice_id}
+                    isPrevious={true}
+                  />
                 ))}
               </CardContent>
             </Card>
