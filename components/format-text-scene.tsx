@@ -2,6 +2,7 @@ import { type ReactNode } from "react"
 import { cn } from "@/lib/utils"
 import { CharacterMention } from "./character-card"
 import { PageClientProps } from "@/app/(game)/[story_id]/[scene_id]/page.client"
+import { ItemMention } from "./item-card"
 
 const normalizeString = (str: string): string => {
   return str
@@ -15,12 +16,18 @@ const escapeRegExp = (string: string): string => {
   return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-export const formatSceneContent = (content: string, characters: PageClientProps["story_data"]["characters"], loading = false) => {
+export const formatSceneContent = (
+  content: string, 
+  characters: PageClientProps["story_data"]["characters"], 
+  items: any[] = [],
+  loading = false
+) => {
   return content.split("\n").map((paragraph, index) => {
     type Replacement = {
       start: number;
       end: number;
-      character: typeof characters[0];
+      type: 'character' | 'item';
+      entity: any;
     }
     
     const replacements: Replacement[] = [];
@@ -43,7 +50,8 @@ export const formatSceneContent = (content: string, characters: PageClientProps[
             replacements.push({
               start: match.index,
               end: match.index + match[0].length,
-              character
+              type: 'character',
+              entity: character
             });
           }
         }
@@ -71,7 +79,8 @@ export const formatSceneContent = (content: string, characters: PageClientProps[
               replacements.push({
                 start: normalizedIndex,
                 end: normalizedIndex + namePart.length,
-                character
+                type: 'character',
+                entity: character
               });
             }
           }
@@ -81,6 +90,64 @@ export const formatSceneContent = (content: string, characters: PageClientProps[
       }
     }
     
+    if (items && items.length > 0) {
+      const sortedItems = [...items].sort((a, b) => b.name.length - a.name.length);
+      
+      for (const item of sortedItems) {
+        const regex = new RegExp(`\\b${escapeRegExp(item.name)}\\b`, 'gi');
+        let match: RegExpExecArray | null;
+        
+        while ((match = regex.exec(paragraph)) !== null) {
+          const overlaps = replacements.some(r => 
+            (match!.index >= r.start && match!.index < r.end) || 
+            (match!.index + match![0].length > r.start && match!.index + match![0].length <= r.end)
+          );
+          
+          if (!overlaps) {
+            replacements.push({
+              start: match.index,
+              end: match.index + match[0].length,
+              type: 'item',
+              entity: item
+            });
+          }
+        }
+        
+        const normalizedParagraph = normalizeString(paragraph);
+        const normalizedItemName = normalizeString(item.name);
+        let normalizedIndex = 0;
+        
+        while ((normalizedIndex = normalizedParagraph.indexOf(normalizedItemName, normalizedIndex)) !== -1) {
+          const beforeChar = normalizedIndex === 0 ? ' ' : normalizedParagraph[normalizedIndex - 1];
+          const afterChar = normalizedIndex + normalizedItemName.length >= normalizedParagraph.length
+            ? ' ' 
+            : normalizedParagraph[normalizedIndex + normalizedItemName.length];
+
+          const isWordBoundaryBefore = /[\s,.;:!?()[\]{}'"<>\/\\-]/.test(beforeChar) || normalizedIndex === 0;
+          const isWordBoundaryAfter = /[\s,.;:!?()[\]{}'"<>\/\\-]/.test(afterChar) || normalizedIndex + normalizedItemName.length === normalizedParagraph.length;
+          
+          if (isWordBoundaryBefore && isWordBoundaryAfter) {
+            const overlaps = replacements.some(r => 
+              (normalizedIndex >= r.start && normalizedIndex < r.end) || 
+              (normalizedIndex + item.name.length > r.start && normalizedIndex + item.name.length <= r.end)
+            );
+            
+            if (!overlaps) {
+              replacements.push({
+                start: normalizedIndex,
+                end: normalizedIndex + item.name.length,
+                type: 'item',
+                entity: item
+              });
+            }
+          }
+          
+          normalizedIndex += normalizedItemName.length;
+        }
+      }
+    }
+    
+    // Sort replacements by position
     replacements.sort((a, b) => {
       if (a.start !== b.start) return a.start - b.start;
       return (b.end - b.start) - (a.end - a.start);
@@ -104,12 +171,21 @@ export const formatSceneContent = (content: string, characters: PageClientProps[
         segments.push(paragraph.substring(lastPos, replacement.start));
       }
       
-      segments.push(
-        <CharacterMention 
-          key={`${replacement.character.id}-${replacement.start}-${index}`}
-          character={replacement.character}
-        />
-      );
+      if (replacement.type === 'character') {
+        segments.push(
+          <CharacterMention 
+            key={`char-${replacement.entity.id}-${replacement.start}-${index}`}
+            character={replacement.entity}
+          />
+        );
+      } else if (replacement.type === 'item') {
+        segments.push(
+          <ItemMention 
+            key={`item-${replacement.entity.id}-${replacement.start}-${index}`}
+            item={replacement.entity}
+          />
+        );
+      }
       
       lastPos = replacement.end;
     }
