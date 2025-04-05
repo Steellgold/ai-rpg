@@ -495,6 +495,7 @@ export type Database = {
           creatorId: string
           current_scene: number | null
           current_scene_id: string | null
+          forkedFromId: string | null
           genre: string[] | null
           goal: string
           id: string
@@ -514,6 +515,7 @@ export type Database = {
           creatorId: string
           current_scene?: number | null
           current_scene_id?: string | null
+          forkedFromId?: string | null
           genre?: string[] | null
           goal: string
           id: string
@@ -533,6 +535,7 @@ export type Database = {
           creatorId?: string
           current_scene?: number | null
           current_scene_id?: string | null
+          forkedFromId?: string | null
           genre?: string[] | null
           goal?: string
           id?: string
@@ -552,6 +555,13 @@ export type Database = {
             columns: ["creatorId"]
             isOneToOne: false
             referencedRelation: "User"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "Story_forkedFromId_fkey"
+            columns: ["forkedFromId"]
+            isOneToOne: false
+            referencedRelation: "Story"
             referencedColumns: ["id"]
           },
         ]

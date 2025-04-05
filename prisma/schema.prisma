@@ -91,6 +91,10 @@ model Story {
   isChildrenStory  Boolean        @default(false)
   isPublic         Boolean        @default(false)
   // 
+  forks            Story[]        @relation("ForkedStory")
+  forkedFrom       Story?         @relation("ForkedStory", fields: [forkedFromId], references: [id], onDelete: SetNull)
+  forkedFromId     String?
+  // 
   notes            String?        @db.Text
   // 
   narrativeStyle   NarrativeStyle
