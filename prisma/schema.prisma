@@ -22,11 +22,31 @@ enum JobStage {
   CREATING_MAIN_CHARS
   CREATING_SEC_CHARS
   CREATING_FIRST_SCENE
+  GENERATING_ITEMS
   GENERATING_BANNER
   UPLOADING_BANNER
   GENERATING_SCENE_IMG
   UPLOADING_SCENE_IMG
   FINALIZING
+}
+
+enum ItemRarity {
+  COMMON
+  UNCOMMON
+  RARE
+  EPIC
+  LEGENDARY
+}
+
+enum ItemType {
+  WEAPON
+  ARMOR
+  POTION
+  KEY
+  TOOL
+  DOCUMENT
+  QUEST
+  MISC
 }
 
 model Job {
@@ -90,6 +110,7 @@ model Story {
   // 
   isChildrenStory  Boolean        @default(false)
   isPublic         Boolean        @default(false)
+  hasItems         Boolean        @default(false)
   // 
   forks            Story[]        @relation("ForkedStory")
   forkedFrom       Story?         @relation("ForkedStory", fields: [forkedFromId], references: [id], onDelete: SetNull)
@@ -105,6 +126,8 @@ model Story {
   max_scenes       Int?           @default(20)
   current_scene    Int?           @default(0)
   current_scene_id String?
+  // 
+  items            Item[]
   // 
   gameSaves        GameSave[]
   // 
@@ -145,6 +168,65 @@ model Character {
   @@index([storyId])
 }
 
+model Item {
+  id             String          @id @default(cuid())
+  name           String
+  description    String          @db.Text
+  type           ItemType        @default(MISC)
+  rarity         ItemRarity      @default(COMMON)
+  imageUrl       String?
+  effect         String?         @db.Text
+  useCount       Int?
+  //
+  story          Story           @relation(fields: [storyId], references: [id], onDelete: Cascade)
+  storyId        String
+  // 
+  inventoryItems InventoryItem[]
+  choiceItems    ChoiceItem[]
+  sceneItems     SceneItem[]
+  // 
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @default(now()) @updatedAt
+
+  @@index([storyId])
+  @@index([type])
+  @@index([rarity])
+}
+
+model InventoryItem {
+  id         String   @id @default(cuid())
+  quantity   Int      @default(1)
+  isEquipped Boolean  @default(false)
+  // 
+  item       Item     @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  itemId     String
+  gameSave   GameSave @relation(fields: [gameSaveId], references: [id], onDelete: Cascade)
+  gameSaveId String
+  //
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now()) @updatedAt
+
+  @@unique([gameSaveId, itemId])
+  @@index([gameSaveId])
+  @@index([itemId])
+}
+
+model SceneItem {
+  id        String   @id @default(cuid())
+  isHidden  Boolean  @default(false)
+  // 
+  scene     Scene    @relation(fields: [sceneId], references: [id], onDelete: Cascade)
+  sceneId   String
+  item      Item     @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  itemId    String
+  // 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@unique([sceneId, itemId])
+  @@index([sceneId])
+}
+
 model Scene {
   id                 String            @id @default(cuid())
   title              String
@@ -161,6 +243,7 @@ model Scene {
   diceRoll           Int?              @default(0)
   // 
   characters         SceneCharacter[]
+  items              SceneItem[]
   nextScenes         SceneTransition[] @relation("SourceScene")
   prevScenes         SceneTransition[] @relation("DestinationScene")
   // 
@@ -206,6 +289,7 @@ model Choice {
   description    String?           @db.Text
   consequence    String?           @db.Text
   isPersonalized Boolean           @default(false)
+  isItemRelated  Boolean           @default(false)
   loadingMessage String?
   isCustomChoice Boolean           @default(false)
   //
@@ -213,6 +297,7 @@ model Choice {
   sceneId        String
   transitions    SceneTransition[]
   saveHistories  SaveHistory[]
+  items          ChoiceItem[]
   // 
   createdAt      DateTime          @default(now())
   updatedAt      DateTime          @default(now()) @updatedAt
@@ -220,25 +305,43 @@ model Choice {
   @@index([sceneId])
 }
 
+model ChoiceItem {
+  id        String   @id @default(cuid())
+  //
+  choice    Choice   @relation(fields: [choiceId], references: [id], onDelete: Cascade)
+  choiceId  String
+  item      Item     @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  itemId    String
+  consumed  Boolean  @default(false)
+  // 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@unique([choiceId, itemId])
+  @@index([choiceId])
+  @@index([itemId])
+}
+
 model GameSave {
-  id             String        @id @default(cuid())
-  name           String        @default("Save")
+  id             String          @id @default(cuid())
+  name           String          @default("Save")
   characterName  String
   characterClass String?
-  lastPlayed     DateTime      @default(now())
+  lastPlayed     DateTime        @default(now())
   currentSceneId String
-  progress       Int           @default(0)
+  progress       Int             @default(0)
   //
-  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId         String
-  story          Story         @relation(fields: [storyId], references: [id], onDelete: Cascade)
+  story          Story           @relation(fields: [storyId], references: [id], onDelete: Cascade)
   storyId        String
   // 
+  inventory      InventoryItem[]
   history        SaveHistory[]
-  notes          String?       @db.Text
+  notes          String?         @db.Text
   // 
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @default(now()) @updatedAt
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @default(now()) @updatedAt
 
   @@index([userId])
   @@index([storyId])

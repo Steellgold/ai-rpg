@@ -142,6 +142,7 @@ export type Database = {
           description: string | null
           id: string
           isCustomChoice: boolean
+          isItemRelated: boolean
           isPersonalized: boolean
           loadingMessage: string | null
           sceneId: string
@@ -154,6 +155,7 @@ export type Database = {
           description?: string | null
           id: string
           isCustomChoice?: boolean
+          isItemRelated?: boolean
           isPersonalized?: boolean
           loadingMessage?: string | null
           sceneId: string
@@ -166,6 +168,7 @@ export type Database = {
           description?: string | null
           id?: string
           isCustomChoice?: boolean
+          isItemRelated?: boolean
           isPersonalized?: boolean
           loadingMessage?: string | null
           sceneId?: string
@@ -178,6 +181,48 @@ export type Database = {
             columns: ["sceneId"]
             isOneToOne: false
             referencedRelation: "Scene"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ChoiceItem: {
+        Row: {
+          choiceId: string
+          consumed: boolean
+          createdAt: string
+          id: string
+          itemId: string
+          updatedAt: string
+        }
+        Insert: {
+          choiceId: string
+          consumed?: boolean
+          createdAt?: string
+          id: string
+          itemId: string
+          updatedAt?: string
+        }
+        Update: {
+          choiceId?: string
+          consumed?: boolean
+          createdAt?: string
+          id?: string
+          itemId?: string
+          updatedAt?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ChoiceItem_choiceId_fkey"
+            columns: ["choiceId"]
+            isOneToOne: false
+            referencedRelation: "Choice"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ChoiceItem_itemId_fkey"
+            columns: ["itemId"]
+            isOneToOne: false
+            referencedRelation: "Item"
             referencedColumns: ["id"]
           },
         ]
@@ -238,6 +283,101 @@ export type Database = {
             columns: ["userId"]
             isOneToOne: false
             referencedRelation: "User"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      InventoryItem: {
+        Row: {
+          createdAt: string
+          gameSaveId: string
+          id: string
+          isEquipped: boolean
+          itemId: string
+          quantity: number
+          updatedAt: string
+        }
+        Insert: {
+          createdAt?: string
+          gameSaveId: string
+          id: string
+          isEquipped?: boolean
+          itemId: string
+          quantity?: number
+          updatedAt?: string
+        }
+        Update: {
+          createdAt?: string
+          gameSaveId?: string
+          id?: string
+          isEquipped?: boolean
+          itemId?: string
+          quantity?: number
+          updatedAt?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "InventoryItem_gameSaveId_fkey"
+            columns: ["gameSaveId"]
+            isOneToOne: false
+            referencedRelation: "GameSave"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "InventoryItem_itemId_fkey"
+            columns: ["itemId"]
+            isOneToOne: false
+            referencedRelation: "Item"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      Item: {
+        Row: {
+          createdAt: string
+          description: string
+          effect: string | null
+          id: string
+          imageUrl: string | null
+          name: string
+          rarity: Database["public"]["Enums"]["ItemRarity"]
+          storyId: string
+          type: Database["public"]["Enums"]["ItemType"]
+          updatedAt: string
+          useCount: number | null
+        }
+        Insert: {
+          createdAt?: string
+          description: string
+          effect?: string | null
+          id: string
+          imageUrl?: string | null
+          name: string
+          rarity?: Database["public"]["Enums"]["ItemRarity"]
+          storyId: string
+          type?: Database["public"]["Enums"]["ItemType"]
+          updatedAt?: string
+          useCount?: number | null
+        }
+        Update: {
+          createdAt?: string
+          description?: string
+          effect?: string | null
+          id?: string
+          imageUrl?: string | null
+          name?: string
+          rarity?: Database["public"]["Enums"]["ItemRarity"]
+          storyId?: string
+          type?: Database["public"]["Enums"]["ItemType"]
+          updatedAt?: string
+          useCount?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "Item_storyId_fkey"
+            columns: ["storyId"]
+            isOneToOne: false
+            referencedRelation: "Story"
             referencedColumns: ["id"]
           },
         ]
@@ -442,6 +582,48 @@ export type Database = {
           },
         ]
       }
+      SceneItem: {
+        Row: {
+          createdAt: string
+          id: string
+          isHidden: boolean
+          itemId: string
+          sceneId: string
+          updatedAt: string
+        }
+        Insert: {
+          createdAt?: string
+          id: string
+          isHidden?: boolean
+          itemId: string
+          sceneId: string
+          updatedAt?: string
+        }
+        Update: {
+          createdAt?: string
+          id?: string
+          isHidden?: boolean
+          itemId?: string
+          sceneId?: string
+          updatedAt?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "SceneItem_itemId_fkey"
+            columns: ["itemId"]
+            isOneToOne: false
+            referencedRelation: "Item"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "SceneItem_sceneId_fkey"
+            columns: ["sceneId"]
+            isOneToOne: false
+            referencedRelation: "Scene"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       SceneTransition: {
         Row: {
           choiceId: string
@@ -501,6 +683,7 @@ export type Database = {
           forkedFromId: string | null
           genre: string[] | null
           goal: string
+          hasItems: boolean
           id: string
           isChildrenStory: boolean
           isPublic: boolean
@@ -521,6 +704,7 @@ export type Database = {
           forkedFromId?: string | null
           genre?: string[] | null
           goal: string
+          hasItems?: boolean
           id: string
           isChildrenStory?: boolean
           isPublic?: boolean
@@ -541,6 +725,7 @@ export type Database = {
           forkedFromId?: string | null
           genre?: string[] | null
           goal?: string
+          hasItems?: boolean
           id?: string
           isChildrenStory?: boolean
           isPublic?: boolean
@@ -626,6 +811,16 @@ export type Database = {
           }
     }
     Enums: {
+      ItemRarity: "COMMON" | "UNCOMMON" | "RARE" | "EPIC" | "LEGENDARY"
+      ItemType:
+        | "WEAPON"
+        | "ARMOR"
+        | "POTION"
+        | "KEY"
+        | "TOOL"
+        | "DOCUMENT"
+        | "QUEST"
+        | "MISC"
       JobStage:
         | "INITIALIZED"
         | "GENERATING_STORY"
@@ -638,6 +833,7 @@ export type Database = {
         | "GENERATING_SCENE_IMG"
         | "UPLOADING_SCENE_IMG"
         | "FINALIZING"
+        | "GENERATING_ITEMS"
       JobStatus: "PENDING" | "RUNNING" | "COMPLETED" | "FAILED"
       NarrativeStyle: "FirstPerson" | "SecondPerson" | "ThirdPerson"
     }
