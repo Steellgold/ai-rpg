@@ -103,7 +103,7 @@ export const AiTextarea: Component<
     if (isGenerating) return; // Lmao
     if (isInputValid) setIsGenerating(true);
 
-    await generateHistory(prompt, selectedGenres || [], childMode);
+    await generateHistory(prompt, selectedGenres || [], childMode, isPremium ? items : false);
   }
 
   return (
