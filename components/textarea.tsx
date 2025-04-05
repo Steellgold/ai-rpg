@@ -119,9 +119,8 @@ export const AiTextarea: Component<
           placeholder={
             "The story takes place in the kingdom of Kiyomitsugawa, a prosperous nation bathed by sacred rivers, with landscapes adorned with thousand-year-old cherry trees and majestic mountains. This kingdom, imbued with ser...."
           }
-          rows={1}
           className={cn(
-            "w-full resize-none py-4 px-4 outline-none bg-transparent text-gray-200 placeholder:text-gray-500 min-h-[86px]", {
+            "w-full resize-none py-4 px-4 outline-none bg-transparent text-gray-200 placeholder:text-gray-500 min-h-[110px]", {
               "animate-pulse italic text-gray-400": isGenerating,
               // 
               "text-white placeholder:text-teal-100/40": childMode
@@ -274,25 +273,27 @@ export const AiTextarea: Component<
         </div>
       </div>
 
-      <div className="flex flex-row items-center justify-between w-full gap-2">
-        {suggestions.filter((s) => s.isChild === childMode).map((suggestion, index) => (
-          <Button
-            key={index}
-            className={cn("border rounded-full px-4 h-8 flex items-center justify-center cursor-pointer transition-all", {
-              "bg-[#1a254f30] text-gray-200 border border-[#173a8940] hover:bg-[#1a254f40] hover:text-gray-100": !childMode,
-              "bg-teal-500/10 text-teal-400 border border-teal-500/30 hover:bg-teal-500/20 hover:text-teal-300": childMode
-            })}
-            onClick={() => {
-              if (isGenerating) return;
-              setPrompt(u(suggestion.prompt));
-              setSelectedGenres(suggestion.genres);
-            }}
-          >
-            {/* @ts-ignore */}
-            {cloneElement(suggestion.icon, { className: childMode ? "h-4 w-4 text-teal-400" : "h-4 w-4 text-gray-200" })}
-            {u(suggestion.label)}
-          </Button>
-        ))}
+      <div>
+        <div className="flex flex-row items-center justify-between w-full gap-2">
+          {suggestions.filter((s) => s.isChild === childMode).map((suggestion, index) => (
+            <Button
+              key={index}
+              className={cn("border rounded-full px-4 h-8 flex items-center justify-center cursor-pointer transition-all", {
+                "bg-[#1a254f30] text-gray-200 border border-[#173a8940] hover:bg-[#1a254f40] hover:text-gray-100": !childMode,
+                "bg-teal-500/10 text-teal-400 border border-teal-500/30 hover:bg-teal-500/20 hover:text-teal-300": childMode
+              })}
+              onClick={() => {
+                if (isGenerating) return;
+                setPrompt(u(suggestion.prompt));
+                setSelectedGenres(suggestion.genres);
+              }}
+            >
+              {/* @ts-ignore */}
+              {cloneElement(suggestion.icon, { className: childMode ? "h-4 w-4 text-teal-400" : "h-4 w-4 text-gray-200" })}
+              {u(suggestion.label)}
+            </Button>
+          ))}
+        </div>
       </div>
     </div>
   )
