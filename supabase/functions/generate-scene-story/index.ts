@@ -262,7 +262,8 @@ Always keep in mind the characters' personalities and the player's previous choi
     console.log("Scene generated, updating database...");
     // Mise à jour de la scène actuelle
     await supabase.from('Scene').update({
-      selected_choice_id: selectedChoice.id
+      selected_choice_id: selectedChoice.id,
+      diceRoll: diceRoll
     }).eq('id', currentScene.id);
     // Création de la nouvelle scène
     const { data: newScene, error: sceneError } = await supabase.from('Scene').insert({

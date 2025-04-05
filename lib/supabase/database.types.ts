@@ -354,6 +354,7 @@ export type Database = {
         Row: {
           content: string
           createdAt: string
+          diceRoll: number | null
           id: string
           imagePrompt: string | null
           imageUrl: string | null
@@ -366,6 +367,7 @@ export type Database = {
         Insert: {
           content: string
           createdAt?: string
+          diceRoll?: number | null
           id: string
           imagePrompt?: string | null
           imageUrl?: string | null
@@ -378,6 +380,7 @@ export type Database = {
         Update: {
           content?: string
           createdAt?: string
+          diceRoll?: number | null
           id?: string
           imagePrompt?: string | null
           imageUrl?: string | null

@@ -158,6 +158,7 @@ model Scene {
   // 
   choices            Choice[]
   selected_choice_id String?
+  diceRoll           Int?              @default(0)
   // 
   characters         SceneCharacter[]
   nextScenes         SceneTransition[] @relation("SourceScene")
