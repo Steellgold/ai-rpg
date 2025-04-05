@@ -19,8 +19,17 @@ export const generateNextScene = async (
   const user_data = await prisma.user.findUnique({ where: { id: user.id } });
   if (!user_data) throw new Error("User not found");
 
+  const story = await prisma.story.findUnique({
+    where: { id: storyId },
+    select: { hasItems: true }
+  });
+  
+  if (!story) throw new Error("Story not found");
+
+  const functionName = (user_data.premium && story.hasItems) ? "generate-scene-story-v2" : "generate-scene-story";
+
   try {
-    const { data, error } = await supabase.functions.invoke("generate-scene-story", {
+    const { data, error } = await supabase.functions.invoke(functionName, {
       body: {
         storyId,
         sceneId,
@@ -28,7 +37,8 @@ export const generateNextScene = async (
         diceRoll: diceRoll || 3,
         gameSaveId,
         userId: user.id,
-        isPremium: user_data.premium
+        isPremium: user_data.premium,
+        items: story.hasItems && user_data.premium
       }
     });
 
@@ -59,8 +69,17 @@ export const handleCustomChoice = async (
   const user_data = await prisma.user.findUnique({ where: { id: user.id } });
   if (!user_data) throw new Error("User not found");
 
+  const story = await prisma.story.findUnique({
+    where: { id: storyId },
+    select: { hasItems: true }
+  });
+  
+  if (!story) throw new Error("Story not found");
+
+  const functionName = (user_data.premium && story.hasItems) ? "generate-scene-story-v2" : "generate-scene-story";
+
   try {
-    const { data, error } = await supabase.functions.invoke("generate-scene-story", {
+    const { data, error } = await supabase.functions.invoke(functionName, {
       body: {
         storyId,
         sceneId,
@@ -68,7 +87,8 @@ export const handleCustomChoice = async (
         diceRoll: diceRoll || 3,
         gameSaveId,
         userId: user.id,
-        isPremium: user_data.premium
+        isPremium: user_data.premium,
+        items: story.hasItems && user_data.premium
       }
     })
 

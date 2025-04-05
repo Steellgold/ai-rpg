@@ -9,7 +9,7 @@ import { redirect } from "next/navigation";
 import { env } from "../env/env";
 import { Database } from "../supabase/database.types";
 
-export const generateHistory = async (text: string, genres?: string[], isForChildren?: boolean) => {
+export const generateHistory = async (text: string, genres?: string[], isForChildren?: boolean, itemsEnabled?: boolean) => {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) throw new Error("User not authenticated");
@@ -21,6 +21,8 @@ export const generateHistory = async (text: string, genres?: string[], isForChil
     serverEnv.NEXT_PUBLIC_SUPABASE_URL,
     serverEnv.SUPABASE_SERVICE_ROLE_KEY
   );
+
+  const functionName = (user_data.premium && itemsEnabled) ? "generate-story-v2" : "generate-story";
 
   const jobId = createId();
   const job = await prisma.job.create({
@@ -34,7 +36,7 @@ export const generateHistory = async (text: string, genres?: string[], isForChil
 
   if (!job) throw new Error("Job not created");
 
-  const { data, error } = await supabase_role_key.functions.invoke("generate-story", {
+  const { data, error } = await supabase_role_key.functions.invoke(functionName, {
     body: {
       text,
       genres: genres || [],
@@ -42,6 +44,7 @@ export const generateHistory = async (text: string, genres?: string[], isForChil
       jobId,
       isPremium: user_data.premium,
       isChildren: isForChildren || false,
+      items: user_data.premium ? itemsEnabled : false
     }
   });
 
