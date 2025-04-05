@@ -2,6 +2,7 @@ import { notFound, unauthorized } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/db/prisma";
 import { PageClient } from "./page.client";
+import { NotesButton } from "@/components/notes-button";
 
 type PageProps = {
   params: Promise<{
@@ -63,7 +64,10 @@ const Page = async ({ params }: PageProps) => {
   if (!scene) return notFound();
 
   return (
-    <PageClient story_data={story} scene_data={scene} />
+    <>
+      <PageClient story_data={story} scene_data={scene} />
+      <NotesButton notes={story.notes ?? ""} storyId={story.id} userId={user.id} />
+    </>
   );
 }
 
