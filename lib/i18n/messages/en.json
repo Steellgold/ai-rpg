@@ -101,6 +101,23 @@
         "Title": "Notes",
         "Saving": "Saving...",
         "Notes": "Notes ({count} word(s))"
+      },
+
+      "CharacterCard": {
+        "type": {
+          "Main": "Main character",
+          "Secondary": "Secondary character"
+        },
+        "age": "{age} years",
+        "abilities": "Abilities",
+        "description": "Description",
+        "personality": "Personality",
+        "outfit": "Outfit",
+        "background": "Background",
+        "relationships": "Relationships",
+        "motivations": "Motivations",
+        "flaws": "Flaws",
+        "backstory": "Backstory"
       }
     }
   },
