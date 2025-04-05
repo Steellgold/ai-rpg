@@ -142,7 +142,8 @@ Deno.serve(async (req)=>{
     const prompt = `
 You are the narrator of an interactive text-based game. Based on the following information, generate the next scene of the story.
     
-You must respect the language, tone, and style of the story. If the story is in French, respond in French.
+You must respect the language, tone, and style of the story.
+Only languages avaible to generates stories is French or English. If the user has written in French, you must respond in French. But every other language, you must respond in English.
     
 ## STORY
 Title: ${story.title}

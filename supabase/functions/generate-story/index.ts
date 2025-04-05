@@ -118,7 +118,8 @@ Deno.serve(async (req)=>{
         const prompt = `
 Improve this text for a narrative game. Make it more captivating, descriptive and immersive, 
 while preserving the main ideas. ${genres ? "Adapt it to the following genre(s): " + genres.join(", ") : ""}
-Answer in the same language as the original text.
+
+Only languages avaible to generates stories is French or English. If the user has written in French, you must respond in French. But every other language, you must respond in English.
 
 ${isChildren ? "Make it suitable for children, avoiding any inappropriate content, violence, or adult themes." : ""}
 
