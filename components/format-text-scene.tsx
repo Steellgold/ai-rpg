@@ -1,4 +1,4 @@
-import { Fragment, type ReactNode } from "react"
+import { type ReactNode } from "react"
 import { cn } from "@/lib/utils"
 import { CharacterMention } from "./character-card"
 import { PageClientProps } from "@/app/(game)/[story_id]/[scene_id]/page.client"
