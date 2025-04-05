@@ -42,7 +42,7 @@ const Page = async() => {
         <p className="text-lg">{t("NoGameDescription")}</p>
 
         <div className="flex flex-col items-center mt-4">
-          <Link href="/new" className={buttonVariants({ variant: "navbar" })}>
+          <Link href="/" className={buttonVariants({ variant: "navbar" })}>
             {t("NewGame")}
           </Link>
         </div>
