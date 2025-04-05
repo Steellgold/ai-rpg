@@ -128,6 +128,74 @@
         "motivations": "Motivations",
         "flaws": "Flaws",
         "backstory": "Backstory"
+      },
+      "ItemCard": {
+        "description": "Description",
+        "effect": "Effect",
+        "uses": "Uses",
+        "unlimited_uses": "Unlimited uses",
+        "remaining_uses": "{count} use(s) remaining",
+        "quantity": "Quantity",
+        "rarity_description": "Rarity",
+        "type_description": "Item Type",
+        "status": {
+          "equipped": "Equipped",
+          "unequipped": "Unequipped"
+        },
+        "rarity": {
+          "common": "Common",
+          "uncommon": "Uncommon",
+          "rare": "Rare",
+          "epic": "Epic",
+          "legendary": "Legendary"
+        },
+        "rarity_desc": {
+          "common": "An ordinary item, easy to find.",
+          "uncommon": "A superior quality item, somewhat sought after.",
+          "rare": "A valuable item that is difficult to obtain.",
+          "epic": "An exceptional item with remarkable properties.",
+          "legendary": "A mythical item with extraordinary powers."
+        },
+        "type": {
+          "weapon": "Weapon",
+          "armor": "Armor",
+          "potion": "Potion",
+          "key": "Key",
+          "tool": "Tool",
+          "document": "Document",
+          "quest": "Quest Item",
+          "misc": "Miscellaneous"
+        },
+        "type_desc": {
+          "weapon": "An object designed to inflict damage or defend oneself.",
+          "armor": "An object designed to protect its wearer.",
+          "potion": "A liquid with magical or alchemical properties.",
+          "key": "An object that unlocks a lock or grants access to a place.",
+          "tool": "A utility instrument that facilitates certain actions.",
+          "document": "A written piece containing important information.",
+          "quest": "An object linked to a specific mission or objective.",
+          "misc": "An object with diverse or unclassifiable properties."
+        }
+      },
+      "Inventory": {
+        "title": "Inventory",
+        "search_placeholder": "Search for an item...",
+        "all_items": "All items",
+        "no_items_found": "No items match your search",
+        "empty_inventory": "Your inventory is empty",
+        "equip": "Equip",
+        "unequip": "Unequip",
+        "use": "Use",
+        "type": {
+          "weapon": "Weapons",
+          "armor": "Armor",
+          "potion": "Potions",
+          "key": "Keys",
+          "tool": "Tools",
+          "document": "Documents",
+          "quest": "Quest Items",
+          "misc": "Miscellaneous"
+        }
       }
     }
   },

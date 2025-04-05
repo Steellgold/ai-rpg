@@ -129,6 +129,74 @@
         "motivations": "Motivations",
         "flaws": "Défauts",
         "backstory": "Histoire"
+      },
+      "ItemCard": {
+        "description": "Description",
+        "effect": "Effet",
+        "uses": "Utilisations",
+        "unlimited_uses": "Utilisations illimitées",
+        "remaining_uses": "{count} utilisation(s) restante(s)",
+        "quantity": "Quantité",
+        "rarity_description": "Rareté",
+        "type_description": "Type d'objet",
+        "status": {
+          "equipped": "Équipé",
+          "unequipped": "Non équipé"
+        },
+        "rarity": {
+          "common": "Commun",
+          "uncommon": "Peu commun",
+          "rare": "Rare",
+          "epic": "Épique",
+          "legendary": "Légendaire"
+        },
+        "rarity_desc": {
+          "common": "Un objet ordinaire, facile à trouver.",
+          "uncommon": "Un objet de qualité supérieure, assez recherché.",
+          "rare": "Un objet précieux et difficile à obtenir.",
+          "epic": "Un objet exceptionnel aux propriétés remarquables.",
+          "legendary": "Un objet mythique aux pouvoirs extraordinaires."
+        },
+        "type": {
+          "weapon": "Arme",
+          "armor": "Armure",
+          "potion": "Potion",
+          "key": "Clé",
+          "tool": "Outil",
+          "document": "Document",
+          "quest": "Quête",
+          "misc": "Divers"
+        },
+        "type_desc": {
+          "weapon": "Un objet conçu pour infliger des dégâts ou se défendre.",
+          "armor": "Un objet conçu pour protéger son porteur.",
+          "potion": "Un liquide aux propriétés magiques ou alchimiques.",
+          "key": "Un objet permettant d'ouvrir une serrure ou d'accéder à un lieu.",
+          "tool": "Un instrument utilitaire facilitant certaines actions.",
+          "document": "Un écrit contenant des informations importantes.",
+          "quest": "Un objet lié à une mission ou un objectif spécifique.",
+          "misc": "Un objet aux propriétés diverses ou inclassables."
+        }
+      },
+      "Inventory": {
+        "title": "Inventaire",
+        "search_placeholder": "Rechercher un objet...",
+        "all_items": "Tous les objets",
+        "no_items_found": "Aucun objet ne correspond à votre recherche",
+        "empty_inventory": "Votre inventaire est vide",
+        "equip": "Équiper",
+        "unequip": "Retirer",
+        "use": "Utiliser",
+        "type": {
+          "weapon": "Armes",
+          "armor": "Armures",
+          "potion": "Potions",
+          "key": "Clés",
+          "tool": "Outils",
+          "document": "Documents",
+          "quest": "Objets de quête",
+          "misc": "Divers"
+        }
       }
     }
   },
