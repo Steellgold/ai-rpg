@@ -63,19 +63,8 @@ const Page = async () => {
         <div className="h-12" />
 
         <AiTextarea isPremium={user_data?.premium} />
-
-        {/* <div className="mt-16">
-          <PremiumBanner
-            title="Unlock Legendary Adventures"
-            description="Unlock a realm of exclusive features designed to enhance your narrative journey. Craft more immersive tales and bring your stories to life like never before."
-            features={[]}
-            ctaText="Unleash Your Creativity"
-          />
-        </div> */}
       </section>
 
-      {/* When the premium banner is ready, uncomment this section (56 instead of 36) */}
-      {/* <hr className="my-36 border-t border-[#161616]" /> */} 
       <hr className="my-56 border-t border-[#161616]" />
 
       <section className="flex flex-col items-center w-full max-w-6xl mx-auto">
