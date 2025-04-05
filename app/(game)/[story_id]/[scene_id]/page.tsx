@@ -35,6 +35,7 @@ const Page = async ({ params }: PageProps) => {
               id: true,
               isCustomChoice: true,
               isPersonalized: true,
+              isItemRelated: true,
               description: true
             }
           },
@@ -58,6 +59,18 @@ const Page = async ({ params }: PageProps) => {
           isMain: true,
           imageUrl: true
         }
+      },
+      items: {
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          type: true,
+          rarity: true,
+          effect: true,
+          useCount: true,
+          imageUrl: true
+        }
       }
     }
   });
@@ -73,8 +86,26 @@ const Page = async ({ params }: PageProps) => {
           loadingMessage: true,
           isCustomChoice: true,
           isPersonalized: true,
+          isItemRelated: true,
           text: true,
           id: true
+        }
+      },
+      items: {
+        select: {
+          isHidden: true,
+          item: {
+            select: {
+              id: true,
+              name: true,
+              description: true,
+              type: true,
+              rarity: true,
+              effect: true,
+              useCount: true,
+              imageUrl: true
+            }
+          }
         }
       }
     }

@@ -17,6 +17,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { ChoiceComponent } from "@/components/choice";
 import { DiceCube } from "@/components/dice";
+import { Inventory } from "@/components/inventory";
 
 export type PageClientProps = {
   story_data: Prisma.StoryGetPayload<{
@@ -35,6 +36,7 @@ export type PageClientProps = {
               id: true,
               isCustomChoice: true,
               isPersonalized: true,
+              isItemRelated: true,
               description: true
             }
           },
@@ -58,6 +60,19 @@ export type PageClientProps = {
           isMain: true,
           imageUrl: true
         }
+      },
+      // Ajouter les items à la requête
+      items: {
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          type: true,
+          rarity: true,
+          effect: true,
+          useCount: true,
+          imageUrl: true
+        }
       }
     }
   }>;
@@ -71,7 +86,25 @@ export type PageClientProps = {
           text: true,
           isCustomChoice: true,
           isPersonalized: true,
+          isItemRelated: true,
           id: true
+        }
+      },
+      items: {
+        select: {
+          isHidden: true,
+          item: {
+            select: {
+              id: true,
+              name: true,
+              description: true,
+              type: true,
+              rarity: true,
+              effect: true,
+              useCount: true,
+              imageUrl: true
+            }
+          }
         }
       }
     }
@@ -245,6 +278,10 @@ export const PageClient: Component<PageClientProps> = ({ story_data: storyData, 
                 {formatSceneContent(
                   sceneData.content,
                   storyData.characters,
+                  [
+                    ...storyData.items, 
+                    ...sceneData.items.filter(si => !si.isHidden).map(si => si.item),
+                  ],
                   loading
                 )}
               </CardDescription>
@@ -337,6 +374,14 @@ export const PageClient: Component<PageClientProps> = ({ story_data: storyData, 
                 </>
               )}
             </Card>
+
+            {/* <Inventory 
+              items={[
+                ...sceneData.items.filter(si => !si.isHidden).map(si => si.item)
+              ]}
+              onEquipItem={() => console.log("Equip item")} 
+              onUseItem={() => console.log("Use item")}
+            /> */}
           </div>
         )}
 
