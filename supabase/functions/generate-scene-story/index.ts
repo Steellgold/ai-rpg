@@ -236,8 +236,10 @@ ${historyContext}
 2. The impact of the choice must match the dice roll result (${diceRoll}/6).
 3. The scene must be immersive, with sensory descriptions.
 4. Offer the player 4 distinct choices:
-  - Occasionally (20% of the time), include a thematic choice related to a character. Mark this with is_personalized = true.
-  - Rarely (10% of the time), include a choice allowing the player to write their own action. Mark this with is_custom_choice = true.
+  - Include a thematic choice related to a character. Mark this with is_personalized = true.
+  - Include a choice allowing the player to write their own action. Mark this with is_custom_choice = true.
+  - Include a choice that is a direct consequence of the player's previous choice or the new scene context.
+  - Include a choice that is unexpected or surprising.
 5. ${approachingEnd ? "Consider that the story is approaching its end, you can start steering towards a conclusion." : "Do not end the story unless it is a natural culmination point."}
 6. Maintain the narrative style ${story.narrativeStyle}.
 7. Include a visual description for scene image generation.
