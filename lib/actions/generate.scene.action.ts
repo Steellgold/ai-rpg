@@ -30,7 +30,7 @@ export const generateNextScene = async (
         userId: user.id,
         isPremium: user_data.premium
       }
-    })
+    });
 
     if (!data || error) {
       throw new Error(error?.message || "Error generating next scene");
