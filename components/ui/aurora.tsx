@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from "react";
 import { Renderer, Program, Mesh, Color, Triangle } from "ogl";
-import { useTheme } from "next-themes";
 
 const VERT = `#version 300 es
 in vec2 position;
@@ -118,10 +117,6 @@ interface AuroraProps {
 }
 
 export default function Aurora(props: AuroraProps) {
-  const { theme, setTheme } = useTheme();
-  if (theme === "light") return <></>;
-
-
   const {
     colorStops = ["#00d8ff", "#7cff67", "#00d8ff"],
     amplitude = 1.0,
