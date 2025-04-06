@@ -49,6 +49,15 @@ enum ItemType {
   MISC
 }
 
+enum StoryLanguage {
+  auto
+  en
+  fr
+  es
+  it
+  de
+}
+
 model Job {
   id          String    @id @default(cuid())
   status      JobStatus @default(PENDING)
@@ -112,6 +121,8 @@ model Story {
   possibleEndings  String[]
   coverImageUrl    String?
   genre            String[]
+  // 
+  language         StoryLanguage   @default(auto)
   // 
   isChildrenStory  Boolean         @default(false)
   isPublic         Boolean         @default(false)
