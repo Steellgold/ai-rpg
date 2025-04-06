@@ -100,44 +100,44 @@ enum NarrativeStyle {
 }
 
 model Story {
-  id               String         @id @default(cuid())
+  id               String          @id @default(cuid())
   title            String
-  synopsis         String         @db.Text
-  goal             String         @db.Text
+  synopsis         String          @db.Text
+  goal             String          @db.Text
   possibleEndings  String[]
   coverImageUrl    String?
   genre            String[]
   // 
-  isChildrenStory  Boolean        @default(false)
-  isPublic         Boolean        @default(false)
-  hasItems         Boolean        @default(false)
+  isChildrenStory  Boolean         @default(false)
+  isPublic         Boolean         @default(false)
+  hasItems         Boolean         @default(false)
   // 
-  forks            Story[]        @relation("ForkedStory")
-  forkedFrom       Story?         @relation("ForkedStory", fields: [forkedFromId], references: [id], onDelete: SetNull)
+  forks            Story[]         @relation("ForkedStory")
+  forkedFrom       Story?          @relation("ForkedStory", fields: [forkedFromId], references: [id], onDelete: SetNull)
   forkedFromId     String?
   // 
-  notes            String?        @db.Text
+  notes            String?         @db.Text
   // 
   narrativeStyle   NarrativeStyle
   //
   characters       Character[]
   // 
   scenes           Scene[]
-  max_scenes       Int?           @default(20)
-  current_scene    Int?           @default(0)
+  max_scenes       Int?            @default(20)
+  current_scene    Int?            @default(0)
   current_scene_id String?
   // 
   items            Item[]
   // 
   gameSaves        GameSave[]
   // 
-  creator          User           @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  creator          User            @relation(fields: [creatorId], references: [id], onDelete: Cascade)
   creatorId        String
   // 
   jobs             Job[]
   // 
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @default(now()) @updatedAt
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @default(now()) @updatedAt
 
   @@index([creatorId])
 }
@@ -169,24 +169,32 @@ model Character {
 }
 
 model Item {
-  id             String          @id @default(cuid())
-  name           String
-  description    String          @db.Text
-  type           ItemType        @default(MISC)
-  rarity         ItemRarity      @default(COMMON)
-  imageUrl       String?
-  effect         String?         @db.Text
-  useCount       Int?
+  id                String          @id @default(cuid())
+  name              String
+  description       String          @db.Text
+  type              ItemType        @default(MISC)
+  rarity            ItemRarity      @default(COMMON)
+// 
+  imageUrl          String?
+brokenImageUrl    String?
+  // 
+  effect            String?         @db.Text
+  useCount          Int?
   //
-  story          Story           @relation(fields: [storyId], references: [id], onDelete: Cascade)
-  storyId        String
+  durability        Int?
+  isBroken          Boolean         @default(false)
+  usage_count       Int?
+  last_mentioned_in String?
+  //
+  story             Story           @relation(fields: [storyId], references: [id], onDelete: Cascade)
+  storyId           String
   // 
-  inventoryItems InventoryItem[]
-  choiceItems    ChoiceItem[]
-  sceneItems     SceneItem[]
+  inventoryItems    InventoryItem[]
+  choiceItems       ChoiceItem[]
+  sceneItems        SceneItem[]
   // 
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @default(now()) @updatedAt
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @default(now()) @updatedAt
 
   @@index([storyId])
   @@index([type])
@@ -194,17 +202,21 @@ model Item {
 }
 
 model InventoryItem {
-  id         String   @id @default(cuid())
-  quantity   Int      @default(1)
-  isEquipped Boolean  @default(false)
+  id            String   @id @default(cuid())
+// 
+  quantity      Int      @default(1)
+remainingUses Int?
+  isBroken      Boolean  @default(false)
   // 
-  item       Item     @relation(fields: [itemId], references: [id], onDelete: Cascade)
-  itemId     String
-  gameSave   GameSave @relation(fields: [gameSaveId], references: [id], onDelete: Cascade)
-  gameSaveId String
+  isEquipped    Boolean  @default(false)
+  // 
+  item          Item     @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  itemId        String
+  gameSave      GameSave @relation(fields: [gameSaveId], references: [id], onDelete: Cascade)
+  gameSaveId    String
   //
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @default(now()) @updatedAt
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @default(now()) @updatedAt
 
   @@unique([gameSaveId, itemId])
   @@index([gameSaveId])

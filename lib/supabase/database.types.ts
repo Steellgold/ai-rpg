@@ -292,27 +292,33 @@ export type Database = {
           createdAt: string
           gameSaveId: string
           id: string
+          isBroken: boolean
           isEquipped: boolean
           itemId: string
           quantity: number
+          remainingUses: number | null
           updatedAt: string
         }
         Insert: {
           createdAt?: string
           gameSaveId: string
           id: string
+          isBroken?: boolean
           isEquipped?: boolean
           itemId: string
           quantity?: number
+          remainingUses?: number | null
           updatedAt?: string
         }
         Update: {
           createdAt?: string
           gameSaveId?: string
           id?: string
+          isBroken?: boolean
           isEquipped?: boolean
           itemId?: string
           quantity?: number
+          remainingUses?: number | null
           updatedAt?: string
         }
         Relationships: [
@@ -334,42 +340,57 @@ export type Database = {
       }
       Item: {
         Row: {
+          brokenImageUrl: string | null
           createdAt: string
           description: string
+          durability: number | null
           effect: string | null
           id: string
           imageUrl: string | null
+          isBroken: boolean
+          last_mentioned_in: string | null
           name: string
           rarity: Database["public"]["Enums"]["ItemRarity"]
           storyId: string
           type: Database["public"]["Enums"]["ItemType"]
           updatedAt: string
+          usage_count: number | null
           useCount: number | null
         }
         Insert: {
+          brokenImageUrl?: string | null
           createdAt?: string
           description: string
+          durability?: number | null
           effect?: string | null
           id: string
           imageUrl?: string | null
+          isBroken?: boolean
+          last_mentioned_in?: string | null
           name: string
           rarity?: Database["public"]["Enums"]["ItemRarity"]
           storyId: string
           type?: Database["public"]["Enums"]["ItemType"]
           updatedAt?: string
+          usage_count?: number | null
           useCount?: number | null
         }
         Update: {
+          brokenImageUrl?: string | null
           createdAt?: string
           description?: string
+          durability?: number | null
           effect?: string | null
           id?: string
           imageUrl?: string | null
+          isBroken?: boolean
+          last_mentioned_in?: string | null
           name?: string
           rarity?: Database["public"]["Enums"]["ItemRarity"]
           storyId?: string
           type?: Database["public"]["Enums"]["ItemType"]
           updatedAt?: string
+          usage_count?: number | null
           useCount?: number | null
         }
         Relationships: [
