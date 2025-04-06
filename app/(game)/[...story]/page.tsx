@@ -73,6 +73,9 @@ const Page = async ({ params }: PageProps) => {
             }
           },
           selected_choice_id: true,
+        },
+        orderBy: {
+          createdAt: "asc"
         }
       },
       characters: {
