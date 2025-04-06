@@ -140,9 +140,9 @@ export const AiTextarea: Component<
           <div className="flex items-center flex-wrap gap-2">
             {(selectedGenres.length > 0 || prompt.length > 0) && (!isGenerating || isInputValid) && (
               <Button
-                size={"default"}
+                size={"icon"}
                 variant="ghost"
-                className="!border border-red-400/20 rounded-full transition-opacity !h-8 hover:bg-red-400/10 cursor-pointer px-2.5"
+                className="!border border-red-400/20 rounded-full transition-opacity !h-8 !w-8 hover:bg-red-400/10 cursor-pointer"
                 onClick={() => {
                   setPrompt("");
                   setSelectedGenres([]);
@@ -151,7 +151,6 @@ export const AiTextarea: Component<
                 disabled={isGenerating}
               >
                 <X className="h-4 w-4 text-red-400" />
-                <span className="text-red-400 text-sm">{t("AiTextarea.Clear")}</span>
               </Button>
             )}
 
@@ -166,6 +165,11 @@ export const AiTextarea: Component<
               placeholder={t("AiTextarea.SelectGenres")}
               emptyMessage={t("AiTextarea.NoGenresFound")}
               disabled={isGenerating}
+            />
+            
+            <StoryLanguageSelector
+              selectedLanguage={storyLanguage}
+              onLanguageChange={setStoryLanguage}
             />
 
             <Button
@@ -216,11 +220,6 @@ export const AiTextarea: Component<
                   {t("AiTextarea.ItemsEnabled")}</span>
               )}
             </Button>
-            
-            <StoryLanguageSelector
-              selectedLanguage={storyLanguage}
-              onLanguageChange={setStoryLanguage}
-            />
 
             <Button
               size={"default"}
