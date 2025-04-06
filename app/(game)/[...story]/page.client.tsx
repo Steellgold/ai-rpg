@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { generateNextScene } from "@/lib/actions/generate.scene.action";
-import useShowScenes from "@/lib/hooks/use-show-p.scenes";
 import { useItem } from "@/lib/actions/use-item";
 import { Component } from "@/lib/types";
 import { Prisma } from "@prisma/client";
@@ -150,10 +149,6 @@ export const PageClient: Component<PageClientProps> = ({
   
   const [showFullImage, setShowFullImage] = useState(false);
   
-
-  const { showPreviousScenes, toggle } = useShowScenes();
-  const t = useTranslations("Pages.Story");
-
   const handleRollDice = () => {
     if (isRolling) return;
     setIsRolling(true);
@@ -298,23 +293,19 @@ export const PageClient: Component<PageClientProps> = ({
         maxScenes={storyData.max_scenes || 1}
       />
       <div className="flex flex-col xl:flex-row gap-4 mt-4">
-        <SceneList 
-          scenes={storyData.scenes} 
-          storyId={gameSaveId || storyData.id} 
-          showPreviousScenes={showPreviousScenes} 
-          toggle={toggle} 
+        <SceneList
+          scenes={storyData.scenes}
+          storyId={gameSaveId || storyData.id}
+          selectedSceneId={sceneData.id}
         />
         
-        <div className={cn({ 
-          "w-full xl:w-3/5": showPreviousScenes, 
-          "w-full xl:w-5/5": !showPreviousScenes 
-        })}>
+        <div className={"w-full xl:w-3/5"}>
           <SceneContent 
-            sceneData={sceneData} 
-            storyData={storyData} 
-            loading={loading} 
-            showFullImage={showFullImage} 
-            setShowFullImage={setShowFullImage} 
+            sceneData={sceneData}
+            storyData={storyData}
+            loading={loading}
+            showFullImage={showFullImage}
+            setShowFullImage={setShowFullImage}
           />
         </div>
         
