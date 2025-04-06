@@ -43,6 +43,7 @@
       
       "GeneratingSteps": {
         "Pending": "Préparation de votre histoire...",
+        "DetectingLanguage": "Détection de la langue de l'histoire...",
         "Processing": "Génération de l'univers et des personnages...",
         "GeneratingItems": "Création des objets et accessoires...",
         "GeneratingScenes": "Construction de votre première scène...",
@@ -217,6 +218,16 @@
     }
   },
   "Utils": {
+    "Languages": {
+      "selectLanguage": "Sélectionner une langue",
+      "storyLanguage": "Langue de l'histoire",
+      "auto": "Détection auto",
+      "en": "Anglais",
+      "fr": "Français",
+      "es": "Espagnol",
+      "it": "Italien",
+      "de": "Allemand"
+    },
     "Suggestions": {
       "TKOK": {
         "Label": "Le Royaume de Kiyomitsugawa",

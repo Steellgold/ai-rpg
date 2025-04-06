@@ -44,6 +44,7 @@
       
       "GeneratingSteps": {
         "Pending": "Preparing your story...",
+        "DetectingLanguage": "Detecting story language...",
         "Processing": "Generating the universe and characters...",
         "GeneratingItems": "Creating items and objects...",
         "GeneratingScenes": "Building your first scene...",
@@ -216,6 +217,16 @@
     }
   },
   "Utils": {
+    "Languages": {
+      "selectLanguage": "Select language",
+      "storyLanguage": "Story language",
+      "auto": "Auto-detect",
+      "en": "English",
+      "fr": "French",
+      "es": "Spanish",
+      "it": "Italian",
+      "de": "German"
+    },
     "Suggestions": {
       "TKOK": {
         "Label": "The Kingdom of Kiyomitsugawa",
