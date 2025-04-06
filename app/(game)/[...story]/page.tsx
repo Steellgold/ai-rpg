@@ -196,6 +196,11 @@ const Page = async ({ params }: PageProps) => {
         }
       }
     });
+
+    await prisma.gameSave.update({
+      where: { id: gameSaveId },
+      data: { lastPlayed: new Date() }
+    })
   }
 
   return (

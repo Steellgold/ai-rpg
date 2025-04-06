@@ -13,9 +13,21 @@ import { cn } from "@/lib/utils";
 import { Trash2, Clock } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { toast } from "@/lib/hooks/use-toast";
+import { Prisma } from "@prisma/client";
 
 export const GameSaveList = () => {
-  const [saves, setSaves] = useState<any[]>([]);
+  const [saves, setSaves] = useState<Prisma.GameSaveGetPayload<{
+    include: {
+      story: {
+        select: {
+          title: true,
+          synopsis: true,
+          coverImageUrl: true,
+          max_scenes: true
+        }
+      }
+    }
+  }>[] | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   
@@ -38,24 +50,14 @@ export const GameSaveList = () => {
   }, []);
 
   if (loading) {
-    return (
-      <div className="flex justify-center items-center p-8">
-        <div className="animate-pulse flex flex-col gap-4 w-full max-w-md">
-          <div className="h-4 bg-gray-700/50 rounded w-3/4"></div>
-          <div className="h-32 bg-gray-700/50 rounded"></div>
-          <div className="h-32 bg-gray-700/50 rounded"></div>
-        </div>
-      </div>
-    );
+    return (<></>);
   }
   
   if (error) {
     return (
       <div className="text-center p-8">
         <p className="text-red-500 mb-4">{error}</p>
-        <Button onClick={() => window.location.reload()} variant="outline">
-          Retry
-        </Button>
+        <Button onClick={() => window.location.reload()} variant="outline">Retry</Button>
       </div>
     );
   }
@@ -100,7 +102,7 @@ export const GameSaveList = () => {
             </Badge>
           </div>
 
-          <CardContent className="flex flex-col gap-4 mt-4">
+          <CardContent className="flex flex-col gap-2">
             <div>
               <h3 className="text-lg font-bold">{save.story.title}</h3>
               <p className="text-sm text-muted-foreground">
@@ -118,6 +120,7 @@ export const GameSaveList = () => {
                   max={save.story.max_scenes ?? 0} 
                   className="h-2"
                 />
+
                 <Badge variant="secondary">
                   {save.progress}/{save.story.max_scenes ?? 0}
                 </Badge>

@@ -240,7 +240,8 @@ export const getGameSaves = async () => {
         select: {
           title: true,
           synopsis: true,
-          coverImageUrl: true
+          coverImageUrl: true,
+          max_scenes: true
         }
       }
     },
