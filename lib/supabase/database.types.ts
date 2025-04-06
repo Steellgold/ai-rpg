@@ -708,6 +708,7 @@ export type Database = {
           id: string
           isChildrenStory: boolean
           isPublic: boolean
+          language: Database["public"]["Enums"]["StoryLanguage"]
           max_scenes: number | null
           narrativeStyle: Database["public"]["Enums"]["NarrativeStyle"]
           notes: string | null
@@ -715,6 +716,7 @@ export type Database = {
           synopsis: string
           title: string
           updatedAt: string
+          v: Database["public"]["Enums"]["StoryVGenerated"]
         }
         Insert: {
           coverImageUrl?: string | null
@@ -729,6 +731,7 @@ export type Database = {
           id: string
           isChildrenStory?: boolean
           isPublic?: boolean
+          language?: Database["public"]["Enums"]["StoryLanguage"]
           max_scenes?: number | null
           narrativeStyle: Database["public"]["Enums"]["NarrativeStyle"]
           notes?: string | null
@@ -736,6 +739,7 @@ export type Database = {
           synopsis: string
           title: string
           updatedAt?: string
+          v?: Database["public"]["Enums"]["StoryVGenerated"]
         }
         Update: {
           coverImageUrl?: string | null
@@ -750,6 +754,7 @@ export type Database = {
           id?: string
           isChildrenStory?: boolean
           isPublic?: boolean
+          language?: Database["public"]["Enums"]["StoryLanguage"]
           max_scenes?: number | null
           narrativeStyle?: Database["public"]["Enums"]["NarrativeStyle"]
           notes?: string | null
@@ -757,6 +762,7 @@ export type Database = {
           synopsis?: string
           title?: string
           updatedAt?: string
+          v?: Database["public"]["Enums"]["StoryVGenerated"]
         }
         Relationships: [
           {
@@ -778,31 +784,31 @@ export type Database = {
       User: {
         Row: {
           createdAt: string
-          daily_limit_messages: number | null
           display_name: string
           email: string
           id: string
           image_url: string | null
+          limit_messages: number | null
           premium: boolean
           updatedAt: string
         }
         Insert: {
           createdAt?: string
-          daily_limit_messages?: number | null
           display_name?: string
           email: string
           id: string
           image_url?: string | null
+          limit_messages?: number | null
           premium?: boolean
           updatedAt?: string
         }
         Update: {
           createdAt?: string
-          daily_limit_messages?: number | null
           display_name?: string
           email?: string
           id?: string
           image_url?: string | null
+          limit_messages?: number | null
           premium?: boolean
           updatedAt?: string
         }
@@ -855,8 +861,11 @@ export type Database = {
         | "UPLOADING_SCENE_IMG"
         | "FINALIZING"
         | "GENERATING_ITEMS"
+        | "DETECTING_LANGUAGE"
       JobStatus: "PENDING" | "RUNNING" | "COMPLETED" | "FAILED"
       NarrativeStyle: "FirstPerson" | "SecondPerson" | "ThirdPerson"
+      StoryLanguage: "auto" | "en" | "fr" | "es" | "it" | "de"
+      StoryVGenerated: "V1" | "V2"
     }
     CompositeTypes: {
       [_ in never]: never
