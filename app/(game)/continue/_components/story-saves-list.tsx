@@ -149,7 +149,7 @@ export const GameSaveList = () => {
       ))}
 
       <Link 
-        href="/new" 
+        href="/" 
         className="w-[350px] h-[350px] relative flex items-center justify-center border-border border-dashed border-2 rounded-lg hover:bg-accent transition-colors duration-300 ease-in-out"
       >
         {t("NewGame")}
