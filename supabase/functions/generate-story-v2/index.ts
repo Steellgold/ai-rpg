@@ -187,17 +187,23 @@ Deno.serve(async (req) => {
     (async () => {
       try {
         const prompt = `
-Improve this text for a narrative game. Make it more captivating, descriptive and immersive, 
-while preserving the main ideas. ${genres ? "Adapt it to the following genre(s): " + genres.join(", ") : ""}
-
-Only languages avaible to generates stories is French or English. If the user has written in French, you must respond in French. But every other language, you must respond in English.
-
+Improve this text for a narrative game. Make it more captivating, descriptive and immersive, while preserving the main ideas. ${genres ? "Adapt it to the following genre(s): " + genres.join(", ") : ""}
+        
+Only languages available to generates stories is French or English. If the user has written in French, you must respond in French. But every other language, you must respond in English.
+        
 ${isChildren ? "Make it suitable for children, avoiding any inappropriate content, violence, or adult themes." : ""}
-
-${items ? "Also create a set of interesting items/objects that fit the narrative and could be found or used throughout the story. These items should vary in rarity and usefulness and should be relevant to the plot, setting, and characters." : ""}
+        
+${items ? `
+Create 3-5 significant items/objects that will play important roles throughout the story. Each item should:
+  - Have a clear purpose or function within the narrative
+  - Be relevant to the plot, setting, or character development
+  - Be interesting enough to be used multiple times across different scenes
+  - Vary in rarity and usefulness
+Do not create items that will only be used in a single scene.
+` : ""}
 
 Text: ${text}
-        `;
+`;
 
         const model = registry.languageModel("openai:gpt-4o");
         console.log(`[Job ${jobId}] Generating story content...`);
