@@ -16,6 +16,16 @@ const openai = new OpenAI({
   apiKey: Deno.env.get("OPENAI_API_KEY")
 });
 
+// Définir les langues supportées (même enum que dans Prisma)
+const SupportedLanguage = z.enum(["en", "fr", "es", "it", "de"]);
+type SupportedLanguageType = z.infer<typeof SupportedLanguage>;
+
+// Schéma pour la détection de langue
+const languageDetectionSchema = z.object({
+  detectedLanguage: SupportedLanguage,
+  confidence: z.number().min(0).max(1)
+});
+
 const characterSchema = z.object({
   name: z.string().min(1).max(100),
   description: z.string().min(1).max(200),
@@ -41,6 +51,49 @@ const itemSchema = z.object({
   found_in_scene: z.boolean().default(false)
 });
 
+// Fonction de détection de langue avec l'IA
+async function detectLanguageWithAI(text: string): Promise<SupportedLanguageType> {
+  try {
+    // Détection de la langue avec l'IA
+    const model = registry.languageModel("openai:gpt-4o");
+    console.log(`Detecting language for text: ${text.substring(0, 100)}...`);
+
+    const prompt = `
+Analyze the following text and determine which language it is written in.
+Text: "${text.substring(0, 500)}"
+
+Respond with ONLY one of these language codes:
+- en: English
+- fr: French
+- es: Spanish
+- it: Italian
+- de: German
+
+If the language is not one of these, or if you are unsure, respond with "en" (English).
+`;
+
+    const { object } = await generateObject({
+      model,
+      schema: languageDetectionSchema,
+      prompt
+    });
+
+    console.log(`Language detection result: ${object.detectedLanguage} (confidence: ${object.confidence})`);
+    
+    // Si la confiance est faible, utiliser l'anglais par défaut
+    if (object.confidence < 0.6) {
+      console.log(`Low confidence detection, defaulting to English`);
+      return "en";
+    }
+    
+    return object.detectedLanguage;
+  } catch (error) {
+    console.error("Error in language detection:", error);
+    // En cas d'erreur, utiliser l'anglais par défaut
+    return "en";
+  }
+}
+
 function extractSceneImagePrompt(prompt) {
   return `Create a high-quality, detailed illustration for a narrative game scene. 
 The scene should depict: ${prompt}
@@ -62,19 +115,23 @@ Ensure the image is visually striking and immersive, drawing the viewer into the
 `;
 }
 
-function extractItemImagePrompt(prompt, itemName, itemType) {
+function extractItemImagePrompt(description, itemName, itemType) {
   return `Create a detailed and high-quality illustration of a ${itemType.toLowerCase()} for a narrative game.
 The object is: ${itemName}
 Description: ${description}
 
-Style: Detailed and high-quality digital art with proper lighting and depth. Use rich colors and subtle textures to give the object depth. The background should be simple and slightly blurred to highlight the object.
+Style: Detailed and high-quality digital art with proper lighting and depth. The object should be centered against a simple, slightly blurred background.
 
-### IMPORTANT:
-- Do not include any text or UI elements in the image.
-- The image should focus solely on the object itself.
-- The object should be centered and well-lit.
-- Avoid any elements that could be considered inappropriate or offensive.
-`;
+CRITICAL INSTRUCTIONS:
+- Create ONLY the object itself with NO TEXT whatsoever
+- DO NOT include item name, stats, properties, or any labels in the image
+- NO UI elements, inventory frames, or item cards
+- NO price tags, rarity indicators, or numerical values
+- Show just the clean object against a simple background
+- Focus on details, textures, and materials of the object itself
+- The final image should contain absolutely no text, numbers, or symbols
+
+The object should be clearly visible and detailed, communicating its purpose through visual design alone.`;
 }
 
 function extractCharacterAvatarPrompt(character) {
@@ -87,22 +144,18 @@ ${character.personality ? `- Personality: ${character.personality}` : ''}
 ${character.outfit ? `- Outfit: ${character.outfit}` : ''}
 ${character.age ? `- Age: ${character.age}` : ''}
 
-Style: Detailed and high-quality digital portrait with appropriate lighting on a simple background. Use clean lines and vibrant colors for a semi-realistic cartoon style. The character should have clear facial features and a distinctive expression.
+Style: Clean, detailed character portrait showing only the head and shoulders against a simple background.
 
-### PORTRAIT SPECIFICATIONS:
-- Square avatar/portrait format showing only the character’s head and shoulders
-- Semi-realistic style with clear facial features
-- The character should be looking slightly to the side or directly at the viewer
-- Simple, slightly blurred background that complements the character
-- Strong lighting to highlight facial features
-- Color palette reflecting the character's personality
+CRITICAL INSTRUCTIONS:
+- Create ONLY the character portrait with NO TEXT whatsoever in the image
+- DO NOT include the character's name, attributes, or any labels in the image
+- NO UI elements, stats, or character sheet information
+- NO borders with text or information cards
+- Just a clean, simple portrait against a plain or simple background
+- Focus on facial features, expression, and basic shoulder/upper chest area
+- The final image should contain absolutely no text, numbers, or symbols
 
-### IMPORTANT:
-- Focus solely on creating a clear and distinctive portrait of this unique character
-- Do not include any text or UI elements in the image
-- Ensure the character has a distinctive and recognizable appearance
-- The portrait should suit a narrative game, emphasizing the character's identity
-- Avoid any elements that could be considered inappropriate or offensive`;
+The portrait should communicate the character's personality through visual elements only - expression, coloring, and style.`;
 }
 
 async function uploadImageToSupabase(imageUrl, path) {
@@ -139,6 +192,17 @@ async function updateJob(supabase, jobId, updates) {
   }
 }
 
+interface RequestParams {
+  text: string;
+  genres: string[];
+  userId: string;
+  jobId: string;
+  isPremium: boolean;
+  isChildren: boolean;
+  items: boolean;
+  language?: string; // "auto", "en", "fr", "es", "it", "de", etc.
+}
+
 Deno.serve(async (req) => {
   if (req.method !== "POST") {
     return new Response("Method not allowed", {
@@ -146,7 +210,7 @@ Deno.serve(async (req) => {
     });
   }
 
-  const { text, genres, userId, jobId, isPremium = false, isChildren = false, items = false } = await req.json();
+  const { text, genres, userId, jobId, isPremium = false, isChildren = false, items = false, language = "auto" } = await req.json() as RequestParams;
 
   if (!text || !userId || !jobId) {
     return new Response(JSON.stringify({
@@ -175,22 +239,52 @@ Deno.serve(async (req) => {
       throw new Error("Vous n'êtes pas autorisé à accéder à ce job");
     }
 
-    await updateJob(supabase, jobId, {
-      status: 'RUNNING',
-      progress: 10,
-      stage: 'GENERATING_STORY',
-      startedAt: new Date().toISOString()
-    });
+    // Si auto, on commence par la détection de langue, sinon on passe directement à la génération
+    if (language === "auto") {
+      await updateJob(supabase, jobId, {
+        status: 'RUNNING',
+        progress: 5,
+        stage: 'DETECTING_LANGUAGE',
+        startedAt: new Date().toISOString()
+      });
+    } else {
+      await updateJob(supabase, jobId, {
+        status: 'RUNNING',
+        progress: 10,
+        stage: 'GENERATING_STORY',
+        startedAt: new Date().toISOString()
+      });
+    }
 
     (async () => {
       try {
+        // Déterminer la langue à utiliser
+        let outputLanguage = language;
+        if (language === "auto") {
+          outputLanguage = await detectLanguageWithAI(text);
+          console.log(`[Job ${jobId}] AI-detected language: ${outputLanguage}`);
+          
+          // Mise à jour du job après la détection de langue
+          await updateJob(supabase, jobId, {
+            progress: 10,
+            stage: 'GENERATING_STORY'
+          });
+        }
+
+        const languageInstructions = {
+          "en": "Write the story in English.",
+          "fr": "Écrivez l'histoire en français.",
+          "es": "Escriba la historia en español.",
+          "it": "Scrivere la storia in italiano.",
+          "de": "Schreiben Sie die Geschichte auf Deutsch.",
+        };
+
         const prompt = `
 Improve this text for a narrative game. Make it more captivating, descriptive and immersive, while preserving the main ideas. ${genres ? "Adapt it to the following genre(s): " + genres.join(", ") : ""}
         
-Only languages available to generates stories is French or English. If the user has written in French, you must respond in French. But every other language, you must respond in English.
-        
 ${isChildren ? "Make it suitable for children, avoiding any inappropriate content, violence, or adult themes." : ""}
-        
+${languageInstructions[outputLanguage] || ""}
+
 ${items ? `
 Create 3-5 significant items/objects that will play important roles throughout the story. Each item should:
   - Have a clear purpose or function within the narrative
@@ -265,6 +359,7 @@ Text: ${text}
           isChildrenStory: object.is_children || isChildren,
           genre: genres || [],
           hasItems: items,
+          language: outputLanguage, // Enregistrer la langue utilisée
           v: "V2"
         }).select().single();
 
@@ -581,13 +676,71 @@ Text: ${text}
           }
         }
 
-        // Step 8: Finalize the job
+        // Step 8: Create game save
         await updateJob(supabase, jobId, {
           progress: 95,
           stage: 'FINALIZING'
         });
 
-        console.log(`[Job ${jobId}] Finalizing...`);
+        console.log(`[Job ${jobId}] Creating game save...`);
+        let gameSaveId = null;
+        try {
+          // Créer une sauvegarde de jeu pour l'utilisateur
+          gameSaveId = createId();
+          await supabase.from('GameSave').insert({
+            id: gameSaveId,
+            characterName: "Aventurier", // ou extraire un nom de personnage de l'histoire
+            storyId: story.id,
+            userId: userId,
+            currentSceneId: firstSceneId,
+            progress: 1,
+            name: `${object.title} - Sauvegarde`,
+            lastPlayed: new Date().toISOString()
+          });
+
+          // Si l'histoire a des objets et qu'ils sont présents dans la première scène
+          if (items && firstSceneData?.found_items && firstSceneData.found_items.length > 0) {
+            for (const itemName of firstSceneData.found_items) {
+              const itemId = itemsMap[itemName];
+              if (!itemId) continue;
+              
+              // Déterminer les utilisations restantes si applicable
+              const itemData = object.items.find(item => item.name === itemName);
+              if (!itemData) continue;
+              
+              let remainingUses = null;
+              if (["WEAPON", "ARMOR", "TOOL"].includes(itemData.type)) {
+                const rarityMultiplier = {
+                  "COMMON": 1,
+                  "UNCOMMON": 2,
+                  "RARE": 3,
+                  "EPIC": 4,
+                  "LEGENDARY": 5
+                };
+                remainingUses = 5 * (rarityMultiplier[itemData.rarity] || 1);
+              } else if (itemData.type === "POTION") {
+                remainingUses = 1;
+              }
+              
+              // Ajouter l'objet à l'inventaire du joueur
+              await supabase.from('InventoryItem').insert({
+                id: createId(),
+                gameSaveId: gameSaveId,
+                itemId: itemId,
+                quantity: 1,
+                isEquipped: false,
+                remainingUses: remainingUses,
+                isBroken: false
+              });
+            }
+          }
+
+          console.log(`[Job ${jobId}] Game save created successfully: ${gameSaveId}`);
+        } catch (saveError) {
+          console.error(`[Job ${jobId}] Error creating game save:`, saveError);
+          gameSaveId = null;
+          // Continuer même si la création de sauvegarde échoue
+        }
 
         // Job completed successfully
         await updateJob(supabase, jobId, {
@@ -598,7 +751,9 @@ Text: ${text}
           output: {
             story: object,
             storyId: story.id,
-            firstSceneId: firstSceneId
+            firstSceneId: firstSceneId,
+            gameSaveId: gameSaveId,
+            language: outputLanguage
           }
         });
 

@@ -31,26 +31,18 @@ const choiceSchema = z.object({
 
 function extractSceneImagePrompt(prompt) {
   return `Create a high-quality, detailed environmental illustration for a narrative game scene. 
-The scene should depict the SETTING ONLY: ${prompt}
+The scene should depict ONLY THE ENVIRONMENT described here: ${prompt}
 Style: Cinematic, detailed, high-quality digital art with proper lighting and depth.
 
-Focus exclusively on the environment and setting, with NO CHARACTERS present.
-Make sure to include elements that enhance the narrative aspect of the scene.
-Consider the following details:
-- Atmospheric lighting and mood
-- Environmental details and textures
-- Background elements that complement the story
-- Color palette that matches the mood of the scene
-- Depth and perspective to create an immersive setting
+CRITICAL INSTRUCTIONS:
+- Create ONLY an empty environment or setting with NO LIVING BEINGS whatsoever
+- ABSOLUTELY NO humans, characters, animals, or any living creatures should appear in the image
+- Focus exclusively on architecture, landscapes, interiors, objects, and atmosphere
+- Do not include any text, UI elements, or labels in the image
+- The environment should be the sole focus - empty rooms, abandoned streets, untouched nature
+- Show the scene as if it's waiting for characters to enter it, but completely devoid of life
 
-### IMPORTANT:
-- DO NOT include any characters, people, or living beings in the image.
-- Show ONLY the environment, location, and setting.
-- The environment should be the main focus - create an evocative, empty scene.
-- Do not include any text or UI elements in the image.
-- The image should be suitable for a narrative game, focusing on storytelling through environments.
-- Avoid any elements that could be considered inappropriate or offensive.
-`;
+Create a visually striking and immersive setting that tells a story through environmental details alone.`;
 }
 
 function extractItemImagePrompt(description, itemName, itemType) {
@@ -58,13 +50,18 @@ function extractItemImagePrompt(description, itemName, itemType) {
 The object is: ${itemName}
 Description: ${description}
 
-Style: Detailed and high-quality digital art with proper lighting and depth. Use rich colors and subtle textures to give the object depth. The background should be simple and slightly blurred to highlight the object.
+Style: Detailed and high-quality digital art with proper lighting and depth. The object should be centered against a simple, slightly blurred background.
 
-### IMPORTANT:
-- Do not include any text or UI elements in the image.
-- The image should focus solely on the object itself.
-- The object should be centered and well-lit.
-- Avoid any elements that could be considered inappropriate or offensive.`;
+CRITICAL INSTRUCTIONS:
+- Create ONLY the object itself with NO TEXT whatsoever
+- DO NOT include item name, stats, properties, or any labels in the image
+- NO UI elements, inventory frames, or item cards
+- NO price tags, rarity indicators, or numerical values
+- Show just the clean object against a simple background
+- Focus on details, textures, and materials of the object itself
+- The final image should contain absolutely no text, numbers, or symbols
+
+The object should be clearly visible and detailed, communicating its purpose through visual design alone.`;
 }
 
 async function uploadImageToSupabase(imageUrl, path) {
@@ -86,6 +83,20 @@ async function uploadImageToSupabase(imageUrl, path) {
   }
 }
 
+interface RequestParams {
+  storyId: string;
+  sceneId: string;
+  choiceId?: string;
+  customText?: string;
+  diceRoll: number;
+  userId: string;
+  isPremium: boolean;
+  items: boolean;
+  activeItem?: any;
+  gameSaveId?: string;
+  language?: string; // Paramètre de langue (optionnel, utilisera celui de l'histoire si non spécifié)
+}
+
 Deno.serve(async (req) => {
   if (req.method !== "POST") {
     return new Response("Method not allowed", {
@@ -93,7 +104,19 @@ Deno.serve(async (req) => {
     });
   }
 
-  const { storyId, sceneId, choiceId, diceRoll = 3, gameSaveId, userId, customText, isPremium = false, isChildren = false, items = false } = await req.json();
+  const { 
+    storyId, 
+    sceneId, 
+    choiceId, 
+    customText, 
+    diceRoll = 3, 
+    userId, 
+    isPremium = false, 
+    items = false, 
+    activeItem,
+    gameSaveId,
+    language
+  } = await req.json() as RequestParams;
 
   if (!storyId || !sceneId || !(choiceId || customText) || !userId) {
     return new Response(JSON.stringify({
@@ -115,7 +138,7 @@ Deno.serve(async (req) => {
     }
 
     const { data: story, error: storyError } = await supabase.from('Story').select(`
-        id, title, synopsis, goal, possibleEndings, narrativeStyle, genre, max_scenes, current_scene, creatorId, hasItems,
+        id, title, synopsis, goal, possibleEndings, narrativeStyle, genre, max_scenes, current_scene, creatorId, hasItems, language,
         Character (
           id, name, description, personality, outfit, age, background, abilities, relationships, motivations, flaws, backstory, isMain
         ),
@@ -141,6 +164,9 @@ Deno.serve(async (req) => {
     if (story.creatorId !== userId) {
       throw new Error("You do not have permission to access this story");
     }
+
+    // Utiliser la langue de l'histoire ou la langue spécifiée
+    const outputLanguage = language || story.language || "en";
 
     const useItemSystem = items && story.hasItems;
     
@@ -288,6 +314,22 @@ Deno.serve(async (req) => {
       }
     }
 
+    // Si on a un gameSaveId, enregistrer le choix du joueur
+    if (gameSaveId && selectedChoice) {
+      try {
+        await supabase.from('SaveHistory').insert({
+          id: createId(),
+          gameSaveId: gameSaveId,
+          sceneId: sceneId,
+          choiceId: selectedChoice.id,
+          timestamp: new Date().toISOString()
+        });
+      } catch (historyError) {
+        console.error("Error recording save history:", historyError);
+        // Continuer même si l'enregistrement de l'historique échoue
+      }
+    }
+
     const sceneHistory = story.Scene.filter((s) => s.id !== currentScene.id && (s.order || 0) < (currentScene.order || 0)).sort((a, b) => (a.order || 0) - (b.order || 0)).slice(-5);
     const historyContext = sceneHistory.map((scene) => `Scene:: ${scene.title}\n${scene.content}\nSelected choice: ${scene.selected_choice_id ? scene.Choice?.find((c) => c.id === scene.selected_choice_id)?.text || "Aucun choix sélectionné" : "Aucun choix sélectionné"}`).join("\n\n");
     
@@ -297,11 +339,23 @@ Deno.serve(async (req) => {
     const newSceneOrder = (currentScene.order || 0) + 1;
     const approachingEnd = newSceneOrder >= (story.max_scenes || 20) - 3;
     
+    // Instructions de langue pour l'IA
+    const languageInstructions = {
+      "en": "The scene content should be written in English.",
+      "fr": "Le contenu de la scène doit être écrit en français.",
+      "es": "El contenido de la escena debe escribirse en español.",
+      "it": "Il contenuto della scena deve essere scritto in italiano.",
+      "de": "Der Inhalt der Szene sollte auf Deutsch geschrieben werden.",
+      // Ajoutez d'autres langues selon vos besoins
+    };
+    
     const prompt = `
 You are the narrator of an interactive text-based game. Based on the following information, generate the next scene of the story.
     
 You must respect the language, tone, and style of the story.
-Only languages avaible to generates stories is French or English. If the user has written in French, you must respond in French. But every other language, you must respond in English.
+
+### IMPORTANT - Language (localization):
+${languageInstructions[outputLanguage] || "Write the scene in the appropriate language."}
     
 ## STORY
 Title: ${story.title}
@@ -310,9 +364,9 @@ Goal: ${story.goal}
 Possible Endings: ${story.possibleEndings.join(", ")}
 Narrative Style: ${story.narrativeStyle}
 Genre(s): ${story.genre.join(", ")}
-Is for children: ${isChildren ? "Yes" : "No"}
+Is for children: ${story.isChildrenStory ? "Yes" : "No"}
 
-${isChildren ? "The story should be suitable for children, avoiding any inappropriate content like violence, adult themes, or complex language." : ""}
+${story.isChildrenStory ? "The story should be suitable for children, avoiding any inappropriate content like violence, adult themes, or complex language." : ""}
     
 ## MAIN CHARACTERS
 ${mainCharacters.map((char) => `- Name: ${char.name}
@@ -491,6 +545,7 @@ Always keep in mind the characters' personalities, the player's inventory, and t
           isHidden: newItem.is_hidden || false
         });
         
+        // Si l'objet n'est pas caché et qu'on a un game save, l'ajouter à l'inventaire
         if (!newItem.is_hidden && gameSaveId) {
           await supabase.from('InventoryItem').insert({
             id: createId(),
@@ -588,20 +643,13 @@ Always keep in mind the characters' personalities, the player's inventory, and t
       current_scene: newSceneOrder
     }).eq('id', story.id);
 
+    // Mettre à jour le game save si disponible
     if (gameSaveId) {
       await supabase.from('GameSave').update({
         currentSceneId: newScene.id,
         progress: newSceneOrder,
         lastPlayed: new Date().toISOString()
       }).eq('id', gameSaveId);
-      
-      await supabase.from('SaveHistory').insert({
-        id: createId(),
-        gameSaveId: gameSaveId,
-        sceneId: currentScene.id,
-        choiceId: selectedChoice.id,
-        timestamp: new Date().toISOString()
-      });
     }
 
     console.log("Database updated successfully");
@@ -643,9 +691,11 @@ Always keep in mind the characters' personalities, the player's inventory, and t
         is_ending: isEnding,
         ending_type: object.ending_type,
         new_items: useItemSystem ? (object.new_items || []) : [],
-        items_enabled: useItemSystem
+        items_enabled: useItemSystem,
+        progress: newSceneOrder
       },
-      redirect: gameSaveId ? `/${gameSaveId}/${newScene.id}` : `/${storyId}/${newScene.id}`
+      redirect: gameSaveId ? `/${gameSaveId}/${newScene.id}` : `/${storyId}/${newScene.id}`,
+      gameSaveId: gameSaveId
     }), {
       headers: {
         "Content-Type": "application/json"
