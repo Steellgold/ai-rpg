@@ -8,9 +8,16 @@ import { createClient as createSupabaseClient } from "@supabase/supabase-js"
 import { redirect } from "next/navigation";
 import { env } from "../env/env";
 import { Database } from "../supabase/database.types";
-import { checkDailyLimit } from "../limit";
+import { checkDailyLimit } from "@/lib/limit"
+import { StoryLanguage } from "@prisma/client";
 
-export const generateHistory = async (text: string, genres?: string[], isForChildren?: boolean, itemsEnabled?: boolean) => {
+export const generateStory = async (
+  text: string, 
+  genres?: string[], 
+  isForChildren?: boolean, 
+  itemsEnabled?: boolean,
+  language: StoryLanguage = "auto"
+) => {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) throw new Error("User not authenticated");
@@ -36,7 +43,11 @@ export const generateHistory = async (text: string, genres?: string[], isForChil
       id: jobId,
       userId: user.id,
       stage: "INITIALIZED",
-      input: { text, genres: genres || [] }
+      input: { 
+        text, 
+        genres: genres || [],
+        language
+      }
     }
   });
 
@@ -50,7 +61,8 @@ export const generateHistory = async (text: string, genres?: string[], isForChil
       jobId,
       isPremium: user_data.premium,
       isChildren: isForChildren || false,
-      items: user_data.premium ? itemsEnabled : false
+      items: user_data.premium ? itemsEnabled : false,
+      language
     }
   });
 
