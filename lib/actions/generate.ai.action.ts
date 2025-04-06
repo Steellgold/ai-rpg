@@ -17,6 +17,20 @@ export const generateHistory = async (text: string, genres?: string[], isForChil
   const user_data = await prisma.user.findUnique({ where: { id: user.id } });
   if (!user_data) throw new Error("User not found");
 
+  const isPremium = user_data.premium;
+  const dailyLimit = user_data.daily_limit_messages ?? 15;
+
+  if (dailyLimit <= 0 && !isPremium) {
+    throw new Error("Daily limit reached. Please try again later.");
+  }
+  
+  if (dailyLimit > 0 && !isPremium) {
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { daily_limit_messages: dailyLimit - 1 }
+    });
+  }
+
   const supabase_role_key = createSupabaseClient<Database>(
     serverEnv.NEXT_PUBLIC_SUPABASE_URL,
     serverEnv.SUPABASE_SERVICE_ROLE_KEY
