@@ -3,16 +3,17 @@
 import { useState, useRef, useEffect, ReactElement, HTMLAttributes, cloneElement } from "react"
 import { Button } from "@/components/ui/button"
 import { ArrowUpIcon, Baby, Crown, Eclipse, Flower, Loader, Lock, LockOpen, Music, Pickaxe, TowerControl, User, X } from "lucide-react"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { cn } from "@/lib/utils"
 import { Component } from "@/lib/types"
 import { MultiSelectCombobox } from "./ui/multi-select-combobox"
 import { Genre, genreIds } from "@/lib/genres-ids"
 import { useTranslations } from "next-intl";
 import { FaDragon } from "react-icons/fa";
-import { generateHistory } from "@/lib/actions/generate.ai.action"
+import { generateStory } from "@/lib/actions/generate.ai.action"
 import { useSession } from "@/lib/hooks/use-session"
 import { useSearchParams } from "next/navigation"
+import { StoryLanguageSelector } from "./story-language-selector"
+import { StoryLanguage } from "@prisma/client"
 
 type Suggestion = {
   label: string;
@@ -62,12 +63,12 @@ export const AiTextarea: Component<
   const [childMode, setChildMode] = useState(false);
   const [publicMode, setPublicMode] = useState(true);
   const [items, setItems] = useState(false);
+  const [storyLanguage, setStoryLanguage] = useState<StoryLanguage>("auto");
 
   const [isGenerating, setIsGenerating] = useState(false);
   const [selectedGenres, setSelectedGenres] = useState<string[]>(
     searchParams.get("genres")?.split(",") || []
   );
-
 
   const u = useTranslations("Utils");
   const t = useTranslations("Pages.New");
@@ -103,7 +104,13 @@ export const AiTextarea: Component<
     if (isGenerating) return; // Lmao
     if (isInputValid) setIsGenerating(true);
 
-    await generateHistory(prompt, selectedGenres || [], childMode, isPremium ? items : false);
+    await generateStory(
+      prompt, 
+      selectedGenres || [], 
+      childMode, 
+      isPremium ? items : false,
+      storyLanguage
+    );
   }
 
   return (
@@ -130,12 +137,12 @@ export const AiTextarea: Component<
         />
 
         <div className="flex items-center justify-between p-2 border-t border-[#173a8940]">
-          <div className="flex items-center">
+          <div className="flex items-center flex-wrap gap-2">
             {(selectedGenres.length > 0 || prompt.length > 0) && (!isGenerating || isInputValid) && (
               <Button
                 size={"default"}
                 variant="ghost"
-                className="!border border-red-400/20 rounded-full transition-opacity !h-8 hover:bg-red-400/10 cursor-pointer px-2.5 mr-1"
+                className="!border border-red-400/20 rounded-full transition-opacity !h-8 hover:bg-red-400/10 cursor-pointer px-2.5"
                 onClick={() => {
                   setPrompt("");
                   setSelectedGenres([]);
@@ -165,7 +172,7 @@ export const AiTextarea: Component<
               size={"default"}
               variant="ghost"
               className={cn(
-                "!border rounded-full transition-opacity !h-8 cursor-pointer px-2 ml-1", {
+                "!border rounded-full transition-opacity !h-8 cursor-pointer px-2", {
                   "!w-8": !childMode,
                   "border-emerald-400/20 hover:bg-emerald-400/10": childMode,
                   "border-gray-400/20 hover:bg-gray-400/10": !childMode
@@ -188,7 +195,7 @@ export const AiTextarea: Component<
               size={"default"}
               variant="ghost"
               className={cn(
-                "!border rounded-full transition-opacity !h-8 cursor-pointer px-2 ml-1", {
+                "!border rounded-full transition-opacity !h-8 cursor-pointer px-2", {
                   "!w-8": !items,
                   "border-indigo-400/20 hover:bg-indigo-400/10": items && isPremium,
                   "border-gray-400/20 hover:bg-gray-400/10": !items
@@ -214,7 +221,7 @@ export const AiTextarea: Component<
               size={"default"}
               variant="ghost"
               className={cn(
-                "!border rounded-full transition-opacity !h-8 cursor-pointer px-2.5 ml-1", {
+                "!border rounded-full transition-opacity !h-8 cursor-pointer px-2.5", {
                   "border-teal-400/20 hover:bg-teal-400/10": publicMode,
                   "border-gray-400/20 hover:bg-gray-400/10": !publicMode && !isPremium,
                   "border-red-400/20 hover:bg-red-400/10": !publicMode && isPremium,
@@ -242,6 +249,13 @@ export const AiTextarea: Component<
                 {publicMode ? t("AiTextarea.PublicModeOn") : t("AiTextarea.PublicModeOff")}
               </span>
             </Button>
+            
+            <StoryLanguageSelector
+              selectedLanguage={storyLanguage}
+              onLanguageChange={setStoryLanguage}
+              className="ml-1"
+            />
+            
           </div>
 
           <div className="flex items-center">
@@ -325,4 +339,3 @@ export const AiTextarea: Component<
     </div>
   )
 }
-
