@@ -6,19 +6,18 @@ import { createClient } from "@/lib/supabase/server"
 import { env } from "@/lib/env/env"
 import { checkDailyLimit } from "../limit"
 
-export const generateNextScene = async (
-  storyId: string,
-  sceneId: string,
-  choiceId: string,
-  diceRoll?: number,
-  gameSaveId?: string
-) => {
+export const generateNextScene = async (storyId: string, sceneId: string, choiceId: string, diceRoll?: number, gameSaveId?: string) => {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) throw new Error("User not authenticated");
 
   const user_data = await prisma.user.findUnique({ where: { id: user.id } });
   if (!user_data) throw new Error("User not found");
+  
+  const { dailyLimit, isPremium } = await checkDailyLimit(user.id);
+  if (!isPremium && dailyLimit <= 0) {
+    throw new Error("Daily limit reached. Please try again later.");
+  }
 
   const story = await prisma.story.findUnique({
     where: { id: storyId },
@@ -56,20 +55,14 @@ export const generateNextScene = async (
   }
 };
 
-export const handleCustomChoice = async (
-  storyId: string,
-  sceneId: string,
-  customText: string,
-  diceRoll?: number,
-  gameSaveId?: string
-) => {
+export const handleCustomChoice = async (storyId: string, sceneId: string, customText: string, diceRoll?: number, gameSaveId?: string) => {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) throw new Error("User not authenticated");
 
   const user_data = await prisma.user.findUnique({ where: { id: user.id } });
   if (!user_data) throw new Error("User not found");
-
+  
   const { dailyLimit, isPremium } = await checkDailyLimit(user.id);
   if (!isPremium && dailyLimit <= 0) {
     throw new Error("Daily limit reached. Please try again later.");
