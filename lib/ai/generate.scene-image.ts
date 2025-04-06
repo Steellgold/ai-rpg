@@ -2,6 +2,7 @@ import { createClient } from "@supabase/supabase-js";
 import { createClient as createServerClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/db/prisma"
 import { OpenAI } from "openai"
+import { checkMonthlyLimit } from "../limit";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -64,6 +65,13 @@ export const generateSceneImage = async (sceneId: string, imagePrompt?: string):
     return { success: false, error: "User not authenticated" }
   }
 
+  const user_data = await prisma.user.findUnique({ where: { id: user.id } });
+  if (!user_data) return { success: false, error: "User not found" }
+
+  const { monthlyLimit, isPremium } = await checkMonthlyLimit(user.id);
+  if (!isPremium && monthlyLimit <= 0) {
+    throw new Error("Monthly limit reached. Please try again later.");
+  }
 
   try {
     const scene = await prisma.scene.findUnique({

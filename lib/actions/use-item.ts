@@ -5,7 +5,7 @@ import { prisma } from "../db/prisma";
 import { serverEnv } from "@/lib/env/env.server";
 import OpenAI from "openai";
 import { uploadImageToSupabase } from "@/lib/ai/generate.scene-image";
-import { checkDailyLimit } from "@/lib/limit"
+import { checkMonthlyLimit } from "@/lib/limit"
 
 const openai = new OpenAI({
   apiKey: serverEnv.OPENAI_API_KEY,
@@ -20,9 +20,9 @@ export const useItem = async (itemId: string, inventoryItemId: string) => {
   const user_data = await prisma.user.findUnique({ where: { id: user.id } });
   if (!user_data) throw new Error("User not found");
 
-  const { dailyLimit, isPremium } = await checkDailyLimit(user.id);
-  if (!isPremium && dailyLimit <= 0) {
-    throw new Error("Daily limit reached. Please try again later.");
+  const { monthlyLimit, isPremium } = await checkMonthlyLimit(user.id);
+  if (!isPremium && monthlyLimit <= 0) {
+    throw new Error("Monthly limit reached. Please try again later.");
   }
 
   try {

@@ -4,7 +4,7 @@ import { redirect } from "next/navigation"
 import { prisma } from "@/lib/db/prisma"
 import { createClient } from "@/lib/supabase/server"
 import { env } from "@/lib/env/env"
-import { checkDailyLimit } from "@/lib/limit"
+import { checkMonthlyLimit } from "@/lib/limit"
 import { updateGameSave, recordChoice, addItemToInventory } from "@/lib/services/game-save.service"
 
 export const generateNextScene = async (
@@ -23,9 +23,9 @@ export const generateNextScene = async (
   const user_data = await prisma.user.findUnique({ where: { id: user.id } });
   if (!user_data) throw new Error("User not found");
 
-  const { dailyLimit, isPremium } = await checkDailyLimit(user.id);
-  if (!isPremium && dailyLimit <= 0) {
-    throw new Error("Daily limit reached. Please try again later.");
+  const { monthlyLimit, isPremium } = await checkMonthlyLimit(user.id);
+  if (!isPremium && monthlyLimit <= 0) {
+    throw new Error("Monthly limit reached. Please try again later.");
   }
 
   const story = await prisma.story.findUnique({
