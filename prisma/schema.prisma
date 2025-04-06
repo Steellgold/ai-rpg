@@ -99,6 +99,11 @@ enum NarrativeStyle {
   ThirdPerson
 }
 
+enum StoryVGenerated {
+  V1
+  V2
+}
+
 model Story {
   id               String          @id @default(cuid())
   title            String
@@ -135,6 +140,8 @@ model Story {
   creatorId        String
   // 
   jobs             Job[]
+  // 
+  v                StoryVGenerated @default(V1)
   // 
   createdAt        DateTime        @default(now())
   updatedAt        DateTime        @default(now()) @updatedAt
@@ -174,13 +181,13 @@ model Item {
   description       String          @db.Text
   type              ItemType        @default(MISC)
   rarity            ItemRarity      @default(COMMON)
-// 
+  // 
   imageUrl          String?
-brokenImageUrl    String?
+  brokenImageUrl    String?
   // 
   effect            String?         @db.Text
   useCount          Int?
-  //
+  // 
   durability        Int?
   isBroken          Boolean         @default(false)
   usage_count       Int?
@@ -203,9 +210,9 @@ brokenImageUrl    String?
 
 model InventoryItem {
   id            String   @id @default(cuid())
-// 
+  // 
   quantity      Int      @default(1)
-remainingUses Int?
+  remainingUses Int?
   isBroken      Boolean  @default(false)
   // 
   isEquipped    Boolean  @default(false)

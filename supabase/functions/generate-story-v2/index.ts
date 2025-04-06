@@ -266,7 +266,8 @@ Text: ${text}
           creatorId: userId,
           isChildrenStory: object.is_children || isChildren,
           genre: genres || [],
-          hasItems: items
+          hasItems: items,
+          v: "V2"
         }).select().single();
 
         if (storyError) {

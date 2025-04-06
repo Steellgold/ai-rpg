@@ -177,7 +177,8 @@ Text: ${text}
           max_scenes: object.max_story_scenes,
           creatorId: userId,
           isChildrenStory: object.is_children || isChildren,
-          genre: genres || []
+          genre: genres || [],
+          v: "V1"
         }).select().single();
         if (storyError) {
           throw new Error(`Failed to create story: ${storyError.message}`);
