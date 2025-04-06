@@ -42,11 +42,11 @@ export const ItemMention: Component<ItemProps> = ({ item, onClick, isInventoryIt
   };
 
   const rarityColors = {
-    COMMON: "bg-zinc-600 text-zinc-200",
-    UNCOMMON: "bg-green-700 text-green-100",
-    RARE: "bg-blue-700 text-blue-100",
-    EPIC: "bg-purple-700 text-purple-100",
-    LEGENDARY: "bg-orange-600 text-orange-100"
+    COMMON: "border border-zinc-600 text-zinc-200",
+    UNCOMMON: "border border-green-700 text-green-100",
+    RARE: "border border-blue-700 text-blue-100",
+    EPIC: "border border-purple-700 text-purple-100",
+    LEGENDARY: "border border-orange-600 text-orange-100"
   };
 
   const typeIcons = {
@@ -65,13 +65,14 @@ export const ItemMention: Component<ItemProps> = ({ item, onClick, isInventoryIt
       <span
         className={cn(
           "cursor-pointer",
-          rarityColors[item.rarity] || "bg-zinc-600 text-zinc-200",
-          "px-2 py-0.5 rounded-md",
-          "inline-flex items-center",
-          "hover:brightness-110 transition-all",
-          isInventoryItem && "border border-zinc-700"
+          "bg-card border",
+          rarityColors[item.rarity] || "border-border",
+          isInventoryItem ? "bg-zinc-800" : "",
+          "text-zinc-200",
+          "px-1 rounded-sm",
+          "inline-flex items-center"
         )}
-        onClick={handleClick}
+        onClick={() => setOpen(true)}
       >
         <span className="mr-1">
           {item.imageUrl ? (

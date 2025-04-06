@@ -6,9 +6,9 @@ import { Badge } from "@/components/ui/badge"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Component } from "@/lib/types"
-import { PageClientProps } from "@/app/(game)/[story_id]/[scene_id]/page.client"
 import { useTranslations } from "next-intl"
 import { cn } from "@/lib/utils"
+import { PageClientProps } from "@/app/(game)/[...story]/page.client"
 
 type CharacterCardProps = {
   character: PageClientProps["story_data"]["characters"][0]
@@ -23,23 +23,25 @@ export const CharacterMention: Component<CharacterCardProps> = ({ character }) =
       <span
         className={cn(
           "cursor-pointer",
-          "bg-zinc-800",
-          "text-zinc-200 hover:text-zinc-100",
-          "px-2 py-0.5 rounded-md",
+          "bg-card border border-border",
+          "text-zinc-200",
+          "px-1 rounded-sm",
           "inline-flex items-center"
         )}
         onClick={() => setOpen(true)}
       >
-        <Avatar className="inline-block w-5 h-5 mr-1">
-          <AvatarImage src={character.imageUrl || ""} alt={character.name} />
-          <AvatarFallback className="text-sm">
-            {character.name
-              .split(" ")
-              .map((n) => n[0])
-              .join("")
-              .toUpperCase()}
-          </AvatarFallback>
-        </Avatar>
+        {character.imageUrl && (
+          <Avatar className="inline-block w-4 h-4 mr-1">
+            <AvatarImage src={character.imageUrl || ""} alt={character.name} />
+            <AvatarFallback className="text-sm">
+              {character.name
+                .split(" ")
+                .map((n) => n[0])
+                .join("")
+                .toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+        )}
         {character.name}
       </span>
 
