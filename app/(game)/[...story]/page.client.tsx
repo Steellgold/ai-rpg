@@ -18,6 +18,7 @@ import { useState } from "react";
 import { ChoiceComponent } from "@/components/choice";
 import { DiceCube } from "@/components/dice";
 import { Inventory } from "@/components/inventory";
+import { useItem } from "@/lib/actions/use-item";
 
 export type PageClientProps = {
   story_data: Prisma.StoryGetPayload<{
@@ -61,7 +62,6 @@ export type PageClientProps = {
           imageUrl: true
         }
       },
-      // Ajouter les items à la requête
       items: {
         select: {
           id: true,
@@ -109,9 +109,32 @@ export type PageClientProps = {
       }
     }
   }>;
+  player_inventory?: {
+    id: string;
+    itemId: string;
+    quantity: number;
+    isEquipped: boolean;
+    remainingUses: number | null;
+    isBroken: boolean;
+    item: {
+      id: string;
+      name: string;
+      description: string;
+      type: string;
+      rarity: string;
+      effect?: string;
+      durability?: number;
+      isBroken: boolean;
+      imageUrl?: string;
+      brokenImageUrl?: string;
+    }
+  }[];
 };
 
-export const PageClient: Component<PageClientProps> = ({ story_data: storyData, scene_data: sceneData }) => {
+export const PageClient: Component<PageClientProps> = ({
+  story_data: storyData, scene_data: sceneData,
+  player_inventory: playerInventory
+}) => {
   const [selectedChoice, setSelectedChoice] = useState<typeof sceneData.choices[0] | null>(null);
   const [confirmChoice, setConfirmChoice] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -121,6 +144,19 @@ export const PageClient: Component<PageClientProps> = ({ story_data: storyData, 
   const [currentFace, setCurrentFace] = useState(1);
   const [diceRolled, setDiceRolled] = useState(false);
   const [show_fullImage, setShowFullImage] = useState(false);
+
+  const getInventoryItemId = (itemId: string): string | null => {
+    if (!playerInventory || !itemId) return null;
+    
+    const inventoryItem = playerInventory.find(invItem => invItem.itemId === itemId);
+    return inventoryItem ? inventoryItem.id : null;
+  };
+  
+  const getItemName = (itemId: string): string => {
+    if (!playerInventory) return "Item";
+    const item = playerInventory.find(invItem => invItem.itemId === itemId);
+    return item ? item.item.name : "Item";
+  };
 
   const { showPreviousScenes, toggle } = useShowScenes();
 
@@ -144,15 +180,36 @@ export const PageClient: Component<PageClientProps> = ({ story_data: storyData, 
     }, 1500);
   };
   
+  const handleUseItem = async (itemId: string) => {
+    const result = await useItem(itemId, getInventoryItemId(itemId));
+    return result.success;
+  };
+
   const handleSubmitChoice = async () => {
     if (!selectedChoice || !diceRolled || loading) return;
     
     setLoading(true);
     
     try {
-      if (!selectedChoice.isCustomChoice) await generateNextScene(storyData.id, sceneData.id, selectedChoice.id, diceResult || undefined);
-      else await handleCustomChoice(storyData.id, sceneData.id, selectedChoice.text, diceResult || undefined);
-
+      if (!selectedChoice.isCustomChoice) {
+        await generateNextScene(
+          storyData.id, 
+          sceneData.id, 
+          selectedChoice.id, 
+          diceResult || undefined, 
+          gameSaveId, 
+          activeItem
+        );
+      } else {
+        await handleCustomChoice(
+          storyData.id, 
+          sceneData.id, 
+          selectedChoice.text, 
+          diceResult || undefined, 
+          gameSaveId,
+          activeItem
+        );
+      }
     } catch (error) {
       console.error("An error occurred while generating the next scene:", error);
       setLoading(false);
@@ -375,13 +432,15 @@ export const PageClient: Component<PageClientProps> = ({ story_data: storyData, 
               )}
             </Card>
 
-            {/* <Inventory 
-              items={[
-                ...sceneData.items.filter(si => !si.isHidden).map(si => si.item)
-              ]}
+            <Inventory
+              items={storyData.items}
               onEquipItem={() => console.log("Equip item")} 
-              onUseItem={() => console.log("Use item")}
-            /> */}
+              onActiveItemChange={() => console.log("Active item changed")}
+              onUseItem={async (itemId: string) => {
+                console.log("Use item");
+                return true;
+              }}
+            />
           </div>
         )}
 

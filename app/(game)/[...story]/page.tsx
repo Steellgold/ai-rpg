@@ -6,20 +6,29 @@ import { NotesButton } from "@/components/notes-button";
 
 type PageProps = {
   params: Promise<{
-    story_id: string;
-    scene_id: string;
-  }>;
+    story: string[];
+  }>
 };
 
 const Page = async ({ params }: PageProps) => {
-  const { story_id, scene_id } = await params;
+  const { story: storyParams } = await params;
+
+  const saveId = storyParams[0];
+  const sceneId = storyParams[1] ?? null;
+
   const supabase = await createClient();
 
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return unauthorized();
 
+  const save = await prisma.gameSave.findUnique({ where: { id: saveId, userId: user.id } });
+  if (!save) return notFound();
+
   const story = await prisma.story.findUnique({
-    where: { id: story_id, creatorId: user.id },
+    where: {
+      id: save?.storyId,
+      creatorId: user.id
+    },
     include: {
       scenes: {
         select: {
@@ -77,7 +86,10 @@ const Page = async ({ params }: PageProps) => {
   if (!story) return notFound();
   
   const scene = await prisma.scene.findUnique({
-    where: { id: scene_id, storyId: story.id },
+    where: {
+      id: sceneId ?? story.scenes[0]?.id,
+      storyId: story.id
+    },
     include: {
       choices: {
         select: {
@@ -112,9 +124,41 @@ const Page = async ({ params }: PageProps) => {
   });
   if (!scene) return notFound();
 
+  // const player_inventory = await prisma.inventoryItem.findMany({
+  //   where: {
+  //     gameSaveId: save.id
+  //   },
+  //   select: {
+  //     id: true,
+  //     itemId: true,
+  //     quantity: true,
+  //     isEquipped: true,
+  //     remainingUses: true,
+  //     isBroken: true,
+  //     item: {
+  //       select: {
+  //         id: true,
+  //         name: true,
+  //         description: true,
+  //         type: true,
+  //         rarity: true,
+  //         effect: true,
+  //         durability: true,
+  //         isBroken: true,
+  //         imageUrl: true,
+  //         brokenImageUrl: true,
+  //         useCount: true
+  //       }
+  //     }
+  //   }
+  // });
+
   return (
     <>
-      <PageClient story_data={story} scene_data={scene} />
+      <PageClient
+        story_data={story}
+        scene_data={scene}
+      />
       <NotesButton notes={story.notes ?? ""} storyId={story.id} userId={user.id} />
     </>
   );
