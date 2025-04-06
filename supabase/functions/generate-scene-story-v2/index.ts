@@ -38,7 +38,9 @@ CRITICAL INSTRUCTIONS:
 - Create ONLY an empty environment or setting with NO LIVING BEINGS whatsoever
 - ABSOLUTELY NO humans, characters, animals, or any living creatures should appear in the image
 - Focus exclusively on architecture, landscapes, interiors, objects, and atmosphere
-- Do not include any text, UI elements, or labels in the image
+- DO NOT include ANY text, words, letters, numbers, or written elements in the image
+- ABSOLUTELY NO UI elements, buttons, menus, overlays, or any form of text whatsoever
+- The image MUST be completely free of any textual content
 - The environment should be the sole focus - empty rooms, abandoned streets, untouched nature
 - Show the scene as if it's waiting for characters to enter it, but completely devoid of life
 

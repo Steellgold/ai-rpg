@@ -109,8 +109,10 @@ Consider the following details:
 Ensure the image is visually striking and immersive, drawing the viewer into the narrative.
 
 ### IMPORTANT:
-- Do not include any text or UI elements in the image.
-- The image should be suitable for a narrative game, focusing on storytelling through visuals.
+- DO NOT include ANY text, words, letters, numbers, or written elements in the image.
+- DO NOT include any UI elements, buttons, menus, or overlays in the image.
+- The image must be completely free of any textual content.
+- The image should be suitable for a narrative game, focusing on storytelling through visuals only.
 - Avoid any elements that could be considered inappropriate or offensive.
 `;
 }
