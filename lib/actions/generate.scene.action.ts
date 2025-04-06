@@ -4,6 +4,7 @@ import { redirect } from "next/navigation"
 import { prisma } from "@/lib/db/prisma"
 import { createClient } from "@/lib/supabase/server"
 import { env } from "@/lib/env/env"
+import { checkDailyLimit } from "../limit"
 
 export const generateNextScene = async (
   storyId: string,
@@ -69,18 +70,9 @@ export const handleCustomChoice = async (
   const user_data = await prisma.user.findUnique({ where: { id: user.id } });
   if (!user_data) throw new Error("User not found");
 
-  const isPremium = user_data.premium;
-  const dailyLimit = user_data.daily_limit_messages ?? 15;
-
-  if (dailyLimit <= 0 && !isPremium) {
+  const { dailyLimit, isPremium } = await checkDailyLimit(user.id);
+  if (!isPremium && dailyLimit <= 0) {
     throw new Error("Daily limit reached. Please try again later.");
-  }
-  
-  if (dailyLimit > 0 && !isPremium) {
-    await prisma.user.update({
-      where: { id: user.id },
-      data: { daily_limit_messages: dailyLimit - 1 }
-    });
   }
 
   const story = await prisma.story.findUnique({

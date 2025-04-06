@@ -8,6 +8,7 @@ import { createClient as createSupabaseClient } from "@supabase/supabase-js"
 import { redirect } from "next/navigation";
 import { env } from "../env/env";
 import { Database } from "../supabase/database.types";
+import { checkDailyLimit } from "../limit";
 
 export const generateHistory = async (text: string, genres?: string[], isForChildren?: boolean, itemsEnabled?: boolean) => {
   const supabase = await createClient();
@@ -17,18 +18,9 @@ export const generateHistory = async (text: string, genres?: string[], isForChil
   const user_data = await prisma.user.findUnique({ where: { id: user.id } });
   if (!user_data) throw new Error("User not found");
 
-  const isPremium = user_data.premium;
-  const dailyLimit = user_data.daily_limit_messages ?? 15;
-
-  if (dailyLimit <= 0 && !isPremium) {
+  const { dailyLimit, isPremium } = await checkDailyLimit(user.id);
+  if (!isPremium && dailyLimit <= 0) {
     throw new Error("Daily limit reached. Please try again later.");
-  }
-  
-  if (dailyLimit > 0 && !isPremium) {
-    await prisma.user.update({
-      where: { id: user.id },
-      data: { daily_limit_messages: dailyLimit - 1 }
-    });
   }
 
   const supabase_role_key = createSupabaseClient<Database>(
