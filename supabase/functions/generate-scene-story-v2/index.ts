@@ -349,7 +349,7 @@ ${story.Item.map(item => `- Name: ${item.name}
   Rarity: ${item.rarity}
   Effect: ${item.effect || "None"}
   Use Count: ${item.useCount || "Unlimited"}`).join("\n")}
-
+      
 ## PLAYER'S INVENTORY
 ${playerInventory.length > 0 ? playerInventory.map(item => `- Name: ${item.name}
   Description: ${item.description}
@@ -365,7 +365,7 @@ ${availableSceneItems.length > 0 ? availableSceneItems.filter(item => !item.isHi
   Type: ${item.type}
   Rarity: ${item.rarity}
   Effect: ${item.effect || "None"}`).join("\n") : "No visible items in this scene."}` : ""}
-    
+  
 ## CURRENT SCENE
 Title: ${currentScene.title}
 Content: ${currentScene.content}
@@ -398,8 +398,10 @@ ${historyContext}
 6. ${approachingEnd ? "Consider that the story is approaching its end, you can start steering towards a conclusion." : "Do not end the story unless it is a natural culmination point."}
 7. Maintain the narrative style ${story.narrativeStyle}.
 8. Include a visual description for scene image generation.
-9. ${useItemSystem ? "If you introduce new items, include them in the new_items array with appropriate details." : "Focus on character interactions, environments, and emotional depth in your descriptions."}
-    
+9. ${useItemSystem
+    ? "FOCUS ON EXISTING ITEMS: Prioritize using items that already exist in the story. Only introduce a new item if it's absolutely necessary for the plot. You should mention and involve at least one existing item in this scene, allowing the player to interact with it."
+    : "Focus on character interactions, environments, and emotional depth in your descriptions."}
+
 Always keep in mind the characters' personalities, the player's inventory, and the player's previous choices when generating the new scene.
 `;
 
