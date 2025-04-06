@@ -86,21 +86,21 @@ model Job {
 }
 
 model User {
-  id                   String     @id @default(uuid())
-  email                String     @unique
-  display_name         String     @default("User")
-  image_url            String?
+  id             String     @id @default(uuid())
+  email          String     @unique
+  display_name   String     @default("User")
+  image_url      String?
   // 
-  daily_limit_messages Int?       @default(15)
-  premium              Boolean    @default(false) // Can generate more than 15 messages per day and access to generate scenes and characters images and avatars
+  limit_messages Int?       @default(15)
+  premium        Boolean    @default(false) // Can generate more than 15 messages per day and access to generate scenes and characters images and avatars
   //
-  stories              Story[]
-  gameSaves            GameSave[]
+  stories        Story[]
+  gameSaves      GameSave[]
   // 
-  jobs                 Job[]
+  jobs           Job[]
   // 
-  createdAt            DateTime   @default(now())
-  updatedAt            DateTime   @default(now()) @updatedAt
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @default(now()) @updatedAt
 }
 
 enum NarrativeStyle {
