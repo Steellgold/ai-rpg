@@ -55,7 +55,7 @@ const itemSchema = z.object({
 async function detectLanguageWithAI(text: string): Promise<SupportedLanguageType> {
   try {
     // Détection de la langue avec l'IA
-    const model = registry.languageModel("openai:gpt-4o");
+    const model = registry.languageModel("openai:gpt-4o-mini");
     console.log(`Detecting language for text: ${text.substring(0, 100)}...`);
 
     const prompt = `
@@ -297,7 +297,7 @@ Do not create items that will only be used in a single scene.
 Text: ${text}
 `;
 
-        const model = registry.languageModel("openai:gpt-4o");
+        const model = registry.languageModel("openai:gpt-4o-mini");
         console.log(`[Job ${jobId}] Generating story content...`);
 
         const { object } = await generateObject({

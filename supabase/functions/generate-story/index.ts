@@ -125,7 +125,7 @@ ${isChildren ? "Make it suitable for children, avoiding any inappropriate conten
 
 Text: ${text}
         `;
-        const model = registry.languageModel("openai:gpt-4o");
+        const model = registry.languageModel("openai:gpt-4o-mini");
         console.log(`[Job ${jobId}] Generating story content...`);
         const { object } = await generateObject({
           model,

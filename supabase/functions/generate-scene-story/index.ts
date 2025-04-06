@@ -247,7 +247,7 @@ ${historyContext}
 Always keep in mind the characters' personalities and the player's previous choices when generating the new scene.
 `;
     console.log("Generating new scene...");
-    const model = registry.languageModel("openai:gpt-4o");
+    const model = registry.languageModel("openai:gpt-4o-mini");
     const { object } = await generateObject({
       model,
       schema: z.object({

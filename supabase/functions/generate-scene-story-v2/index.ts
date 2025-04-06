@@ -458,7 +458,7 @@ Always keep in mind the characters' personalities, the player's inventory, and t
 `;
 
     console.log("Generating new scene...");
-    const model = registry.languageModel("openai:gpt-4o");
+    const model = registry.languageModel("openai:gpt-4o-mini");
     const { object } = await generateObject({
       model,
       schema: z.object({
