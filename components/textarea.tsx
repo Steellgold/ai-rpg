@@ -216,6 +216,11 @@ export const AiTextarea: Component<
                   {t("AiTextarea.ItemsEnabled")}</span>
               )}
             </Button>
+            
+            <StoryLanguageSelector
+              selectedLanguage={storyLanguage}
+              onLanguageChange={setStoryLanguage}
+            />
 
             <Button
               size={"default"}
@@ -249,13 +254,6 @@ export const AiTextarea: Component<
                 {publicMode ? t("AiTextarea.PublicModeOn") : t("AiTextarea.PublicModeOff")}
               </span>
             </Button>
-            
-            <StoryLanguageSelector
-              selectedLanguage={storyLanguage}
-              onLanguageChange={setStoryLanguage}
-              className="ml-1"
-            />
-            
           </div>
 
           <div className="flex items-center">
