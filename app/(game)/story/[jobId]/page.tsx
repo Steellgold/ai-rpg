@@ -74,6 +74,7 @@ const Page: Component<Params> = ({ params }) => {
       setStatus(currentStatus);
 
       const progressMap: {[key: string]: number} = {
+        DETECTING_LANGUAGE: 3,
         PENDING: 5,
         INITIALIZED: 10,
         GENERATING_STORY: 20,
@@ -112,6 +113,7 @@ const Page: Component<Params> = ({ params }) => {
   }, [jobId, router, supabase]);
 
   const statusMessages = {
+    DETECTING_LANGUAGE: t("GeneratingSteps.DetectingLanguage"),
     PENDING: t("GeneratingSteps.Pending"),
     INITIALIZED: t("GeneratingSteps.Pending"),
     GENERATING_STORY: t("GeneratingSteps.Processing"),
@@ -131,7 +133,8 @@ const Page: Component<Params> = ({ params }) => {
   };
 
   const generationSteps = [
-    { key: 'PENDING', label: t("GeneratingSteps.Pending"), progress: 10 },
+    { key: 'PENDING', label: t("GeneratingSteps.Pending"), progress: 5 },
+    { key: 'DETECTING_LANGUAGE', label: t("GeneratingSteps.DetectingLanguage"), progress: 10 },
     { key: 'GENERATING_STORY', label: t("GeneratingSteps.Processing"), progress: 30 },
     ...(hasItems ? [{ key: 'GENERATING_ITEMS', label: t("GeneratingSteps.GeneratingItems"), progress: 55 }] : []),
     { key: 'CREATING_FIRST_SCENE', label: t("GeneratingSteps.GeneratingScenes"), progress: 60 },
