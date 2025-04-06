@@ -30,22 +30,25 @@ const choiceSchema = z.object({
 });
 
 function extractSceneImagePrompt(prompt) {
-  return `Create a high-quality, detailed illustration for a narrative game scene. 
-The scene should depict: ${prompt}
+  return `Create a high-quality, detailed environmental illustration for a narrative game scene. 
+The scene should depict the SETTING ONLY: ${prompt}
 Style: Cinematic, detailed, high-quality digital art with proper lighting and depth.
 
-Focus on the characters and the environment, ensuring a captivating atmosphere.
+Focus exclusively on the environment and setting, with NO CHARACTERS present.
 Make sure to include elements that enhance the narrative aspect of the scene.
 Consider the following details:
-- Characters' expressions and poses
+- Atmospheric lighting and mood
+- Environmental details and textures
 - Background elements that complement the story
 - Color palette that matches the mood of the scene
-- Lighting that highlights the characters and setting
-Ensure the image is visually striking and immersive, drawing the viewer into the narrative.
+- Depth and perspective to create an immersive setting
 
 ### IMPORTANT:
+- DO NOT include any characters, people, or living beings in the image.
+- Show ONLY the environment, location, and setting.
+- The environment should be the main focus - create an evocative, empty scene.
 - Do not include any text or UI elements in the image.
-- The image should be suitable for a narrative game, focusing on storytelling through visuals.
+- The image should be suitable for a narrative game, focusing on storytelling through environments.
 - Avoid any elements that could be considered inappropriate or offensive.
 `;
 }
