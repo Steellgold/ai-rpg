@@ -1,21 +1,21 @@
 "use client";
 
+import { useState } from "react";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useTranslations } from "next-intl";
 import { Globe } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { StoryLanguage } from "@prisma/client";
+
+export type StoryLanguage = "auto" | "en" | "fr" | "es" | "it" | "de";
 
 interface LanguageSelectorProps {
   selectedLanguage: StoryLanguage;
   onLanguageChange: (language: StoryLanguage) => void;
-  className?: string;
 }
 
 export const StoryLanguageSelector = ({ 
   selectedLanguage, 
   onLanguageChange,
-  className
 }: LanguageSelectorProps) => {
   const t = useTranslations("Utils.Languages");
 
@@ -28,16 +28,29 @@ export const StoryLanguageSelector = ({
     { value: "de", label: t("de") }
   ];
 
+  const [selectedOption, setSelectedOption] = useState<StoryLanguage>(selectedLanguage);
+
   return (
-    <div className={cn("flex items-center gap-2", className)}>
+    <div className={cn("flex items-center")}>
       <Select 
         value={selectedLanguage} 
-        onValueChange={(value) => onLanguageChange(value as StoryLanguage)}
+        onValueChange={(value) => {
+          onLanguageChange(value as StoryLanguage);
+          setSelectedOption(value as StoryLanguage);
+        }}
       >
-        <SelectTrigger className="w-[180px]">
+        <SelectTrigger
+          showChevron={false}
+          className={cn(
+            "w-auto rounded-full h-8 items-center justify-center",
+            "focus:outline-none focus:ring-0 border-border", {
+              "!w-8": selectedOption === "auto"
+            }
+          )}
+        >
           <div className="flex items-center gap-2">
-            <Globe className="h-4 w-4 text-gray-400" />
-            <SelectValue placeholder={t("selectLanguage")} />
+            <Globe className="h-4 w-4" />
+            {selectedOption !== "auto" && <SelectValue placeholder={t("selectLanguage")} />}
           </div>
         </SelectTrigger>
         <SelectContent>
