@@ -421,10 +421,11 @@ Always keep in mind the characters' personalities, the player's inventory, and t
           effect: z.string().min(1).max(200).optional(),
           useCount: z.number().int().optional(),
           is_hidden: z.boolean().default(false)
-        })).optional().default([]) : z.array(z.any()).default([]),
+        })).max(1).optional().default([]) : z.array(z.any()).default([]),
         choices: z.array(choiceSchema).min(4).max(4),
         is_ending: z.boolean().default(false),
-        ending_type: z.string().optional()
+        ending_type: z.string().optional(),
+        mentioned_items: z.array(z.string()).min(0).optional().default([])
       }),
       prompt
     });
@@ -456,6 +457,23 @@ Always keep in mind the characters' personalities, the player's inventory, and t
         const itemId = createId();
         newItemsMap[newItem.name] = itemId;
         
+        let durability = null;
+        
+        if (["WEAPON", "ARMOR", "TOOL"].includes(newItem.type)) {
+          const rarityMultiplier = {
+            "COMMON": 1,
+            "UNCOMMON": 2,
+            "RARE": 3,
+            "EPIC": 4,
+            "LEGENDARY": 5
+          };
+          
+          durability = 5 * (rarityMultiplier[newItem.rarity] || 1);
+        } 
+        else if (newItem.type === "POTION") {
+          durability = 1;
+        }
+        
         await supabase.from('Item').insert({
           id: itemId,
           name: newItem.name,
@@ -463,7 +481,8 @@ Always keep in mind the characters' personalities, the player's inventory, and t
           type: newItem.type,
           rarity: newItem.rarity,
           effect: newItem.effect,
-          useCount: newItem.useCount,
+          durability: durability,
+          isBroken: false,
           storyId: story.id
         });
         
@@ -480,7 +499,9 @@ Always keep in mind the characters' personalities, the player's inventory, and t
             gameSaveId: gameSaveId,
             itemId: itemId,
             quantity: 1,
-            isEquipped: false
+            isEquipped: false,
+            remainingUses: durability,
+            isBroken: false
           });
         }
       }
