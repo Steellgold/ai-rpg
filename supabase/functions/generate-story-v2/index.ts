@@ -63,17 +63,16 @@ Ensure the image is visually striking and immersive, drawing the viewer into the
 }
 
 function extractItemImagePrompt(prompt, itemName, itemType) {
-  return `Create a high-quality, detailed illustration of a ${itemType.toLowerCase()} for a narrative game. 
-The item is: ${itemName}
-Description: ${prompt}
+  return `Create a detailed and high-quality illustration of a ${itemType.toLowerCase()} for a narrative game.
+The object is: ${itemName}
+Description: ${description}
 
-Style: Detailed, high-quality digital art with proper lighting and depth.
-Make the item stand out against a simple, slightly blurred background that hints at the setting.
+Style: Detailed and high-quality digital art with proper lighting and depth. Use rich colors and subtle textures to give the object depth. The background should be simple and slightly blurred to highlight the object.
 
 ### IMPORTANT:
 - Do not include any text or UI elements in the image.
-- The image should focus solely on the item itself.
-- The item should be centrally positioned and well-lit.
+- The image should focus solely on the object itself.
+- The object should be centered and well-lit.
 - Avoid any elements that could be considered inappropriate or offensive.
 `;
 }
@@ -88,23 +87,22 @@ ${character.personality ? `- Personality: ${character.personality}` : ''}
 ${character.outfit ? `- Outfit: ${character.outfit}` : ''}
 ${character.age ? `- Age: ${character.age}` : ''}
 
-Style: Detailed, high-quality digital portrait with proper lighting against a simple background.
+Style: Detailed and high-quality digital portrait with appropriate lighting on a simple background. Use clean lines and vibrant colors for a semi-realistic cartoon style. The character should have clear facial features and a distinctive expression.
 
 ### PORTRAIT SPECIFICATIONS:
-- Square format avatar/portrait showing only the character's head and shoulders
+- Square avatar/portrait format showing only the character’s head and shoulders
 - Semi-realistic style with clear facial features
 - The character should be looking slightly to the side or directly at the viewer
 - Simple, slightly blurred background that complements the character
 - Strong lighting to highlight facial features
-- Color palette that reflects the character's personality
+- Color palette reflecting the character's personality
 
 ### IMPORTANT:
-- Focus only on creating a clear, distinctive portrait of this single character
+- Focus solely on creating a clear and distinctive portrait of this unique character
 - Do not include any text or UI elements in the image
-- Ensure the character has a distinctive, recognizable appearance
-- The portrait should be suitable for a narrative game, focusing on character identity
-- Avoid any elements that could be considered inappropriate or offensive
-`;
+- Ensure the character has a distinctive and recognizable appearance
+- The portrait should suit a narrative game, emphasizing the character's identity
+- Avoid any elements that could be considered inappropriate or offensive`;
 }
 
 async function uploadImageToSupabase(imageUrl, path) {

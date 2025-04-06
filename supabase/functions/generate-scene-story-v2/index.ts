@@ -54,19 +54,17 @@ Consider the following details:
 }
 
 function extractItemImagePrompt(description, itemName, itemType) {
-  return `Create a high-quality, detailed illustration of a ${itemType.toLowerCase()} for a narrative game. 
-The item is: ${itemName}
+  return `Create a detailed and high-quality illustration of a ${itemType.toLowerCase()} for a narrative game.
+The object is: ${itemName}
 Description: ${description}
 
-Style: Detailed, high-quality digital art with proper lighting and depth.
-Make the item stand out against a simple, slightly blurred background that hints at the setting.
+Style: Detailed and high-quality digital art with proper lighting and depth. Use rich colors and subtle textures to give the object depth. The background should be simple and slightly blurred to highlight the object.
 
 ### IMPORTANT:
 - Do not include any text or UI elements in the image.
-- The image should focus solely on the item itself.
-- The item should be centrally positioned and well-lit.
-- Avoid any elements that could be considered inappropriate or offensive.
-`;
+- The image should focus solely on the object itself.
+- The object should be centered and well-lit.
+- Avoid any elements that could be considered inappropriate or offensive.`;
 }
 
 async function uploadImageToSupabase(imageUrl, path) {
