@@ -78,6 +78,35 @@ Make the item stand out against a simple, slightly blurred background that hints
 `;
 }
 
+function extractCharacterAvatarPrompt(character) {
+  return `Create a high-quality character portrait avatar for a narrative game.
+
+Character details:
+- Name: ${character.name}
+- Description: ${character.description}
+${character.personality ? `- Personality: ${character.personality}` : ''}
+${character.outfit ? `- Outfit: ${character.outfit}` : ''}
+${character.age ? `- Age: ${character.age}` : ''}
+
+Style: Detailed, high-quality digital portrait with proper lighting against a simple background.
+
+### PORTRAIT SPECIFICATIONS:
+- Square format avatar/portrait showing only the character's head and shoulders
+- Semi-realistic style with clear facial features
+- The character should be looking slightly to the side or directly at the viewer
+- Simple, slightly blurred background that complements the character
+- Strong lighting to highlight facial features
+- Color palette that reflects the character's personality
+
+### IMPORTANT:
+- Focus only on creating a clear, distinctive portrait of this single character
+- Do not include any text or UI elements in the image
+- Ensure the character has a distinctive, recognizable appearance
+- The portrait should be suitable for a narrative game, focusing on character identity
+- Avoid any elements that could be considered inappropriate or offensive
+`;
+}
+
 async function uploadImageToSupabase(imageUrl, path) {
   const supabase = createClient(Deno.env.get("SUPABASE_URL"), Deno.env.get("SERVICE_ROLE_KEY"));
   try {
@@ -348,6 +377,44 @@ Text: ${text}
               } catch (itemImageError) {
                 console.error(`[Job ${jobId}] Error generating item image for ${item.name}:`, itemImageError);
                 // Continue even if item image generation fails
+              }
+            }
+
+            console.log(`[Job ${jobId}] Generating character avatars for premium user...`);
+            for (const character of object.principal_characters) {
+              try {
+                const { data: charData, error: charError } = await supabase
+                  .from('Character')
+                  .select('id')
+                  .eq('name', character.name)
+                  .eq('storyId', story.id)
+                  .single();
+                  
+                if (charError || !charData) continue;
+                
+                const characterId = charData.id;
+                
+                const avatarResponse = await openai.images.generate({
+                  model: "dall-e-3",
+                  prompt: extractCharacterAvatarPrompt(character),
+                  n: 1,
+                  size: "1024x1024",
+                  quality: "standard",
+                  style: "natural"
+                });
+                
+                if (avatarResponse.data.length > 0) {
+                  const avatarImage = avatarResponse.data[0];
+                  const avatarUrl = await uploadImageToSupabase(avatarImage.url ?? "", `${story.id}/characters/${characterId}`);
+                  
+                  if (avatarUrl) {
+                    await supabase.from('Character').update({
+                      imageUrl: avatarUrl
+                    }).eq('id', characterId);
+                  }
+                }
+              } catch (avatarError) {
+                console.error(`[Job ${jobId}] Error generating avatar for character ${character.name}:`, avatarError);
               }
             }
           }
