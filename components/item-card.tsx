@@ -114,7 +114,7 @@ export const ItemMention: Component<ItemProps> = ({ item, onClick, isInventoryIt
                   </div>
 
                   <div className="flex flex-col gap-2">
-                    <Badge className={cn("w-fit", rarityColors[item.rarity])}>
+                    <Badge className={cn("w-fit bg-transparent", rarityColors[item.rarity])}>
                       {t(`rarity.${item.rarity.toLowerCase()}`)}
                     </Badge>
 
