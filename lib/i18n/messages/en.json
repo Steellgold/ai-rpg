@@ -217,6 +217,24 @@
     }
   },
   "Utils": {
+    "Credits": {
+      "Errors": {
+        "UserNotFound": "User not found",
+        "InsufficientCredits": "Insufficient credits",
+        "NoActiveSubscription": "No active subscription",
+        "AlreadyRefreshed": "Credits already refreshed this month",
+        "PaymentError": "Payment error",
+        "UnknownError": "An unknown error occurred"
+      },
+      "Transactions": {
+        "StoryGeneration": "Story generation",
+        "SubscriptionCredits": "Subscription credits",
+        "CreditPurchase": "Credit purchase",
+        "CreditRefund": "Credit refund",
+        "AdminAdjustment": "Administrative adjustment",
+        "CreditBonus": "Bonus credits"
+      }
+    },
     "Languages": {
       "selectLanguage": "Select language",
       "storyLanguage": "Story language",
