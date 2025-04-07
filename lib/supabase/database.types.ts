@@ -227,6 +227,76 @@ export type Database = {
           },
         ]
       }
+      CreditTransaction: {
+        Row: {
+          amount: number
+          balanceAfter: number
+          createdAt: string
+          description: string
+          featureId: string | null
+          id: string
+          jobId: string | null
+          paymentId: string | null
+          paymentProvider: string | null
+          storyId: string | null
+          transactionType: Database["public"]["Enums"]["TransactionType"]
+          updatedAt: string
+          userId: string
+        }
+        Insert: {
+          amount: number
+          balanceAfter: number
+          createdAt?: string
+          description: string
+          featureId?: string | null
+          id: string
+          jobId?: string | null
+          paymentId?: string | null
+          paymentProvider?: string | null
+          storyId?: string | null
+          transactionType: Database["public"]["Enums"]["TransactionType"]
+          updatedAt?: string
+          userId: string
+        }
+        Update: {
+          amount?: number
+          balanceAfter?: number
+          createdAt?: string
+          description?: string
+          featureId?: string | null
+          id?: string
+          jobId?: string | null
+          paymentId?: string | null
+          paymentProvider?: string | null
+          storyId?: string | null
+          transactionType?: Database["public"]["Enums"]["TransactionType"]
+          updatedAt?: string
+          userId?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "CreditTransaction_jobId_fkey"
+            columns: ["jobId"]
+            isOneToOne: false
+            referencedRelation: "Job"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "CreditTransaction_storyId_fkey"
+            columns: ["storyId"]
+            isOneToOne: false
+            referencedRelation: "Story"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "CreditTransaction_userId_fkey"
+            columns: ["userId"]
+            isOneToOne: false
+            referencedRelation: "User"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       GameSave: {
         Row: {
           characterClass: string | null
@@ -411,6 +481,7 @@ export type Database = {
           id: string
           input: Json
           output: Json | null
+          priority: number
           progress: number
           stage: Database["public"]["Enums"]["JobStage"] | null
           startedAt: string | null
@@ -426,6 +497,7 @@ export type Database = {
           id: string
           input: Json
           output?: Json | null
+          priority?: number
           progress?: number
           stage?: Database["public"]["Enums"]["JobStage"] | null
           startedAt?: string | null
@@ -441,6 +513,7 @@ export type Database = {
           id?: string
           input?: Json
           output?: Json | null
+          priority?: number
           progress?: number
           stage?: Database["public"]["Enums"]["JobStage"] | null
           startedAt?: string | null
@@ -459,6 +532,59 @@ export type Database = {
           },
           {
             foreignKeyName: "Job_userId_fkey"
+            columns: ["userId"]
+            isOneToOne: false
+            referencedRelation: "User"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      Payment: {
+        Row: {
+          amount: number
+          createdAt: string
+          credits_amount: number | null
+          currency: string
+          description: string
+          id: string
+          is_subscription: boolean
+          provider: string
+          provider_id: string
+          status: string
+          updatedAt: string
+          userId: string
+        }
+        Insert: {
+          amount: number
+          createdAt?: string
+          credits_amount?: number | null
+          currency?: string
+          description: string
+          id: string
+          is_subscription?: boolean
+          provider: string
+          provider_id: string
+          status: string
+          updatedAt?: string
+          userId: string
+        }
+        Update: {
+          amount?: number
+          createdAt?: string
+          credits_amount?: number | null
+          currency?: string
+          description?: string
+          id?: string
+          is_subscription?: boolean
+          provider?: string
+          provider_id?: string
+          status?: string
+          updatedAt?: string
+          userId?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "Payment_userId_fkey"
             columns: ["userId"]
             isOneToOne: false
             referencedRelation: "User"
@@ -699,6 +825,7 @@ export type Database = {
           coverImageUrl: string | null
           createdAt: string
           creatorId: string
+          credit_cost: number
           current_scene: number | null
           current_scene_id: string | null
           forkedFromId: string | null
@@ -722,6 +849,7 @@ export type Database = {
           coverImageUrl?: string | null
           createdAt?: string
           creatorId: string
+          credit_cost?: number
           current_scene?: number | null
           current_scene_id?: string | null
           forkedFromId?: string | null
@@ -745,6 +873,7 @@ export type Database = {
           coverImageUrl?: string | null
           createdAt?: string
           creatorId?: string
+          credit_cost?: number
           current_scene?: number | null
           current_scene_id?: string | null
           forkedFromId?: string | null
@@ -781,35 +910,85 @@ export type Database = {
           },
         ]
       }
-      User: {
+      StoryFeature: {
         Row: {
           createdAt: string
-          display_name: string
-          email: string
+          creditCost: number
+          featureId: string
           id: string
-          image_url: string | null
-          limit_messages: number | null
-          premium: boolean
+          storyId: string
           updatedAt: string
         }
         Insert: {
           createdAt?: string
-          display_name?: string
-          email: string
+          creditCost: number
+          featureId: string
           id: string
-          image_url?: string | null
-          limit_messages?: number | null
-          premium?: boolean
+          storyId: string
           updatedAt?: string
         }
         Update: {
           createdAt?: string
+          creditCost?: number
+          featureId?: string
+          id?: string
+          storyId?: string
+          updatedAt?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "StoryFeature_storyId_fkey"
+            columns: ["storyId"]
+            isOneToOne: false
+            referencedRelation: "Story"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      User: {
+        Row: {
+          createdAt: string
+          credits: number
+          display_name: string
+          email: string
+          id: string
+          image_url: string | null
+          last_credits_refresh: string | null
+          subscription_end: string | null
+          subscription_id: string | null
+          subscription_start: string | null
+          subscription_status: string
+          subscription_tier: string
+          updatedAt: string
+        }
+        Insert: {
+          createdAt?: string
+          credits?: number
+          display_name?: string
+          email: string
+          id: string
+          image_url?: string | null
+          last_credits_refresh?: string | null
+          subscription_end?: string | null
+          subscription_id?: string | null
+          subscription_start?: string | null
+          subscription_status?: string
+          subscription_tier?: string
+          updatedAt?: string
+        }
+        Update: {
+          createdAt?: string
+          credits?: number
           display_name?: string
           email?: string
           id?: string
           image_url?: string | null
-          limit_messages?: number | null
-          premium?: boolean
+          last_credits_refresh?: string | null
+          subscription_end?: string | null
+          subscription_id?: string | null
+          subscription_start?: string | null
+          subscription_status?: string
+          subscription_tier?: string
           updatedAt?: string
         }
         Relationships: []
@@ -819,23 +998,21 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      create_user:
-        | {
-            Args: {
-              id: string
-              email: string
-            }
-            Returns: undefined
-          }
-        | {
-            Args: {
+      create_user: {
+        Args:
+          | { id: string; email: string }
+          | {
               id: string
               email: string
               display_name?: string
               image_url?: string
             }
-            Returns: undefined
-          }
+        Returns: undefined
+      }
+      manual_update_messages_limit: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
     }
     Enums: {
       ItemRarity: "COMMON" | "UNCOMMON" | "RARE" | "EPIC" | "LEGENDARY"
@@ -866,6 +1043,13 @@ export type Database = {
       NarrativeStyle: "FirstPerson" | "SecondPerson" | "ThirdPerson"
       StoryLanguage: "auto" | "en" | "fr" | "es" | "it" | "de"
       StoryVGenerated: "V1" | "V2"
+      TransactionType:
+        | "PURCHASE"
+        | "SUBSCRIPTION"
+        | "USAGE"
+        | "REFUND"
+        | "BONUS"
+        | "ADMIN_ADJUST"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -873,27 +1057,29 @@ export type Database = {
   }
 }
 
-type PublicSchema = Database[Extract<keyof Database, "public">]
+type DefaultSchema = Database[Extract<keyof Database, "public">]
 
 export type Tables<
-  PublicTableNameOrOptions extends
-    | keyof (PublicSchema["Tables"] & PublicSchema["Views"])
+  DefaultSchemaTableNameOrOptions extends
+    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
     | { schema: keyof Database },
-  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
-        Database[PublicTableNameOrOptions["schema"]]["Views"])
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof Database
+  }
+    ? keyof (Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+        Database[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
     : never = never,
-> = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
-      Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+> = DefaultSchemaTableNameOrOptions extends { schema: keyof Database }
+  ? (Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+      Database[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
       Row: infer R
     }
     ? R
     : never
-  : PublicTableNameOrOptions extends keyof (PublicSchema["Tables"] &
-        PublicSchema["Views"])
-    ? (PublicSchema["Tables"] &
-        PublicSchema["Views"])[PublicTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])
+    ? (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
         Row: infer R
       }
       ? R
@@ -901,20 +1087,22 @@ export type Tables<
     : never
 
 export type TablesInsert<
-  PublicTableNameOrOptions extends
-    | keyof PublicSchema["Tables"]
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
     | { schema: keyof Database },
-  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof Database
+  }
+    ? keyof Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never = never,
-> = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+> = DefaultSchemaTableNameOrOptions extends { schema: keyof Database }
+  ? Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Insert: infer I
     }
     ? I
     : never
-  : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
-    ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
         Insert: infer I
       }
       ? I
@@ -922,20 +1110,22 @@ export type TablesInsert<
     : never
 
 export type TablesUpdate<
-  PublicTableNameOrOptions extends
-    | keyof PublicSchema["Tables"]
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
     | { schema: keyof Database },
-  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof Database
+  }
+    ? keyof Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never = never,
-> = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+> = DefaultSchemaTableNameOrOptions extends { schema: keyof Database }
+  ? Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Update: infer U
     }
     ? U
     : never
-  : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
-    ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
         Update: infer U
       }
       ? U
@@ -943,21 +1133,23 @@ export type TablesUpdate<
     : never
 
 export type Enums<
-  PublicEnumNameOrOptions extends
-    | keyof PublicSchema["Enums"]
+  DefaultSchemaEnumNameOrOptions extends
+    | keyof DefaultSchema["Enums"]
     | { schema: keyof Database },
-  EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicEnumNameOrOptions["schema"]]["Enums"]
+  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+    schema: keyof Database
+  }
+    ? keyof Database[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
     : never = never,
-> = PublicEnumNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
-  : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
-    ? PublicSchema["Enums"][PublicEnumNameOrOptions]
+> = DefaultSchemaEnumNameOrOptions extends { schema: keyof Database }
+  ? Database[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
+    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
     : never
 
 export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
-    | keyof PublicSchema["CompositeTypes"]
+    | keyof DefaultSchema["CompositeTypes"]
     | { schema: keyof Database },
   CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
     schema: keyof Database
@@ -966,6 +1158,54 @@ export type CompositeTypes<
     : never = never,
 > = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
   ? Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
-  : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
-    ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
+    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
+
+export const Constants = {
+  graphql_public: {
+    Enums: {},
+  },
+  public: {
+    Enums: {
+      ItemRarity: ["COMMON", "UNCOMMON", "RARE", "EPIC", "LEGENDARY"],
+      ItemType: [
+        "WEAPON",
+        "ARMOR",
+        "POTION",
+        "KEY",
+        "TOOL",
+        "DOCUMENT",
+        "QUEST",
+        "MISC",
+      ],
+      JobStage: [
+        "INITIALIZED",
+        "GENERATING_STORY",
+        "CREATING_STORY",
+        "CREATING_MAIN_CHARS",
+        "CREATING_SEC_CHARS",
+        "CREATING_FIRST_SCENE",
+        "GENERATING_BANNER",
+        "UPLOADING_BANNER",
+        "GENERATING_SCENE_IMG",
+        "UPLOADING_SCENE_IMG",
+        "FINALIZING",
+        "GENERATING_ITEMS",
+        "DETECTING_LANGUAGE",
+      ],
+      JobStatus: ["PENDING", "RUNNING", "COMPLETED", "FAILED"],
+      NarrativeStyle: ["FirstPerson", "SecondPerson", "ThirdPerson"],
+      StoryLanguage: ["auto", "en", "fr", "es", "it", "de"],
+      StoryVGenerated: ["V1", "V2"],
+      TransactionType: [
+        "PURCHASE",
+        "SUBSCRIPTION",
+        "USAGE",
+        "REFUND",
+        "BONUS",
+        "ADMIN_ADJUST",
+      ],
+    },
+  },
+} as const

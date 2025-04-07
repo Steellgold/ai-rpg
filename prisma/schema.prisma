@@ -60,47 +60,96 @@ enum StoryLanguage {
 }
 
 model Job {
-  id          String    @id @default(cuid())
-  status      JobStatus @default(PENDING)
-  stage       JobStage? @default(INITIALIZED)
-  progress    Int       @default(0)
-  startedAt   DateTime? @default(now())
-  completedAt DateTime?
-  error       String?   @db.Text
-  //
-  input       Json
-  //
-  output      Json?
-  //
-  userId      String
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  storyId     String?
-  story       Story?    @relation(fields: [storyId], references: [id], onDelete: SetNull)
-  //
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @default(now()) @updatedAt
+  id                 String              @id @default(cuid())
+  status             JobStatus           @default(PENDING)
+  stage              JobStage?           @default(INITIALIZED)
+  progress           Int                 @default(0)
+  priority           Int                 @default(0)
+  startedAt          DateTime?           @default(now())
+  completedAt        DateTime?
+  error              String?             @db.Text
+  // 
+  input              Json
+  output             Json?
+  // 
+  userId             String
+  user               User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  storyId            String?
+  story              Story?              @relation(fields: [storyId], references: [id], onDelete: SetNull)
+  // 
+  creditTransactions CreditTransaction[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   @@index([userId])
   @@index([status])
   @@index([stage])
+  @@index([priority])
+}
+
+enum TransactionType {
+  PURCHASE
+  SUBSCRIPTION
+  USAGE
+  REFUND
+  BONUS
+  ADMIN_ADJUST
+}
+
+model CreditTransaction {
+  id              String          @id @default(cuid())
+  userId          String
+  user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // 
+  amount          Int
+  balanceAfter    Int
+  description     String
+  transactionType TransactionType
+  // 
+  featureId       String?
+  storyId         String?
+  story           Story?          @relation(fields: [storyId], references: [id], onDelete: SetNull)
+  jobId           String?
+  job             Job?            @relation(fields: [jobId], references: [id], onDelete: SetNull)
+  // 
+  paymentId       String?
+  paymentProvider String?
+  // 
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @default(now()) @updatedAt
+
+  @@index([userId])
+  @@index([storyId])
+  @@index([jobId])
+  @@index([transactionType])
+  @@index([createdAt])
 }
 
 model User {
-  id             String     @id @default(uuid())
-  email          String     @unique
-  display_name   String     @default("User")
-  image_url      String?
-  // 
-  limit_messages Int?       @default(15)
-  premium        Boolean    @default(false) // Can generate more than 15 messages per day and access to generate scenes and characters images and avatars
+  id                   String              @id @default(uuid())
+  email                String              @unique
+  display_name         String              @default("User")
+  image_url            String?
   //
-  stories        Story[]
-  gameSaves      GameSave[]
-  // 
-  jobs           Job[]
-  // 
-  createdAt      DateTime   @default(now())
-  updatedAt      DateTime   @default(now()) @updatedAt
+  credits              Int                 @default(5)
+  last_credits_refresh DateTime?
+  //
+  subscription_tier    String              @default("basic")
+  subscription_status  String              @default("active")
+  subscription_start   DateTime?
+  subscription_end     DateTime?
+  subscription_id      String?
+  //
+  stories              Story[]
+  gameSaves            GameSave[]
+  jobs                 Job[]
+  //
+  creditTransactions   CreditTransaction[]
+  payments             Payment[]
+  //
+  createdAt            DateTime            @default(now())
+  updatedAt            DateTime            @default(now()) @updatedAt
 }
 
 enum NarrativeStyle {
@@ -115,50 +164,94 @@ enum StoryVGenerated {
 }
 
 model Story {
-  id               String          @id @default(cuid())
+  id               String              @id @default(cuid())
   title            String
-  synopsis         String          @db.Text
-  goal             String          @db.Text
+  synopsis         String              @db.Text
+  goal             String              @db.Text
   possibleEndings  String[]
   coverImageUrl    String?
   genre            String[]
   // 
-  language         StoryLanguage   @default(auto)
+  language         StoryLanguage       @default(auto)
   // 
-  isChildrenStory  Boolean         @default(false)
-  isPublic         Boolean         @default(false)
-  hasItems         Boolean         @default(false)
+  isChildrenStory  Boolean             @default(false)
+  isPublic         Boolean             @default(false)
+  hasItems         Boolean             @default(false)
   // 
-  forks            Story[]         @relation("ForkedStory")
-  forkedFrom       Story?          @relation("ForkedStory", fields: [forkedFromId], references: [id], onDelete: SetNull)
+  forks            Story[]             @relation("ForkedStory")
+  forkedFrom       Story?              @relation("ForkedStory", fields: [forkedFromId], references: [id], onDelete: SetNull)
   forkedFromId     String?
   // 
-  notes            String?         @db.Text
+  notes            String?             @db.Text
   // 
   narrativeStyle   NarrativeStyle
   //
   characters       Character[]
   // 
   scenes           Scene[]
-  max_scenes       Int?            @default(20)
-  current_scene    Int?            @default(0)
+  max_scenes       Int?                @default(20)
+  current_scene    Int?                @default(0)
   current_scene_id String?
   // 
   items            Item[]
   // 
   gameSaves        GameSave[]
   // 
-  creator          User            @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  creator          User                @relation(fields: [creatorId], references: [id], onDelete: Cascade)
   creatorId        String
   // 
   jobs             Job[]
   // 
-  v                StoryVGenerated @default(V1)
+  v                StoryVGenerated     @default(V1)
   // 
-  createdAt        DateTime        @default(now())
-  updatedAt        DateTime        @default(now()) @updatedAt
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @default(now()) @updatedAt
+  // 
+  credit_cost      Int                 @default(0)
+  transactions     CreditTransaction[]
+  usedFeatures     StoryFeature[]
 
   @@index([creatorId])
+}
+
+model StoryFeature {
+  id         String   @id @default(cuid())
+  storyId    String
+  story      Story    @relation(fields: [storyId], references: [id], onDelete: Cascade)
+  // 
+  featureId  String
+  creditCost Int
+  // 
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now()) @updatedAt
+
+  @@unique([storyId, featureId])
+  @@index([storyId])
+  @@index([featureId])
+}
+
+model Payment {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // 
+  amount          Int
+  currency        String   @default("EUR")
+  description     String
+  status          String
+  // 
+  provider        String
+  provider_id     String
+  // 
+  credits_amount  Int?
+  is_subscription Boolean  @default(false)
+  // 
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @default(now()) @updatedAt
+
+  @@index([userId])
+  @@index([provider_id])
+  @@index([status])
 }
 
 model Character {
