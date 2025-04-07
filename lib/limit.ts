@@ -2,23 +2,16 @@
 
 import { prisma } from "@/lib/db/prisma";
 
-export const checkMonthlyLimit = async (userId: string) => {
+export const checkCredits = async (userId: string) => {
   const user_data = await prisma.user.findUnique({ where: { id: userId } });
   if (!user_data) throw new Error("User not found");
   
-  const isPremium = user_data.premium;
-  const monthlyLimit = user_data.limit_messages ?? 15;
+  const isPremium = user_data.subscription_status === "active";
+  const credits = user_data.credits || 0;
 
-  if (monthlyLimit <= 0) {
-    throw new Error("Daily limit reached. Please try again later.");
+  if (credits <= 0) {
+    throw new Error("No credits available. Please purchase more credits.");
   }
     
-  if (monthlyLimit > 0) {
-    await prisma.user.update({
-      where: { id: userId },
-      data: { limit_messages: monthlyLimit - 1 }
-    });
-  }
-
-  return { isPremium, monthlyLimit };
+  return { isPremium, credits };
 }

@@ -4,7 +4,7 @@ import { redirect } from "next/navigation"
 import { prisma } from "@/lib/db/prisma"
 import { createClient } from "@/lib/supabase/server"
 import { env } from "@/lib/env/env"
-import { checkMonthlyLimit } from "@/lib/limit"
+import { checkCredits } from "@/lib/limit"
 import { updateGameSave, recordChoice, addItemToInventory } from "@/lib/services/game-save.service"
 
 export const generateNextScene = async (
@@ -23,9 +23,9 @@ export const generateNextScene = async (
   const user_data = await prisma.user.findUnique({ where: { id: user.id } });
   if (!user_data) throw new Error("User not found");
 
-  const { monthlyLimit, isPremium } = await checkMonthlyLimit(user.id);
-  if (!isPremium && monthlyLimit <= 0) {
-    throw new Error("Monthly limit reached. Please try again later.");
+  const { credits, isPremium } = await checkCredits(user.id);
+  if (!isPremium && credits <= 0) {
+    throw new Error("No credits available. Please purchase more credits.");
   }
 
   const story = await prisma.story.findUnique({
@@ -43,7 +43,7 @@ export const generateNextScene = async (
     }
   }
 
-  const functionName = (user_data.premium && story.hasItems)
+  const functionName = (user_data.subscription_status == "active" && story.hasItems)
     ? "generate-scene-story-v2"
     : "generate-scene-story";
 
@@ -68,8 +68,8 @@ export const generateNextScene = async (
       diceRoll,
       gameSaveId,
       userId: user.id,
-      isPremium: user_data.premium,
-      items: story.hasItems && user_data.premium,
+      isPremium: user_data.subscription_status == "active",
+      items: story.hasItems && user_data.subscription_status == "active",
       activeItem
     };
 

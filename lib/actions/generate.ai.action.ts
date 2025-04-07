@@ -8,7 +8,7 @@ import { createClient as createSupabaseClient } from "@supabase/supabase-js"
 import { redirect } from "next/navigation";
 import { env } from "../env/env";
 import { Database } from "../supabase/database.types";
-import { checkMonthlyLimit } from "@/lib/limit"
+import { checkCredits } from "@/lib/limit"
 import { StoryLanguage } from "@prisma/client";
 
 export const generateStory = async (
@@ -25,9 +25,9 @@ export const generateStory = async (
   const user_data = await prisma.user.findUnique({ where: { id: user.id } });
   if (!user_data) throw new Error("User not found");
 
-  const { monthlyLimit, isPremium } = await checkMonthlyLimit(user.id);
-  if (!isPremium && monthlyLimit <= 0) {
-    throw new Error("Monthly limit reached. Please try again later.");
+  const { credits, isPremium } = await checkCredits(user.id);
+  if (!isPremium && credits <= 0) {
+    throw new Error("No credits available. Please purchase more credits.");
   }
 
   const supabase_role_key = createSupabaseClient<Database>(
@@ -35,7 +35,7 @@ export const generateStory = async (
     serverEnv.SUPABASE_SERVICE_ROLE_KEY
   );
 
-  const functionName = (user_data.premium && itemsEnabled) ? "generate-story-v2" : "generate-story";
+  const functionName = (user_data.subscription_status == "active" && itemsEnabled) ? "generate-story-v2" : "generate-story";
 
   const jobId = createId();
   const job = await prisma.job.create({
@@ -59,9 +59,9 @@ export const generateStory = async (
       genres: genres || [],
       userId: user.id,
       jobId,
-      isPremium: user_data.premium,
+      isPremium: user_data.subscription_status == "active",
       isChildren: isForChildren || false,
-      items: user_data.premium ? itemsEnabled : false,
+      items: user_data.subscription_id == "active" ? itemsEnabled : false,
       language
     }
   });

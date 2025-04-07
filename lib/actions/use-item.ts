@@ -5,7 +5,7 @@ import { prisma } from "../db/prisma";
 import { serverEnv } from "@/lib/env/env.server";
 import OpenAI from "openai";
 import { uploadImageToSupabase } from "@/lib/ai/generate.scene-image";
-import { checkMonthlyLimit } from "@/lib/limit"
+import { checkCredits } from "@/lib/limit"
 
 const openai = new OpenAI({
   apiKey: serverEnv.OPENAI_API_KEY,
@@ -20,9 +20,9 @@ export const useItem = async (itemId: string, inventoryItemId: string) => {
   const user_data = await prisma.user.findUnique({ where: { id: user.id } });
   if (!user_data) throw new Error("User not found");
 
-  const { monthlyLimit, isPremium } = await checkMonthlyLimit(user.id);
-  if (!isPremium && monthlyLimit <= 0) {
-    throw new Error("Monthly limit reached. Please try again later.");
+  const { credits, isPremium } = await checkCredits(user.id);
+  if (!isPremium && credits <= 0) {
+    throw new Error("No credits available. Please purchase more credits.");
   }
 
   try {
@@ -57,7 +57,7 @@ export const useItem = async (itemId: string, inventoryItemId: string) => {
       });
       
       if (isBroken) {
-        if (user_data?.premium && !item.brokenImageUrl) {
+        if (user_data?.subscription_id == "active" && !item.brokenImageUrl) {
           try {
             const imageResponse = await openai.images.generate({
               model: "dall-e-3",
