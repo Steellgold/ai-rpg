@@ -384,6 +384,62 @@
         "description": "Éléments surnaturels et mystiques dans l'intrigue"
       }
     },
+    "Features": {
+      "BasicStory": {
+        "Name": "Histoire de base",
+        "Description": "Génération d'une histoire interactive avec des scènes, des personnages et des choix."
+      },
+      "ChildMode": {
+        "Name": "Mode enfant",
+        "Description": "Contenu adapté aux enfants, sans violence ni thèmes adultes."
+      },
+      "ItemSystem": {
+        "Name": "Système d'objets",
+        "Description": "Ajout d'objets interactifs que le joueur peut utiliser dans l'histoire."
+      },
+      "BannerImage": {
+        "Name": "Image de bannière",
+        "Description": "Génération d'une image de couverture pour votre histoire."
+      },
+      "SceneImage": {
+        "Name": "Images de scènes",
+        "Description": "Génération d'images uniques pour chaque scène de l'histoire."
+      },
+      "CharacterAvatar": {
+        "Name": "Avatars de personnages",
+        "Description": "Génération d'avatars pour les personnages principaux."
+      },
+      "ItemImage": {
+        "Name": "Images d'objets",
+        "Description": "Génération d'images pour les objets de l'inventaire."
+      },
+      "LongStory": {
+        "Name": "Histoire longue",
+        "Description": "Augmente le nombre maximum de scènes possibles dans l'histoire."
+      },
+      "ComplexCharacters": {
+        "Name": "Personnages complexes",
+        "Description": "Personnages plus détaillés avec des motivations et histoires plus riches."
+      },
+      "CustomTheme": {
+        "Name": "Thème personnalisé",
+        "Description": "Personnalisez le style visuel et l'ambiance de votre histoire."
+      },
+      "BranchingPaths": {
+        "Name": "Chemins multiples",
+        "Description": "Crée une histoire avec plus d'embranchements et de fins alternatives."
+      },
+      "Cost": {
+        "Free": "Gratuit",
+        "Credits": "{{credits}} crédit|{{credits}} crédits"
+      },
+      "Categories": {
+        "Basic": "Basique",
+        "Visual": "Visuel",
+        "Advanced": "Avancé",
+        "Special": "Spécial"
+      }
+    },
     "Subscription": {
       "Tiers": {
         "Basic": {

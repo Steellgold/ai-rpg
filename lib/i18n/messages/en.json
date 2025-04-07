@@ -383,6 +383,62 @@
         "description": "Supernatural and mystical elements in the plot"
       }
     },
+    "Features": {
+      "BasicStory": {
+        "Name": "Basic Story",
+        "Description": "Generation of an interactive story with scenes, characters, and choices."
+      },
+      "ChildMode": {
+        "Name": "Child Mode",
+        "Description": "Content suitable for children, without violence or adult themes."
+      },
+      "ItemSystem": {
+        "Name": "Item System",
+        "Description": "Addition of interactive objects that the player can use in the story."
+      },
+      "BannerImage": {
+        "Name": "Banner Image",
+        "Description": "Generation of a cover image for your story."
+      },
+      "SceneImage": {
+        "Name": "Scene Images",
+        "Description": "Generation of unique images for each scene in the story."
+      },
+      "CharacterAvatar": {
+        "Name": "Character Avatars",
+        "Description": "Generation of avatars for the main characters."
+      },
+      "ItemImage": {
+        "Name": "Item Images",
+        "Description": "Generation of images for inventory items."
+      },
+      "LongStory": {
+        "Name": "Long Story",
+        "Description": "Increases the maximum number of possible scenes in the story."
+      },
+      "ComplexCharacters": {
+        "Name": "Complex Characters",
+        "Description": "More detailed characters with richer motivations and backstories."
+      },
+      "CustomTheme": {
+        "Name": "Custom Theme",
+        "Description": "Customize the visual style and atmosphere of your story."
+      },
+      "BranchingPaths": {
+        "Name": "Multiple Paths",
+        "Description": "Creates a story with more branching paths and alternative endings."
+      },
+      "Cost": {
+        "Free": "Free",
+        "Credits": "{{credits}} credit|{{credits}} credits"
+      },
+      "Categories": {
+        "Basic": "Basic",
+        "Visual": "Visual",
+        "Advanced": "Advanced",
+        "Special": "Special"
+      }
+    },
     "Subscription": {
       "Tiers": {
         "Basic": {
