@@ -5,9 +5,42 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { formatSceneContent } from "@/components/format-text-scene";
 import { Component } from "@/lib/types";
+import { Prisma } from "@prisma/client";
 
-interface SceneContentProps {
-  sceneData: any;
+type SceneContentProps = {
+  sceneData: Prisma.SceneGetPayload<{
+    include: {
+      choices: {
+        select: {
+          consequence: true,
+          description: true,
+          loadingMessage: true,
+          isCustomChoice: true,
+          isPersonalized: true,
+          isItemRelated: true,
+          text: true,
+          id: true
+        }
+      },
+      items: {
+        select: {
+          isHidden: true,
+          item: {
+            select: {
+              id: true,
+              name: true,
+              description: true,
+              type: true,
+              rarity: true,
+              effect: true,
+              useCount: true,
+              imageUrl: true
+            }
+          }
+        }
+      }
+    }
+  }>;
   storyData: any;
   loading: boolean;
   showFullImage: boolean;
