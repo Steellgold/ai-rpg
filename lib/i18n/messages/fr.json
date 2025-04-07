@@ -199,6 +199,78 @@
           "misc": "Divers"
         }
       }
+    },
+    "Account": {
+      "title": "Compte",
+      "description": "Gérez vos paramètres, crédits et abonnement",
+      "profile": {
+        "title": "Votre Profil",
+        "description": "Consultez et modifiez vos informations de profil",
+        "edit": "Modifier le Profil"
+      },
+      "credits": {
+        "title": "Crédits",
+        "description": "Gérez vos crédits de création d'histoires",
+        "buy": "Acheter des Crédits",
+        "popular": "Populaire",
+        "bestValue": "Meilleur Rapport",
+        "credits": "crédits",
+        "bonus": "bonus",
+        "processing": "Traitement en cours...",
+        "select": "Sélectionner",
+        "recentTransactions": "Transactions Récentes",
+        "noTransactions": "Aucune transaction récente",
+        "balance": "Solde",
+        "buyDialog": {
+          "title": "Acheter des Crédits",
+          "description": "Sélectionnez un pack de crédits pour améliorer votre expérience de narration"
+        }
+      },
+      "subscription": {
+        "title": "Abonnement",
+        "description": "Gérez votre forfait d'abonnement",
+        "status": {
+          "active": "Actif",
+          "inactive": "Inactif"
+        },
+        "renewsOn": "Renouvellement le {date}",
+        "expiresOn": "Expire le {date}",
+        "change": "Changer de Forfait",
+        "subscribe": "S'abonner",
+        "monthly": "Mensuel",
+        "yearly": "Annuel",
+        "save": "Économisez",
+        "month": "mois",
+        "billedAs": "Facturé {amount}/an",
+        "processing": "Traitement en cours...",
+        "current": "Forfait Actuel",
+        "select": "Sélectionner",
+        "canceling": "Annulation en cours...",
+        "cancelSubscription": "Annuler l'Abonnement",
+        "cancelDescription": "Vous aurez toujours accès jusqu'à la fin de votre période de facturation",
+        "included": "Inclus dans Votre Forfait",
+        "popular": "Populaire",
+        "subscribeDialog": {
+          "title": "Choisissez un Forfait d'Abonnement",
+          "description": "Sélectionnez le forfait qui correspond le mieux à vos besoins narratifs"
+        }
+      },
+      "payment": {
+        "success": {
+          "title": "Paiement Réussi",
+          "description": "Merci pour votre achat",
+          "processing": "Traitement de votre transaction...",
+          "complete": "Votre transaction a été complétée avec succès.",
+          "goToAccount": "Aller au Compte"
+        },
+        "cancel": {
+          "title": "Paiement Annulé",
+          "description": "Votre paiement n'a pas été effectué",
+          "message": "Aucun frais n'a été prélevé sur votre compte. Vous pouvez réessayer quand vous le souhaitez.",
+          "home": "Retour à l'Accueil",
+          "tryAgain": "Réessayer"
+        }
+      }
     }
   },
   "Navbar": {

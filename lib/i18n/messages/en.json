@@ -198,6 +198,78 @@
           "misc": "Miscellaneous"
         }
       }
+    },
+    "Account": {
+      "title": "Account",
+      "description": "Manage your settings, credits, and subscription",
+      "profile": {
+        "title": "Your Profile",
+        "description": "View and edit your profile information",
+        "edit": "Edit Profile"
+      },
+      "credits": {
+        "title": "Credits",
+        "description": "Manage your story creation credits",
+        "balance": "Balance",
+        "buy": "Buy Credits",
+        "popular": "Popular",
+        "bestValue": "Best Value",
+        "credits": "credits",
+        "bonus": "bonus",
+        "processing": "Processing...",
+        "select": "Select",
+        "recentTransactions": "Recent Transactions",
+        "noTransactions": "No recent transactions",
+        "buyDialog": {
+          "title": "Buy Credits",
+          "description": "Select a credit pack to enhance your storytelling experience"
+        }
+      },
+      "subscription": {
+        "title": "Subscription",
+        "description": "Manage your subscription plan",
+        "status": {
+          "active": "Active",
+          "inactive": "Inactive"
+        },
+        "renewsOn": "Renews on {date}",
+        "expiresOn": "Expires on {date}",
+        "change": "Change Plan",
+        "subscribe": "Subscribe",
+        "monthly": "Monthly",
+        "yearly": "Yearly",
+        "save": "Save",
+        "month": "month",
+        "billedAs": "Billed as {amount}/year",
+        "processing": "Processing...",
+        "current": "Current Plan",
+        "select": "Select",
+        "canceling": "Canceling...",
+        "cancelSubscription": "Cancel Subscription",
+        "cancelDescription": "You will still have access until the end of your billing period",
+        "included": "Included in Your Plan",
+        "popular": "Popular",
+        "subscribeDialog": {
+          "title": "Choose a Subscription Plan",
+          "description": "Select the plan that best fits your storytelling needs"
+        }
+      },
+      "payment": {
+        "success": {
+          "title": "Payment Successful",
+          "description": "Thank you for your purchase",
+          "processing": "Processing your transaction...",
+          "complete": "Your transaction has been completed successfully.",
+          "goToAccount": "Go to Account"
+        },
+        "cancel": {
+          "title": "Payment Canceled",
+          "description": "Your payment was not completed",
+          "message": "No charges were made to your account. You can try again whenever you're ready.",
+          "home": "Back to Home",
+          "tryAgain": "Try Again"
+        }
+      }
     }
   },
   "Navbar": {
