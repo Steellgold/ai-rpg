@@ -383,6 +383,73 @@
         "label": "Surnaturel",
         "description": "Éléments surnaturels et mystiques dans l'intrigue"
       }
+    },
+    "Subscription": {
+      "Tiers": {
+        "Basic": {
+          "Name": "Gratuit",
+          "Description": "Pour commencer à explorer",
+          "Features": {
+            "InitialCredits": "5 crédits initiaux",
+            "BasicStories": "Histoires basiques",
+            "LimitedGenerations": "Limite de 3 générations par jour",
+            "BasicFeatures": "Accès aux fonctionnalités de base"
+          }
+        },
+        "Starter": {
+          "Name": "Débutant",
+          "Description": "Pour les créateurs occasionnels",
+          "Features": {
+            "MonthlyCredits": "30 crédits par mois",
+            "BannerImages": "Images de bannière",
+            "LimitedSceneImages": "Images de scènes (limitées)",
+            "ImprovedPriority": "Priorité de génération améliorée",
+            "BasicItemSystem": "Système d'objets basique"
+          }
+        },
+        "Creator": {
+          "Name": "Créateur",
+          "Description": "Pour les auteurs passionnés",
+          "Features": {
+            "MonthlyCredits": "100 crédits par mois",
+            "AllImages": "Toutes les images (bannières, scènes, objets)",
+            "HighPriority": "Priorité de génération élevée",
+            "ComplexCharacters": "Personnages complexes",
+            "LongStories": "Histoires longues",
+            "AdvancedItemSystem": "Système d'objets avancé"
+          }
+        },
+        "Professional": {
+          "Name": "Professionnel",
+          "Description": "Pour les créateurs de contenu sérieux",
+          "Features": {
+            "MonthlyCredits": "250 crédits par mois",
+            "AllPremiumFeatures": "Toutes les fonctionnalités premium",
+            "MaximumPriority": "Priorité de génération maximale",
+            "DedicatedSupport": "Support dédié",
+            "AdvancedExport": "Exportation avancée",
+            "TotalCustomization": "Personnalisation totale"
+          }
+        }
+      }
+    },
+    "CreditPacks": {
+      "Small": {
+        "Name": "Pack Débutant",
+        "Description": "20 crédits pour commencer"
+      },
+      "Medium": {
+        "Name": "Pack Standard",
+        "Description": "50 crédits pour développer vos histoires"
+      },
+      "Large": {
+        "Name": "Pack Premium",
+        "Description": "120 crédits pour des histoires élaborées"
+      },
+      "XLarge": {
+        "Name": "Pack Créateur",
+        "Description": "300 crédits pour les auteurs sérieux"
+      }
     }
   }
 }

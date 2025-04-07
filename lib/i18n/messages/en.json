@@ -382,6 +382,73 @@
         "label": "Supernatural",
         "description": "Supernatural and mystical elements in the plot"
       }
+    },
+    "Subscription": {
+      "Tiers": {
+        "Basic": {
+          "Name": "Free",
+          "Description": "For starting to explore",
+          "Features": {
+            "InitialCredits": "5 initial credits",
+            "BasicStories": "Basic stories",
+            "LimitedGenerations": "3 generations per day limit",
+            "BasicFeatures": "Access to basic features"
+          }
+        },
+        "Starter": {
+          "Name": "Starter",
+          "Description": "For occasional creators",
+          "Features": {
+            "MonthlyCredits": "30 credits per month",
+            "BannerImages": "Banner images",
+            "LimitedSceneImages": "Scene images (limited)",
+            "ImprovedPriority": "Improved generation priority",
+            "BasicItemSystem": "Basic item system"
+          }
+        },
+        "Creator": {
+          "Name": "Creator",
+          "Description": "For passionate authors",
+          "Features": {
+            "MonthlyCredits": "100 credits per month",
+            "AllImages": "All images (banners, scenes, items)",
+            "HighPriority": "High generation priority",
+            "ComplexCharacters": "Complex characters",
+            "LongStories": "Long stories",
+            "AdvancedItemSystem": "Advanced item system"
+          }
+        },
+        "Professional": {
+          "Name": "Professional",
+          "Description": "For serious content creators",
+          "Features": {
+            "MonthlyCredits": "250 credits per month",
+            "AllPremiumFeatures": "All premium features",
+            "MaximumPriority": "Maximum generation priority",
+            "DedicatedSupport": "Dedicated support",
+            "AdvancedExport": "Advanced export",
+            "TotalCustomization": "Total customization"
+          }
+        }
+      }
+    },
+    "CreditPacks": {
+      "Small": {
+        "Name": "Starter Pack",
+        "Description": "20 credits to get started"
+      },
+      "Medium": {
+        "Name": "Standard Pack",
+        "Description": "50 credits to develop your stories"
+      },
+      "Large": {
+        "Name": "Premium Pack",
+        "Description": "120 credits for elaborate stories"
+      },
+      "XLarge": {
+        "Name": "Creator Pack",
+        "Description": "300 credits for serious authors"
+      }
     }
   }
 }
