@@ -5,7 +5,7 @@ import { prisma } from "../db/prisma";
 import { serverEnv } from "@/lib/env/env.server";
 import OpenAI from "openai";
 import { uploadImageToSupabase } from "@/lib/ai/generate.scene-image";
-import { checkCredits } from "@/lib/limit"
+import { checkCredits } from "@/lib/credits"
 
 const openai = new OpenAI({
   apiKey: serverEnv.OPENAI_API_KEY,
