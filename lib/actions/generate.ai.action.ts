@@ -13,14 +13,16 @@ import { StoryLanguage } from "@prisma/client";
 import { getDefaultFeatures } from "@/lib/features/generation-features";
 import { validateCreditCost } from "@/lib/actions/calculate-credit-cost";
 
-export const generateStory = async (
-  text: string, 
-  genres?: string[], 
-  isForChildren?: boolean, 
-  itemsEnabled?: boolean,
-  language: StoryLanguage = "auto",
+type ReturnType = {
+  data: any;
+  error: string | null;
+}
+
+export const generateStory = async(
+  text: string, genres?: string[], 
+  isForChildren?: boolean, itemsEnabled?: boolean, language: StoryLanguage = "auto",
   clientCost?: number
-) => {
+): Promise<ReturnType> => {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) throw new Error("User not authenticated");
@@ -34,8 +36,14 @@ export const generateStory = async (
   const actualCost = await validateCreditCost(clientCost || 0, { activeFeatures, promptLength: text.length });
 
   if (credits < actualCost) {
-    throw new Error(`Not enough credits. This operation requires ${actualCost} credits, but you only have ${credits}.`);
+    return {
+      data: null,
+      error: `Not enough credits. This operation requires ${actualCost} credits, but you only have ${credits}.`
+    };
   }
+
+  if (!text || text.length < 10) return { data: null, error: "Please provide a valid text with at least 10 characters." };
+  if (text.length > 2500) return { data: null, error: "Text is too long. Please provide a shorter text." };
 
   const supabase_role_key = createSupabaseClient<Database>(
     serverEnv.NEXT_PUBLIC_SUPABASE_URL,
@@ -57,7 +65,12 @@ export const generateStory = async (
     }
   });
 
-  if (!job) throw new Error("Job not created");
+  if (!job) {
+    return {
+      data: null,
+      error: "Proccess failed, we couldn't create the job. Try again or contact support."
+    };
+  }
 
   const { data, error } = await supabase_role_key.functions.invoke("generate-story-v3", {
     body: {
@@ -81,11 +94,28 @@ export const generateStory = async (
         stage: "FINALIZING"
       }
     });
-    throw new Error(error.message);
+
+    return {
+      data: null,
+      error: `Error: ${error.message}`
+    };
   }
 
-  if (!data) throw new Error("No data returned from function");
-  console.log("Data from function:", data);
+  if (!data) {
+    await prisma.job.update({
+      where: { id: jobId },
+      data: {
+        status: "FAILED",
+        error: "No data returned from the function.",
+        stage: "FINALIZING"
+      }
+    });
+
+    return {
+      data: null,
+      error: "No data returned from the story generation process."
+    };
+  }
   
   await prisma.user.update({
     where: { id: user.id },
@@ -106,5 +136,5 @@ export const generateStory = async (
     }
   });
   
-  redirect(env.NEXT_PUBLIC_BASE_URL + "/story/" + jobId);
+  redirect(new URL(`/story/${jobId}`, env.NEXT_PUBLIC_BASE_URL).toString());
 }

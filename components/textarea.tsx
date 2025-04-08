@@ -1,8 +1,8 @@
 "use client"
 
 import { useState, useRef, useEffect, ReactElement, HTMLAttributes, cloneElement, useMemo } from "react";
-import { Button } from "@/components/ui/button";
-import { Baby, Crown, Eclipse, Flower, Loader, Lock, LockOpen, Music, Pickaxe, TowerControl, User, X } from "lucide-react";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { Baby, Crown, Eclipse, Flower, Loader, Lock, LockOpen, Maximize, Music, Pickaxe, TowerControl, User, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Component } from "@/lib/types";
 import { MultiSelectCombobox } from "./ui/multi-select-combobox";
@@ -19,6 +19,8 @@ import { EnhancedSendButton } from "./textarea.send-button";
 import { useCredits } from "@/lib/hooks/use-credits";
 import { ShineBorder } from "./magicui/shine-border";
 import { CustomScrollbar } from "./ui/scrollbar";
+import { useToast } from "@/lib/hooks/use-toast";
+import Link from "next/link";
 
 type Suggestion = {
   label: string;
@@ -53,6 +55,7 @@ const suggestions: Suggestion[] = [
 export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ className }): ReactElement => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const searchParams = useSearchParams();
+  const { toast } = useToast();
 
   const { user, loading: isLoggingIn, signIn } = useSession();
   const { credits, loading: isCreditsFetching } = useCredits();
@@ -89,8 +92,8 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
     textarea.style.height = "auto"
     textarea.style.height = `${textarea.scrollHeight}px`
 
-    if (textarea.scrollHeight > 300) {
-      textarea.style.height = "300px"
+    if (textarea.scrollHeight > 500) {
+      textarea.style.height = "500px"
       textarea.style.overflowY = "auto"
     } else {
       textarea.style.overflowY = "hidden"
@@ -113,7 +116,7 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
     if (isGenerating) return; // Lmao
     if (isInputValid) setIsGenerating(true);
 
-    await generateStory(
+    const { error } = await generateStory(
       prompt, 
       selectedGenres || [], 
       childMode, 
@@ -121,6 +124,12 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
       storyLanguage,
       calculateCreditCost
     );
+
+    if (error) {
+      setIsGenerating(false);
+      toast({ title: "Your request failed", description: error, variant: "destructive" });
+      return;
+    }
   }
 
   return (
@@ -144,6 +153,30 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
             }
           )}
         />
+        
+        <div className="flex items-center justify-between px-2">
+          <div className="flex items-center flex-wrap gap-1.5">
+            <Button
+              size={"default"}
+              variant="ghost"
+              className="!border rounded-full transition-opacity h-8 px-3 cursor-pointer"
+              disabled={isGenerating}
+              asChild
+            >
+              <Link href={"/editor"}>
+                {t("AiTextarea.OpenEditor")}
+                <Maximize className="h-4 w-4 text-gray-200" />
+              </Link>
+            </Button>
+          </div>
+
+          <p className={cn("text-sm", {
+            "text-red-400": prompt.length >= 2500,
+            "text-gray-400": prompt.length < 2500
+          })}>
+            {prompt.length} / 2500
+          </p>
+        </div>
 
         <div className="flex items-center justify-between p-2">
           <div className="flex items-center flex-wrap gap-1.5">
@@ -251,18 +284,20 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
 
           <div className="flex items-center">
             {user ? (
-              <EnhancedSendButton
-                isGenerating={isGenerating}
-                isInputValid={isInputValid}
-                handleSend={handleSend}
-                activeFeatures={activeFeatures}
-                promptLength={prompt.length}
-                generateText={t("AiTextarea.Generate")}
-                calculateCreditCost={calculateCreditCost}
-                creditHave={
-                  isCreditsFetching ? 0 : credits
-                }
-              />
+              <>
+                <EnhancedSendButton
+                  isGenerating={isGenerating}
+                  isInputValid={isInputValid}
+                  handleSend={handleSend}
+                  activeFeatures={activeFeatures}
+                  promptLength={prompt.length}
+                  generateText={t("AiTextarea.Generate")}
+                  calculateCreditCost={calculateCreditCost}
+                  creditHave={
+                    isCreditsFetching ? 0 : credits
+                  }
+                />
+              </>
             ) : (
               <>
                 <Button
