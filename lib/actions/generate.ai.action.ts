@@ -10,13 +10,16 @@ import { env } from "../env/env";
 import { Database } from "../supabase/database.types";
 import { checkCredits } from "@/lib/limit"
 import { StoryLanguage } from "@prisma/client";
+import { getDefaultFeatures } from "@/lib/features/generation-features";
+import { validateCreditCost } from "@/lib/actions/calculate-credit-cost";
 
 export const generateStory = async (
   text: string, 
   genres?: string[], 
   isForChildren?: boolean, 
   itemsEnabled?: boolean,
-  language: StoryLanguage = "auto"
+  language: StoryLanguage = "auto",
+  clientCost?: number
 ) => {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -28,6 +31,17 @@ export const generateStory = async (
   const { credits, isPremium } = await checkCredits(user.id);
   if (!isPremium && credits <= 0) {
     throw new Error("No credits available. Please purchase more credits.");
+  }
+
+  const activeFeatures = getDefaultFeatures(isForChildren || false, itemsEnabled || false);
+  const actualCost = await validateCreditCost(clientCost || 0, {
+    activeFeatures,
+    promptLength: text.length,
+    isPremium: user_data.subscription_status === "active"
+  });
+
+  if (credits < actualCost) {
+    throw new Error(`Not enough credits. This operation requires ${actualCost} credits, but you only have ${credits}.`);
   }
 
   const supabase_role_key = createSupabaseClient<Database>(
@@ -44,7 +58,8 @@ export const generateStory = async (
       input: { 
         text, 
         genres: genres || [],
-        language
+        language,
+        creditCost: actualCost
       }
     }
   });
@@ -60,7 +75,8 @@ export const generateStory = async (
       isPremium: user_data.subscription_status == "active",
       isChildren: isForChildren || false,
       items: user_data.subscription_id == "active" ? itemsEnabled : false,
-      language
+      language,
+      creditCost: actualCost
     }
   });
 
@@ -78,6 +94,25 @@ export const generateStory = async (
 
   if (!data) throw new Error("No data returned from function");
   console.log("Data from function:", data);
+  
+  await prisma.user.update({
+    where: { id: user.id },
+    data: {
+      credits: credits - actualCost
+    }
+  });
+  
+  await prisma.creditTransaction.create({
+    data: {
+      id: createId(),
+      userId: user.id,
+      amount: -actualCost,
+      balanceAfter: credits - actualCost,
+      description: "Story generation",
+      transactionType: "USAGE",
+      jobId: jobId
+    }
+  });
   
   redirect(env.NEXT_PUBLIC_BASE_URL + "/story/" + jobId);
 }

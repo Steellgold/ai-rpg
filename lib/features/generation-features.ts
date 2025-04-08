@@ -43,7 +43,7 @@ export const GENERATION_FEATURES: Record<GenerationFeatureType, FeatureDefinitio
     id: GenerationFeatureType.BASIC_STORY,
     name: "Utils.Features.BasicStory.Name",
     description: "Utils.Features.BasicStory.Description",
-    creditCost: 5,
+    creditCost: 3,
     isActiveByDefault: true,
     category: FeatureCategory.BASIC,
     iconName: "BookOpen"
