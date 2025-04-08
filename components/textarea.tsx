@@ -116,8 +116,9 @@ export const AiTextarea: Component<
   return (
     <div className="flex flex-col items-center w-full gap-4">
       <div className={cn("rounded-xl overflow-hidden w-full", className, {
-        "bg-teal-500/10 border border-teal-500/30": childMode,
-        "bg-[#070910] border border-[#173a8940]": !childMode
+        // "bg-teal-500/10 border border-teal-500/30": childMode,
+        // "bg-[#070910] border border-[#173a8940]": !childMode
+        "bg-[#070910] border border-[#173a8940]": true
       })}>
         <textarea
           ref={textareaRef}
@@ -130,8 +131,7 @@ export const AiTextarea: Component<
           className={cn(
             "w-full resize-none py-4 px-4 outline-none bg-transparent text-gray-200 placeholder:text-gray-500 min-h-[110px]", {
               "animate-pulse italic text-gray-400": isGenerating,
-              // 
-              "text-white placeholder:text-teal-100/40": childMode
+              // "text-white placeholder:text-teal-100/40": childMode
             }
           )}
         />
@@ -140,9 +140,9 @@ export const AiTextarea: Component<
           <div className="flex items-center flex-wrap gap-2">
             {(selectedGenres.length > 0 || prompt.length > 0) && (!isGenerating || isInputValid) && (
               <Button
-                size={"icon"}
+                size={"toolIcon"}
                 variant="ghost"
-                className="!border border-red-400/20 rounded-full transition-opacity !h-8 !w-8 hover:bg-red-400/10 cursor-pointer"
+                className="!border border-red-400/20 rounded-full transition-opacity hover:bg-red-400/10 cursor-pointer"
                 onClick={() => {
                   setPrompt("");
                   setSelectedGenres([]);
@@ -173,11 +173,10 @@ export const AiTextarea: Component<
             />
 
             <Button
-              size={"default"}
+              size={"toolIcon"}
               variant="ghost"
               className={cn(
-                "!border rounded-full transition-opacity !h-8 cursor-pointer px-2", {
-                  "!w-8": !childMode,
+                "!border rounded-full transition-opacity cursor-pointer", {
                   "border-emerald-400/20 hover:bg-emerald-400/10": childMode,
                   "border-gray-400/20 hover:bg-gray-400/10": !childMode
                 }
@@ -186,21 +185,23 @@ export const AiTextarea: Component<
               disabled={isGenerating}
             >
               <Baby className={cn("h-4 w-4", { "text-teal-400": childMode, "text-gray-200": !childMode })} />
-              {childMode && (
+              {/* {childMode && (
                 <span className={cn("text-sm", {
                   "text-emerald-400": childMode,
                   "text-gray-200": !childMode
                 })}>
                   {t("AiTextarea.ChildModeOff")}</span>
-              )}
+              )} */}
             </Button>
 
             <Button
-              size={"default"}
+              size={"toolIcon"}
               variant="ghost"
               className={cn(
-                "!border rounded-full transition-opacity !h-8 cursor-pointer px-2", {
-                  "!w-8": !items,
+                "!border rounded-full transition-opacity !h-8 cursor-pointer", {
+                  // px-2
+                  // "!w-8": !items,
+                  "w-8": true,
                   "border-indigo-400/20 hover:bg-indigo-400/10": items && isPremium,
                   "border-gray-400/20 hover:bg-gray-400/10": !items
                 }
@@ -212,13 +213,13 @@ export const AiTextarea: Component<
                 "text-indigo-400": items && isPremium,
                 "text-gray-200": !items
               })} />
-              {items && (
+              {/* {items && (
                 <span className={cn("text-sm", {
                   "text-indigo-400": items && isPremium,
                   "text-gray-200": !items
                 })}>
                   {t("AiTextarea.ItemsEnabled")}</span>
-              )}
+              )} */}
             </Button>
 
             <Button
@@ -270,10 +271,11 @@ export const AiTextarea: Component<
                       "bg-blue-600 hover:bg-blue-500": !isGenerating || isInputValid,
                       "cursor-not-allowed bg-blue-600/50 hover:bg-blue-600/50": isGenerating,
                       // 
-                      "bg-teal-400 hover:bg-teal-600 text-teal-950": (!isGenerating || isInputValid) && childMode,
-                      "cursor-not-allowed bg-teal-600/50 hover:bg-teal-600/50": (isGenerating) && childMode,
+                      // "bg-teal-400 hover:bg-teal-600 text-teal-950": (!isGenerating || isInputValid) && childMode,
+                      // "cursor-not-allowed bg-teal-600/50 hover:bg-teal-600/50": (isGenerating) && childMode,
                       // 
-                      "text-white": !childMode
+                      // "text-white": !childMode
+                      "text-white": true
                     }
                   )}
                 >

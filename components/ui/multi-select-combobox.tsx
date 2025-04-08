@@ -28,7 +28,6 @@ export function MultiSelectCombobox({
   options,
   selected,
   onChange,
-  placeholder = "Select options",
   emptyMessage = "No options found.",
   disabled = false
 }: MultiSelectProps) {
@@ -44,20 +43,18 @@ export function MultiSelectCombobox({
         <Button
           variant="ghost"
           role="combobox"
-          size={selected.length > 0 ? "default" : "icon"}
+          size={"toolIcon"}
           aria-expanded={open}
           disabled={disabled}
-          className={cn(disabled && "opacity-70 cursor-not-allowed", "h-8 rounded-full text-white  !border border", {
-            "!w-8": selected.length === 0
-          })}
+          className={cn(disabled && "opacity-70 cursor-not-allowed", "h-8 w-8 rounded-full text-white  !border border")}
         >
           <div className="flex flex-wrap gap-1">
             {selected.length === 0 ? (
               <Dna className="h-4 w-4" />
             ) : (
-              <span className="text-sm text-gray-400 flex flex-row items-center gap-1">
-                {selected.length} genre{selected.length > 1 ? "s" : ""}
-              </span>
+              <>
+                {selected.length}
+              </>
             )}
           </div>
         </Button>
