@@ -43,10 +43,6 @@ export const generateNextScene = async (
     }
   }
 
-  const functionName = (user_data.subscription_status == "active" && story.hasItems)
-    ? "generate-scene-story-v3"
-    : "generate-scene-story";
-
   try {
     let activeItem = null;
     if (activeItemId && gameSaveId) {
@@ -76,7 +72,7 @@ export const generateNextScene = async (
     if (choiceId) body.choiceId = choiceId;
     if (customText) body.customText = customText;
 
-    const { data, error } = await supabase.functions.invoke(functionName, { body });
+    const { data, error } = await supabase.functions.invoke("generate-scene-story-v3", { body });
 
     if (!data || error) {
       throw new Error(error?.message || "Error generating next scene");

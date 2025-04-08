@@ -35,8 +35,6 @@ export const generateStory = async (
     serverEnv.SUPABASE_SERVICE_ROLE_KEY
   );
 
-  const functionName = (user_data.subscription_status == "active" && itemsEnabled) ? "generate-story-v3" : "generate-story";
-
   const jobId = createId();
   const job = await prisma.job.create({
     data: {
@@ -53,7 +51,7 @@ export const generateStory = async (
 
   if (!job) throw new Error("Job not created");
 
-  const { data, error } = await supabase_role_key.functions.invoke(functionName, {
+  const { data, error } = await supabase_role_key.functions.invoke("generate-story-v3", {
     body: {
       text,
       genres: genres || [],
