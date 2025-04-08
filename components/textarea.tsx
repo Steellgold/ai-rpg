@@ -21,6 +21,7 @@ import { CustomScrollbar } from "./ui/scrollbar";
 import { useToast } from "@/lib/hooks/use-toast";
 import Link from "next/link";
 import { suggestions } from "@/lib/suggestions";
+import { useDraft } from "@/lib/hooks/use-draft";
 
 export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ className }): ReactElement => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -30,7 +31,13 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
   const { user, loading: isLoggingIn, signIn } = useSession();
   const { credits, loading: isCreditsFetching } = useCredits();
 
-  const [prompt, setPrompt] = useState(searchParams.get("prompt") || "");
+  const [prompt, setPrompt, clearPrompt] = useDraft({
+    key: "ai-textarea-prompt",
+    initialValue: searchParams.get("prompt") || "",
+    storageType: "localStorage",
+    debounceTime: 500
+  });
+    
   const [isInputValid, setIsInputValid] = useState(false);
 
   const [childMode, setChildMode] = useState(false);
@@ -39,10 +46,25 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
   const [storyLanguage, setStoryLanguage] = useState<StoryLanguage>("auto");
 
   const [isGenerating, setIsGenerating] = useState(false);
-  const [selectedGenres, setSelectedGenres] = useState<string[]>(
-    searchParams.get("genres")?.split(",") || []
-  );
 
+  const initialGenres = searchParams.get("genres")?.split(",") || [];
+  const [genresStr, setGenresStr, clearGenres] = useDraft({
+    key: "ai-textarea-genres",
+    initialValue: JSON.stringify(initialGenres),
+    storageType: "localStorage",
+    debounceTime: 500
+  });
+
+  const selectedGenres = useMemo(() => {
+    try {
+      return JSON.parse(genresStr) as string[];
+    } catch {
+      return [];
+    }
+  }, [genresStr]);
+
+  const setSelectedGenres = (genres: string[]) => setGenresStr(JSON.stringify(genres));
+  
   const u = useTranslations("Utils");
   const t = useTranslations("Pages.New");
 
@@ -102,6 +124,12 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
     }
   }
 
+  const handleClear = () => {
+    clearPrompt();
+    clearGenres();
+    if (textareaRef.current) textareaRef.current.style.height = "auto";
+  };
+
   return (
     <div className="flex flex-col items-center w-full gap-4">
       <CustomScrollbar />
@@ -155,11 +183,7 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
                 size={"toolIcon"}
                 variant="ghost"
                 className="!border border-red-400/20 rounded-full transition-opacity hover:bg-red-400/10 cursor-pointer"
-                onClick={() => {
-                  setPrompt("");
-                  setSelectedGenres([]);
-                  if (textareaRef.current) textareaRef.current.style.height = "auto";
-                }}
+                onClick={handleClear}
                 disabled={isGenerating}
               >
                 <X className="h-4 w-4 text-red-400" />
