@@ -303,16 +303,18 @@
       }
     }
   },
-  "Utils": {
-    "CreditCost": {
-      "cost": "{count} credit(s)",
-      "detail": "Credit cost details",
-      "baseFeatures": "Base features",
+  "Components": {
+    "EnhancedSendButton": {
+      "credit": "credit{s}",
+      "creditDetails": "Credit details",
+      "feature": "{name}",
+      "credits": "{count} credit{s}",
       "promptLength": "Prompt length",
-      "lengthFactor": "+{count} for length",
-      "total": "Total",
-      "creditAmount": "{count} credit(s)"
-    },
+      "availableCredits": "Available credits",
+      "creditsAmount": "{count} credit{s}"
+    }
+  },
+  "Utils": {
     "Credits": {
       "Errors": {
         "UserNotFound": "User not found",

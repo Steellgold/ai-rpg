@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { ArrowUpIcon, Loader } from 'lucide-react';
 import { cn } from "@/lib/utils";
-import { calculateTotalCreditCost, GENERATION_FEATURES, GenerationFeatureType } from "@/lib/features/generation-features";
+import { GENERATION_FEATURES, GenerationFeatureType } from "@/lib/features/generation-features";
 import { useTranslations } from "next-intl";
 
 interface EnhancedSendButtonProps {
@@ -28,8 +28,8 @@ export const EnhancedSendButton = ({
   creditHave
 }: EnhancedSendButtonProps) => {
   const lengthCost = Math.floor(promptLength / 500);
-  const baseCost = calculateTotalCreditCost(activeFeatures);
 
+  const t = useTranslations("Components.EnhancedSendButton");
   const u = useTranslations();
 
   return (
@@ -38,7 +38,10 @@ export const EnhancedSendButton = ({
         <TooltipTrigger asChild>
           <Button
             onClick={handleSend}
-            disabled={!isInputValid}
+            disabled={
+              !isInputValid ||
+              isGenerating
+            }
             className={cn(
               "rounded-full transition-opacity flex items-center gap-2", {
                 "!h-8 !w-8": !isInputValid || isGenerating,
@@ -59,17 +62,20 @@ export const EnhancedSendButton = ({
         <TooltipContent side="top" className="w-64 bg-white py-3 px-3 rounded-lg shadow-md text-gray-800">
           <div className="space-y-1">
             <div className="space-y-1">
-              <p className="text-sm font-medium">Détails des crédits</p>
+              <p className="text-sm font-medium">{t("creditDetails")}</p>
               {activeFeatures.map((featureId) => {
                 if (!featureId) return null;
                 if (!GENERATION_FEATURES[featureId]) return null;
                 if (!GENERATION_FEATURES[featureId].creditCost) return null;
-                if (GENERATION_FEATURES[featureId].creditCost == 0) return null;
+                if (GENERATION_FEATURES[featureId].creditCost === 0) return null;
 
                 return (
                   <div key={featureId} className="flex justify-between text-sm">
                     <span>{u(GENERATION_FEATURES[featureId].name)}</span>
-                    <span>{GENERATION_FEATURES[featureId].creditCost} crédits</span>
+                    <span>{t("credits", {
+                      count: GENERATION_FEATURES[featureId].creditCost,
+                      s: GENERATION_FEATURES[featureId].creditCost > 1 ? "s" : ""
+                    })}</span>
                   </div>
                 )
               })}
@@ -77,8 +83,8 @@ export const EnhancedSendButton = ({
 
             {lengthCost > 0 && (
               <div className="flex justify-between text-sm">
-                <span>Longueur du prompt</span>
-                <span>+{lengthCost}</span>
+                <span>{t("promptLength")}</span>
+                <span>{lengthCost} {t("credit", { s: lengthCost > 1 ? "s" : "" })}</span>
               </div>
             )}
 
@@ -86,18 +92,18 @@ export const EnhancedSendButton = ({
 
             <div>
               <div className="flex justify-between text-sm font-medium">
-                <span>Crédits disponibles</span>
-                <span>{creditHave} crédits</span>
+                <span>{t("availableCredits")}</span>
+                <span>{t("creditsAmount", { count: creditHave, s: creditHave > 1 ? "s" : "" })}</span>
               </div>
 
               <div className="flex justify-between text-sm font-medium">
                 <span></span>
-                <span className="text-red-600">-{calculateCreditCost} crédits</span>
+                <span className="text-red-600">-{t("creditsAmount", { count: calculateCreditCost, s: calculateCreditCost > 1 ? "s" : "" })}</span>
               </div>
 
               <div className="flex justify-between text-sm font-medium">
                 <span></span>
-                <span>{creditHave - calculateCreditCost} crédits</span>
+                <span>{t("creditsAmount", { count: Math.max(0, creditHave - calculateCreditCost), s: creditHave - calculateCreditCost > 1 ? "s" : "" })}</span>
               </div>
             </div>
           </div>

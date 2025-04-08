@@ -304,16 +304,18 @@
       }
     }
   },
-  "Utils": {
-    "CreditCost": {
-      "cost": "{count} crédit(s)",
-      "detail": "Détail du coût en crédits",
-      "baseFeatures": "Fonctionnalités de base",
+  "Components": {
+    "EnhancedSendButton": {
+      "credit": "crédit{s}",
+      "creditDetails": "Détails des crédits",
+      "feature": "{name}",
+      "credits": "{count} crédit{s}",
       "promptLength": "Longueur du prompt",
-      "lengthFactor": "+{count} pour la longueur",
-      "total": "Total",
-      "creditAmount": "{count} crédit(s)"
-    },
+      "availableCredits": "Crédits disponibles",
+      "creditsAmount": "{count} crédit{s}"
+    }
+  },
+  "Utils": {
     "Credits": {
       "Errors": {
         "UserNotFound": "Utilisateur non trouvé",
