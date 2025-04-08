@@ -3,7 +3,7 @@ import Link from "next/link";
 
 const Forbidden = () => {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center relative">
+    <div className="flex flex-col items-center justify-center flex-1 py-16 text-center">
       <h2 className="text-3xl font-bold">
         Forbidden access
       </h2>
