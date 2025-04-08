@@ -65,7 +65,7 @@ const Page = async () => {
         <AiTextarea isPremium={user_data?.subscription_status == "active"} />
       </section>
 
-      <hr className="my-56 border-t border-[#161616]" />
+      <hr className="my-32 border-t border-[#161616]" />
 
       <section className="flex flex-col items-center w-full max-w-6xl mx-auto">
         <h2 className="flex flex-row gap-2 text-3xl items-center">
