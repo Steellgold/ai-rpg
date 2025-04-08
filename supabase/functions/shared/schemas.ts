@@ -8,18 +8,24 @@ export const languageDetectionSchema = z.object({
   confidence: z.number().min(0).max(1)
 });
 
+export const dialogueSchema = z.object({
+  speaker: z.string().min(1).max(100),
+  text: z.string().min(1).max(500),
+  emotion: z.string().optional()
+});
+
 export const characterSchema = z.object({
   name: z.string().min(1).max(100),
-  description: z.string().min(1).max(200),
-  personality: z.string().min(1).max(200).optional(),
-  outfit: z.string().min(1).max(200).optional(),
+  description: z.string().min(1).max(450),
+  personality: z.string().min(1).max(450).optional(),
+  outfit: z.string().min(1).max(450).optional(),
   age: z.number().int().optional(),
-  background: z.string().min(1).max(200).optional(),
+  background: z.string().min(1).max(450).optional(),
   abilities: z.array(z.string()).optional(),
   relationships: z.array(z.string()).optional(),
-  motivations: z.string().min(1).max(200).optional(),
-  flaws: z.string().min(1).max(200).optional(),
-  backstory: z.string().min(1).max(200).optional()
+  motivations: z.string().min(1).max(450).optional(),
+  flaws: z.string().min(1).max(450).optional(),
+  backstory: z.string().min(1).max(450).optional()
 });
 
 export const itemSchema = z.object({
@@ -72,12 +78,6 @@ export const storyGenerationSchema = z.object({
   banner_image_visual_description: z.string().min(1).max(350),
   max_story_scenes: z.number().int().min(1).max(20),
   first_scene: z.array(sceneSchema)
-});
-
-export const dialogueSchema = z.object({
-  speaker: z.string().min(1).max(100),
-  text: z.string().min(1).max(500),
-  emotion: z.string().optional()
 });
 
 export const nextSceneSchema = z.object({

@@ -72,22 +72,27 @@ Ensure the image is visually striking and immersive, drawing the viewer into the
  * @returns 
  */
 export const extractItemImagePrompt = (description: string, itemName: string, itemType: string): string => {
-  return `Create a detailed and high-quality illustration of a ${itemType.toLowerCase()} for a narrative game.
-The object is: ${itemName}
+  return `Create a high-quality 2D illustration of a ${itemType.toLowerCase()} named "${itemName}" for a fantasy narrative RPG, in a **vintage cartoon style** reminiscent of 1930s animation.
+
 Description: ${description}
 
-Style: Detailed and high-quality digital art with proper lighting and depth. The object should be centered against a simple, slightly blurred background.
+🎨 Style & Visual Guidelines:
+- Artistic style: Hand-drawn cartoon with clean black linework, soft sepia tones, and subtle paper texture
+- Background: Aged parchment with light wear, faint stains, and slightly torn edges — no harsh contrasts
+- Materials and surfaces should feel worn, magical, or medieval, depending on the item
+- Use gentle shading and textured coloring, no gradients or modern effects
+- Give the object a stylized, slightly exaggerated fantasy look — like something out of a magical world
 
-CRITICAL INSTRUCTIONS:
-- Create ONLY the object itself with NO TEXT whatsoever
-- DO NOT include item name, stats, properties, or any labels in the image
-- NO UI elements, inventory frames, or item cards
-- NO price tags, rarity indicators, or numerical values
-- Show just the clean object against a simple background
-- Focus on details, textures, and materials of the object itself
-- The final image should contain absolutely no text, numbers, or symbols
+❌ Do NOT include:
+- Any text, names, stats, numbers, symbols, labels, or UI elements
+- Any modern design elements or polished/glossy effects
 
-The object should be clearly visible and detailed, communicating its purpose through visual design alone.`;
+✅ Focus:
+- Center the object clearly on the canvas
+- Showcase its purpose and magical/fantasy nature through visual storytelling alone
+- Make the object readable at a glance with rich textures and expressive silhouette
+
+The result should look like a magical illustration from an old fantasy book or animated film.`;
 };
 
 /**
@@ -96,7 +101,7 @@ The object should be clearly visible and detailed, communicating its purpose thr
  * @returns
  */
 export const extractCharacterAvatarPrompt = (character: any): string => {
-  return `Create a high-quality character portrait avatar for a narrative game.
+  return `Create a detailed character portrait in **vintage cartoon style** (1930s animation aesthetic) for a fantasy narrative RPG.
 
 Character details:
 - Name: ${character.name}
@@ -105,18 +110,22 @@ ${character.personality ? `- Personality: ${character.personality}` : ''}
 ${character.outfit ? `- Outfit: ${character.outfit}` : ''}
 ${character.age ? `- Age: ${character.age}` : ''}
 
-Style: Clean, detailed character portrait showing only the head and shoulders against a simple background.
+🎨 Style & Visual Guidelines:
+- Head and shoulders only, centered
+- Drawn in a soft vintage cartoon style with hand-inked lines and warm, muted sepia/brown tones
+- Background: Plain or faded parchment-style, neutral and non-distracting
+- Expression should reflect the character's personality (e.g., mysterious, bold, cheerful)
+- Use stylized proportions, classic cartoon exaggeration, and textured shading
 
-CRITICAL INSTRUCTIONS:
-- Create ONLY the character portrait with NO TEXT whatsoever in the image
-- DO NOT include the character's name, attributes, or any labels in the image
-- NO UI elements, stats, or character sheet information
-- NO borders with text or information cards
-- Just a clean, simple portrait against a plain or simple background
-- Focus on facial features, expression, and basic shoulder/upper chest area
-- The final image should contain absolutely no text, numbers, or symbols
+❌ Do NOT include:
+- Names, text, stats, borders, numbers, or any game UI
+- Overly modern design elements or effects
 
-The portrait should communicate the character's personality through visual elements only - expression, coloring, and style.`;
+✅ Focus:
+- Communicate the character’s identity and mood through face, posture, and outfit details
+- Keep the portrait expressive, charming, and timeless — like a magical storybook illustration
+
+The final result should evoke a nostalgic fantasy world through a unique, handcrafted cartoon look.`;
 };
 
 /**
@@ -168,7 +177,6 @@ Text: ${text}
  * @param languageInstructions - Instructions for the language of the text.
  * @returns 
  */
-// Ajout aux prompts.ts existants
 
 export const getNextScenePrompt = (
   storyData: any, 
@@ -228,28 +236,29 @@ ${storyData.secondaryCharacters.map((char: any) => `- Name: ${char.name}
     Backstory: ${char.backstory || "Undefined"}`).join("\n")}
 
 ${useItemSystem ? `## AVAILABLE ITEMS IN STORY
-${storyData.items.map((item: any) => `- Name: ${item.name}
-  Description: ${item.description}
-  Type: ${item.type}
-  Rarity: ${item.rarity}
-  Effect: ${item.effect || "None"}
-  Use Count: ${item.useCount || "Unlimited"}`).join("\n")}
-      
-## PLAYER'S INVENTORY
-${playerInventory.length > 0 ? playerInventory.map((item: any) => `- Name: ${item.name}
-  Description: ${item.description}
-  Type: ${item.type}
-  Rarity: ${item.rarity}
-  Effect: ${item.effect || "None"}
-  Quantity: ${item.quantity}
-  Equipped: ${item.isEquipped ? "Yes" : "No"}`).join("\n") : "The player has no items in their inventory."}
+  ${storyData.items.map((item: any) => `- Name: ${item.name}
+    Description: ${item.description}
+    Type: ${item.type}
+    Rarity: ${item.rarity}
+    Effect: ${item.effect || "None"}
+    Use Count: ${item.useCount || "Unlimited"}`).join("\n")}
+        
+  ## PLAYER'S INVENTORY
+  ${playerInventory.length > 0 ? playerInventory.map((item: any) => `- Name: ${item.name}
+    Description: ${item.description}
+    Type: ${item.type}
+    Rarity: ${item.rarity}
+    Effect: ${item.effect || "None"}
+    Quantity: ${item.quantity}
+    Equipped: ${item.isEquipped ? "Yes" : "No"}`).join("\n") : "The player has no items in their inventory."}
 
-${activeItem ? `## ACTIVE ITEM
-- Name: ${activeItem.name}
-- Description: ${activeItem.description}
-- Type: ${activeItem.type}
-- Rarity: ${activeItem.rarity}
-- Effect: ${activeItem.effect || "None"}` : ""}` : ""}
+  ${activeItem ? `## ACTIVE ITEM
+  - Name: ${activeItem.name}
+  - Description: ${activeItem.description}
+  - Type: ${activeItem.type}
+  - Rarity: ${activeItem.rarity}
+  - Effect: ${activeItem.effect || "None"}` : ""}`
+: ""}
   
 ## CURRENT SCENE
 Title: ${currentScene.title}
