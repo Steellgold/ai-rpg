@@ -20,8 +20,8 @@ export const useItem = async (itemId: string, inventoryItemId: string) => {
   const user_data = await prisma.user.findUnique({ where: { id: user.id } });
   if (!user_data) throw new Error("User not found");
 
-  const { credits, isPremium } = await checkCredits(user.id);
-  if (!isPremium && credits <= 0) {
+  const { credits } = await checkCredits(user.id);
+  if (credits <= 0) {
     throw new Error("No credits available. Please purchase more credits.");
   }
 
