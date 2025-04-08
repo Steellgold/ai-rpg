@@ -14,7 +14,7 @@ const Unauthorized = () => {
           You need to be authenticated to access this page or resource.
         </p>
 
-        <Link href="/" className={buttonVariants({ variant: "outline" })}>
+        <Link href="/" className={buttonVariants({ variant: "outline", className: "cursor-pointer z-[13]" })}>
           Go back
         </Link>
       </div>

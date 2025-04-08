@@ -12,7 +12,7 @@ const Forbidden = () => {
         You are not allowed to access this page or resource.
       </p>
 
-      <Link href="/" className={buttonVariants({ variant: "outline" })}>
+      <Link href="/" className={buttonVariants({ variant: "outline", className: "cursor-pointer z-[13]" })}>
         Go back home
       </Link>
     </div>
