@@ -78,7 +78,10 @@ const Page = async ({ params }: PageProps) => {
               speaker: true,
               text: true,
               emotion: true,
-              order: true
+              order: true,
+              createdAt: true,
+              updatedAt: true,
+              sceneId: true
             },
             orderBy: {
               order: 'asc'
@@ -156,18 +159,6 @@ const Page = async ({ params }: PageProps) => {
           id: true
         }
       },
-      dialogues: {
-        select: {
-          id: true,
-          speaker: true,
-          text: true,
-          emotion: true,
-          order: true
-        },
-        orderBy: {
-          order: 'asc'
-        }
-      },
       items: {
         select: {
           isHidden: true,
@@ -184,7 +175,22 @@ const Page = async ({ params }: PageProps) => {
             }
           }
         }
-      }
+      },
+      dialogues: {
+        select: {
+          id: true,
+          speaker: true,
+          text: true,
+          emotion: true,
+          order: true,
+          createdAt: true,
+          updatedAt: true,
+          sceneId: true
+        },
+        orderBy: {
+          order: 'asc'
+        }
+      },
     }
   });
   if (!scene) return notFound();

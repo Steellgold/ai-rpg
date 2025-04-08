@@ -94,15 +94,6 @@ export type PageClientProps = {
           id: true;
         };
       };
-      dialogues: {
-        select: {
-          id: true;
-          speaker: true;
-          text: true;
-          emotion: true;
-          order: true;
-        };
-      };
       items: {
         select: {
           isHidden: true;
@@ -118,6 +109,14 @@ export type PageClientProps = {
               imageUrl: true;
             };
           };
+        };
+      }
+      dialogues?: {
+        select: {
+          id: true;
+          speaker: true;
+          text: true;
+          emotion: true;
         };
       };
     };
