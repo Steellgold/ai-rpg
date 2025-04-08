@@ -292,7 +292,13 @@ Example format for returned dialogues array:
     "speaker": "Character Name",
     "text": "What the character says",
     "emotion": "happy"
-  }
+  },
+  {
+    "speaker": "Second Character Name",
+    "text": "What the second character says",
+    "emotion": "happy"
+  },
+  ...
 ]
 
 ## MAIN INSTRUCTIONS
@@ -314,5 +320,6 @@ Example format for returned dialogues array:
     : "Focus on character interactions, environments, and emotional depth in your descriptions."}
 
 Always keep in mind the characters' personalities, the player's inventory, and the player's previous choices when generating the new scene.
+IMPORTANT: Ensure that dialogues are generated within the dialogue object and not within the scene content.
 `;
 };
