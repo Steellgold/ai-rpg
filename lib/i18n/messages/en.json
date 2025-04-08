@@ -72,6 +72,21 @@
       }
     },
     "Story": {
+      "Dialogue": {
+        "emotion": {
+          "happy": "happy",
+          "sad": "sad",
+          "angry": "angry",
+          "surprised": "surprised",
+          "confused": "confused",
+          "afraid": "afraid",
+          "neutral": "neutral"
+        },
+        "expand": "Expand",
+        "collapse": "Collapse"
+      },
+      "SceneImage": "Scene Image",
+
       "Scenes": {
         "Title": "Scenes",
         "Description": "Here you can see the scenes of your story and go back to them (however, you won't be able to change a choice already made)."
