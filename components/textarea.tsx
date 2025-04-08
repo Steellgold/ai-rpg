@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, ReactElement, HTMLAttributes, cloneElement, useMemo } from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowUpIcon, Baby, Crown, Eclipse, Flower, Loader, Lock, LockOpen, Music, Pickaxe, TowerControl, User, X } from "lucide-react";
+import { Baby, Crown, Eclipse, Flower, Loader, Lock, LockOpen, Music, Pickaxe, TowerControl, User, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Component } from "@/lib/types";
 import { MultiSelectCombobox } from "./ui/multi-select-combobox";
@@ -14,8 +14,11 @@ import { useSession } from "@/lib/hooks/use-session";
 import { useSearchParams } from "next/navigation";
 import { StoryLanguageSelector } from "./story-language-selector";
 import { StoryLanguage } from "@prisma/client";
-import { CreditCostDisplay } from "./credit-cost-display";
 import { calculateTotalCreditCost, getDefaultFeatures } from "@/lib/features/generation-features";
+import { EnhancedSendButton } from "./textarea.send-button";
+import { useCredits } from "@/lib/hooks/use-credits";
+import { ShineBorder } from "./magicui/shine-border";
+import { CustomScrollbar } from "./ui/scrollbar";
 
 type Suggestion = {
   label: string;
@@ -47,17 +50,12 @@ const suggestions: Suggestion[] = [
   }
 ];
 
-export const AiTextarea: Component<
-  HTMLAttributes<HTMLDivElement> & {
-    isPremium?: boolean;
-  }
-> = ({
-  className, isPremium = false
-}): ReactElement => {
+export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ className }): ReactElement => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const searchParams = useSearchParams();
 
   const { user, loading: isLoggingIn, signIn } = useSession();
+  const { credits, loading: isCreditsFetching } = useCredits();
 
   const [prompt, setPrompt] = useState(searchParams.get("prompt") || "");
   const [isInputValid, setIsInputValid] = useState(false);
@@ -80,10 +78,9 @@ export const AiTextarea: Component<
   const calculateCreditCost = useMemo(() => {
     const baseFeatureCost = calculateTotalCreditCost(activeFeatures);
     const lengthCost = Math.floor(prompt.length / 500);
-    const totalCost = baseFeatureCost + lengthCost;
-    
-    return isPremium ? Math.max(1, Math.ceil(totalCost * 0.9)) : totalCost;
-  }, [activeFeatures, prompt.length, isPremium]);
+
+    return baseFeatureCost + lengthCost;
+  }, [activeFeatures, prompt.length]);
 
   useEffect(() => {
     const textarea = textareaRef.current
@@ -120,7 +117,7 @@ export const AiTextarea: Component<
       prompt, 
       selectedGenres || [], 
       childMode, 
-      isPremium ? items : false,
+      items,
       storyLanguage,
       calculateCreditCost
     );
@@ -128,9 +125,11 @@ export const AiTextarea: Component<
 
   return (
     <div className="flex flex-col items-center w-full gap-4">
-      <div className={cn("rounded-xl overflow-hidden w-full", className, {
+      <CustomScrollbar />
+      <div className={cn("relative border-2 rounded-xl overflow-hidden w-full", className, {
         "bg-[#070910] border border-[#173a8940]": true
       })}>
+        <ShineBorder className="rounded-xl" shineColor={["#2744ad", "#6c83d6", "#0d288a"]} />
         <textarea
           ref={textareaRef}
           value={prompt}
@@ -140,13 +139,13 @@ export const AiTextarea: Component<
             "The story takes place in the kingdom of Kiyomitsugawa, a prosperous nation bathed by sacred rivers, with landscapes adorned with thousand-year-old cherry trees and majestic mountains. This kingdom, imbued with ser...."
           }
           className={cn(
-            "w-full resize-none py-4 px-4 outline-none bg-transparent text-gray-200 placeholder:text-gray-500 min-h-[110px]", {
+            "w-full resize-none py-4 px-4 outline-none bg-transparent text-gray-200 placeholder:text-gray-500 min-h-[110px] custom-scrollbar", {
               "animate-pulse italic text-gray-400": isGenerating
             }
           )}
         />
 
-        <div className="flex items-center justify-between p-2 border-t border-[#173a8940]">
+        <div className="flex items-center justify-between p-2">
           <div className="flex items-center flex-wrap gap-1.5">
             {(selectedGenres.length > 0 || prompt.length > 0) && (!isGenerating || isInputValid) && (
               <Button
@@ -203,15 +202,15 @@ export const AiTextarea: Component<
               className={cn(
                 "!border rounded-full transition-opacity cursor-pointer", {
                   "w-8": true,
-                  "border-teal-400/20 hover:bg-teal-400/10": items && isPremium,
+                  "border-teal-400/20 hover:bg-teal-400/10": items,
                   "border-gray-400/20 hover:bg-gray-400/10": !items
                 }
               )}
-              onClick={() => isPremium && setItems(!items)}
-              disabled={isGenerating || isLoggingIn || !isPremium}
+              onClick={() => setItems(!items)}
+              disabled={isGenerating || isLoggingIn}
             >
               <Pickaxe className={cn("h-4 w-4", {
-                "text-teal-400": items && isPremium,
+                "text-teal-400": items,
                 "text-gray-200": !items
               })} />
             </Button>
@@ -222,12 +221,12 @@ export const AiTextarea: Component<
               className={cn(
                 "!border rounded-full transition-opacity !h-8 cursor-pointer px-2.5", {
                   "border-teal-400/20 hover:bg-teal-400/10": publicMode,
-                  "border-gray-400/20 hover:bg-gray-400/10": !publicMode && !isPremium,
-                  "border-red-400/20 hover:bg-red-400/10": !publicMode && isPremium,
+                  "border-gray-400/20 hover:bg-gray-400/10": !publicMode,
+                  "border-red-400/20 hover:bg-red-400/10": !publicMode,
                 }
               )}
               onClick={() => setPublicMode(!publicMode)}
-              disabled={isGenerating || isLoggingIn || !isPremium}
+              disabled={isGenerating || isLoggingIn}
             >
               {cloneElement(
                 publicMode
@@ -235,51 +234,35 @@ export const AiTextarea: Component<
                   : <Lock className="h-4 w-4" />, {
                     className: cn("h-4 w-4", {
                       "text-teal-400": publicMode,
-                      "text-red-200": !publicMode && isPremium,
-                      "text-gray-200": !publicMode && !isPremium
+                      "text-red-200": !publicMode,
+                      "text-gray-200": !publicMode
                     })
               })}
 
               <span className={cn("text-sm", {
                 "text-teal-400": publicMode,
-                "text-red-200": !publicMode && isPremium,
-                "text-gray-200": !publicMode && !isPremium
+                "text-red-200": !publicMode,
+                "text-gray-200": !publicMode
               })}>
                 {publicMode ? t("AiTextarea.PublicModeOn") : t("AiTextarea.PublicModeOff")}
               </span>
             </Button>
-
-            <CreditCostDisplay 
-              activeFeatures={activeFeatures}
-              promptLength={prompt.length}
-              isPremium={isPremium}
-            />
           </div>
 
           <div className="flex items-center">
             {user ? (
-              <>
-                <Button
-                  onClick={handleSend}
-                  disabled={!isInputValid}
-                  className={cn(
-                    "rounded-full transition-opacity", {
-                      "!h-8 !w-8": !isInputValid || isGenerating,
-                      "!h-8 !px-4": isInputValid && !isGenerating,
-                      "cursor-not-allowed": !isInputValid,
-                      "bg-blue-600 hover:bg-blue-500": !isGenerating || isInputValid,
-                      "cursor-not-allowed bg-blue-600/50 hover:bg-blue-600/50": isGenerating,
-                      "text-white": true
-                    }
-                  )}
-                >
-                  {isGenerating
-                    ? <Loader className="animate-spin h-4 w-4 text-white" />
-                    : <ArrowUpIcon className="h-4 w-4 text-white" />
-                  }
-                  {isInputValid && !isGenerating && <>{t("AiTextarea.Generate")}</>}
-                </Button>
-              </>
+              <EnhancedSendButton
+                isGenerating={isGenerating}
+                isInputValid={isInputValid}
+                handleSend={handleSend}
+                activeFeatures={activeFeatures}
+                promptLength={prompt.length}
+                generateText={t("AiTextarea.Generate")}
+                calculateCreditCost={calculateCreditCost}
+                creditHave={
+                  isCreditsFetching ? 0 : credits
+                }
+              />
             ) : (
               <>
                 <Button

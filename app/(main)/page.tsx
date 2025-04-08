@@ -14,6 +14,8 @@ const Page = async () => {
   let user_data = null;
   if (user) {
     const { data, error } = await supabase.from("User").select("*").eq("id", user?.id).single();
+    user_data = data;
+
     if (error) {
       console.error("Error fetching user data:", error);
     } else {
@@ -62,7 +64,7 @@ const Page = async () => {
 
         <div className="h-12" />
 
-        <AiTextarea isPremium={user_data?.subscription_status == "active"} />
+        <AiTextarea />
       </section>
 
       <hr className="my-32 border-t border-[#161616]" />
