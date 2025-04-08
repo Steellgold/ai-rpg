@@ -1,14 +1,13 @@
 "use client"
 
 import { useState, useRef, useEffect, ReactElement, HTMLAttributes, cloneElement, useMemo } from "react";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { Baby, Crown, Eclipse, Flower, Loader, Lock, LockOpen, Maximize, Music, Pickaxe, TowerControl, User, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Baby, Loader, Lock, LockOpen, Maximize, Pickaxe, User, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Component } from "@/lib/types";
 import { MultiSelectCombobox } from "./ui/multi-select-combobox";
-import { Genre, genreIds } from "@/lib/genres-ids";
+import { genreIds } from "@/lib/genres-ids";
 import { useTranslations } from "next-intl";
-import { FaDragon } from "react-icons/fa";
 import { generateStory } from "@/lib/actions/generate.ai.action";
 import { useSession } from "@/lib/hooks/use-session";
 import { useSearchParams } from "next/navigation";
@@ -21,36 +20,7 @@ import { ShineBorder } from "./magicui/shine-border";
 import { CustomScrollbar } from "./ui/scrollbar";
 import { useToast } from "@/lib/hooks/use-toast";
 import Link from "next/link";
-
-type Suggestion = {
-  label: string;
-  prompt: string;
-  icon: ReactElement;
-  genres: Genre[];
-  isChild?: boolean;
-};
-
-const suggestions: Suggestion[] = [
-  { label: "Suggestions.TKOK.Label", prompt: "Suggestions.TKOK.Prompt", icon: <Crown className="h-4 w-4 text-gray-200" />,
-    genres: ["fantasy-medieval", "adventure", "mythology", "fantasy"], isChild: false
-  },
-  { label: "Suggestions.TSC.Label", prompt: "Suggestions.TSC.Prompt", icon: <Eclipse className="h-4 w-4 text-gray-200" />,
-    genres: ["dark-fantasy", "mystery", "fantasy", "supernatural"], isChild: false
-  },
-  { label: "Suggestions.DRA.Label", prompt: "Suggestions.DRA.Prompt", icon: <FaDragon className="h-4 w-4 text-gray-200" />,
-    genres: ["fantasy", "adventure", "mythology", "fantasy-medieval"], isChild: false
-  },
-  // Safe-for-children suggestions
-  { label: "Suggestions.WG.Label", prompt: "Suggestions.WG.Prompt", icon: <Flower className="h-4 w-4 text-gray-200" />,
-    genres: ["fantasy", "adventure", "family", "supernatural"], isChild: true
-  },
-  { label: "Suggestions.SL.Label", prompt: "Suggestions.SL.Prompt", icon: <TowerControl className="h-4 w-4 text-gray-200" />,
-    genres: ["fantasy", "adventure", "family", "mystery"], isChild: true
-  },
-  { label: "Suggestions.AO.Label", prompt: "Suggestions.AO.Prompt", icon: <Music className="h-4 w-4 text-gray-200" />,
-    genres: ["fantasy", "music", "adventure", "family"], isChild: true
-  }
-];
+import { suggestions } from "@/lib/suggestions";
 
 export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ className }): ReactElement => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
