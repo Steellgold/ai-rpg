@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { BookDashed, Home, Menu, Settings } from "lucide-react"
+import { BookDashed, Home, LibraryBig, Menu, Settings } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
@@ -13,7 +13,7 @@ import Image from "next/image"
 const navigationItems = [
   { name: "Home", href: "/", icon: Home },
   { name: "Account", href: "/account", icon: Settings },
-  { name: "Stories", href: "/continue", icon: BookDashed }
+  { name: "Stories", href: "/continue", icon: LibraryBig }
 ]
 
 export const Navbar = () => {
@@ -56,8 +56,10 @@ export const Navbar = () => {
                 {navigationItems.map((item) => {
                   const Icon = item.icon
                   return (
-                    <Link key={item.name} href={item.href} className={cn("flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium")}>
-                      <Icon className="h-5 w-5" />
+                    <Link key={item.name} href={item.href} className={cn(
+                      "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium"
+                    )}>
+                      <Icon className="h-4 w-4" />
                       {item.name}
                     </Link>
                   )
@@ -79,8 +81,11 @@ export const Navbar = () => {
             {navigationItems.map((item) => {
               const Icon = item.icon
               return (
-                <Link key={item.name} href={item.href} className={cn("flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium")}>
-                  <Icon className="h-5 w-5" />
+                <Link key={item.name} href={item.href} className={cn(
+                  "flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium",
+                  "hover:bg-accent-foreground/10",
+                )}>
+                  <Icon className="h-4 w-4" />
                   {item.name}
                 </Link>
               )
