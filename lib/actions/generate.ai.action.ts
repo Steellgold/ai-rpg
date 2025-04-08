@@ -35,7 +35,7 @@ export const generateStory = async (
     serverEnv.SUPABASE_SERVICE_ROLE_KEY
   );
 
-  const functionName = (user_data.subscription_status == "active" && itemsEnabled) ? "generate-story-v2" : "generate-story";
+  const functionName = (user_data.subscription_status == "active" && itemsEnabled) ? "generate-story-v3" : "generate-story";
 
   const jobId = createId();
   const job = await prisma.job.create({

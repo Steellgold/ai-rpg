@@ -44,7 +44,7 @@ export const generateNextScene = async (
   }
 
   const functionName = (user_data.subscription_status == "active" && story.hasItems)
-    ? "generate-scene-story-v2"
+    ? "generate-scene-story-v3"
     : "generate-scene-story";
 
   try {

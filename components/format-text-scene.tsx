@@ -2,23 +2,54 @@ import { type ReactNode } from "react"
 import { cn } from "@/lib/utils"
 import { CharacterMention } from "./character-card"
 import { ItemMention } from "./item-card"
+import { Dialogue } from "./dialogue"
 import { PageClientProps } from "@/app/(game)/[...story]/page.client"
 
 const escapeRegExp = (string: string): string => {
-  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
 export const formatSceneContent = (
   content: string, 
   characters: PageClientProps["story_data"]["characters"], 
   items: any[] = [],
+  dialogues: any[] = [],
   loading = false
 ) => {
-  return content.split("\n").map((paragraph, index) => {
+  const paragraphs = content.split("\n");
+  const formattedResult: ReactNode[] = [];
+  
+  paragraphs.forEach((paragraph, index) => {
+    const dialogueMarker = paragraph.trim().match(/^__DIALOGUE:(\d+)__$/);
+    
+    if (dialogueMarker && dialogues && dialogues.length > 0) {
+      const dialogueIndex = parseInt(dialogueMarker[1], 10);
+      const dialogue = dialogues[dialogueIndex];
+      
+      if (dialogue) {
+        const character = characters.find(c => c.name === dialogue.speaker);
+        formattedResult.push(
+          <Dialogue 
+            key={`dialogue-${index}`}
+            speaker={dialogue.speaker}
+            text={dialogue.text}
+            emotion={dialogue.emotion}
+            character={character}
+          />
+        );
+      }
+      return;
+    }
+    
+    if (paragraph.trim() === "") {
+      formattedResult.push(<br key={`br-${index}`} />);
+      return;
+    }
+    
     type Replacement = {
       start: number;
       end: number;
-      type: 'character' | 'item';
+      type: "character" | "item";
       entity: any;
     }
     
@@ -26,12 +57,12 @@ export const formatSceneContent = (
     
     const sortedCharacters = [...characters].sort((a, b) => b.name.length - a.name.length);
     for (const character of sortedCharacters) {
-      const nameParts = [character.name, ...character.name.split(' ')].filter(part => part.length > 1);
+      const nameParts = [character.name, ...character.name.split(" ")].filter(part => part.length > 1);
       
       const replacedRanges = new Set<string>();
       
       for (const namePart of nameParts) {
-        const regex = new RegExp(`\\b${escapeRegExp(namePart)}\\b`, 'gi');
+        const regex = new RegExp(`\\b${escapeRegExp(namePart)}\\b`, "gi");
         let match: RegExpExecArray | null;
         
         while ((match = regex.exec(paragraph)) !== null) {
@@ -50,7 +81,7 @@ export const formatSceneContent = (
               replacements.push({
                 start: matchStart,
                 end: matchEnd,
-                type: 'character',
+                type: "character",
                 entity: character
               });
               replacedRanges.add(rangeKey);
@@ -65,7 +96,7 @@ export const formatSceneContent = (
       const replacedRanges = new Set<string>();
       
       for (const item of sortedItems) {
-        const regex = new RegExp(`\\b${escapeRegExp(item.name)}\\b`, 'gi');
+        const regex = new RegExp(`\\b${escapeRegExp(item.name)}\\b`, "gi");
         let match: RegExpExecArray | null;
         
         while ((match = regex.exec(paragraph)) !== null) {
@@ -84,7 +115,7 @@ export const formatSceneContent = (
               replacements.push({
                 start: matchStart,
                 end: matchEnd,
-                type: 'item',
+                type: "item",
                 entity: item
               });
               replacedRanges.add(rangeKey);
@@ -104,13 +135,13 @@ export const formatSceneContent = (
         segments.push(paragraph.substring(lastPos, replacement.start));
       }
       
-      if (replacement.type === 'character') {
+      if (replacement.type === "character") {
         segments.push(
           <span key={`char-${replacement.entity.id}-${replacement.start}`} className="inline-flex align-middle mr-0 pr-0">
             <CharacterMention character={replacement.entity} />
           </span>
         );
-      } else if (replacement.type === 'item') {
+      } else if (replacement.type === "item") {
         segments.push(
           <span key={`item-${replacement.entity.id}-${replacement.start}`} className="inline-flex align-middle mr-0 pr-0">
             <ItemMention item={replacement.entity} />
@@ -125,10 +156,12 @@ export const formatSceneContent = (
       segments.push(paragraph.substring(lastPos));
     }
     
-    return (
+    formattedResult.push(
       <p key={index} className={cn({ "animate-pulse": loading })}>
         {segments.length > 0 ? segments : paragraph}
       </p>
     );
   });
+  
+  return formattedResult;
 }
