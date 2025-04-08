@@ -1,7 +1,7 @@
 import { type ReactNode } from "react"
 import { cn } from "@/lib/utils"
-import { CharacterMention } from "./character-card"
-import { ItemMention } from "./item-card"
+import { CharacterMention } from "./mentions/character-card"
+import { ItemMention } from "./mentions/item-card"
 import { Dialogue } from "./dialogue"
 import { PageClientProps } from "@/app/(game)/[...story]/page.client"
 

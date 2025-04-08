@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Backpack, Search, AlertTriangle } from "lucide-react"
 import { Progress } from "@/components/ui/progress"
 import { useTranslations } from "next-intl"
-import { ItemMention } from "./item-card"
+import { ItemMention } from "./mentions/item-card"
 import { cn } from "@/lib/utils"
 import { ItemRarity, ItemType } from "@prisma/client"
 
