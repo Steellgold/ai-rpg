@@ -128,7 +128,7 @@ export const generateCharacterAvatar = async (storyId: string, characterId: stri
       n: 1,
       size: "1024x1024",
       quality: "standard",
-      style: "natural"
+      style: "vivid"
     });
     
     if (avatarResponse.data.length > 0) {

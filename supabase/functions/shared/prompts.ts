@@ -42,17 +42,17 @@ export const getLanguageInstructions = (languageCode: string): string => {
  * @returns 
  */
 export const extractSceneImagePrompt = (prompt: string): string => {
-  return `Create a high-quality, detailed illustration for a narrative game scene. 
+  return `Create a high-quality, detailed illustration for a narrative game scene.
 The scene should depict: ${prompt}
 Style: Cinematic, detailed, high-quality digital art with proper lighting and depth.
 
-Focus on the characters and the environment, ensuring a captivating atmosphere.
+Focus on the individuals and the environment, ensuring a captivating atmosphere.
 Make sure to include elements that enhance the narrative aspect of the scene.
 Consider the following details:
-- Characters' expressions and poses
+- Expressions and poses of the individuals
 - Background elements that complement the story
 - Color palette that matches the mood of the scene
-- Lighting that highlights the characters and setting
+- Lighting that highlights the individuals and setting
 Ensure the image is visually striking and immersive, drawing the viewer into the narrative.
 
 ### IMPORTANT:
@@ -101,9 +101,9 @@ The result should look like a magical illustration from an old fantasy book or a
  * @returns
  */
 export const extractCharacterAvatarPrompt = (character: any): string => {
-  return `Create a detailed character portrait in **vintage cartoon style** (1930s animation aesthetic) for a fantasy narrative RPG.
+  return `Create a detailed portrait in **vintage cartoon style** (1930s animation aesthetic) for a fantasy narrative RPG.
 
-Character details:
+Details:
 - Name: ${character.name}
 - Description: ${character.description}
 ${character.personality ? `- Personality: ${character.personality}` : ''}
@@ -114,7 +114,7 @@ ${character.age ? `- Age: ${character.age}` : ''}
 - Head and shoulders only, centered
 - Drawn in a soft vintage cartoon style with hand-inked lines and warm, muted sepia/brown tones
 - Background: Plain or faded parchment-style, neutral and non-distracting
-- Expression should reflect the character's personality (e.g., mysterious, bold, cheerful)
+- Expression should reflect the individual's personality (e.g., mysterious, bold, cheerful)
 - Use stylized proportions, classic cartoon exaggeration, and textured shading
 
 ❌ Do NOT include:
@@ -122,7 +122,7 @@ ${character.age ? `- Age: ${character.age}` : ''}
 - Overly modern design elements or effects
 
 ✅ Focus:
-- Communicate the character’s identity and mood through face, posture, and outfit details
+- Communicate the individual’s identity and mood through face, posture, and outfit details
 - Keep the portrait expressive, charming, and timeless — like a magical storybook illustration
 
 The final result should evoke a nostalgic fantasy world through a unique, handcrafted cartoon look.`;
