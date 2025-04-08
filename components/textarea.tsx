@@ -16,7 +16,7 @@ import { StoryLanguage } from "@prisma/client";
 import { calculateTotalCreditCost, getDefaultFeatures } from "@/lib/features/generation-features";
 import { EnhancedSendButton } from "./textarea.send-button";
 import { useCredits } from "@/lib/hooks/use-credits";
-import { ShineBorder } from "./magicui/shine-border";
+import { ShineBorder } from "./ui/magicui/shine-border";
 import { CustomScrollbar } from "./ui/scrollbar";
 import { useToast } from "@/lib/hooks/use-toast";
 import Link from "next/link";
