@@ -6,7 +6,7 @@ export const Footer: Component<{}> = () => {
   const t = useTranslations("Footer");
   
   return (
-    <footer className="w-full bg-card/50 border-t border-border mt-auto">
+    <footer className="w-full bg-card/10 border-t border-border mt-auto z-[13] backdrop-blur-3xl">
       <div className="container mx-auto py-8 px-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="col-span-1 md:col-span-2">

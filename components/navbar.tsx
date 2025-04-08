@@ -31,7 +31,7 @@ export const Navbar = () => {
   return (
     <nav
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-200 border-b",
+        "fixed top-0 left-0 right-0 z-[13] transition-all duration-200",
         isScrolled ? "bg-background/80 backdrop-blur-sm shadow-md" : "bg-transparent",
       )}
     >
