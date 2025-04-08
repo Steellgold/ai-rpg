@@ -8,7 +8,7 @@ import { createClient as createSupabaseClient } from "@supabase/supabase-js"
 import { redirect } from "next/navigation";
 import { env } from "../env/env";
 import { Database } from "../supabase/database.types";
-import { checkCredits } from "@/lib/limit"
+import { checkCredits } from "@/lib/credits"
 import { StoryLanguage } from "@prisma/client";
 import { getDefaultFeatures } from "@/lib/features/generation-features";
 import { validateCreditCost } from "@/lib/actions/calculate-credit-cost";
@@ -28,17 +28,10 @@ export const generateStory = async (
   const user_data = await prisma.user.findUnique({ where: { id: user.id } });
   if (!user_data) throw new Error("User not found");
 
-  const { credits, isPremium } = await checkCredits(user.id);
-  if (!isPremium && credits <= 0) {
-    throw new Error("No credits available. Please purchase more credits.");
-  }
+  const { credits } = await checkCredits(user.id);
 
   const activeFeatures = getDefaultFeatures(isForChildren || false, itemsEnabled || false);
-  const actualCost = await validateCreditCost(clientCost || 0, {
-    activeFeatures,
-    promptLength: text.length,
-    isPremium: user_data.subscription_status === "active"
-  });
+  const actualCost = await validateCreditCost(clientCost || 0, { activeFeatures, promptLength: text.length });
 
   if (credits < actualCost) {
     throw new Error(`Not enough credits. This operation requires ${actualCost} credits, but you only have ${credits}.`);
@@ -72,9 +65,8 @@ export const generateStory = async (
       genres: genres || [],
       userId: user.id,
       jobId,
-      isPremium: user_data.subscription_status == "active",
       isChildren: isForChildren || false,
-      items: user_data.subscription_id == "active" ? itemsEnabled : false,
+      items: itemsEnabled || false,
       language,
       creditCost: actualCost
     }

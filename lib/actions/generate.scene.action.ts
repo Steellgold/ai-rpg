@@ -4,7 +4,7 @@ import { redirect } from "next/navigation"
 import { prisma } from "@/lib/db/prisma"
 import { createClient } from "@/lib/supabase/server"
 import { env } from "@/lib/env/env"
-import { checkCredits } from "@/lib/limit"
+import { checkCredits } from "@/lib/credits"
 import { updateGameSave, recordChoice, addItemToInventory } from "@/lib/services/game-save.service"
 
 export const generateNextScene = async (
@@ -23,10 +23,7 @@ export const generateNextScene = async (
   const user_data = await prisma.user.findUnique({ where: { id: user.id } });
   if (!user_data) throw new Error("User not found");
 
-  const { credits, isPremium } = await checkCredits(user.id);
-  if (!isPremium && credits <= 0) {
-    throw new Error("No credits available. Please purchase more credits.");
-  }
+  const { credits } = await checkCredits(user.id);
 
   const story = await prisma.story.findUnique({
     where: { id: storyId },
@@ -64,8 +61,7 @@ export const generateNextScene = async (
       diceRoll,
       gameSaveId,
       userId: user.id,
-      isPremium: user_data.subscription_status == "active",
-      items: story.hasItems && user_data.subscription_status == "active",
+      items: story.hasItems,
       activeItem
     };
 

@@ -2,7 +2,7 @@ import { createClient } from "@supabase/supabase-js";
 import { createClient as createServerClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/db/prisma"
 import { OpenAI } from "openai"
-import { checkCredits } from "@/lib/limit";
+import { checkCredits } from "@/lib/credits";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -68,10 +68,8 @@ export const generateSceneImage = async (sceneId: string, imagePrompt?: string):
   const user_data = await prisma.user.findUnique({ where: { id: user.id } });
   if (!user_data) return { success: false, error: "User not found" }
 
-  const { credits, isPremium } = await checkCredits(user.id);
-  if (!isPremium && credits <= 0) {
-    throw new Error("Insufficient credits to generate images.");
-  }
+  const { credits } = await checkCredits(user.id);
+  if (credits <= 0) throw new Error("Insufficient credits to generate images.");
 
   try {
     const scene = await prisma.scene.findUnique({
