@@ -1042,7 +1042,7 @@ export type Database = {
       JobStatus: "PENDING" | "RUNNING" | "COMPLETED" | "FAILED"
       NarrativeStyle: "FirstPerson" | "SecondPerson" | "ThirdPerson"
       StoryLanguage: "auto" | "en" | "fr" | "es" | "it" | "de"
-      StoryVGenerated: "V1" | "V2"
+      StoryVGenerated: "V1" | "V2" | "V3"
       TransactionType:
         | "PURCHASE"
         | "SUBSCRIPTION"
@@ -1197,7 +1197,7 @@ export const Constants = {
       JobStatus: ["PENDING", "RUNNING", "COMPLETED", "FAILED"],
       NarrativeStyle: ["FirstPerson", "SecondPerson", "ThirdPerson"],
       StoryLanguage: ["auto", "en", "fr", "es", "it", "de"],
-      StoryVGenerated: ["V1", "V2"],
+      StoryVGenerated: ["V1", "V2", "V3"],
       TransactionType: [
         "PURCHASE",
         "SUBSCRIPTION",

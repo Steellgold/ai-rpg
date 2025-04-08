@@ -161,6 +161,7 @@ enum NarrativeStyle {
 enum StoryVGenerated {
   V1
   V2
+  V3
 }
 
 model Story {
