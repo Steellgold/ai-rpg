@@ -305,9 +305,13 @@
   },
   "Utils": {
     "CreditCost": {
-      "cost": "{{count}} credit|{{count}} credits",
-      "discount": "premium discount",
-      "lengthFactor": "+{{count}} for length"
+      "cost": "{count} credit(s)",
+      "detail": "Credit cost details",
+      "baseFeatures": "Base features",
+      "promptLength": "Prompt length",
+      "lengthFactor": "+{count} for length",
+      "total": "Total",
+      "creditAmount": "{count} credit(s)"
     },
     "Credits": {
       "Errors": {

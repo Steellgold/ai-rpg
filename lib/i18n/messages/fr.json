@@ -307,8 +307,12 @@
   "Utils": {
     "CreditCost": {
       "cost": "{count} crédit(s)",
-      "discount": "réduction premium",
-      "lengthFactor": "+{count} pour la longueur"
+      "detail": "Détail du coût en crédits",
+      "baseFeatures": "Fonctionnalités de base",
+      "promptLength": "Longueur du prompt",
+      "lengthFactor": "+{count} pour la longueur",
+      "total": "Total",
+      "creditAmount": "{count} crédit(s)"
     },
     "Credits": {
       "Errors": {
