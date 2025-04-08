@@ -352,10 +352,27 @@ model SceneItem {
   @@index([sceneId])
 }
 
+model Dialogue {
+  id        String   @id @default(cuid())
+  speaker   String
+  text      String   @db.Text
+  emotion   String?
+  scene     Scene    @relation(fields: [sceneId], references: [id], onDelete: Cascade)
+  sceneId   String
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@index([sceneId])
+}
+
 model Scene {
   id                 String            @id @default(cuid())
   title              String
+  // 
   content            String            @db.Text
+  dialogues          Dialogue[]
+  // 
   imagePrompt        String?           @db.Text
   imageUrl           String?
   order              Int               @default(0)

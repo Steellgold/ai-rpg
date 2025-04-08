@@ -297,6 +297,47 @@ export type Database = {
           },
         ]
       }
+      Dialogue: {
+        Row: {
+          createdAt: string
+          emotion: string | null
+          id: string
+          order: number
+          sceneId: string
+          speaker: string
+          text: string
+          updatedAt: string
+        }
+        Insert: {
+          createdAt?: string
+          emotion?: string | null
+          id: string
+          order?: number
+          sceneId: string
+          speaker: string
+          text: string
+          updatedAt?: string
+        }
+        Update: {
+          createdAt?: string
+          emotion?: string | null
+          id?: string
+          order?: number
+          sceneId?: string
+          speaker?: string
+          text?: string
+          updatedAt?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "Dialogue_sceneId_fkey"
+            columns: ["sceneId"]
+            isOneToOne: false
+            referencedRelation: "Scene"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       GameSave: {
         Row: {
           characterClass: string | null
