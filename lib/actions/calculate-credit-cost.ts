@@ -5,19 +5,17 @@ import { GenerationFeatureType, calculateTotalCreditCost } from "@/lib/features/
 interface CreditCostParams {
   activeFeatures: GenerationFeatureType[];
   promptLength: number;
-  isPremium: boolean;
 }
 
 export const calculateServerCreditCost = async(params: CreditCostParams): Promise<number> => {
-  const { activeFeatures, promptLength, isPremium } = params;
+  const { activeFeatures, promptLength } = params;
   
   const baseFeatureCost = calculateTotalCreditCost(activeFeatures);
   const lengthCost = Math.floor(promptLength / 500);
 
   const totalCost = baseFeatureCost + lengthCost;
-  const finalCost = isPremium ? Math.max(1, Math.ceil(totalCost * 0.9)) : totalCost;
 
-  return finalCost;
+  return totalCost;
 };
 
 export const validateCreditCost = async(clientCost: number, params: CreditCostParams): Promise<number> => {
