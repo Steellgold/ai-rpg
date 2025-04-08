@@ -1,19 +1,20 @@
 "use client"
 
-import { useState, useRef, useEffect, ReactElement, HTMLAttributes, cloneElement } from "react"
-import { Button } from "@/components/ui/button"
-import { ArrowUpIcon, Baby, Crown, Eclipse, Flower, Loader, Lock, LockOpen, Music, Pickaxe, TowerControl, User, X } from "lucide-react"
-import { cn } from "@/lib/utils"
-import { Component } from "@/lib/types"
-import { MultiSelectCombobox } from "./ui/multi-select-combobox"
-import { Genre, genreIds } from "@/lib/genres-ids"
+import { useState, useRef, useEffect, ReactElement, HTMLAttributes, cloneElement } from "react";
+import { Button } from "@/components/ui/button";
+import { ArrowUpIcon, Baby, Crown, Eclipse, Flower, Loader, Lock, LockOpen, Music, Pickaxe, TowerControl, User, X } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Component } from "@/lib/types";
+import { MultiSelectCombobox } from "./ui/multi-select-combobox";
+import { Genre, genreIds } from "@/lib/genres-ids";
 import { useTranslations } from "next-intl";
 import { FaDragon } from "react-icons/fa";
-import { generateStory } from "@/lib/actions/generate.ai.action"
-import { useSession } from "@/lib/hooks/use-session"
-import { useSearchParams } from "next/navigation"
-import { StoryLanguageSelector } from "./story-language-selector"
-import { StoryLanguage } from "@prisma/client"
+import { generateStory } from "@/lib/actions/generate.ai.action";
+import { useSession } from "@/lib/hooks/use-session";
+import { useSearchParams } from "next/navigation";
+import { StoryLanguageSelector } from "./story-language-selector";
+import { StoryLanguage } from "@prisma/client";
+
 
 type Suggestion = {
   label: string;
@@ -137,7 +138,7 @@ export const AiTextarea: Component<
         />
 
         <div className="flex items-center justify-between p-2 border-t border-[#173a8940]">
-          <div className="flex items-center flex-wrap gap-2">
+          <div className="flex items-center flex-wrap gap-1.5">
             {(selectedGenres.length > 0 || prompt.length > 0) && (!isGenerating || isInputValid) && (
               <Button
                 size={"toolIcon"}
@@ -177,7 +178,7 @@ export const AiTextarea: Component<
               variant="ghost"
               className={cn(
                 "!border rounded-full transition-opacity cursor-pointer", {
-                  "border-emerald-400/20 hover:bg-emerald-400/10": childMode,
+                  "border-teal-400/20 hover:bg-teal-400/10": childMode,
                   "border-gray-400/20 hover:bg-gray-400/10": !childMode
                 }
               )}
@@ -185,13 +186,6 @@ export const AiTextarea: Component<
               disabled={isGenerating}
             >
               <Baby className={cn("h-4 w-4", { "text-teal-400": childMode, "text-gray-200": !childMode })} />
-              {/* {childMode && (
-                <span className={cn("text-sm", {
-                  "text-emerald-400": childMode,
-                  "text-gray-200": !childMode
-                })}>
-                  {t("AiTextarea.ChildModeOff")}</span>
-              )} */}
             </Button>
 
             <Button
@@ -202,7 +196,7 @@ export const AiTextarea: Component<
                   // px-2
                   // "!w-8": !items,
                   "w-8": true,
-                  "border-indigo-400/20 hover:bg-indigo-400/10": items && isPremium,
+                  "border-teal-400/20 hover:bg-teal-400/10": items && isPremium,
                   "border-gray-400/20 hover:bg-gray-400/10": !items
                 }
               )}
@@ -210,16 +204,9 @@ export const AiTextarea: Component<
               disabled={isGenerating || isLoggingIn || !isPremium}
             >
               <Pickaxe className={cn("h-4 w-4", {
-                "text-indigo-400": items && isPremium,
+                "text-teal-400": items && isPremium,
                 "text-gray-200": !items
               })} />
-              {/* {items && (
-                <span className={cn("text-sm", {
-                  "text-indigo-400": items && isPremium,
-                  "text-gray-200": !items
-                })}>
-                  {t("AiTextarea.ItemsEnabled")}</span>
-              )} */}
             </Button>
 
             <Button

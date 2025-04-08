@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useTranslations } from "next-intl";
-import { Globe } from "lucide-react";
+import { Earth } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export type StoryLanguage = "auto" | "en" | "fr" | "es" | "it" | "de";
@@ -49,7 +49,7 @@ export const StoryLanguageSelector = ({
           )}
         >
           <div className="flex items-center gap-2">
-            <Globe className="h-4 w-4" />
+            <Earth className="h-4 w-4" />
             {selectedOption !== "auto" && <SelectValue placeholder={t("selectLanguage")} />}
           </div>
         </SelectTrigger>
