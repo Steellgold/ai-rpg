@@ -4,11 +4,11 @@ import { useState, useEffect } from "react"
 import { Moon, Sun, ChevronDown, Globe, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useTheme } from "next-themes"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu"
 import { useTranslations } from "next-intl"
 import { useLanguageStore } from "@/lib/hooks/use-lang"
 import { useRouter } from "next/navigation"
-import { Skeleton } from "./ui/skeleton"
+import { Skeleton } from "../ui/skeleton"
 import { cn } from "@/lib/utils"
 
 type Language = {

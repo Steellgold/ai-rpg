@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { DiceCube } from "@/components/dice";
+import { DiceCube } from "@/components/story-related/dice";
 import { Component } from "@/lib/types";
 
 interface DiceRollSectionProps {

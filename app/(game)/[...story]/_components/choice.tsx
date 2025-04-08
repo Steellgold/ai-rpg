@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
-import { ChoiceComponent } from "@/components/choice";
+import { ChoiceComponent } from "@/components/story-related/choice";
 import { Component } from "@/lib/types";
 
 interface ChoiceSectionProps {

@@ -1,8 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
 import { User, ChevronDown, Wallet, Globe, LogOut } from "lucide-react"
-import { createClient } from "@/lib/supabase/client"
 import { useTranslations } from "next-intl"
 
 import {
@@ -17,8 +15,6 @@ import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 import { AuthButton } from "./auth-button"
-import { CreditsButton } from "./credits-button"
-import { LanguageSelector } from "./language-selector"
 import { useSession } from "@/lib/hooks/use-session"
 import { redirect } from "next/navigation"
 import { clientEnv } from "@/lib/env/env.client"

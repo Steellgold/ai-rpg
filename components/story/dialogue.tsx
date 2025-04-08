@@ -3,7 +3,7 @@
 import { Component } from "@/lib/types";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useState } from "react";
 
 type DialogueProps = {

@@ -1,7 +1,6 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
-import { CardDescription } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { Pen, User } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";

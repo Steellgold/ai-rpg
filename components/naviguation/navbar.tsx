@@ -7,7 +7,7 @@ import { BookDashed, Home, LibraryBig, Menu, Settings } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { cn } from "@/lib/utils"
-import { ProfileComponent } from "./profile-component"
+import { ProfileComponent } from "../auth-related/profile-component"
 import Image from "next/image"
 
 const navigationItems = [

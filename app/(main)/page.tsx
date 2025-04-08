@@ -1,10 +1,10 @@
 import { PageLayout } from "../_l";
 import { Glitch } from "@/components/glitch";
-import { AiTextarea } from "@/components/textarea";
+import { AiTextarea } from "@/components/story/textarea";
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/db/prisma";
-import { StoryCard } from "@/components/story.card";
+import { StoryCard } from "@/components/story-related/story.card";
 import { Badge } from "@/components/ui/badge";
 
 const Page = async () => {

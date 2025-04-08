@@ -1,13 +1,13 @@
 "use client";
 
 import { ReactElement } from "react";
-import { Card, CardContent, CardFooter, CardTitle } from "./ui/card";
+import { Card, CardContent, CardFooter, CardTitle } from "../ui/card";
 import { cn } from "@/lib/utils";
 import { Component } from "@/lib/types";
 import { Prisma } from "@prisma/client";
 import Image from "next/image";
-import { Button } from "./ui/button";
-import { Badge } from "./ui/badge";
+import { Button } from "../ui/button";
+import { Badge } from "../ui/badge";
 import { useTranslations } from "next-intl";
 import { ChildrenStoryTag } from "./children-story.tag";
 
