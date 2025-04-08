@@ -1,12 +1,12 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { generateObject } from "npm:ai";
 import { createClient } from "npm:@supabase/supabase-js";
-import { detectLanguageWithAI } from "../_shared/ai-services.ts";
-import { getStoryGenerationPrompt, getLanguageInstructions } from "../_shared/prompts.ts";
-import { storyGenerationSchema } from "../_shared/schemas.ts";
-import { logger, updateJob } from "../_shared/utils.ts";
-import { createStoryFromData } from "../_shared/data-services.ts";
-import { registry } from "../_shared/registry.ts";
+import { detectLanguageWithAI } from "../shared/ai-services.ts";
+import { getStoryGenerationPrompt, getLanguageInstructions } from "../shared/prompts.ts";
+import { storyGenerationSchema } from "../shared/schemas.ts";
+import { logger, updateJob } from "../shared/utils.ts";
+import { createStoryFromData } from "../shared/data-services.ts";
+import { registry } from "../shared/registry.ts";
 
 interface RequestParams {
   text: string;

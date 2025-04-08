@@ -2,11 +2,11 @@ import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { generateObject } from "npm:ai";
 import { createClient } from "npm:@supabase/supabase-js";
 import { createId } from "npm:@paralleldrive/cuid2";
-import { logger, updateJob, createItem, createChoice, createChoiceItemRelation, addItemToScene, addItemToInventory, createDialogue } from "../_shared/utils.ts";
-import { generateSceneImage, generateItemImage } from "../_shared/ai-services.ts";
-import { getNextScenePrompt, getLanguageInstructions } from "../_shared/prompts.ts";
-import { nextSceneSchema } from "../_shared/schemas.ts";
-import { registry } from "../_shared/registry.ts";
+import { logger, updateJob, createItem, createChoice, createChoiceItemRelation, addItemToScene, addItemToInventory, createDialogue } from "../shared/utils.ts";
+import { generateSceneImage, generateItemImage } from "../shared/ai-services.ts";
+import { getNextScenePrompt, getLanguageInstructions } from "../shared/prompts.ts";
+import { nextSceneSchema } from "../shared/schemas.ts";
+import { registry } from "../shared/registry.ts";
 
 interface RequestParams {
   storyId: string;
