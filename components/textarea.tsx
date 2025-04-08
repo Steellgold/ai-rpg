@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef, useEffect, ReactElement, HTMLAttributes, cloneElement } from "react";
+import { useState, useRef, useEffect, ReactElement, HTMLAttributes, cloneElement, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowUpIcon, Baby, Crown, Eclipse, Flower, Loader, Lock, LockOpen, Music, Pickaxe, TowerControl, User, X } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -14,7 +14,8 @@ import { useSession } from "@/lib/hooks/use-session";
 import { useSearchParams } from "next/navigation";
 import { StoryLanguageSelector } from "./story-language-selector";
 import { StoryLanguage } from "@prisma/client";
-
+import { CreditCostDisplay } from "./credit-cost-display";
+import { calculateTotalCreditCost, getDefaultFeatures } from "@/lib/features/generation-features";
 
 type Suggestion = {
   label: string;
@@ -74,6 +75,16 @@ export const AiTextarea: Component<
   const u = useTranslations("Utils");
   const t = useTranslations("Pages.New");
 
+  const activeFeatures = getDefaultFeatures(childMode, items);
+
+  const calculateCreditCost = useMemo(() => {
+    const baseFeatureCost = calculateTotalCreditCost(activeFeatures);
+    const lengthCost = Math.floor(prompt.length / 500);
+    const totalCost = baseFeatureCost + lengthCost;
+    
+    return isPremium ? Math.max(1, Math.ceil(totalCost * 0.9)) : totalCost;
+  }, [activeFeatures, prompt.length, isPremium]);
+
   useEffect(() => {
     const textarea = textareaRef.current
     if (!textarea) return
@@ -110,15 +121,14 @@ export const AiTextarea: Component<
       selectedGenres || [], 
       childMode, 
       isPremium ? items : false,
-      storyLanguage
+      storyLanguage,
+      calculateCreditCost
     );
   }
 
   return (
     <div className="flex flex-col items-center w-full gap-4">
       <div className={cn("rounded-xl overflow-hidden w-full", className, {
-        // "bg-teal-500/10 border border-teal-500/30": childMode,
-        // "bg-[#070910] border border-[#173a8940]": !childMode
         "bg-[#070910] border border-[#173a8940]": true
       })}>
         <textarea
@@ -131,8 +141,7 @@ export const AiTextarea: Component<
           }
           className={cn(
             "w-full resize-none py-4 px-4 outline-none bg-transparent text-gray-200 placeholder:text-gray-500 min-h-[110px]", {
-              "animate-pulse italic text-gray-400": isGenerating,
-              // "text-white placeholder:text-teal-100/40": childMode
+              "animate-pulse italic text-gray-400": isGenerating
             }
           )}
         />
@@ -192,9 +201,7 @@ export const AiTextarea: Component<
               size={"toolIcon"}
               variant="ghost"
               className={cn(
-                "!border rounded-full transition-opacity !h-8 cursor-pointer", {
-                  // px-2
-                  // "!w-8": !items,
+                "!border rounded-full transition-opacity cursor-pointer", {
                   "w-8": true,
                   "border-teal-400/20 hover:bg-teal-400/10": items && isPremium,
                   "border-gray-400/20 hover:bg-gray-400/10": !items
@@ -241,6 +248,12 @@ export const AiTextarea: Component<
                 {publicMode ? t("AiTextarea.PublicModeOn") : t("AiTextarea.PublicModeOff")}
               </span>
             </Button>
+
+            <CreditCostDisplay 
+              activeFeatures={activeFeatures}
+              promptLength={prompt.length}
+              isPremium={isPremium}
+            />
           </div>
 
           <div className="flex items-center">
@@ -254,23 +267,17 @@ export const AiTextarea: Component<
                       "!h-8 !w-8": !isInputValid || isGenerating,
                       "!h-8 !px-4": isInputValid && !isGenerating,
                       "cursor-not-allowed": !isInputValid,
-                      // 
                       "bg-blue-600 hover:bg-blue-500": !isGenerating || isInputValid,
                       "cursor-not-allowed bg-blue-600/50 hover:bg-blue-600/50": isGenerating,
-                      // 
-                      // "bg-teal-400 hover:bg-teal-600 text-teal-950": (!isGenerating || isInputValid) && childMode,
-                      // "cursor-not-allowed bg-teal-600/50 hover:bg-teal-600/50": (isGenerating) && childMode,
-                      // 
-                      // "text-white": !childMode
                       "text-white": true
                     }
                   )}
                 >
                   {isGenerating
-                    ? <Loader className={cn("animate-spin h-4 w-4", { "text-white": !childMode })} />
-                    : <ArrowUpIcon className={cn("h-4 w-4", { "text-white": !childMode })} />
+                    ? <Loader className="animate-spin h-4 w-4 text-white" />
+                    : <ArrowUpIcon className="h-4 w-4 text-white" />
                   }
-                  {isInputValid && !isGenerating && <>New story</>}
+                  {isInputValid && !isGenerating && <>{t("AiTextarea.Generate")}</>}
                 </Button>
               </>
             ) : (
@@ -282,7 +289,6 @@ export const AiTextarea: Component<
                     isLoggingIn ? "opacity-50 cursor-not-allowed" : "opacity-100", {
                       "bg-blue-600 hover:bg-blue-600": !isLoggingIn && !childMode,
                       "cursor-not-allowed bg-blue-600/50 hover:bg-blue-600/50": isLoggingIn && !childMode,
-                      // 
                       "bg-teal-600 hover:bg-teal-500": !isLoggingIn && childMode,
                       "cursor-not-allowed bg-teal-600/50 hover:bg-teal-600/50": isLoggingIn && childMode
                     }
