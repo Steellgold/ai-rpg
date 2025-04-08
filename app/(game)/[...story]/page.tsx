@@ -72,6 +72,18 @@ const Page = async ({ params }: PageProps) => {
               description: true
             }
           },
+          dialogues: {
+            select: {
+              id: true,
+              speaker: true,
+              text: true,
+              emotion: true,
+              order: true
+            },
+            orderBy: {
+              order: 'asc'
+            }
+          },
           selected_choice_id: true,
         },
         orderBy: {
@@ -144,6 +156,18 @@ const Page = async ({ params }: PageProps) => {
           id: true
         }
       },
+      dialogues: {
+        select: {
+          id: true,
+          speaker: true,
+          text: true,
+          emotion: true,
+          order: true
+        },
+        orderBy: {
+          order: 'asc'
+        }
+      },
       items: {
         select: {
           isHidden: true,
@@ -163,7 +187,6 @@ const Page = async ({ params }: PageProps) => {
       }
     }
   });
-  
   if (!scene) return notFound();
 
   let player_inventory: any[] = [];

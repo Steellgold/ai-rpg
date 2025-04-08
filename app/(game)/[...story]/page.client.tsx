@@ -1,14 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { useTranslations } from "next-intl";
 import { generateNextScene } from "@/lib/actions/generate.scene.action";
 import { useItem } from "@/lib/actions/use-item";
 import { Component } from "@/lib/types";
 import { Prisma } from "@prisma/client";
 import SceneHeader from "./_components/scene-header";
 import SceneList from "./_components/scene-list";
-import { cn } from "@/lib/utils";
 import SceneContent from "./_components/scene-content";
 import ChoiceSection from "./_components/choice";
 import DiceRollSection from "./_components/dice-roll";
@@ -36,6 +34,15 @@ export type PageClientProps = {
               isPersonalized: true,
               isItemRelated: true,
               description: true
+            }
+          },
+          dialogues: {
+            select: {
+              id: true,
+              speaker: true,
+              text: true,
+              emotion: true,
+              order: true
             }
           },
           selected_choice_id: true,
@@ -77,34 +84,43 @@ export type PageClientProps = {
     include: {
       choices: {
         select: {
-          consequence: true,
-          description: true,
-          loadingMessage: true,
-          text: true,
-          isCustomChoice: true,
-          isPersonalized: true,
-          isItemRelated: true,
-          id: true
-        }
-      },
+          consequence: true;
+          description: true;
+          loadingMessage: true;
+          text: true;
+          isCustomChoice: true;
+          isPersonalized: true;
+          isItemRelated: true;
+          id: true;
+        };
+      };
+      dialogues: {
+        select: {
+          id: true;
+          speaker: true;
+          text: true;
+          emotion: true;
+          order: true;
+        };
+      };
       items: {
         select: {
-          isHidden: true,
+          isHidden: true;
           item: {
             select: {
-              id: true,
-              name: true,
-              description: true,
-              type: true,
-              rarity: true,
-              effect: true,
-              useCount: true,
-              imageUrl: true
-            }
-          }
-        }
-      }
-    }
+              id: true;
+              name: true;
+              description: true;
+              type: true;
+              rarity: true;
+              effect: true;
+              useCount: true;
+              imageUrl: true;
+            };
+          };
+        };
+      };
+    };
   }>;
   player_inventory?: {
     id: string;
