@@ -140,6 +140,10 @@ model User {
   subscription_start   DateTime?
   subscription_end     DateTime?
   subscription_id      String?
+  // 
+  daily_limit_messages Int?                @default(10)
+  premium              Boolean             @default(false)
+  limit_messages       Int                 @default(10)
   //
   stories              Story[]
   gameSaves            GameSave[]
