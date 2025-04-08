@@ -611,5 +611,23 @@
         "Description": "300 credits for serious authors"
       }
     }
+  },
+  "Footer": {
+    "about": {
+      "title": "About",
+      "description": "Imagine.place is an AI-powered interactive storytelling platform that allows you to create and experience immersive adventures where your choices shape the narrative."
+    },
+    "links": {
+      "title": "Links",
+      "home": "Home",
+      "stories": "My Stories",
+      "account": "My Account"
+    },
+    "legal": {
+      "title": "Legal",
+      "terms": "Terms of Service",
+      "privacy": "Privacy Policy"
+    },
+    "copyright": "All rights reserved."
   }
 }

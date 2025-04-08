@@ -612,6 +612,24 @@
         "Description": "300 crédits pour les auteurs sérieux"
       }
     }
+  },
+  "Footer": {
+    "about": {
+      "title": "À propos",
+      "description": "Imagine.place est une plateforme interactive de narration propulsée par l'IA qui vous permet de créer et de vivre des aventures immersives où vos choix façonnent l'histoire."
+    },
+    "links": {
+      "title": "Liens",
+      "home": "Accueil",
+      "stories": "Mes histoires",
+      "account": "Mon compte"
+    },
+    "legal": {
+      "title": "Informations légales",
+      "terms": "Conditions d'utilisation",
+      "privacy": "Politique de confidentialité"
+    },
+    "copyright": "Tous droits réservés."
   }
 }
 
