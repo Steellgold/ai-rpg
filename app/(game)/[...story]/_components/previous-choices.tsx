@@ -1,6 +1,6 @@
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
-import { ChoiceComponent } from "@/components/story-related/choice";
-import { DiceCube } from "@/components/story-related/dice";
+import { ChoiceComponent } from "@/components/story/choice";
+import { DiceCube } from "@/components/story/dice";
 import { Component } from "@/lib/types";
 
 interface PreviousChoicesProps {

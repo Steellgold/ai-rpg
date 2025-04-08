@@ -1,5 +1,5 @@
 import { Badge } from "@/components/ui/badge";
-import { ChildrenStoryTag } from "@/components/story-related/children-story.tag";
+import { ChildrenStoryTag } from "@/components/story/children-story.tag";
 import { Component } from "@/lib/types";
 
 interface SceneHeaderProps {

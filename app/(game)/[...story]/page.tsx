@@ -2,7 +2,7 @@ import { notFound, unauthorized } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/db/prisma";
 import { PageClient } from "./page.client";
-import { NotesButton } from "@/components/story-related/notes-button";
+import { NotesButton } from "@/components/story/notes-button";
 import { createGameSave } from "@/lib/services/game-save.service";
 
 type PageProps = {

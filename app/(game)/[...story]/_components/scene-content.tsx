@@ -3,7 +3,7 @@ import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/com
 import { Expand, Shrink } from "lucide-react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import { formatSceneContent } from "@/components/story-related/format-text-scene";
+import { formatSceneContent } from "@/components/story/format-text-scene";
 import { Component } from "@/lib/types";
 import { Prisma } from "@prisma/client";
 import { useTranslations } from "next-intl";

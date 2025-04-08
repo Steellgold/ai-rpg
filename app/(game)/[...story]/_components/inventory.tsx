@@ -1,4 +1,4 @@
-import { Inventory } from "@/components/story-related/inventory";
+import { Inventory } from "@/components/story/inventory";
 import { Component } from "@/lib/types";
 import { useState, useEffect } from "react";
 import { getInventoryItems } from "@/lib/services/game-save.service";
