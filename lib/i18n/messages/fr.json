@@ -305,6 +305,11 @@
     }
   },
   "Utils": {
+    "CreditCost": {
+      "cost": "{count} crédit(s)",
+      "discount": "réduction premium",
+      "lengthFactor": "+{count} pour la longueur"
+    },
     "Credits": {
       "Errors": {
         "UserNotFound": "Utilisateur non trouvé",
@@ -628,6 +633,12 @@
       "title": "Informations légales",
       "terms": "Conditions d'utilisation",
       "privacy": "Politique de confidentialité"
+    },
+    "contact": {
+      "title": "Contact",
+      "form": "Formulaire de contact",
+      "support": "Support technique",
+      "feedback": "Envoyer un retour"
     },
     "copyright": "Tous droits réservés."
   }

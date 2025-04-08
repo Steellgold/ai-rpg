@@ -304,6 +304,11 @@
     }
   },
   "Utils": {
+    "CreditCost": {
+      "cost": "{{count}} credit|{{count}} credits",
+      "discount": "premium discount",
+      "lengthFactor": "+{{count}} for length"
+    },
     "Credits": {
       "Errors": {
         "UserNotFound": "User not found",
@@ -627,6 +632,12 @@
       "title": "Legal",
       "terms": "Terms of Service",
       "privacy": "Privacy Policy"
+    },
+    "contact": {
+      "title": "Contact",
+      "form": "Contact Form",
+      "support": "Technical Support",
+      "feedback": "Send Feedback"
     },
     "copyright": "All rights reserved."
   }
