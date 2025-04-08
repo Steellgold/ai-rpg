@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import Noise from "@/components/ui/noise";
 import { Component } from "@/lib/types";
 import { IterationCcw } from "lucide-react";
 import { useEffect } from "react";
@@ -14,20 +15,30 @@ const Error: Component<{
   }, [error])
  
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center relative">
-      <h2 className="text-3xl font-bold">
-        An error occurred
-      </h2>
+    <>
+      <div className="flex flex-col items-center justify-center flex-1 py-16 text-center">
+        <h2 className="text-3xl font-bold">
+          An error occurred
+        </h2>
 
-      <p className="mb-4">
-        {error.message}
-      </p>
+        <p className="mb-4">
+          {error.message}
+        </p>
 
-      <Button variant="outline" onClick={reset}>
-        <IterationCcw className="w-4 h-4 mr-2" />
-        Try again
-      </Button>
-    </div>
+        <Button variant="outline" onClick={reset} className="cursor-pointer z-[13]">
+          <IterationCcw className="w-4 h-4 mr-2" />
+          Try again
+        </Button>
+      </div>
+          
+      <Noise
+        patternSize={250}
+        patternScaleX={1}
+        patternScaleY={1}
+        patternRefreshInterval={2}
+        patternAlpha={15}
+      />
+    </>
   )
 }
 
