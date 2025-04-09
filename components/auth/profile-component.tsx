@@ -18,6 +18,8 @@ import { AuthButton } from "./auth-button"
 import { useSession } from "@/lib/hooks/use-session"
 import { redirect } from "next/navigation"
 import { clientEnv } from "@/lib/env/env.client"
+import { useCredits } from "@/lib/hooks/use-credits"
+import Image from "next/image"
 
 interface ProfileComponentProps {
   variant?: "default" | "navbar"
@@ -28,8 +30,9 @@ export function ProfileComponent({ variant = "default", className }: ProfileComp
   const t = useTranslations("Navbar");
 
   const { session, simplifiedUser: user, loading, signOut } = useSession();
+  const { credits, loading: creditsLoading } = useCredits();
 
-  if (!session || !user || loading) {
+  if (!session || !user || loading || creditsLoading) {
     return <AuthButton Navbar={variant === "navbar"} />
   }
 
@@ -65,7 +68,14 @@ export function ProfileComponent({ variant = "default", className }: ProfileComp
               <Wallet size={16} />
               <span>{t("Credits")}</span>
             </div>
-            {/* <CreditsButton variant="ghost" size="sm" className="h-auto py-0" /> */}
+
+            <span className="border border-border px-2 rounded-md flex items-center">
+              <Image src="/coin.webp" alt="Coin" width={16} height={16} className="inline-block mr-1" />
+              {credits.toLocaleString("en-US", {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0,
+              })}
+            </span>
           </div>
         </DropdownMenuItem>
 
@@ -76,7 +86,6 @@ export function ProfileComponent({ variant = "default", className }: ProfileComp
               <Globe size={16} />
               <span>{t("Language")}</span>
             </div>
-            {/* <LanguageSelector variant="ghost" size="sm" className="h-auto py-0" /> */}
           </div>
         </DropdownMenuItem>
 
