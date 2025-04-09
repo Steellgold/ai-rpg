@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createCheckoutSession, createSubscriptionCheckoutSession } from "@/lib/payment/stripe";
+import { createCheckoutSession } from "@/lib/payment/stripe";
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/db/prisma";
 import { env } from "@/lib/env/env";
@@ -35,14 +35,15 @@ export async function POST(req: NextRequest) {
     let session;
     
     if (mode === "subscription") {
-      session = await createSubscriptionCheckoutSession({
-        priceId,
-        userId: user.id,
-        customerEmail: userData.email,
-        metadata,
-        successUrl,
-        cancelUrl,
-      });
+      throw new Error("Subscription mode is not supported yet.");
+      // session = await createSubscriptionCheckoutSession({
+      //   priceId,
+      //   userId: user.id,
+      //   customerEmail: userData.email,
+      //   metadata,
+      //   successUrl,
+      //   cancelUrl,
+      // });
     } else {
       session = await createCheckoutSession({
         priceId,
