@@ -20,6 +20,7 @@ import { redirect } from "next/navigation"
 import { clientEnv } from "@/lib/env/env.client"
 import { useCredits } from "@/lib/hooks/use-credits"
 import Image from "next/image"
+import { CreditPacksDialog } from "../credits.dialog"
 
 interface ProfileComponentProps {
   variant?: "default" | "navbar"
@@ -61,23 +62,24 @@ export function ProfileComponent({ variant = "default", className }: ProfileComp
 
         <DropdownMenuSeparator />
 
-        {/* Credits */}
-        <DropdownMenuItem className="p-0">
-          <div className="flex items-center justify-between w-full px-2 py-1.5">
-            <div className="flex items-center gap-2">
-              <Wallet size={16} />
-              <span>{t("Credits")}</span>
-            </div>
+        <CreditPacksDialog>
+          <DropdownMenuItem className="p-0" onSelect={(e) => e.preventDefault()}>
+            <div className="flex items-center justify-between w-full px-2 py-1.5">
+              <div className="flex items-center gap-2">
+                <Wallet size={16} />
+                <span>{t("Credits")}</span>
+              </div>
 
-            <span className="border border-border px-2 rounded-md flex items-center">
-              <Image src="/coin.webp" alt="Coin" width={16} height={16} className="inline-block mr-1" />
-              {credits.toLocaleString("en-US", {
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 0,
-              })}
-            </span>
-          </div>
-        </DropdownMenuItem>
+              <span className="border border-border px-2 rounded-md flex items-center">
+                <Image src="/coin.webp" alt="Coin" width={16} height={16} className="inline-block mr-1" />
+                {credits.toLocaleString("en-US", {
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 0,
+                })}
+              </span>
+            </div>
+          </DropdownMenuItem>
+        </CreditPacksDialog>
 
         {/* Language */}
         <DropdownMenuItem className="p-0">
