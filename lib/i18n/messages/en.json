@@ -291,6 +291,9 @@
     }
   },
   "Navbar": {
+    "Credits": "Credits",
+    "Language": "Interface Language",
+
     "LanguageSelector": {
       "Placeholder": "Select a language",
       "Label": "Language",
