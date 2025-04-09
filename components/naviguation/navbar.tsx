@@ -14,7 +14,7 @@ const navigationItems = [
   { name: "Home", href: "/", icon: Home },
   { name: "Account", href: "/account", icon: Settings },
   { name: "Stories", href: "/continue", icon: LibraryBig }
-]
+];
 
 export const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -71,7 +71,7 @@ export const Navbar = () => {
 
         <Link href="/" className="flex items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary">
-            <Image src="/icon.webp" alt="Logo" width={32} height={32} className="object-contain" />
+            <Image src="/icon.webp" alt="Logo" width={32} height={32} className="object-contain p-1" />
           </div>
           <span className="hidden text-lg font-bold sm:inline-block">Imagine</span>
         </Link>
