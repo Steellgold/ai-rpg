@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, ReactElement, HTMLAttributes, cloneElement, useMemo } from "react";
 import { Button } from "@/components/ui/button";
-import { Baby, Loader, Lock, LockOpen, Maximize, Pickaxe, User, X } from "lucide-react";
+import { Baby, Loader, Lock, LockOpen, Maximize, Pickaxe, RefreshCcw, User, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Component } from "@/lib/types";
 import { MultiSelectCombobox } from "../ui/multi-select-combobox";
@@ -10,7 +10,6 @@ import { genreIds } from "@/lib/genres-ids";
 import { useTranslations } from "next-intl";
 import { generateStory } from "@/lib/actions/generate.ai.action";
 import { useSession } from "@/lib/hooks/use-session";
-import { useSearchParams } from "next/navigation";
 import { StoryLanguageSelector } from "./story-language-selector";
 import { StoryLanguage } from "@prisma/client";
 import { calculateTotalCreditCost, getDefaultFeatures } from "@/lib/features/generation-features";
@@ -20,9 +19,9 @@ import { ShineBorder } from "../ui/magicui/shine-border";
 import { CustomScrollbar } from "../ui/scrollbar";
 import { useToast } from "@/lib/hooks/use-toast";
 import Link from "next/link";
-import { suggestions } from "@/lib/suggestions";
 import { useDraft } from "@/lib/hooks/use-draft";
 import Image from "next/image";
+import { getRandomSuggestion } from "@/lib/suggestions";
 
 export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ className }): ReactElement => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -66,6 +65,22 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
   
   const u = useTranslations("Utils");
   const t = useTranslations("Pages.New");
+
+  const [CHILDREN_SUGGESTIONS, SUGGESTIONS] = useMemo(() => {
+    const children = getRandomSuggestion(true, 3);
+    const adults = getRandomSuggestion(false, 3);
+    return [children, adults];
+  }, []);
+
+  const [childrenSuggestions, setChildrenSuggestions] = useState(CHILDREN_SUGGESTIONS);
+  const [suggestions, setSuggestions] = useState(SUGGESTIONS);
+
+  const refreshSuggestions = () => {
+    const children = getRandomSuggestion(true, 3);
+    const adults = getRandomSuggestion(false, 3);
+    setChildrenSuggestions(children);
+    setSuggestions(adults);
+  };
 
   const activeFeatures = getDefaultFeatures(childMode, items);
 
@@ -332,7 +347,22 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
 
       <div>
         <div className="flex flex-row items-center justify-between w-full gap-2">
-          {suggestions.filter((s) => s.isChild === childMode).map((suggestion, index) => (
+          <Button
+            key={"reload"}
+            size={"toolIcon"}
+            className={cn("border rounded-full px-4 h-8 flex items-center justify-center cursor-pointer transition-all", {
+              "bg-[#1a254f30] text-gray-200 border border-[#173a8940] hover:bg-[#1a254f40] hover:text-gray-100": !childMode,
+              "bg-teal-500/10 text-teal-400 border border-teal-500/30 hover:bg-teal-500/20 hover:text-teal-300": childMode
+            })}
+            onClick={() => refreshSuggestions()}
+          >
+            <RefreshCcw className={cn("h-4 w-4", {
+              "text-teal-400": childMode,
+              "text-gray-200": !childMode
+            })} />
+          </Button>
+
+          {(!childMode ? suggestions : childrenSuggestions).map((suggestion, index) => (
             <Button
               key={index}
               className={cn("border rounded-full px-4 h-8 flex items-center justify-center cursor-pointer transition-all", {
