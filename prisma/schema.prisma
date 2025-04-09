@@ -134,16 +134,12 @@ model User {
   credits              Int                 @default(5)
   last_credits_refresh DateTime?
   //
-  subscription_tier    String              @default("basic")
-  subscription_status  String              @default("active")
-  subscription_start   DateTime?
-  subscription_end     DateTime?
-  subscription_id      String?
-  // 
   daily_limit_messages Int?                @default(10)
   premium              Boolean             @default(false)
   limit_messages       Int                 @default(10)
   //
+  stripe_customer_id   String?
+  // 
   stories              Story[]
   gameSaves            GameSave[]
   jobs                 Job[]
