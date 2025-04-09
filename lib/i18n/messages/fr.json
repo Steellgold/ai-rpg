@@ -292,6 +292,9 @@
     }
   },
   "Navbar": {
+    "Credits": "Crédits",
+    "Language": "Langue de l'interface",
+
     "LanguageSelector": {
       "Placeholder": "Sélectionnez une langue",
       "Label": "Langue",
@@ -560,6 +563,8 @@
       }
     },
     "CreditPacks": {
+      "BONUS": "Inclus {count} de crédits bonus !",
+
       "Small": {
         "Name": "Pack Découverte",
         "Description": "20 crédits pour commencer"

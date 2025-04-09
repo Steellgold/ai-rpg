@@ -559,6 +559,8 @@
       }
     },
     "CreditPacks": {
+      "BONUS": "Include {bonus} bonus credits !",
+
       "Small": {
         "Name": "Discovery Pack",
         "Description": "20 credits to get started"
