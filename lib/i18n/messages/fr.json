@@ -652,7 +652,8 @@
         "Popular": "Populaire",
         "credits": "crédit{s}",
         "Button": "Se recharger maintenant",
-        "Stripe": "Paiement sécurisé avec"
+        "Stripe": "Paiement sécurisé avec",
+        "Processing": "Traitement..."
       },
 
       "Small": {

@@ -651,7 +651,8 @@
         "Popular": "Popular",
         "credits": "credit{s}",
         "Button": "Recharge now",
-        "Stripe": "Secure payment with"
+        "Stripe": "Secure payment with",
+        "Processing": "Processing..."
       },
 
       "Small": {
