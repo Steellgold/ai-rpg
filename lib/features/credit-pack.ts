@@ -1,7 +1,7 @@
-import { getPriceId } from "../payment/prices";
+import { CreditPackId, getPriceId } from "@/lib/payment/prices";
 
 export interface CreditPack {
-  id: string;
+  id: CreditPackId;
   name: string;
   description: string;
   amount: number;

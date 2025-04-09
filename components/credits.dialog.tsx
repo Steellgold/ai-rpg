@@ -1,20 +1,23 @@
 "use client"
 
-import { PropsWithChildren, useId, useState } from "react"
-
-import { Button } from "@/components/ui/button"
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Badge } from "@/components/ui/badge"
-import { CREDIT_PACKS } from "@/lib/features/credit-pack"
-import { useTranslations } from "next-intl"
-import { Component } from "@/lib/types"
-import { useLanguageStore } from "@/lib/hooks/use-lang"
-import { isEurope, ISOLang } from "@/lib/types/lang"
-import Image from "next/image"
-import { ShineBorder } from "./ui/magicui/shine-border"
-import { cn } from "@/lib/utils"
+import { PropsWithChildren, useId, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Badge } from "@/components/ui/badge";
+import { CREDIT_PACKS } from "@/lib/features/credit-pack";
+import { useTranslations } from "next-intl";
+import { Component } from "@/lib/types";
+import { useLanguageStore } from "@/lib/hooks/use-lang";
+import { isEurope, ISOLang } from "@/lib/types/lang";
+import Image from "next/image";
+import { ShineBorder } from "./ui/magicui/shine-border";
+import { cn } from "@/lib/utils";
+import { FaStripe } from "react-icons/fa";
+import { Loader2 } from "lucide-react";
+import { toast } from "@/lib/hooks/use-toast";
+import { buyCredits } from "@/lib/actions/payment";
 
 const formatPrice = (priceInCents: number, locale: ISOLang = "en") => {
   return (priceInCents / 100).toLocaleString(isEurope(locale) ? "fr-FR" : "en-US", {
@@ -26,16 +29,43 @@ const formatPrice = (priceInCents: number, locale: ISOLang = "en") => {
 export const CreditPacksDialog: Component<PropsWithChildren> = ({ children }) => {
   const id = useId();
   const [selectedPack, setSelectedPack] = useState<string>("medium");
+  const [isLoading, setIsLoading] = useState(false);
 
   const t = useTranslations("Utils.CreditPacks");
   const u = useTranslations();
 
   const { lang } = useLanguageStore();
 
-  const handlePurchase = () => {
-    const pack = CREDIT_PACKS.find((p) => p.id === selectedPack)
-    if (pack) {
-      alert(`${t(pack.name)}`)
+  const handlePurchase = async() => {
+    try {
+      setIsLoading(true);
+      const pack = CREDIT_PACKS.find(p => p.id === selectedPack);
+      
+      if (!pack) {
+        toast({
+          title: t("Errors.InvalidPack"),
+          description: t("Errors.TryAgain"),
+          variant: "destructive"
+        });
+        return;
+      }
+      
+      const result = await buyCredits(selectedPack);
+      
+      if (result.url) {
+        window.location.href = result.url;
+      } else {
+        throw new Error("Pas d'URL de paiement reçue");
+      }
+    } catch (error) {
+      console.error("Erreur lors de l'achat de crédits :", error);
+      toast({
+        title: t("Errors.PaymentFailed"),
+        description: t("Errors.TryAgain"),
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -109,14 +139,26 @@ export const CreditPacksDialog: Component<PropsWithChildren> = ({ children }) =>
           </RadioGroup>
 
           <div className="grid gap-2">
-            <Button type="button" className="w-full" onClick={handlePurchase}>
-              Acheter maintenant
+            <Button 
+              type="button" 
+              className="w-full" 
+              onClick={handlePurchase}
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  {t("Dialog.Processing")}
+                </>
+              ) : (
+                t("Dialog.Button")
+              )}
             </Button>
-            <DialogClose asChild>
-              <Button type="button" variant="ghost" className="w-full">
-                Annuler
-              </Button>
-            </DialogClose>
+
+            <p className="text-muted-foreground text-xs text-center flex items-center justify-center gap-1">
+              {t("Dialog.Stripe")}
+              <FaStripe className="text-indigo-500" size={32} />
+            </p>
           </div>
         </form>
       </DialogContent>
