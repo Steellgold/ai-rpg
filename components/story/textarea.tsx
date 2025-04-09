@@ -340,7 +340,7 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
           width={90}
           height={90}
           className={cn(
-            "absolute z-10 -top-[95px] -right-[19px] rotate-[21deg] select-none selection-none pointer-events-none",
+            "absolute z-10 -top-[55px] -right-[35px] rotate-[31deg] select-none selection-none pointer-events-none",
             "hidden lg:block"
           )}
         />
