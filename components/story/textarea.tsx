@@ -334,12 +334,23 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
         </div>
 
         <Image
-          src={"/dragon.svg"}
+          src={"/illustrations/dragon.svg"}
           alt="dragon"
           width={100}
           height={100}
           className={cn(
             "absolute z-10 -top-14 -right-[45px] rotate-12 select-none selection-none pointer-events-none",
+            "hidden lg:block"
+          )}
+        />
+
+        <Image
+          src={"/illustrations/portal.svg"}
+          alt="portal"
+          width={250}
+          height={250}
+          className={cn(
+            "absolute z-10 top-4 -left-40 rotate-12 select-none selection-none pointer-events-none",
             "hidden lg:block"
           )}
         />
