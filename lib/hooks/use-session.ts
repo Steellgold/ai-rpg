@@ -56,15 +56,12 @@ export const useSession = () => {
     simplifiedUser,
     loading,
     signIn: {
-      discord: async (prompt?: string | null, selectedGenres?: string[] | null) => {
+      discord: async () => {
         setLoading(true)
-        const encodedPrompt = prompt ? encodeURIComponent(prompt) : null;
         const { error } = await supabase.auth.signInWithOAuth({
           provider: "discord",
           options: {
-            redirectTo: `${clientEnv.NEXT_PUBLIC_BASE_URL}/auth/callback` +
-              (encodedPrompt ? `?prompt=${encodedPrompt}` : "") +
-              (selectedGenres ? `${encodedPrompt ? "&" : "?"}genres=${selectedGenres.join(",")}` : "")
+            redirectTo: `${clientEnv.NEXT_PUBLIC_BASE_URL}/auth/callback`
           },
         })
         return { error }

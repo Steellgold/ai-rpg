@@ -4,15 +4,6 @@ import { createClient } from '@/lib/supabase/server'
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code');
-
-  const prompt = searchParams.get('prompt') ?? null
-  const genres = searchParams.get('genres') ?? null
-
-  const params = new URLSearchParams()
-  if (prompt) params.append('prompt', prompt)
-  if (genres) params.append('genres', genres)
-  const paramsString = params.toString();
-
   const next = searchParams.get('next') ?? '/'
 
   if (code) {
@@ -39,11 +30,11 @@ export async function GET(request: Request) {
       const isLocalEnv = process.env.NODE_ENV === 'development'
 
       if (isLocalEnv) {
-        return NextResponse.redirect(`${origin}${next}?${paramsString}`)
+        return NextResponse.redirect(`${origin}${next}`)
       } else if (forwardedHost) {
-        return NextResponse.redirect(`https://${forwardedHost}${next}?${paramsString}`)
+        return NextResponse.redirect(`https://${forwardedHost}${next}`)
       } else {
-        return NextResponse.redirect(`${origin}${next}?${paramsString}`)
+        return NextResponse.redirect(`${origin}${next}`)
       }
     } else {
       console.error('Error exchanging code for session:', error);

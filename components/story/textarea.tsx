@@ -26,7 +26,6 @@ import Image from "next/image";
 
 export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ className }): ReactElement => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const searchParams = useSearchParams();
   const { toast } = useToast();
 
   const { user, loading: isLoggingIn, signIn } = useSession();
@@ -34,7 +33,7 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
 
   const [prompt, setPrompt, clearPrompt] = useDraft({
     key: "ai-textarea-prompt",
-    initialValue: searchParams.get("prompt") || "",
+    initialValue: "",
     storageType: "localStorage",
     debounceTime: 500
   });
@@ -48,10 +47,9 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
 
   const [isGenerating, setIsGenerating] = useState(false);
 
-  const initialGenres = searchParams.get("genres")?.split(",") || [];
   const [genresStr, setGenresStr, clearGenres] = useDraft({
     key: "ai-textarea-genres",
-    initialValue: JSON.stringify(initialGenres),
+    initialValue: JSON.stringify([]),
     storageType: "localStorage",
     debounceTime: 500
   });
@@ -135,7 +133,7 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
     <div className="flex flex-col items-center w-full gap-4">
       <CustomScrollbar />
       <div className="relative w-full">
-        <div className={cn("relative border-2 rounded-xl overflow-hidden w-full", className, {
+        <div className={cn("relative z-20 border-2 rounded-xl overflow-hidden w-full", className, {
           "bg-[#070910] border border-[#173a8940]": true
         })}>
           <ShineBorder className="rounded-xl" shineColor={["#2744ad", "#6c83d6", "#0d288a"]} />
@@ -297,7 +295,7 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
               ) : (
                 <>
                   <Button
-                    onClick={() => signIn.discord(prompt, selectedGenres)}
+                    onClick={() => signIn.discord()}
                     className={cn(
                       "!h-8 !px-4 rounded-full transition-opacity",
                       isLoggingIn ? "opacity-50 cursor-not-allowed" : "opacity-100", {
@@ -326,7 +324,7 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
           width={100}
           height={100}
           className={cn(
-            "absolute -top-14 -right-[45px] rotate-12 select-none selection-none pointer-events-none",
+            "absolute z-10 -top-14 -right-[45px] rotate-12 select-none selection-none pointer-events-none",
             "hidden lg:block"
           )}
         />
