@@ -645,23 +645,28 @@
       }
     },
     "CreditPacks": {
-      "BONUS": "Include {bonus} bonus credits !",
+      "Dialog": {
+        "Title": "Recharge your credits",
+        "Description": "Choose the credit pack that suits you best to start or continue creating captivating stories.",
+        "Popular": "Popular",
+        "credits": "credit{s}"
+      },
 
       "Small": {
         "Name": "Discovery Pack",
-        "Description": "20 credits to get started"
+        "Description": "Take your first step into a world of endless possibilities"
       },
       "Medium": {
         "Name": "Adventurer Pack",
-        "Description": "55 credits to develop your stories"
+        "Description": "Unleash your imagination and begin crafting epic tales"
       },
       "Large": {
         "Name": "Creator Pack",
-        "Description": "135 credits for elaborate stories"
+        "Description": "Build unique worlds, unforgettable characters, and vibrant stories"
       },
       "XLarge": {
         "Name": "Narrator Pack",
-        "Description": "350 credits for serious authors"
+        "Description": "Master the art of storytelling—your legend starts here"
       }
     }
   },

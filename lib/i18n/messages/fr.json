@@ -646,23 +646,28 @@
       }
     },
     "CreditPacks": {
-      "BONUS": "Inclus {count} de crédits bonus !",
+      "Dialog": {
+        "Title": "Rechargez vos crédits",
+        "Description": "Choisissez le pack de crédits qui vous convient le mieux pour commencer ou continuer à créer des histoires captivantes.",
+        "Popular": "Populaire",
+        "credits": "crédit{s}"
+      },
 
       "Small": {
         "Name": "Pack Découverte",
-        "Description": "20 crédits pour commencer"
+        "Description": "Faites vos premiers pas dans un univers de possibilités infinies"
       },
       "Medium": {
         "Name": "Pack Aventurier",
-        "Description": "55 crédits pour développer vos histoires"
+        "Description": "Déchaînez votre imagination et commencez à façonner vos récits"
       },
       "Large": {
         "Name": "Pack Créateur",
-        "Description": "135 crédits pour des histoires élaborées"
+        "Description": "Créez des mondes uniques, des personnages inoubliables, des histoires vibrantes"
       },
       "XLarge": {
         "Name": "Pack Narrateur",
-        "Description": "350 crédits pour les auteurs sérieux"
+        "Description": "Passez maître dans l’art de raconter des histoires, la légende commence ici"
       }
     }
   },
