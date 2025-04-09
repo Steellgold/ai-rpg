@@ -13,6 +13,8 @@
 /.next/
 /out/
 
+prisma/generated/*
+
 deno.exe
 
 # production
