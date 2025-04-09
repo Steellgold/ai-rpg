@@ -549,7 +549,7 @@
       },
       "Cost": {
         "Free": "Free",
-        "Credits": "{{credits}} credit|{{credits}} credits"
+        "Credits": "{credits} credit"
       },
       "Categories": {
         "Basic": "Basic",
@@ -558,71 +558,22 @@
         "Special": "Special"
       }
     },
-    "Subscription": {
-      "Tiers": {
-        "Basic": {
-          "Name": "Free",
-          "Description": "For starting to explore",
-          "Features": {
-            "InitialCredits": "5 initial credits",
-            "BasicStories": "Basic stories",
-            "LimitedGenerations": "3 generations per day limit",
-            "BasicFeatures": "Access to basic features"
-          }
-        },
-        "Starter": {
-          "Name": "Starter",
-          "Description": "For occasional creators",
-          "Features": {
-            "MonthlyCredits": "30 credits per month",
-            "BannerImages": "Banner images",
-            "LimitedSceneImages": "Scene images (limited)",
-            "ImprovedPriority": "Improved generation priority",
-            "BasicItemSystem": "Basic item system"
-          }
-        },
-        "Creator": {
-          "Name": "Creator",
-          "Description": "For passionate authors",
-          "Features": {
-            "MonthlyCredits": "100 credits per month",
-            "AllImages": "All images (banners, scenes, items)",
-            "HighPriority": "High generation priority",
-            "ComplexCharacters": "Complex characters",
-            "LongStories": "Long stories",
-            "AdvancedItemSystem": "Advanced item system"
-          }
-        },
-        "Professional": {
-          "Name": "Professional",
-          "Description": "For serious content creators",
-          "Features": {
-            "MonthlyCredits": "250 credits per month",
-            "AllPremiumFeatures": "All premium features",
-            "MaximumPriority": "Maximum generation priority",
-            "DedicatedSupport": "Dedicated support",
-            "AdvancedExport": "Advanced export",
-            "TotalCustomization": "Total customization"
-          }
-        }
-      }
-    },
     "CreditPacks": {
       "Small": {
-        "Name": "Starter Pack",
+        "Name": "Discovery Pack",
         "Description": "20 credits to get started"
       },
       "Medium": {
-        "Name": "Standard Pack",
-        "Description": "50 credits to develop your stories"
+        "Name": "Adventurer Pack",
+        "Description": "55 credits to develop your stories"
       },
       "Large": {
-        "Name": "Premium Pack",
-        "Description": "120 credits for elaborate stories"
+        "Name": "Creator Pack",
+        "Description": "135 credits for elaborate stories"
       },
       "XLarge": {
-        "Name": "Creator Pack",
-        "Description": "300 credits for serious authors"
+        "Name": "Narrator Pack",
+        "Description": "350 credits for serious authors"
       }
     }
   },
