@@ -65,7 +65,6 @@ model Job {
   status             JobStatus           @default(PENDING)
   stage              JobStage?           @default(INITIALIZED)
   progress           Int                 @default(0)
-  priority           Int                 @default(0)
   startedAt          DateTime?           @default(now())
   completedAt        DateTime?
   error              String?             @db.Text
@@ -86,7 +85,6 @@ model Job {
   @@index([userId])
   @@index([status])
   @@index([stage])
-  @@index([priority])
 }
 
 enum TransactionType {
