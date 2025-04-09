@@ -22,6 +22,7 @@ import Link from "next/link";
 import { useDraft } from "@/lib/hooks/use-draft";
 import Image from "next/image";
 import { getRandomSuggestion } from "@/lib/suggestions";
+import { Levitate } from "../levitate";
 
 export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ className }): ReactElement => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -334,12 +335,12 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
         </div>
 
         <Image
-          src={"/assets/dragon.svg"}
+          src={"/assets/dragon-body.svg"}
           alt="dragon"
-          width={100}
-          height={100}
+          width={90}
+          height={90}
           className={cn(
-            "absolute z-10 -top-14 -right-[45px] rotate-12 select-none selection-none pointer-events-none",
+            "absolute z-10 -top-[95px] -right-[19px] rotate-[21deg] select-none selection-none pointer-events-none",
             "hidden lg:block"
           )}
         />
@@ -354,6 +355,19 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
             "hidden lg:block"
           )}
         />
+
+        <Levitate speed={1.5}>
+          <Image
+            src={"/assets/potion.svg"}
+            alt="portal"
+            width={75}
+            height={75}
+            className={cn(
+              "absolute z-10 bottom-5 -right-11 select-none selection-none pointer-events-none",
+              "hidden lg:block"
+            )}
+          />
+        </Levitate>
       </div>
 
       <div>
