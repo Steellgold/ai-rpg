@@ -649,7 +649,9 @@
         "Title": "Recharge your credits",
         "Description": "Choose the credit pack that suits you best to start or continue creating captivating stories.",
         "Popular": "Popular",
-        "credits": "credit{s}"
+        "credits": "credit{s}",
+        "Button": "Recharge now",
+        "Stripe": "Secure payment with"
       },
 
       "Small": {
