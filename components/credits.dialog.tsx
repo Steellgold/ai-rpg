@@ -15,7 +15,7 @@ import Image from "next/image";
 import { ShineBorder } from "./ui/magicui/shine-border";
 import { cn } from "@/lib/utils";
 import { FaStripe } from "react-icons/fa";
-import { Loader2 } from "lucide-react";
+import { Loader } from "lucide-react";
 import { toast } from "@/lib/hooks/use-toast";
 import { buyCredits } from "@/lib/actions/payment";
 
@@ -147,7 +147,7 @@ export const CreditPacksDialog: Component<PropsWithChildren> = ({ children }) =>
             >
               {isLoading ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <Loader className="mr-2 h-4 w-4 animate-spin" />
                   {t("Dialog.Processing")}
                 </>
               ) : (
