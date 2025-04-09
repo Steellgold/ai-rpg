@@ -7,8 +7,8 @@ import { ArrowUpRight, ArrowDownRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { CREDIT_PACKS } from "@/lib/features/credit-pack";
 import { format } from "date-fns";
-import { buyCredits } from "../_actions/payment";
 import Image from "next/image";
+import { buyCredits } from "@/lib/actions/payment";
 
 interface CreditsSectionProps {
   credits: number;
