@@ -47,7 +47,7 @@ export const Navbar = () => {
             <div className="flex flex-col gap-6 py-4">
               <Link href="/" className="flex items-center gap-2 px-2">
                 <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary">
-                  <Image src="/icon.webp" alt="Logo" width={32} height={32} className="object-contain" />
+                  <Image src="/icon.webp" alt="Logo" width={32} height={32} className="object-contain p-1" />
                 </div>
                 <span className="text-lg font-bold">Website</span>
               </Link>
@@ -93,7 +93,7 @@ export const Navbar = () => {
           </div>
 
           <div className="flex items-center">
-            <ProfileComponent variant="navbar" className="hidden md:flex" />
+            <ProfileComponent variant="navbar" />
           </div>
         </div>
       </div>
