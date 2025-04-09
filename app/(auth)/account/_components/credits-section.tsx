@@ -1,14 +1,12 @@
 "use client";
 
-import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowUpRight, ArrowDownRight } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { CREDIT_PACKS } from "@/lib/features/credit-pack";
 import { format } from "date-fns";
 import Image from "next/image";
-import { buyCredits } from "@/lib/actions/payment";
+import { CreditPacksDialog } from "@/components/credits.dialog";
 
 interface CreditsSectionProps {
   credits: number;
@@ -23,33 +21,7 @@ interface CreditsSectionProps {
 }
 
 export default function CreditsSection({ credits, transactions }: CreditsSectionProps) {
-  const [isLoading, setIsLoading] = useState(false);
-  const [selectedPack, setSelectedPack] = useState<string | null>(null);
-
   const t = useTranslations("Pages.Account.credits");
-  const u = useTranslations();
-  
-  const handleBuyCredits = async (packId: string) => {
-    setSelectedPack(packId);
-    setIsLoading(true);
-    
-    try {
-      const pack = CREDIT_PACKS.find(p => p.id === packId);
-      if (!pack) throw new Error("Invalid pack");
-      
-      const result = await buyCredits(packId);
-      
-      if (result.url) {
-        window.location.href = result.url;
-      } else {
-        throw new Error("No checkout URL returned");
-      }
-    } catch (error) {
-      console.error("Error purchasing credits:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
   
   return (
     <>
@@ -71,7 +43,9 @@ export default function CreditsSection({ credits, transactions }: CreditsSection
                 </div>
               </div>
 
-              <Button>{t("buy")}</Button>
+              <CreditPacksDialog>
+                <Button>{t("buy")}</Button>
+              </CreditPacksDialog>
             </div>
             
             <div>
