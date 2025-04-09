@@ -57,12 +57,12 @@ const Page = async () => {
   return (
     <PageLayout>
       <section className="flex flex-col items-center max-w-2xl mx-auto">
-        <h1 className="text-5xl -motion-translate-x-in-100 motion-translate-y-in-75">
+        <h1 className="text-5xl">
           <Glitch>{t("Title")}</Glitch>
         </h1>
         <p className="text-lg">{t("Description")}</p>
 
-        <div className="h-12" />
+        <div className="h-16" />
 
         <AiTextarea />
       </section>
