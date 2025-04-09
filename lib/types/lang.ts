@@ -19,8 +19,35 @@ export type ISOLang =
 | "uk" | "ur" | "uz" | "ve" | "vi" | "vo" | "wa" | "wo" | "xh" | "yi"
 | "yo" | "za" | "zh" | "zu";
 
+const europe = [
+  "fr", // France
+  "de", // Germany
+  "it", // Italy
+  "es", // Spain
+  "pt", // Portugal
+  "nl", // Netherlands
+  "be", // Belgium 
+  "el", // Greece
+  "fi", // Finland
+  "sk", // Slovakia
+  "si", // Slovenia
+  "ie", // Ireland
+  "lv", // Latvia
+  "lt", // Lithuania
+  "ee", // Estonia
+  "cy", // Cyprus
+  "mt", // Malta
+  "lu", // Luxembourg
+  "at", // Austria
+  "hr"  // Croatia
+];
+
 export type SupportedLangs = Record<string, ISOLang>;
 
 export const supportedLanguages: SupportedLangs = {
   en: "en"
 };
+
+export const isEurope = (lang: ISOLang) => {
+  return europe.includes(lang as string);
+}
