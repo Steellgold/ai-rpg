@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, ReactElement, HTMLAttributes, cloneElement, useMemo } from "react";
 import { Button } from "@/components/ui/button";
-import { Baby, Loader, Lock, LockOpen, Maximize, Pickaxe, RefreshCcw, User, X } from "lucide-react";
+import { Baby, Loader, Lock, LockOpen, Maximize, Pickaxe, PocketKnife, RefreshCcw, User, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Component } from "@/lib/types";
 import { MultiSelectCombobox } from "../ui/multi-select-combobox";
@@ -251,7 +251,7 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
                 onClick={() => setItems(!items)}
                 disabled={isGenerating || isLoggingIn}
               >
-                <Pickaxe className={cn("h-4 w-4", {
+                <PocketKnife className={cn("h-4 w-4", {
                   "text-teal-400": items,
                   "text-gray-200": !items
                 })} />
@@ -334,7 +334,7 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
         </div>
 
         <Image
-          src={"/illustrations/dragon.svg"}
+          src={"/assets/dragon.svg"}
           alt="dragon"
           width={100}
           height={100}
@@ -345,7 +345,7 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
         />
 
         <Image
-          src={"/illustrations/portal.svg"}
+          src={"/assets/portal.svg"}
           alt="portal"
           width={250}
           height={250}
