@@ -151,7 +151,7 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
         <div className={cn("relative z-20 border-2 rounded-xl overflow-hidden w-full", className, {
           "bg-[#070910] border border-[#173a8940]": true
         })}>
-          <ShineBorder className="rounded-xl" shineColor={["#2744ad", "#6c83d6", "#0d288a"]} />
+          <ShineBorder className="rounded-xl border-2" shineColor={["#2744ad", "#6c83d6", "#0d288a"]} />
           <textarea
             ref={textareaRef}
             value={prompt}
@@ -161,13 +161,13 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
               "The story takes place in the kingdom of Kiyomitsugawa, a prosperous nation bathed by sacred rivers, with landscapes adorned with thousand-year-old cherry trees and majestic mountains. This kingdom, imbued with ser...."
             }
             className={cn(
-              "w-full resize-none py-4 px-4 outline-none bg-transparent text-gray-200 placeholder:text-gray-500 min-h-[110px] custom-scrollbar", {
+              "w-full resize-none py-4 px-4 outline-none bg-transparent text-gray-200 placeholder:text-gray-500 min-h-[110px] mx-2 mt-2 custom-scrollbar", {
                 "animate-pulse italic text-gray-400": isGenerating
               }
             )}
           />
           
-          <div className="flex items-center justify-between px-2">
+          <div className="flex items-center justify-between px-2 mx-2">
             <div className="flex items-center flex-wrap gap-1.5">
               <Button
                 size={"default"}
@@ -191,7 +191,7 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
             </p>
           </div>
 
-          <div className="flex items-center justify-between p-2">
+          <div className="flex items-center justify-between p-2 mx-2 mb-2">
             <div className="flex items-center flex-wrap gap-1.5">
               {(selectedGenres.length > 0 || prompt.length > 0) && (!isGenerating || isInputValid) && (
                 <Button
@@ -350,7 +350,7 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
           width={250}
           height={250}
           className={cn(
-            "absolute z-10 top-4 -left-40 rotate-12 select-none selection-none pointer-events-none",
+            "absolute z-10 top-5 -left-40 rotate-12 select-none selection-none pointer-events-none",
             "hidden lg:block"
           )}
         />
