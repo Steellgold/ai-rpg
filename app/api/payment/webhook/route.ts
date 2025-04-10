@@ -6,7 +6,7 @@ import { addCredits } from "@/lib/credits";
 import { createId } from "@paralleldrive/cuid2";
 import Stripe from "stripe";
 
-export async function POST(req: NextRequest) {
+export const POST = async (req: NextRequest): Promise<NextResponse> => {
   const body = await req.text();
   const signature = req.headers.get("stripe-signature") as string;
 

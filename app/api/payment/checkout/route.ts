@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/db/prisma";
 import { env } from "@/lib/env/env";
 
-export async function POST(req: NextRequest) {
+export const POST = async (req: NextRequest): Promise<NextResponse> => {
   try {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
