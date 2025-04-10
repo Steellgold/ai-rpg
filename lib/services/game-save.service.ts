@@ -25,8 +25,19 @@ export const createGameSave = async (storyId: string, characterName: string = "P
     throw new Error("Story not found")
   }
 
-  if (!story.current_scene_id) {
-    throw new Error("Story has no starting scene")
+  let scene: string | null = story.current_scene_id;
+
+  if (!scene) {
+    const latestScene = await prisma.scene.findFirst({
+      where: { storyId: story.id },
+      orderBy: { createdAt: "desc" }
+    })
+
+    if (latestScene) {
+      scene = latestScene.id
+    }
+
+    throw new Error("No scenes found for this story")
   }
 
   const existingSave = await prisma.gameSave.findFirst({
@@ -50,7 +61,7 @@ export const createGameSave = async (storyId: string, characterName: string = "P
       characterName,
       storyId: story.id,
       userId: user.id,
-      currentSceneId: story.current_scene_id,
+      currentSceneId: scene,
       progress: 1,
       name: `${story.title} - Save`,
       lastPlayed: new Date().toISOString()

@@ -13,7 +13,6 @@ interface RequestParams {
   genres: string[];
   userId: string;
   jobId: string;
-  isPremium: boolean;
   isChildren: boolean;
   items: boolean;
   language?: string;
@@ -26,7 +25,7 @@ Deno.serve(async (req) => {
     });
   }
 
-  const { text, genres, userId, jobId, isPremium = false, isChildren = false, items = false, language = "auto" } = await req.json() as RequestParams;
+  const { text, genres, userId, jobId, isChildren = false, items = false, language = "auto" } = await req.json() as RequestParams;
 
   if (!text || !userId || !jobId) {
     return new Response(JSON.stringify({
@@ -95,7 +94,6 @@ Deno.serve(async (req) => {
       { ...storyObject, genres },
       userId,
       jobId,
-      isPremium,
       items,
       outputLanguage as string
     );

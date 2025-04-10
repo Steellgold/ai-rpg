@@ -77,7 +77,7 @@ export const storyGenerationSchema = z.object({
   items: z.array(itemSchema).default([]),
   banner_image_visual_description: z.string().min(1).max(350),
   max_story_scenes: z.number().int().min(1).max(20),
-  first_scene: z.array(sceneSchema)
+  first_scene: sceneSchema
 });
 
 export const nextSceneSchema = z.object({

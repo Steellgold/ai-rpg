@@ -15,7 +15,6 @@ interface RequestParams {
   customText?: string;
   diceRoll: number;
   userId: string;
-  isPremium: boolean;
   items: boolean;
   activeItem?: any;
   gameSaveId?: string;
@@ -36,7 +35,6 @@ Deno.serve(async (req) => {
     customText, 
     diceRoll = 3, 
     userId, 
-    isPremium = false, 
     items = false, 
     activeItem,
     gameSaveId,
@@ -350,9 +348,10 @@ Deno.serve(async (req) => {
           await addItemToInventory(supabase, gameSaveId, itemId);
         }
         
-        if (isPremium) {
+        // Générer une image pour l'item si nécessaire
+        const shouldGenerateImage = userData.credits > 0;
+        if (shouldGenerateImage) {
           const itemImageUrl = await generateItemImage(story.id, itemId, newItem, generationId);
-          
           if (itemImageUrl) {
             await supabase.from('Item').update({
               imageUrl: itemImageUrl
@@ -405,8 +404,10 @@ Deno.serve(async (req) => {
 
     logger.info(generationId, "Database updated successfully");
 
-    if (isPremium) {
-      logger.info(generationId, "Generating scene image for premium user...");
+    // Générer une image pour la scène si l'utilisateur a des crédits
+    const shouldGenerateSceneImage = userData.credits > 0;
+    if (shouldGenerateSceneImage) {
+      logger.info(generationId, "Generating scene image...");
       try {
         const sceneImageUrl = await generateSceneImage(
           story.id,

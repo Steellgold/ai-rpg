@@ -1,7 +1,7 @@
 import { logger, createGameSave, createCharacter, createItem, createScene, createChoice, createChoiceItemRelation, addItemToScene, addItemToInventory } from "./utils.ts";
 import { generateBannerImage, generateSceneImage, generateItemImage, generateCharacterAvatar } from "./ai-services.ts";
 
-export const createStoryFromData = async (supabase: any, storyObject: any, userId: string, jobId: string, isPremium: boolean, hasItems: boolean, language: string) => {
+export const createStoryFromData = async (supabase: any, storyObject: any, userId: string, jobId: string, hasItems: boolean, language: string) => {
   logger.info(jobId, "Creating story record...");
   const storyId = crypto.randomUUID();
   
@@ -21,6 +21,9 @@ export const createStoryFromData = async (supabase: any, storyObject: any, userI
     v: "V3"
   }).select().single();
 
+  const { data: { user, error: userError } } = await supabase.from('User').select('*').eq('id', userId).single();
+  if (userError) throw new Error(`Failed to retrieve user data: ${userError.message}`);
+
   if (storyError) {
     throw new Error(`Failed to create story: ${storyError.message}`);
   }
@@ -31,7 +34,7 @@ export const createStoryFromData = async (supabase: any, storyObject: any, userI
     const charId = await createCharacter(supabase, character, storyId, true);
     principalCharIds.push(charId);
     
-    if (isPremium) {
+    if (user?.credits > 0) {
       const avatarUrl = await generateCharacterAvatar(storyId, charId, character, jobId);
       if (avatarUrl) {
         await supabase.from('Character').update({
@@ -54,7 +57,7 @@ export const createStoryFromData = async (supabase: any, storyObject: any, userI
       const itemId = await createItem(supabase, item, storyId);
       itemsMap[item.name] = itemId;
       
-      if (isPremium) {
+      if (user?.credits > 0) {
         const itemImageUrl = await generateItemImage(storyId, itemId, item, jobId);
         if (itemImageUrl) {
           await supabase.from('Item').update({
@@ -95,7 +98,7 @@ export const createStoryFromData = async (supabase: any, storyObject: any, userI
     }
   }
 
-  if (isPremium) {
+  if (user?.credits > 0) {
     logger.info(jobId, "Generating banner image...");
     const bannerImageUrl = await generateBannerImage(storyId, storyObject.banner_image_visual_description, jobId);
     if (bannerImageUrl) {
