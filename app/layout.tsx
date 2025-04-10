@@ -9,11 +9,7 @@ import { getLocale, getMessages } from "next-intl/server";
 import { Toaster } from "@/components/ui/toaster";
 import { Footer } from "@/components/naviguation/footer";
 import { Navbar } from "@/components/naviguation/navbar";
-import { Geist, Geist_Mono } from "next/font/google"
-
-
-const geistSans = localFont({ src: "./fonts/GeistVF.woff", variable: "--font-geist-sans", weight: "100 900" });
-const geistMono = localFont({ src: "./fonts/GeistMonoVF.woff", variable: "--font-geist-mono", weight: "100 900" });
+import { GeistHackBecauseWTFWhyNewTimesRomanAlwaysAppear } from "@/components/glitch";
 
 export const metadata: Metadata = { 
   title: "Imagine | AI-powered Interactive Storytelling",
@@ -60,17 +56,19 @@ const RootLayout: AsyncComponent<PropsWithChildren> = async({ children }) => {
 
   return (
     <html lang={locale} style={{ scrollBehavior: "smooth" }} suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}>
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
-          <NextIntlClientProvider messages={messages}>
-            <Navbar />
+      <body className={`antialiased min-h-screen flex flex-col`}>
+        <GeistHackBecauseWTFWhyNewTimesRomanAlwaysAppear>
+          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
+            <NextIntlClientProvider messages={messages}>
+              <Navbar />
 
-            {children}
+              {children}
 
-            <Toaster />
-            <Footer />
-          </NextIntlClientProvider>          
-        </ThemeProvider>
+              <Toaster />
+              <Footer />
+            </NextIntlClientProvider>          
+          </ThemeProvider>
+        </GeistHackBecauseWTFWhyNewTimesRomanAlwaysAppear>
       </body>
     </html>
   );
