@@ -11,7 +11,7 @@ import { Progress } from "@/components/ui/progress"
 import { useTranslations } from "next-intl"
 import { ItemMention } from "./mentions/item-card"
 import { cn } from "@/lib/utils"
-import { ItemRarity, ItemType } from "@prisma/client"
+import { ItemRarity, ItemType } from "@/prisma/generated"
 
 type InventoryItemType = {
   id: string

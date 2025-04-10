@@ -5,8 +5,8 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { formatSceneContent } from "@/components/story/format-text-scene";
 import { Component } from "@/lib/types";
-import { Prisma } from "@prisma/client";
 import { useTranslations } from "next-intl";
+import { Prisma } from "@/prisma/generated/prisma/client";
 
 type SceneContentProps = {
   sceneData: Prisma.SceneGetPayload<{

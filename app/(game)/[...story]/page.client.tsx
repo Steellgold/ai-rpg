@@ -4,7 +4,6 @@ import { useState } from "react";
 import { generateNextScene } from "@/lib/actions/generate.scene.action";
 import { useItem } from "@/lib/actions/use-item";
 import { Component } from "@/lib/types";
-import { Prisma } from "@prisma/client";
 import SceneHeader from "./_components/scene-header";
 import SceneList from "./_components/scene-list";
 import SceneContent from "./_components/scene-content";
@@ -14,6 +13,7 @@ import InventorySection from "./_components/inventory";
 import PreviousChoices from "./_components/previous-choices";
 import { equipItem } from "@/lib/services/game-save.service";
 import { toast } from "@/lib/hooks/use-toast";
+import { Prisma } from "@/prisma/generated";
 
 export type PageClientProps = {
   story_data: Prisma.StoryGetPayload<{

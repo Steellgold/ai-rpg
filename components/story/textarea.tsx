@@ -11,7 +11,7 @@ import { useTranslations } from "next-intl";
 import { generateStory } from "@/lib/actions/generate.ai.action";
 import { useSession } from "@/lib/hooks/use-session";
 import { StoryLanguageSelector } from "./story-language-selector";
-import { StoryLanguage } from "@prisma/client";
+import { StoryLanguage } from "@/prisma/generated";
 import { calculateTotalCreditCost, getDefaultFeatures } from "@/lib/features/generation-features";
 import { EnhancedSendButton } from "./textarea.send-button";
 import { useCredits } from "@/lib/hooks/use-credits";

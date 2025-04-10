@@ -9,7 +9,7 @@ import { redirect } from "next/navigation";
 import { env } from "../env/env";
 import { Database } from "../supabase/database.types";
 import { checkCredits } from "@/lib/credits"
-import { StoryLanguage } from "@prisma/client";
+import { StoryLanguage } from "@/prisma/generated";
 import { getDefaultFeatures } from "@/lib/features/generation-features";
 import { validateCreditCost } from "@/lib/actions/calculate-credit-cost";
 

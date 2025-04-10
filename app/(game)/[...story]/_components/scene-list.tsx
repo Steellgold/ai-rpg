@@ -4,7 +4,7 @@ import { Check, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Component } from "@/lib/types";
-import { Prisma } from "@prisma/client";
+import { Prisma } from "@/prisma/generated";
 
 type SceneListProps = {
   scenes: Prisma.SceneGetPayload<{

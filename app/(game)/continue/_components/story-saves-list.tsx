@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
 import { Trash2, Clock } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { toast } from "@/lib/hooks/use-toast";
-import { Prisma } from "@prisma/client";
+import { Prisma } from "@/prisma/generated";
 
 export const GameSaveList = () => {
   const [saves, setSaves] = useState<Prisma.GameSaveGetPayload<{
