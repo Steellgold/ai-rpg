@@ -522,7 +522,6 @@ export type Database = {
           id: string
           input: Json
           output: Json | null
-          priority: number
           progress: number
           stage: Database["public"]["Enums"]["JobStage"] | null
           startedAt: string | null
@@ -538,7 +537,6 @@ export type Database = {
           id: string
           input: Json
           output?: Json | null
-          priority?: number
           progress?: number
           stage?: Database["public"]["Enums"]["JobStage"] | null
           startedAt?: string | null
@@ -554,7 +552,6 @@ export type Database = {
           id?: string
           input?: Json
           output?: Json | null
-          priority?: number
           progress?: number
           stage?: Database["public"]["Enums"]["JobStage"] | null
           startedAt?: string | null
@@ -990,46 +987,43 @@ export type Database = {
         Row: {
           createdAt: string
           credits: number
+          daily_limit_messages: number | null
           display_name: string
           email: string
           id: string
           image_url: string | null
           last_credits_refresh: string | null
-          subscription_end: string | null
-          subscription_id: string | null
-          subscription_start: string | null
-          subscription_status: string
-          subscription_tier: string
+          limit_messages: number
+          premium: boolean
+          stripe_customer_id: string | null
           updatedAt: string
         }
         Insert: {
           createdAt?: string
           credits?: number
+          daily_limit_messages?: number | null
           display_name?: string
           email: string
           id: string
           image_url?: string | null
           last_credits_refresh?: string | null
-          subscription_end?: string | null
-          subscription_id?: string | null
-          subscription_start?: string | null
-          subscription_status?: string
-          subscription_tier?: string
+          limit_messages?: number
+          premium?: boolean
+          stripe_customer_id?: string | null
           updatedAt?: string
         }
         Update: {
           createdAt?: string
           credits?: number
+          daily_limit_messages?: number | null
           display_name?: string
           email?: string
           id?: string
           image_url?: string | null
           last_credits_refresh?: string | null
-          subscription_end?: string | null
-          subscription_id?: string | null
-          subscription_start?: string | null
-          subscription_status?: string
-          subscription_tier?: string
+          limit_messages?: number
+          premium?: boolean
+          stripe_customer_id?: string | null
           updatedAt?: string
         }
         Relationships: []

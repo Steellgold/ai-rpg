@@ -18,9 +18,6 @@ const AccountPage = async () => {
       email: true,
       display_name: true,
       image_url: true,
-      subscription_tier: true,
-      subscription_status: true,
-      subscription_end: true,
       creditTransactions: {
         select: {
           id: true,
