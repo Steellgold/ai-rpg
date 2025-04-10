@@ -158,9 +158,7 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             disabled={isGenerating}
-            placeholder={
-              "The story takes place in the kingdom of Kiyomitsugawa, a prosperous nation bathed by sacred rivers, with landscapes adorned with thousand-year-old cherry trees and majestic mountains. This kingdom, imbued with ser...."
-            }
+            placeholder={t("AiTextarea.Placeholder")}
             className={cn(
               "w-full resize-none py-4 px-4 outline-none bg-transparent text-gray-200 placeholder:text-gray-500 min-h-[110px] mx-2 mt-2 custom-scrollbar", {
                 "animate-pulse italic text-gray-400": isGenerating
