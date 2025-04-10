@@ -21,6 +21,7 @@ import { clientEnv } from "@/lib/env/env.client"
 import { useCredits } from "@/lib/hooks/use-credits"
 import Image from "next/image"
 import { CreditPacksDialog } from "../credits.dialog"
+import { LanguageDialog } from "../language.dialog"
 
 interface ProfileComponentProps {
   variant?: "default" | "navbar"
@@ -81,15 +82,16 @@ export function ProfileComponent({ variant = "default", className }: ProfileComp
           </DropdownMenuItem>
         </CreditPacksDialog>
 
-        {/* Language */}
-        <DropdownMenuItem className="p-0">
-          <div className="flex items-center justify-between w-full px-2 py-1.5">
-            <div className="flex items-center gap-2">
-              <Globe size={16} />
-              <span>{t("Language")}</span>
+        <LanguageDialog>
+          <DropdownMenuItem className="p-0 cursor-pointer" onSelect={(e) => e.preventDefault()}>
+            <div className="flex items-center justify-between w-full px-2 py-1.5">
+              <div className="flex items-center gap-2">
+                <Globe size={16} />
+                <span>{t("Language")}</span>
+              </div>
             </div>
-          </div>
-        </DropdownMenuItem>
+          </DropdownMenuItem>
+        </LanguageDialog>
 
         <DropdownMenuSeparator />
 
