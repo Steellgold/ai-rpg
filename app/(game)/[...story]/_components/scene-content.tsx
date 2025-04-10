@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { formatSceneContent } from "@/components/story/format-text-scene";
 import { Component } from "@/lib/types";
 import { useTranslations } from "next-intl";
-import { Prisma } from "@/prisma/generated/prisma/client";
+import { Prisma } from "@/prisma/generated";
 
 type SceneContentProps = {
   sceneData: Prisma.SceneGetPayload<{
