@@ -57,7 +57,7 @@ export const useItem = async (itemId: string, inventoryItemId: string) => {
       });
       
       if (isBroken) {
-        if (user_data?.subscription_id == "active" && !item.brokenImageUrl) {
+        if (!item.brokenImageUrl) {
           try {
             const imageResponse = await openai.images.generate({
               model: "dall-e-3",
