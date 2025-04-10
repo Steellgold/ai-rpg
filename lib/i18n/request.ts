@@ -26,6 +26,8 @@ export default getRequestConfig(async () => {
   const supportedLanguages: SupportedLangs = {
     en: "en",
     fr: "fr",
+    es: "es",
+    de: "de"
   };
 
   const store = await cookieStore;
