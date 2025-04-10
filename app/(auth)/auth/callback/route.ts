@@ -1,10 +1,10 @@
-import { NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { NextResponse } from "next/server"
+import { createClient } from "@/lib/supabase/server"
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url)
-  const code = searchParams.get('code');
-  const next = searchParams.get('next') ?? '/'
+  const code = searchParams.get("code");
+  const next = searchParams.get("next") ?? "/"
 
   if (code) {
     const supabase = await createClient()
@@ -14,20 +14,20 @@ export async function GET(request: Request) {
       console.log("No errors, and user exist")
 
       try {
-        const { data: createdUser, error } = await supabase.rpc('create_user', { 
+        const { data: createdUser, error } = await supabase.rpc("create_user", { 
           id: data.user.id, 
           email: data.user.email ?? "",
           image_url: data.user.user_metadata?.avatar_url ?? null,
           display_name: data.user.user_metadata?.custom_claims.global_name ?? null
         });
 
-        console.log('User created:', createdUser, error)
+        console.log("User created:", createdUser, error)
       } catch (createUserError) {
-        console.error('Error creating user:', createUserError);
+        console.error("Error creating user:", createUserError);
       }
 
-      const forwardedHost = request.headers.get('x-forwarded-host')
-      const isLocalEnv = process.env.NODE_ENV === 'development'
+      const forwardedHost = request.headers.get("x-forwarded-host")
+      const isLocalEnv = process.env.NODE_ENV === "development"
 
       if (isLocalEnv) {
         return NextResponse.redirect(`${origin}${next}`)
@@ -37,9 +37,9 @@ export async function GET(request: Request) {
         return NextResponse.redirect(`${origin}${next}`)
       }
     } else {
-      console.error('Error exchanging code for session:', error);
-      console.error('Error exchanging code for session: Code:', code);
-      console.error('Error exchanging code for session: Data:', data);
+      console.error("Error exchanging code for session:", error);
+      console.error("Error exchanging code for session: Code:", code);
+      console.error("Error exchanging code for session: Data:", data);
     }
   }
 

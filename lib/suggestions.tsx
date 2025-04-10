@@ -2,8 +2,8 @@ import { ReactElement } from "react"
 import { Genre } from "./genres-ids"
 import { 
   Crown, Eclipse, Flower, Music, TowerControl, Sword, Mountain, 
-  BookOpen, Skull, Cloud, Ship, Eye, Heart, Wand, Rabbit, 
-  BugPlay, Glasses, Trees, Gamepad2, Baby, Dog, Plane, Sun, Camera
+  BookOpen, Skull, Cloud, Ship, Eye, Heart, Wand, 
+  BugPlay, Trees, Gamepad2, Baby, Dog, Plane, Sun, Camera
 } from "lucide-react"
 import { FaDragon, FaGhost, FaRocket, FaChessKnight } from "react-icons/fa"
 

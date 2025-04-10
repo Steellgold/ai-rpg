@@ -246,7 +246,7 @@ export const PageClient: Component<PageClientProps> = ({
       if (result.success) {
         toast({
           title: equip ? "Item equipped" : "Item unequipped",
-          description: `The item has been ${equip ? 'equipped' : 'unequipped'} successfully`
+          description: `The item has been ${equip ? "equipped" : "unequipped"} successfully`
         });
       }
     } catch (error) {

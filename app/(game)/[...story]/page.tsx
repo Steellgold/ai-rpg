@@ -84,7 +84,7 @@ const Page = async ({ params }: PageProps) => {
               sceneId: true
             },
             orderBy: {
-              order: 'asc'
+              order: "asc"
             }
           },
           selected_choice_id: true,
@@ -188,7 +188,7 @@ const Page = async ({ params }: PageProps) => {
           sceneId: true
         },
         orderBy: {
-          order: 'asc'
+          order: "asc"
         }
       },
     }

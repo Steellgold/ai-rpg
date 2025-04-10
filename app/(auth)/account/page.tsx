@@ -4,6 +4,7 @@ import { prisma } from "@/lib/db/prisma";
 import { unauthorized } from "next/navigation";
 import CreditsSection from "./_components/credits-section";
 import { getTranslations } from "next-intl/server";
+import Image from "next/image";
 
 const AccountPage = async () => {
   const supabase = await createClient();
@@ -27,7 +28,7 @@ const AccountPage = async () => {
           transactionType: true,
           createdAt: true
         },
-        orderBy: { createdAt: 'desc' },
+        orderBy: { createdAt: "desc" },
         take: 10
       }
     }
@@ -56,16 +57,18 @@ const AccountPage = async () => {
             <CardContent className="flex flex-col items-center text-center gap-4">
               {userData.image_url && (
                 <div className="w-32 h-32 rounded-full overflow-hidden">
-                  <img 
+                  <Image 
                     src={userData.image_url} 
-                    alt={userData.display_name || 'User'} 
+                    alt={userData.display_name || "User"} 
                     className="w-full h-full object-cover"
+                    width={128}
+                    height={128}
                   />
                 </div>
               )}
 
               <div>
-                <h3 className="text-xl font-medium">{userData.display_name || 'User'}</h3>
+                <h3 className="text-xl font-medium">{userData.display_name || "User"}</h3>
                 <p className="text-sm text-muted-foreground">{userData.email}</p>
               </div>
             </CardContent>

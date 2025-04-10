@@ -40,7 +40,7 @@ const Page: Component<Params> = ({ params }) => {
 
         if (fetchError) throw fetchError;
 
-        if (data.input && typeof data.input === 'object' && 'items' in data.input) {
+        if (data.input && typeof data.input === "object" && "items" in data.input) {
           setHasItems(Boolean(data.input.items));
         }
 
@@ -49,15 +49,15 @@ const Page: Component<Params> = ({ params }) => {
         realtimeChannel = supabase
           .channel(`job-${jobId}`)
           .on(
-            'postgres_changes', 
+            "postgres_changes", 
             { 
-              event: '*', 
-              schema: 'public', 
-              table: 'Job', 
+              event: "*", 
+              schema: "public", 
+              table: "Job", 
               filter: `id=eq.${jobId}` 
             },
             (payload) => {
-              if (payload.eventType === 'UPDATE') {
+              if (payload.eventType === "UPDATE") {
                 updateJobStatus(payload.new);
               }
             }
@@ -96,9 +96,9 @@ const Page: Component<Params> = ({ params }) => {
       const newProgress = progressMap[currentStatus] || progress;
       setProgress(newProgress);
 
-      if (currentStatus === 'COMPLETED' && jobData.storyId) {
+      if (currentStatus === "COMPLETED" && jobData.storyId) {
         router.push(`/${jobData.storyId}`);
-      } else if (currentStatus === 'FAILED' || currentStatus === 'ERROR') {
+      } else if (currentStatus === "FAILED" || currentStatus === "ERROR") {
         setError(jobData.error || "An error occurred");
       }
     };
@@ -110,7 +110,7 @@ const Page: Component<Params> = ({ params }) => {
         supabase.removeChannel(realtimeChannel);
       }
     };
-  }, [jobId, router, supabase]);
+  }, [jobId, router, supabase, progress]);
 
   const statusMessages = {
     DETECTING_LANGUAGE: t("GeneratingSteps.DetectingLanguage"),
@@ -133,13 +133,13 @@ const Page: Component<Params> = ({ params }) => {
   };
 
   const generationSteps = [
-    { key: 'PENDING', label: t("GeneratingSteps.Pending"), progress: 5 },
-    { key: 'DETECTING_LANGUAGE', label: t("GeneratingSteps.DetectingLanguage"), progress: 10 },
-    { key: 'GENERATING_STORY', label: t("GeneratingSteps.Processing"), progress: 30 },
-    ...(hasItems ? [{ key: 'GENERATING_ITEMS', label: t("GeneratingSteps.GeneratingItems"), progress: 55 }] : []),
-    { key: 'CREATING_FIRST_SCENE', label: t("GeneratingSteps.GeneratingScenes"), progress: 60 },
-    { key: 'GENERATING_BANNER', label: t("GeneratingSteps.GeneratingImages"), progress: 80 },
-    { key: 'COMPLETED', label: t("GeneratingSteps.Completed"), progress: 100 }
+    { key: "PENDING", label: t("GeneratingSteps.Pending"), progress: 5 },
+    { key: "DETECTING_LANGUAGE", label: t("GeneratingSteps.DetectingLanguage"), progress: 10 },
+    { key: "GENERATING_STORY", label: t("GeneratingSteps.Processing"), progress: 30 },
+    ...(hasItems ? [{ key: "GENERATING_ITEMS", label: t("GeneratingSteps.GeneratingItems"), progress: 55 }] : []),
+    { key: "CREATING_FIRST_SCENE", label: t("GeneratingSteps.GeneratingScenes"), progress: 60 },
+    { key: "GENERATING_BANNER", label: t("GeneratingSteps.GeneratingImages"), progress: 80 },
+    { key: "COMPLETED", label: t("GeneratingSteps.Completed"), progress: 100 }
   ];
 
   return (

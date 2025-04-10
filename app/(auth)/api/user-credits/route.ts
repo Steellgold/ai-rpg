@@ -21,7 +21,7 @@ export const GET = async () => {
     }
 
     return NextResponse.json({ credits: userData.credits });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error checking credits:", error);
     return NextResponse.json(
       { error: "Failed to check credits" },

@@ -246,7 +246,7 @@ export const getGameSaves = async () => {
       }
     },
     orderBy: {
-      lastPlayed: 'desc'
+      lastPlayed: "desc"
     }
   })
 
