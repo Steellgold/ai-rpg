@@ -23,7 +23,7 @@ const languages: Language[] = [
 
 export const ThemeLanguageSwitcher = () => {
   const { theme, setTheme } = useTheme()
-  const { lang, setLang } = useLanguageStore();
+  const { setLang } = useLanguageStore();
 
   const [currentLanguage, setCurrentLanguage] = useState<Language>(languages[0])
   const [mounted, setMounted] = useState(false)

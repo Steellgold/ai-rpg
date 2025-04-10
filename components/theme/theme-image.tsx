@@ -10,9 +10,8 @@ export const ThemeImage = (props: Props) => {
 
   return (
     <>
-      <Image {...rest} src={srcDark} unoptimized={srcDark.includes("svg")} className="dark:hidden" />
-
-      <Image {...rest} src={srcLight} unoptimized={srcLight.includes("svg")} className="hidden dark:block" />
+      <Image {...rest} src={srcDark} unoptimized={srcDark.includes("svg")} className="dark:hidden" alt={rest.alt} />
+      <Image {...rest} src={srcLight} unoptimized={srcLight.includes("svg")} className="hidden dark:block" alt={rest.alt} />
     </>
   )
 }

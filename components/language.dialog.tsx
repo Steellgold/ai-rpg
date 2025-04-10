@@ -36,7 +36,7 @@ export const LanguageDialog: Component<PropsWithChildren> = ({ children }) => {
   const id = useId();
 
   const [selectedLanguage, setSelectedLanguage] = useState<ISOLang>("en")
-  const { lang, setLang } = useLanguageStore();
+  const { setLang } = useLanguageStore();
   const router = useRouter();
 
   const handleLanguageChange = () => {
@@ -60,7 +60,7 @@ export const LanguageDialog: Component<PropsWithChildren> = ({ children }) => {
           <DialogHeader>
             <DialogTitle className="text-left">Changer de langue</DialogTitle>
             <DialogDescription className="text-left">
-              Sélectionnez la langue de votre choix pour l'interface.
+              Sélectionnez la langue de votre choix pour l&apos;interface.
             </DialogDescription>
           </DialogHeader>
         </div>

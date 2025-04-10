@@ -22,8 +22,8 @@ export const generateNextScene = async (
 
   const user_data = await prisma.user.findUnique({ where: { id: user.id } });
   if (!user_data) throw new Error("User not found");
-
-  const { credits } = await checkCredits(user.id);
+  
+  await checkCredits(user.id);
 
   const story = await prisma.story.findUnique({
     where: { id: storyId },
@@ -44,10 +44,10 @@ export const generateNextScene = async (
     let activeItem = null;
     if (activeItemId && gameSaveId) {
       const { data: inventoryItemData } = await supabase
-        .from('InventoryItem')
-        .select('*, item:itemId(*)')
-        .eq('gameSaveId', gameSaveId)
-        .eq('itemId', activeItemId)
+        .from("InventoryItem")
+        .select("*, item:itemId(*)")
+        .eq("gameSaveId", gameSaveId)
+        .eq("itemId", activeItemId)
         .single();
 
       if (inventoryItemData) {

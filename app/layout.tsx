@@ -12,8 +12,8 @@ import { Navbar } from "@/components/naviguation/navbar";
 import { Geist, Geist_Mono } from "next/font/google"
 
 
-// const geistSans = localFont({ src: "./fonts/GeistVF.woff", variable: "--font-geist-sans", weight: "100 900" });
-// const geistMono = localFont({ src: "./fonts/GeistMonoVF.woff", variable: "--font-geist-mono", weight: "100 900" });
+// const geistSans = localFont({ src: "../fonts/GeistVF.woff", variable: "--font-geist-sans", weight: "100 900" });
+// const geistMono = localFont({ src: "../fonts/GeistMonoVF.woff", variable: "--font-geist-mono", weight: "100 900" });
 const geistSans = Geist({ subsets: ["latin"], variable: "--font-geist-sans", weight: ["100" , "900"] });
 const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono", weight: ["100" , "900"] });
 

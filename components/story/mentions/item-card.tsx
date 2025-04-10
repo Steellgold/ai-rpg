@@ -8,6 +8,7 @@ import { Component } from "@/lib/types"
 import { useTranslations } from "next-intl"
 import { cn } from "@/lib/utils"
 import { ShoppingBag } from "lucide-react"
+import Image from "next/image"
 
 type ItemType = "WEAPON" | "ARMOR" | "POTION" | "KEY" | "TOOL" | "DOCUMENT" | "QUEST" | "MISC"
 type ItemRarity = "COMMON" | "UNCOMMON" | "RARE" | "EPIC" | "LEGENDARY"
@@ -32,14 +33,6 @@ type ItemProps = {
 export const ItemMention: Component<ItemProps> = ({ item, onClick, isInventoryItem = false }) => {
   const [open, setOpen] = useState(false);
   const t = useTranslations("Pages.Story.ItemCard");
-
-  const handleClick = () => {
-    if (onClick) {
-      onClick();
-    } else {
-      setOpen(true);
-    }
-  };
 
   const rarityColors = {
     COMMON: "border border-zinc-600 text-zinc-200",
@@ -76,7 +69,7 @@ export const ItemMention: Component<ItemProps> = ({ item, onClick, isInventoryIt
       >
         <span className="mr-1">
           {item.imageUrl ? (
-            <img src={item.imageUrl} alt={item.name} className="w-4 h-4 rounded-md" />
+            <Image src={item.imageUrl} alt={item.name} className="w-4 h-4 rounded-md" width={16} height={16} />
           ) : (
             <>{typeIcons[item.type]}</>
           )}
@@ -98,7 +91,7 @@ export const ItemMention: Component<ItemProps> = ({ item, onClick, isInventoryIt
                 <div className="flex flex-col gap-4">
                   {item.imageUrl ? (
                     <div className="w-32 h-32 bg-zinc-800 rounded-md overflow-hidden">
-                      <img src={item.imageUrl} alt={item.name} className="w-full h-full object-cover" />
+                      <Image src={item.imageUrl} alt={item.name} className="w-full h-full object-cover" width={128} height={128} />
                     </div>
                   ) : (
                     <div className="w-32 h-32 bg-zinc-800 rounded-md flex items-center justify-center text-4xl">

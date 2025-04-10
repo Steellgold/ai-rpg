@@ -1,24 +1,24 @@
 "use client";
 
-import React, { HTMLAttributes } from 'react';
+import React, { HTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
-import { Component } from '@/lib/types';
+import { Component } from "@/lib/types";
 
 type DiceCubeProps = HTMLAttributes<HTMLDivElement> & {
   face?: number;
-  size?: 'sm' | 'md' | 'lg';
-  displayType?: 'number' | 'dots';
+  size?: "sm" | "md" | "lg";
+  displayType?: "number" | "dots";
 };
 
 type Position = "top-left" | "top-right" | "middle-left" | "middle-right" | "bottom-left" | "bottom-right" | "center";
 
 export const DiceCube: Component<DiceCubeProps> = ({
   face = 1,
-  size = 'md',
-  displayType = 'dots',
-  className = ''
+  size = "md",
+  displayType = "dots",
+  className = ""
 }) => {
-  const validFace = typeof face === 'number' && face >= 1 && face <= 6 ? face : 1;
+  const validFace = typeof face === "number" && face >= 1 && face <= 6 ? face : 1;
   
   const sizeClasses = {
     sm: "w-9 h-9 text-sm",
@@ -37,9 +37,9 @@ export const DiceCube: Component<DiceCubeProps> = ({
 
   const getDotSize = () => {
     switch (size) {
-      case 'sm': return 'w-1.5 h-1.5';
-      case 'lg': return 'w-4 h-4';
-      default: return 'w-2.5 h-2.5';
+      case "sm": return "w-1.5 h-1.5";
+      case "lg": return "w-4 h-4";
+      default: return "w-2.5 h-2.5";
     }
   };
 
@@ -64,7 +64,7 @@ export const DiceCube: Component<DiceCubeProps> = ({
         className
       )}
     >
-      {displayType === 'number' ? (
+      {displayType === "number" ? (
         <span className="font-bold">{validFace}</span>
       ) : (
         dotPositions[validFace].map((position, index) => (

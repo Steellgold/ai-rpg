@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { ArrowUpIcon, Loader } from 'lucide-react';
+import { ArrowUpIcon, Loader } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { GENERATION_FEATURES, GenerationFeatureType } from "@/lib/features/generation-features";
 import { useTranslations } from "next-intl";

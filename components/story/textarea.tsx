@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, ReactElement, HTMLAttributes, cloneElement, useMemo } from "react";
 import { Button } from "@/components/ui/button";
-import { Baby, Loader, Lock, LockOpen, Maximize, Pickaxe, PocketKnife, RefreshCcw, User, X } from "lucide-react";
+import { Baby, Loader, Lock, LockOpen, Maximize, PocketKnife, RefreshCcw, User, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Component } from "@/lib/types";
 import { MultiSelectCombobox } from "../ui/multi-select-combobox";

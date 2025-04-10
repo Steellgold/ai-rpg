@@ -69,7 +69,7 @@ export const Dialogue: Component<DialogueProps> = ({
       <div className={cn(
         "pl-11", { "line-clamp-2": !expanded }
       )}>
-        "{text}"
+        &quot;{text}&quot;
       </div>
     </div>
   );

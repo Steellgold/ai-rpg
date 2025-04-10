@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Button } from "@/components/ui/button"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Input } from "@/components/ui/input"
 import { Backpack, Search, AlertTriangle } from "lucide-react"
 import { Progress } from "@/components/ui/progress"
@@ -12,6 +12,7 @@ import { useTranslations } from "next-intl"
 import { ItemMention } from "./mentions/item-card"
 import { cn } from "@/lib/utils"
 import { ItemRarity, ItemType } from "@/prisma/generated"
+import Image from "next/image"
 
 type InventoryItemType = {
   id: string
@@ -147,19 +148,21 @@ export const Inventory = ({
                   <div 
                     key={item.id}
                     className={`p-4 rounded-lg border ${
-                      item.isBroken ? 'border-red-800 bg-red-900/20' : 
-                      item.isEquipped ? 'border-blue-800 bg-blue-900/20' :
-                      activeItem === item.id ? 'border-green-800 bg-green-900/20' :
-                      'border-zinc-800 hover:bg-zinc-800/30'
+                      item.isBroken ? "border-red-800 bg-red-900/20" : 
+                      item.isEquipped ? "border-blue-800 bg-blue-900/20" :
+                      activeItem === item.id ? "border-green-800 bg-green-900/20" :
+                      "border-zinc-800 hover:bg-zinc-800/30"
                     } transition-colors`}
                   >
                     <div className="flex items-start gap-3">
                       <div className="w-16 h-16 flex-shrink-0">
                         {item.imageUrl && (
-                          <img 
+                          <Image
                             src={item.isBroken && item.brokenImageUrl ? item.brokenImageUrl : item.imageUrl} 
                             alt={item.name} 
                             className="w-full h-full object-cover rounded-md"
+                            width={64}
+                            height={64}
                           />
                         )}
                       </div>
