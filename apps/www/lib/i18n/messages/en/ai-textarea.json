@@ -5,9 +5,14 @@
 
     "Tools": {
       "Children": {
-        "On": "Children mode",
-        "Off": "Children mode off"
+        "On": "For children",
+        "Off": "For anyone"
       }
+    },
+
+    "Record": {
+      "Record": "Record",
+      "Stop": "Stop"
     }
   }
 }
