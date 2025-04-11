@@ -4,10 +4,7 @@
     "build:all": "dotenv -- pnpm --filter=@imagine/* --recursive run build",
 
     "start:website": "pnpm --filter=@imagine/website run start",
-    "start:api": "pnpm --filter=@imagine/api run start",
-
-    "build:website": "dotenv -- pnpm --filter=@imagine/website run build",
-    "build:api": "pnpm --filter=@imagine/api run build"
+    "build:website": "dotenv -- pnpm --filter=@imagine/website run build"
   },
   "dependencies": {
     "dotenv": "^16.4.5",
