@@ -1,0 +1,86 @@
+enum TransactionType {
+  PURCHASE
+  SUBSCRIPTION
+  USAGE
+  REFUND
+  BONUS
+  ADMIN_ADJUST
+}
+
+model User {
+  id                   String              @id @default(uuid())
+  email                String              @unique
+  display_name         String              @default("User")
+  image_url            String?
+  //
+  credits              Int                 @default(5)
+  last_credits_refresh DateTime?
+  //
+  daily_limit_messages Int?                @default(10)
+  premium              Boolean             @default(false)
+  limit_messages       Int                 @default(10)
+  //
+  stripe_customer_id   String?
+  // 
+  stories              Story[]
+  jobs                 Job[]
+  //
+  creditTransactions   CreditTransaction[]
+  payments             Payment[]
+  //
+  createdAt            DateTime            @default(now())
+  updatedAt            DateTime            @default(now()) @updatedAt
+}
+
+model Payment {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // 
+  amount          Int
+  currency        String   @default("EUR")
+  description     String
+  status          String
+  // 
+  provider        String
+  provider_id     String
+  // 
+  credits_amount  Int?
+  is_subscription Boolean  @default(false)
+  // 
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @default(now()) @updatedAt
+
+  @@index([userId])
+  @@index([provider_id])
+  @@index([status])
+}
+
+model CreditTransaction {
+  id              String          @id @default(cuid())
+  userId          String
+  user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // 
+  amount          Int
+  balanceAfter    Int
+  description     String
+  transactionType TransactionType
+  // 
+  featureId       String?
+  storyId         String?
+  story           Story?          @relation(fields: [storyId], references: [id], onDelete: SetNull)
+  jobId           String?
+  job             Job?            @relation(fields: [jobId], references: [id], onDelete: SetNull)
+  // 
+  paymentId       String?
+  paymentProvider String?
+  // 
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @default(now()) @updatedAt
+
+  @@index([userId])
+  @@index([storyId])
+  @@index([jobId])
+  @@index([transactionType])
+  @@index([createdAt])
+}

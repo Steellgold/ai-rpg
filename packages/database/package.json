@@ -1,0 +1,11 @@
+{
+  "name": "@imagine/database",
+  "scripts": {
+    "generate": "npx prisma generate",
+    "postinstall": "pnpm run generate"
+  },
+  "exports": {
+    "./prisma": "./src/prisma/index.ts",
+    "./supabase": "./src/supabase/index.ts"
+  }
+}
