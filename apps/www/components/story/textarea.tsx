@@ -7,11 +7,14 @@ import { ShineBorder } from "../ui/magicui/shine-border";
 import { CustomScrollbar } from "../ui/scrollbar";
 import { useTranslations } from "next-intl";
 import { Button } from "../ui/button";
-import { ArrowUp, Baby, Loader } from "lucide-react";
+import { ArrowUp, Baby, Loader, Mic, MicOff, PersonStanding } from "lucide-react";
 import { useDraft } from "@/lib/hooks/use-draft";
+import { useRecordVoice } from "@/lib/hooks/use-record";
 
 export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ className }): ReactElement => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const { startRecording, stopRecording, text: voiceText, recording } = useRecordVoice();
 
   const [isInputValid, setIsInputValid] = useState<boolean>(false);
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
@@ -53,6 +56,26 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
     setIsInputValid(validatePrompt(prompt));
   }, [prompt]);
 
+  useEffect(() => {
+    if (voiceText && voiceText.trim() !== "") {
+      setPrompt(currentPrompt => {
+        if (currentPrompt.trim() === "") {
+          return voiceText;
+        } else {
+          return `${currentPrompt} ${voiceText}`;
+        }
+      });
+    }
+  }, [voiceText, setPrompt]);
+
+  const handleRecordToggle = () => {
+    if (recording) {
+      stopRecording();
+    } else {
+      startRecording();
+    }
+  };
+
   return (
     <div className="flex flex-col items-center w-full gap-4">
       <CustomScrollbar />
@@ -91,29 +114,58 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
                   }
                 )}
               >
-                <Baby className={cn("h-4 w-4", { "text-teal-400": forChildren, "text-gray-200": !forChildren })} />
+                {forChildren
+                  ? <Baby className="text-teal-400" />
+                  : <PersonStanding className="text-gray-200" />
+                }
+
                 <span className={cn({ "text-teal-400": forChildren, "text-gray-200": !forChildren })}>
-                  {t("Tools.Children.On")}
+                  {t("Tools.Children." + (forChildren ? "On" : "Off"))}
                 </span>
               </Button>
             </div>
 
-            <Button
-              size={isInputValid ? "toolText" : "toolIcon"}
-              className={cn("transition-all", {
-                "bg-blue-700 hover:bg-blue-800": !forChildren,
-                "bg-teal-700 hover:bg-teal-800": forChildren
-              })}
-              disabled={!isInputValid || isGenerating}
-              onClick={async () => {
-                setIsGenerating(true);
-                await new Promise((resolve) => setTimeout(resolve, 2000));
-                setIsGenerating(false);
-              }}
-            >
-              {isGenerating ? <Loader className="animate-spin" /> : <ArrowUp />}
-              {isInputValid && t("Send")}
-            </Button>
+            <div className="flex items-center gap-1">
+              <Button
+                size={"toolText"}
+                variant={"ghost"}
+                onClick={handleRecordToggle}
+                className={cn(
+                  "cursor-pointer", {
+                    "!border border-red-400/20 hover:bg-red-400/10": recording,
+                    "border-gray-400/20 hover:bg-gray-400/10": !recording
+                  }
+                )}
+              >
+                {recording 
+                  ? <MicOff className="text-red-400" /> 
+                  : <Mic className="text-gray-200" />
+                }
+
+                {recording && (
+                  <span className={cn({ "text-red-400": recording, "text-gray-200": !recording })}>
+                    {t("Record.Stop")}
+                  </span>
+                )}
+              </Button>
+
+              <Button
+                size={isInputValid ? "toolText" : "toolIcon"}
+                className={cn("transition-all", {
+                  "bg-blue-700 hover:bg-blue-800": !forChildren,
+                  "bg-teal-700 hover:bg-teal-800": forChildren
+                })}
+                disabled={!isInputValid || isGenerating}
+                onClick={async () => {
+                  setIsGenerating(true);
+                  await new Promise((resolve) => setTimeout(resolve, 2000));
+                  setIsGenerating(false);
+                }}
+              >
+                {isGenerating ? <Loader className="animate-spin" /> : <ArrowUp />}
+                {isInputValid && t("Send")}
+              </Button>
+            </div>
           </div>
         </div>
       </div>
