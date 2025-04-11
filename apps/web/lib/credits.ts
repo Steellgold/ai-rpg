@@ -1,6 +1,6 @@
 "use server";
 
-import { prisma } from "@/lib/db/prisma";
+import { prisma } from "@imagine/database/prisma";
 
 export const checkCredits = async (userId: string) => {
   const user_data = await prisma.user.findUnique({ where: { id: userId } });

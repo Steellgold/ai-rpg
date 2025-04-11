@@ -3,7 +3,7 @@ import { Glitch } from "@/components/glitch";
 import { AiTextarea } from "@/components/story/textarea";
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
-import { prisma } from "@/lib/db/prisma";
+import { prisma } from "@imagine/database/prisma";
 import { StoryCard } from "@/components/story/story.card";
 import { Badge } from "@/components/ui/badge";
 

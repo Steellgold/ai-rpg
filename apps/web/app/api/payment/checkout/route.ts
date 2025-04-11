@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createCheckoutSession } from "@/lib/payment/stripe";
 import { createClient } from "@/lib/supabase/server";
-import { prisma } from "@/lib/db/prisma";
+import { prisma } from "@imagine/database/prisma";
 import { env } from "@/lib/env/env";
 
 export const POST = async (req: NextRequest): Promise<NextResponse> => {

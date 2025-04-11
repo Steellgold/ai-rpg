@@ -1,6 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { createClient } from "@/lib/supabase/server";
-import { prisma } from "@/lib/db/prisma";
+import { prisma } from "@imagine/database/prisma";
 import { unauthorized } from "next/navigation";
 import CreditsSection from "./_components/credits-section";
 import { getTranslations } from "next-intl/server";

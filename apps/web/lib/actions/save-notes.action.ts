@@ -1,7 +1,7 @@
 "use client";
 
 import { createClient } from "@/lib/supabase/server";
-import { prisma } from "@/lib/db/prisma";
+import { prisma } from "@imagine/database/prisma";
 
 export const updateGameSaveNotes = async (
   gameSaveId: string,

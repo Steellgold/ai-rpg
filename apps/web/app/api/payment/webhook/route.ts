@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/payment/client";
 import { env } from "@/lib/env/env";
-import { prisma } from "@/lib/db/prisma";
+import { prisma } from "@imagine/database/prisma";
 import { addCredits } from "@/lib/credits";
 import { createId } from "@paralleldrive/cuid2";
 import Stripe from "stripe";
