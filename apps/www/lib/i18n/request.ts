@@ -2,7 +2,9 @@ import { getRequestConfig } from "next-intl/server";
 import { cookies } from "next/headers";
 import { ISOLang, SupportedLangs } from "@imagine/types/lang";
 
-const FILES = ["home-page.json"];
+const FILES = [
+  "home-page", "ai-textarea",
+];
 
 const detectLanguage = (
   acceptLanguage: string | null,
@@ -44,9 +46,9 @@ export default getRequestConfig(async () => {
   const messages = await Promise.all(
     FILES.map(async (file) => {
       try {
-        return await import(`./messages/${locale}/${file}`);
+        return await import(`./messages/${locale}/${file}.json`);
       } catch (error) {
-        console.error(`Error loading message file: ${file}`, error);
+        console.error(`Error loading message file: ${file}.json`, error);
         return null;
       }
     })
