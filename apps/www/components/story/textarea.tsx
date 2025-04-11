@@ -10,9 +10,11 @@ import { Button } from "../ui/button";
 import { ArrowUp, Baby, Loader, Mic, MicOff, PersonStanding } from "lucide-react";
 import { useDraft } from "@/lib/hooks/use-draft";
 import { useRecordVoice } from "@/lib/hooks/use-record";
+import { useSession } from "@/lib/hooks/use-session";
 
 export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ className }): ReactElement => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const { user, loading: userLoading, signIn } = useSession();
 
   const { startRecording, stopRecording, text: voiceText, recording, loading: recordLoading } = useRecordVoice();
 
@@ -69,11 +71,10 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
   }, [voiceText, setPrompt]);
 
   const handleRecordToggle = () => {
-    if (recording) {
-      stopRecording();
-    } else {
-      startRecording();
-    }
+    if (!user) return signIn.discord();
+
+    if (recording) stopRecording();
+    else startRecording();
   };
 
   return (
@@ -130,7 +131,7 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
                 size={"toolText"}
                 variant={"ghost"}
                 onClick={handleRecordToggle}
-                disabled={isGenerating}
+                disabled={isGenerating || !user || userLoading}
                 className={cn(
                   "cursor-pointer", {
                     "!border border-red-400/20 hover:bg-red-400/10": recording,
