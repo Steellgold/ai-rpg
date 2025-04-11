@@ -6,7 +6,7 @@ type PropsWithChildren = DefaultPropsWithChildren & {
   aurora?: string[];
 };
 
-export const PageLayout: Component<PropsWithChildren> = ({ children, aurora = ["#1a254f", "#1b274d", "#233161", "#16264d", "#2f9dd8"] }) => {
+export const PageLayout: Component<PropsWithChildren> = ({ children, aurora = ["#1447e6", "#193cb8"] }) => {
   return (
     <main className="relative overflow-hidden">
       <div className="h-[200px]">
