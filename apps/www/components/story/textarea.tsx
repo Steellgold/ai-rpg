@@ -14,7 +14,7 @@ import { useRecordVoice } from "@/lib/hooks/use-record";
 export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ className }): ReactElement => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const { startRecording, stopRecording, text: voiceText, recording } = useRecordVoice();
+  const { startRecording, stopRecording, text: voiceText, recording, loading: recordLoading } = useRecordVoice();
 
   const [isInputValid, setIsInputValid] = useState<boolean>(false);
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
@@ -130,6 +130,7 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
                 size={"toolText"}
                 variant={"ghost"}
                 onClick={handleRecordToggle}
+                disabled={isGenerating}
                 className={cn(
                   "cursor-pointer", {
                     "!border border-red-400/20 hover:bg-red-400/10": recording,
@@ -139,7 +140,9 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
               >
                 {recording 
                   ? <MicOff className="text-red-400" /> 
-                  : <Mic className="text-gray-200" />
+                  : recordLoading
+                    ? <Loader className="text-gray-200 animate-spin" />
+                    : <Mic className="text-gray-200" />
                 }
 
                 {recording && (

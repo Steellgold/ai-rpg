@@ -7,9 +7,11 @@ export const useRecordVoice = (): {
   recording: boolean;
   startRecording: () => void;
   stopRecording: () => void;
+  loading: boolean;
   text: string;
 } => {
   const [text, setText] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
   const [recording, setRecording] = useState<boolean>(false);
   const isRecording = useRef<boolean>(false);
@@ -28,36 +30,40 @@ export const useRecordVoice = (): {
       isRecording.current = false;
       mediaRecorder.stop();
       setRecording(false);
+      setLoading(true);
+      console.log("Recording stopped, processing audio...");
     }
   };
 
   const getText = async (base64data: string | undefined): Promise<void> => {
     if (!base64data) {
       console.error("No audio data available");
+      setLoading(false);
       return;
     }
     
     try {
       console.log("Sending audio data to API...");
-      // const response = await fetch("/api/speech-to-text", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({
-      //     audio: base64data,
-      //   }),
-      // });
+      const response = await fetch("/api/speech-to-text", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          audio: base64data,
+        }),
+      });
       
-      // if (!response.ok) {
-      //   const errorData = await response.json();
-      //   console.error("API error:", errorData);
-      //   throw new Error(`API error: ${response.status}`);
-      // }
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("API error:", errorData);
+        setLoading(false);
+        throw new Error(`API error: ${response.status}`);
+      }
       
-      // const data = await response.json();
-      // console.log("Transcription received:", data);
-      setText("Text from audio"); // Temporary placeholder for the transcription
+      const data = await response.json();
+      setText(data.text);
+      setLoading(false);
     } catch (error) {
       console.error("Error in getText:", error);
     }
@@ -110,5 +116,5 @@ export const useRecordVoice = (): {
     };
   }, []);
 
-  return { recording, startRecording, stopRecording, text };
+  return { recording, startRecording, stopRecording, text, loading };
 };
