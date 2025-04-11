@@ -81,7 +81,7 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
           <div className="flex items-center justify-between p-2 mx-2 mb-2">
             <div className="flex items-center flex-wrap gap-1.5">
               <Button
-                size={forChildren ? "toolText" : "toolIcon"}
+                size={"toolText"}
                 variant={"ghost"}
                 onClick={() => setForChildren(!forChildren)}
                 className={cn(
@@ -92,11 +92,9 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
                 )}
               >
                 <Baby className={cn("h-4 w-4", { "text-teal-400": forChildren, "text-gray-200": !forChildren })} />
-                {forChildren && (
-                  <span className={cn({ "text-teal-400": forChildren, "text-gray-200": !forChildren })}>
-                    {t("Tools.Children.On")}
-                  </span>
-                )}
+                <span className={cn({ "text-teal-400": forChildren, "text-gray-200": !forChildren })}>
+                  {t("Tools.Children.On")}
+                </span>
               </Button>
             </div>
 
