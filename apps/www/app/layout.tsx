@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     url: "https://imagine.place",
     siteName: "Imagine",
     images: [
-      { url: "/og-image.jpg", width: 1200, height: 630 },
+      { url: "/og-image.png", width: 1200, height: 630 },
     ],
     locale: "en_US",
     type: "website",
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Imagine | AI-powered Interactive Storytelling",
     description: "Dive into immersive adventures where your choices shape the narrative with our interactive storytelling platform.",
-    images: ["/og-image.jpg"],
+    images: ["/og-image.png"],
   },
   icons: {
     icon: "/favicon.ico",
