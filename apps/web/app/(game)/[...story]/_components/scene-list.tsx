@@ -1,9 +1,8 @@
-import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Check, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { Component } from "@/lib/types";
+import type { Component } from "@/lib/types";
 import { Prisma } from "@/prisma/generated";
 
 type SceneListProps = {

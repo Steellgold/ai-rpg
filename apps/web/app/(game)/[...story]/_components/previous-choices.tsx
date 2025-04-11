@@ -1,7 +1,7 @@
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import { ChoiceComponent } from "@/components/story/choice";
 import { DiceCube } from "@/components/story/dice";
-import { Component } from "@/lib/types";
+import type { Component } from "@/lib/types";
 
 interface PreviousChoicesProps {
   choices: any[];

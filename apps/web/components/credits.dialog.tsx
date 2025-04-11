@@ -1,6 +1,7 @@
 "use client"
 
-import { PropsWithChildren, useId, useState } from "react";
+import type { PropsWithChildren } from "react";
+import { useId, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
@@ -8,9 +9,10 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Badge } from "@/components/ui/badge";
 import { CREDIT_PACKS } from "@/lib/features/credit-pack";
 import { useTranslations } from "next-intl";
-import { Component } from "@/lib/types";
+import type { Component } from "@/lib/types";
 import { useLanguageStore } from "@/lib/hooks/use-lang";
-import { isEurope, ISOLang } from "@/lib/types/lang";
+import { isEurope } from "@/lib/types/lang";
+import type { ISOLang } from "@/lib/types/lang";
 import Image from "next/image";
 import { ShineBorder } from "./ui/magicui/shine-border";
 import { cn } from "@/lib/utils";

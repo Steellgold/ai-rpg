@@ -10,7 +10,7 @@ import { Loader2, AlertTriangle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useTranslations } from "next-intl";
 import { RealtimeChannel } from "@supabase/supabase-js";
-import { Component } from "@/lib/types";
+import type { Component } from "@/lib/types";
 
 type Params = {
   params: Promise<{ jobId: string }>;

@@ -4,7 +4,7 @@ import { Expand, Shrink } from "lucide-react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { formatSceneContent } from "@/components/story/format-text-scene";
-import { Component } from "@/lib/types";
+import type { Component } from "@/lib/types";
 import { useTranslations } from "next-intl";
 import { Prisma } from "@/prisma/generated";
 

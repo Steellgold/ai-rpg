@@ -7,7 +7,7 @@ import { serverEnv } from "../env/env.server"
 import { createClient as createSupabaseClient } from "@supabase/supabase-js"
 import { redirect } from "next/navigation";
 import { env } from "../env/env";
-import { Database } from "../supabase/database.types";
+import type { Database } from "../supabase/database.types";
 import { checkCredits } from "@/lib/credits"
 import { getDefaultFeatures } from "@/lib/features/generation-features";
 import { validateCreditCost } from "@/lib/actions/calculate-credit-cost";

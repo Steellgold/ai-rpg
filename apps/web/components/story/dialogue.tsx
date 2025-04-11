@@ -1,6 +1,6 @@
 "use client";
 
-import { Component } from "@/lib/types";
+import type { Component } from "@/lib/types";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";

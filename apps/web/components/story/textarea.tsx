@@ -4,7 +4,7 @@ import { useState, useRef, useEffect, ReactElement, HTMLAttributes, cloneElement
 import { Button } from "@/components/ui/button";
 import { Baby, Loader, Lock, LockOpen, Maximize, PocketKnife, RefreshCcw, User, X } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Component } from "@/lib/types";
+import type { Component } from "@/lib/types";
 import { MultiSelectCombobox } from "../ui/multi-select-combobox";
 import { genreIds } from "@/lib/genres-ids";
 import { useTranslations } from "next-intl";

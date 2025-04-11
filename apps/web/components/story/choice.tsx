@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { Pen, User } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
-import { Component } from "@/lib/types";
+import type { Component } from "@/lib/types";
 import { useTranslations } from "next-intl";
 
 export type ChoiceType = {

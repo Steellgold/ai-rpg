@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import Noise from "@/components/ui/noise";
-import { Component } from "@/lib/types";
+import type { Component } from "@/lib/types";
 import { IterationCcw } from "lucide-react";
 import { useEffect } from "react";
 

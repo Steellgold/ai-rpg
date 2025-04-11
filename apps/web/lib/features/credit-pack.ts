@@ -1,4 +1,5 @@
-import { CreditPackId, getPriceId } from "@/lib/payment/prices";
+import type { CreditPackId } from "@/lib/payment/prices";
+import { getPriceId } from "@/lib/payment/prices";
 
 export interface CreditPack {
   id: CreditPackId;

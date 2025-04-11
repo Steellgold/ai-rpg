@@ -1,4 +1,4 @@
-import Image, { ImageProps } from "next/image"
+import Image, { type ImageProps } from "next/image"
  
 type Props = Omit<ImageProps, "src" | "priority" | "loading"> & {
   srcLight: string

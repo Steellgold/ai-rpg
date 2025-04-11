@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { DiceCube } from "@/components/story/dice";
-import { Component } from "@/lib/types";
+import type { Component } from "@/lib/types";
 
 interface DiceRollSectionProps {
   currentFace: number;

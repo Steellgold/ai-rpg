@@ -1,6 +1,7 @@
 "use client"
 
-import { PropsWithChildren, useId, useState } from "react"
+import type { PropsWithChildren } from "react"
+import { useId, useState } from "react"
 import { GlobeIcon } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -14,9 +15,9 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Component } from "@/lib/types"
+import type { Component } from "@/lib/types"
 import { useLanguageStore } from "@/lib/hooks/use-lang"
-import { ISOLang } from "@/lib/types/lang"
+import type { ISOLang } from "@/lib/types/lang"
 import { useRouter } from "next/navigation"
 
 type Language = {

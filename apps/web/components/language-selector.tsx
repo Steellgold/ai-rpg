@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "./ui/select";
 import { useLanguageStore } from "@/lib/hooks/use-lang";
 import { useRouter } from "next/navigation";
-import { ISOLang } from "@/lib/types/lang";
+import type { ISOLang } from "@/lib/types/lang";
 
 export const LanguageSelector = () => {
   const t = useTranslations("Navbar.LanguageSelector");

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { generateNextScene } from "@/lib/actions/generate.scene.action";
 import { useItem } from "@/lib/actions/use-item";
-import { Component } from "@/lib/types";
+import type { Component } from "@/lib/types";
 import SceneHeader from "./_components/scene-header";
 import SceneList from "./_components/scene-list";
 import SceneContent from "./_components/scene-content";

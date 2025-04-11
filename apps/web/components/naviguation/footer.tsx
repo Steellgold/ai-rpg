@@ -1,5 +1,5 @@
 import { useTranslations } from "next-intl";
-import { Component } from "@/lib/types";
+import type { Component } from "@/lib/types";
 import Link from "next/link";
 
 export const Footer: Component<{}> = () => {

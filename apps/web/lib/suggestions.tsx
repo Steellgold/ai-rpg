@@ -1,5 +1,5 @@
-import { ReactElement } from "react"
-import { Genre } from "./genres-ids"
+import type { ReactElement } from "react"
+import type { Genre } from "./genres-ids"
 import { 
   Crown, Eclipse, Flower, Music, TowerControl, Sword, Mountain, 
   BookOpen, Skull, Cloud, Ship, Eye, Heart, Wand, 
@@ -25,8 +25,7 @@ export const suggestions: Suggestion[] = [
   { label: "Suggestions.DRA.Label", prompt: "Suggestions.DRA.Prompt", icon: <FaDragon className="h-4 w-4 text-gray-200" />,
     genres: ["fantasy", "adventure", "mythology", "fantasy-medieval"], isChild: false
   },
-  
-  // Nouvelles suggestions pour adultes
+
   { label: "Suggestions.APO.Label", prompt: "Suggestions.APO.Prompt", 
     icon: <Skull className="h-4 w-4 text-gray-200" />,
     genres: ["post-apocalyptic", "adventure", "dystopian", "sci-fi"], 
@@ -78,7 +77,6 @@ export const suggestions: Suggestion[] = [
     isChild: false
   },
 
-  // Suggestions existantes pour enfants
   { label: "Suggestions.WG.Label", prompt: "Suggestions.WG.Prompt", icon: <Flower className="h-4 w-4 text-gray-200" />,
     genres: ["fantasy", "adventure", "family", "supernatural"], isChild: true
   },
@@ -89,7 +87,6 @@ export const suggestions: Suggestion[] = [
     genres: ["fantasy", "music", "adventure", "family"], isChild: true
   },
   
-  // Nouvelles suggestions pour enfants
   { label: "Suggestions.FF.Label", prompt: "Suggestions.FF.Prompt", 
     icon: <Dog className="h-4 w-4 text-gray-200" />,
     genres: ["family", "adventure", "slice-of-life", "mystery"], 

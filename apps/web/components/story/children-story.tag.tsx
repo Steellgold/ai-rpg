@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { Badge } from "../ui/badge";
-import { Component } from "@/lib/types";
+import type { Component } from "@/lib/types";
 import { HTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
 

@@ -2,7 +2,7 @@
 
 import React, { HTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
-import { Component } from "@/lib/types";
+import type { Component } from "@/lib/types";
 
 type DiceCubeProps = HTMLAttributes<HTMLDivElement> & {
   face?: number;

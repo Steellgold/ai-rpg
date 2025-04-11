@@ -1,6 +1,6 @@
 "use client";
 
-import { Component } from "@/lib/types";
+import type { Component } from "@/lib/types";
 import { Button, ButtonProps } from "../ui/button";
 import { Loader2, LogOut, User } from "lucide-react";
 import { redirect } from "next/navigation";

@@ -1,6 +1,6 @@
 import Aurora from "@/components/ui/aurora";
-import { Component } from "@/lib/types";
-import { PropsWithChildren as DefaultPropsWithChildren } from "react";
+import type { Component } from "@/lib/types";
+import type { PropsWithChildren as DefaultPropsWithChildren } from "react";
 
 type PropsWithChildren = DefaultPropsWithChildren & {
   aurora?: string[];

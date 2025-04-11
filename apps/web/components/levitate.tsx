@@ -1,7 +1,8 @@
 "use client"
 
-import { Component } from "@/lib/types"
-import { useState, useEffect, ReactNode } from "react"
+import type { Component } from "@/lib/types"
+import { useState, useEffect } from "react"
+import type { ReactNode } from "react"
 
 interface LevitateProps {
   children: ReactNode
