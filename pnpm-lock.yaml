@@ -23,6 +23,12 @@ importers:
       '@ai-sdk/openai':
         specifier: ^1.3.6
         version: 1.3.10(zod@3.24.2)
+      '@imagine/database':
+        specifier: workspace:*
+        version: link:../../packages/database
+      '@imagine/schemas':
+        specifier: workspace:*
+        version: link:../../packages/schemas
       '@paralleldrive/cuid2':
         specifier: ^2.2.2
         version: 2.2.2
