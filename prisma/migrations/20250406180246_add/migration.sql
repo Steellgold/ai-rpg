@@ -1,2 +1,0 @@
--- AlterEnum
-ALTER TYPE "JobStage" ADD VALUE 'DETECTING_LANGUAGE';
