@@ -1,0 +1,11 @@
+{
+  "name": "@imagine/schemas",
+  "version": "0.1.0",
+  "exports": {
+    "./story": "./src/story/index.ts",
+    "./character": "./src/story/character/index.ts"
+  },
+  "dependencies": {
+    "zod": "^3.24.2"
+  }
+}
