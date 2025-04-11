@@ -7,14 +7,16 @@ import { ShineBorder } from "../ui/magicui/shine-border";
 import { CustomScrollbar } from "../ui/scrollbar";
 import { useTranslations } from "next-intl";
 import { Button } from "../ui/button";
-import { ArrowUp, Loader } from "lucide-react";
+import { ArrowUp, Baby, Loader } from "lucide-react";
 import { useDraft } from "@/lib/hooks/use-draft";
 
 export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ className }): ReactElement => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const [isInputValid, setIsInputValid] = useState(false);
-  const [isGenerating, setIsGenerating] = useState(false);
+  const [isInputValid, setIsInputValid] = useState<boolean>(false);
+  const [isGenerating, setIsGenerating] = useState<boolean>(false);
+
+  const [forChildren, setForChildren] = useState<boolean>(false);
 
   const [prompt, setPrompt] = useDraft({
     key: "ai-textarea-prompt",
@@ -58,7 +60,11 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
         <div className={cn("relative z-20 border-2 rounded-xl overflow-hidden w-full", className, {
           "bg-[#070910] border border-[#173a8940]": true
         })}>
-          <ShineBorder className="rounded-xl border-2" shineColor={["#fff", "#1447e6", "#193cb8", "#fff"]} />
+          <ShineBorder className="rounded-xl border-2" shineColor={
+            forChildren
+              ? ["#fff", "#0f9b8e", "#0f9b8e", "#fff"]
+              : ["#fff", "#1447e6", "#193cb8", "#fff"]
+          } />
           <textarea
             ref={textareaRef}
             value={prompt}
@@ -74,11 +80,32 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
           
           <div className="flex items-center justify-between p-2 mx-2 mb-2">
             <div className="flex items-center flex-wrap gap-1.5">
+              <Button
+                size={forChildren ? "toolText" : "toolIcon"}
+                variant={"ghost"}
+                onClick={() => setForChildren(!forChildren)}
+                className={cn(
+                  "!border rounded-full cursor-pointer", {
+                    "border-teal-400/20 hover:bg-teal-400/10": forChildren,
+                    "border-gray-400/20 hover:bg-gray-400/10": !forChildren
+                  }
+                )}
+              >
+                <Baby className={cn("h-4 w-4", { "text-teal-400": forChildren, "text-gray-200": !forChildren })} />
+                {forChildren && (
+                  <span className={cn({ "text-teal-400": forChildren, "text-gray-200": !forChildren })}>
+                    {t("Tools.Children.On")}
+                  </span>
+                )}
+              </Button>
             </div>
 
             <Button
               size={isInputValid ? "toolText" : "toolIcon"}
-              className="bg-blue-700 hover:bg-blue-800 transition-all"
+              className={cn("transition-all", {
+                "bg-blue-700 hover:bg-blue-800": !forChildren,
+                "bg-teal-700 hover:bg-teal-800": forChildren
+              })}
               disabled={!isInputValid || isGenerating}
               onClick={async () => {
                 setIsGenerating(true);
