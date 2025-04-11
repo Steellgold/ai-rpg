@@ -1,15 +1,17 @@
 import { ThemeProvider } from "@/components/theme/theme-provider";
-import { PropsWithChildren } from "react";
-import { AsyncComponent } from "@/lib/types";
+import { getLocale, getMessages } from "next-intl/server";
+import { Footer } from "@/components/naviguation/footer";
+import { Navbar } from "@/components/naviguation/navbar";
+import { NextIntlClientProvider } from "next-intl";
+import { Toaster } from "@/components/ui/toaster";
+import type { AsyncComponent } from "@/lib/types";
+import type { PropsWithChildren } from "react";
 import localFont from "next/font/local";
 import type { Metadata } from "next";
 import "./globals.css";
-import { NextIntlClientProvider } from "next-intl";
-import { getLocale, getMessages } from "next-intl/server";
-import { Toaster } from "@/components/ui/toaster";
-import { Footer } from "@/components/naviguation/footer";
-import { Navbar } from "@/components/naviguation/navbar";
-import { GeistHackBecauseWTFWhyNewTimesRomanAlwaysAppear } from "@/components/glitch";
+
+const geistSans = localFont({ src: "./fonts/GeistVF.woff", variable: "--font-geist-sans", weight: "100 900" });
+const geistMono = localFont({ src: "./fonts/GeistMonoVF.woff", variable: "--font-geist-mono", weight: "100 900" });
 
 export const metadata: Metadata = { 
   title: "Imagine | AI-powered Interactive Storytelling",
@@ -56,19 +58,17 @@ const RootLayout: AsyncComponent<PropsWithChildren> = async({ children }) => {
 
   return (
     <html lang={locale} style={{ scrollBehavior: "smooth" }} suppressHydrationWarning>
-      <body className={`antialiased min-h-screen flex flex-col`}>
-        <GeistHackBecauseWTFWhyNewTimesRomanAlwaysAppear>
-          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
-            <NextIntlClientProvider messages={messages}>
-              <Navbar />
+      <body className={`${geistSans.className} ${geistMono.variable} antialiased min-h-screen flex flex-col`}>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
+          <NextIntlClientProvider messages={messages}>
+            <Navbar />
 
-              {children}
+            {children}
 
-              <Toaster />
-              <Footer />
-            </NextIntlClientProvider>          
-          </ThemeProvider>
-        </GeistHackBecauseWTFWhyNewTimesRomanAlwaysAppear>
+            <Toaster />
+            <Footer />
+          </NextIntlClientProvider>          
+        </ThemeProvider>
       </body>
     </html>
   );
