@@ -1,7 +1,20 @@
 import type { NextConfig } from "next";
+import createNextIntlPlugin from "next-intl/plugin";
+
+const withNextIntl = createNextIntlPlugin(
+  "./lib/i18n/request.ts"
+);
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  images: {
+    remotePatterns: [
+      { hostname: "lgbrmzxeblvailzgebur.supabase.co", protocol: "https" },
+      { hostname: "cdn.discordapp.com", protocol: "https" }
+    ]
+  },
+  experimental: {
+    authInterrupts: true
+  }
 };
 
-export default nextConfig;
+export default withNextIntl(nextConfig);
