@@ -29,7 +29,10 @@ const buttonVariants = cva(
         sm: "h-8 rounded-md px-3 text-xs",
         lg: "h-10 rounded-md px-8",
         icon: "h-9 w-9",
-        toolIcon: "h-8 w-8",
+        // 
+        toolIcon: "h-8 w-8 rounded-full text-white",
+        toolText: "h-8 px-2.5 rounded-full text-white",
+        // 
         combobox: "h-9 rounded-full px-3",
       },
       wrap: {
