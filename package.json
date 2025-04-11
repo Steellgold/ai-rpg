@@ -3,8 +3,8 @@
     "dev": "open-cli http://localhost:3000 && dotenv -- pnpm --filter=@imagine/* --recursive run dev",
     "build:all": "dotenv -- pnpm --filter=@imagine/* --recursive run build",
 
-    "start:website": "pnpm --filter=@imagine/website run start",
-    "build:website": "dotenv -- pnpm --filter=@imagine/website run build"
+    "start:web": "pnpm --filter=@imagine/www run start",
+    "build:web": "dotenv -- pnpm --filter=@imagine/www run build"
   },
   "dependencies": {
     "dotenv": "^16.4.5",
