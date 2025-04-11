@@ -1,0 +1,221 @@
+model Job {
+  id                 String              @id @default(cuid())
+  status             JobStatus           @default(PENDING)
+  stage              JobStage?           @default(INITIALIZED)
+  progress           Int                 @default(0)
+  startedAt          DateTime?           @default(now())
+  completedAt        DateTime?
+  error              String?             @db.Text
+  // 
+  input              Json
+  output             Json?
+  // 
+  userId             String
+  user               User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  storyId            String?
+  story              Story?              @relation(fields: [storyId], references: [id], onDelete: SetNull)
+  // 
+  creditTransactions CreditTransaction[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@index([userId])
+  @@index([status])
+  @@index([stage])
+}
+
+model Story {
+  id               String              @id @default(cuid())
+  title            String
+  synopsis         String              @db.Text
+  goal             String              @db.Text
+  possibleEndings  String[]
+  coverImageUrl    String?
+  genre            String[]
+  // 
+  language         StoryLanguage       @default(auto)
+  // 
+  isChildrenStory  Boolean             @default(false)
+  isPublic         Boolean             @default(false)
+  hasItems         Boolean             @default(false)
+  // 
+  forks            Story[]             @relation("ForkedStory")
+  forkedFrom       Story?              @relation("ForkedStory", fields: [forkedFromId], references: [id], onDelete: SetNull)
+  forkedFromId     String?
+  // 
+  notes            String?             @db.Text
+  // 
+  narrativeStyle   NarrativeStyle
+  //
+  characters       Character[]
+  // 
+  scenes           Scene[]
+  max_scenes       Int?                @default(20)
+  current_scene    Int?                @default(0)
+  current_scene_id String?
+  // 
+  items            Item[]
+  // 
+  creator          User                @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  creatorId        String
+  // 
+  jobs             Job[]
+  // 
+  v                StoryVGenerated     @default(V1)
+  // 
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @default(now()) @updatedAt
+  // 
+  credit_cost      Int                 @default(0)
+  transactions     CreditTransaction[]
+  usedFeatures     StoryFeature[]
+
+  @@index([creatorId])
+}
+
+model StoryFeature {
+  id         String   @id @default(cuid())
+  storyId    String
+  story      Story    @relation(fields: [storyId], references: [id], onDelete: Cascade)
+  // 
+  featureId  String
+  creditCost Int
+  // 
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now()) @updatedAt
+
+  @@unique([storyId, featureId])
+  @@index([storyId])
+  @@index([featureId])
+}
+
+model Character {
+  id            String   @id @default(cuid())
+  name          String
+  description   String   @db.Text
+  personality   Json?    @db.JsonB
+  outfit        Json?    @db.JsonB
+  age           Int
+  background    Json?    @db.JsonB
+  abilities     Json?    @db.JsonB
+  relationships Json?    @db.JsonB
+  motivations   Json?    @db.JsonB
+  flaws         Json?    @db.JsonB
+  backstory     Json?    @db.JsonB
+  isMain        Boolean  @default(false)
+  imageUrl      String?
+  //
+  story         Story    @relation(fields: [storyId], references: [id], onDelete: Cascade)
+  storyId       String
+  // 
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @default(now()) @updatedAt
+
+  @@index([storyId])
+}
+
+model Item {
+  id                String     @id @default(cuid())
+  name              String
+  description       String     @db.Text
+  type              ItemType   @default(MISC)
+  rarity            ItemRarity @default(COMMON)
+  // 
+  imageUrl          String?
+  brokenImageUrl    String?
+  // 
+  effect            String?    @db.Text
+  useCount          Int?
+  // 
+  durability        Int?
+  isBroken          Boolean    @default(false)
+  usage_count       Int?
+  last_mentioned_in String?
+  //
+  story             Story      @relation(fields: [storyId], references: [id], onDelete: Cascade)
+  storyId           String
+  // 
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @default(now()) @updatedAt
+
+  @@index([storyId])
+  @@index([type])
+  @@index([rarity])
+}
+
+model Dialogue {
+  id        String   @id @default(cuid())
+  speaker   String
+  text      String   @db.Text
+  emotion   String?
+  scene     Scene    @relation(fields: [sceneId], references: [id], onDelete: Cascade)
+  sceneId   String
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@index([sceneId])
+}
+
+model Scene {
+  id                 String            @id @default(cuid())
+  title              String
+  // 
+  content            String            @db.Text
+  dialogues          Dialogue[]
+  // 
+  imagePrompt        String?           @db.Text
+  imageUrl           String?
+  order              Int               @default(0)
+  //
+  story              Story             @relation(fields: [storyId], references: [id], onDelete: Cascade)
+  storyId            String
+  // 
+  choices            Choice[]
+  selected_choice_id String?
+  diceRoll           Int?              @default(0)
+  // 
+  nextScenes         SceneTransition[] @relation("SourceScene")
+  prevScenes         SceneTransition[] @relation("DestinationScene")
+  // 
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @default(now()) @updatedAt
+
+  @@index([storyId])
+}
+
+model SceneTransition {
+  id                 String   @id @default(cuid())
+  sourceScene        Scene    @relation("SourceScene", fields: [sourceSceneId], references: [id], onDelete: Cascade)
+  sourceSceneId      String
+  destinationScene   Scene    @relation("DestinationScene", fields: [destinationSceneId], references: [id], onDelete: Cascade)
+  destinationSceneId String
+  choiceId           String
+  choice             Choice   @relation(fields: [choiceId], references: [id], onDelete: Cascade)
+  // 
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @default(now()) @updatedAt
+
+  @@unique([sourceSceneId, choiceId])
+}
+
+model Choice {
+  id             String            @id @default(cuid())
+  text           String
+  description    String?           @db.Text
+  consequence    String?           @db.Text
+  isPersonalized Boolean           @default(false)
+  isItemRelated  Boolean           @default(false)
+  loadingMessage String?
+  isCustomChoice Boolean           @default(false)
+  //
+  scene          Scene             @relation(fields: [sceneId], references: [id], onDelete: Cascade)
+  sceneId        String
+  transitions    SceneTransition[]
+  // 
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @default(now()) @updatedAt
+
+  @@index([sceneId])
+}

@@ -195,6 +195,16 @@ importers:
       '@supabase/supabase-js':
         specifier: ^2.49.4
         version: 2.49.4
+    devDependencies:
+      '@prisma/client':
+        specifier: ^6.5.0
+        version: 6.6.0(prisma@6.6.0(typescript@5.8.3))(typescript@5.8.3)
+      '@types/node':
+        specifier: ^22
+        version: 22.14.0
+      prisma:
+        specifier: ^6.5.0
+        version: 6.6.0(typescript@5.8.3)
 
   packages/schemas:
     dependencies:
