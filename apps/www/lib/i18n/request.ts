@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import { ISOLang, SupportedLangs } from "@imagine/types/lang";
 
 const FILES = [
-  "home-page", "ai-textarea",
+  "home-page", "ai-textarea", "navbar"
 ];
 
 const detectLanguage = (

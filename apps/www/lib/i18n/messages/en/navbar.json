@@ -1,0 +1,13 @@
+{
+  "Navbar": {
+    "Links": {
+      "Stories": "Stories"
+    },
+    "SignIn": {
+      "Label": {
+        "Out": "Sign Out",
+        "In": "Sign In"
+      }
+    }
+  }
+}

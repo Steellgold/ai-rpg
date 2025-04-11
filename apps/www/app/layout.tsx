@@ -7,6 +7,7 @@ import { getLocale, getMessages } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
 import { metadata as defaultMetadata } from "@/components/metadata";
 import { ThemeProvider } from "@/components/ui/theme-provider";
+import { Navbar } from "@/components/naviguation/navbar";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
@@ -22,6 +23,8 @@ const RootLayout: AsyncComponent<PropsWithChildren> = async({ children }) => {
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
           <NextIntlClientProvider messages={messages} locale={locale}>
+            <Navbar />
+
             {children}
           </NextIntlClientProvider>
         </ThemeProvider>
