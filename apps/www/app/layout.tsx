@@ -54,7 +54,7 @@ const RootLayout: AsyncComponent<PropsWithChildren> = async({ children }) => {
 
   return (
     <html lang={locale} style={{ scrollBehavior: "smooth"}} suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#0a0a0a] text-[#eaeaea]`}>
         <NextIntlClientProvider messages={messages} locale={locale}>
           {children}
         </NextIntlClientProvider>
