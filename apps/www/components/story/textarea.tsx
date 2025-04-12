@@ -7,17 +7,57 @@ import { ShineBorder } from "../ui/magicui/shine-border";
 import { CustomScrollbar } from "../ui/scrollbar";
 import { useTranslations } from "next-intl";
 import { Button } from "../ui/button";
-import { ArrowUp, Baby, Brain, GitBranch, GitMerge, Loader, Mic, MicOff, PersonStanding, PocketKnife, Users, Zap, ZapOff } from "lucide-react";
+import { ArrowUp, Baby, Brain, Cog, GitBranch, GitMerge, Loader, LucideIcon, Mic, MicOff, PersonStanding, PocketKnife, Users, Zap, ZapOff } from "lucide-react";
 import { useDraft } from "@/lib/hooks/use-draft";
 import { useRecordVoice } from "@/lib/hooks/use-record";
 import { useSession } from "@/lib/hooks/use-session";
 import { FeatureToggle } from "./feature.button";
 import { useShineColors } from "@/lib/hooks/use-shine-colors";
 
+const SettingsCard: Component<{
+  title: string;
+  description: string;
+  textEnable: string;
+  icon: LucideIcon;
+  toggledIcon?: LucideIcon;
+  isActive: boolean;
+  onClick: () => void;
+  activeColor: string;
+  activeBorderColor: string;
+  activeHoverColor: string;
+  loadingColor?: string;
+}> = ({
+    title, description, textEnable,
+    icon: Icon, toggledIcon: ToggledIcon,
+    isActive, onClick, activeColor, activeBorderColor, activeHoverColor, loadingColor
+  }) => {
+  return (
+    <div className={cn("flex flex-col justify-between gap-2 border border-gray-500/20 p-2 rounded-md", {
+      [`bg-${activeColor.split('-')[1]}-500/10 border-${activeColor.split('-')[1]}-400/20`]: isActive
+    })}>
+      <span className="text-sm text-gray-400">{description}</span>
+      <div>
+        <FeatureToggle
+          Icon={Icon}
+          IconToggled={ToggledIcon}
+          text={textEnable}
+          textToggled={title}
+          isActive={isActive}
+          onClick={onClick}
+          activeColor={activeColor}
+          activeBorderColor={activeBorderColor}
+          activeHoverColor={activeHoverColor}
+          loadingColor={loadingColor}
+          className={"rounded-md"}
+        />
+      </div>
+    </div>
+  );
+};
+
 export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ className }): ReactElement => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { user, loading: userLoading, signIn } = useSession();
-
   const { startRecording, stopRecording, text: voiceText, recording, loading: recordLoading } = useRecordVoice();
 
   const [isInputValid, setIsInputValid] = useState<boolean>(false);
@@ -28,6 +68,8 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
   const [betterCharacters, setBetterCharacters] = useState<boolean>(false);
   const [multipleArcs, setMultipleArcs] = useState<boolean>(false);
   const [withConflicts, setWithConflicts] = useState(false);
+
+  const [moreSettings, setMoreSettings] = useState<boolean>(false);
 
   const shineColors = useShineColors({ forChildren, withItems, betterCharacters, multipleArcs, withConflicts });
 
@@ -62,7 +104,7 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
       const hasMinWords = text.trim().split(/\s+/).length >= 3;
       return hasMinLength && hasNoFlood && hasMinWords;
     };
-    
+
     setIsInputValid(validatePrompt(prompt));
   }, [prompt]);
 
@@ -105,8 +147,8 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
               }
             )}
           />
-          
-          <div className="flex items-center justify-between p-2 mx-2 mb-2">
+
+          <div className={cn("flex items-center justify-between p-2 mx-2", { "mb-2": !moreSettings })}>
             <div className="flex items-center flex-wrap gap-1.5">
               <FeatureToggle
                 Icon={PersonStanding}
@@ -141,38 +183,28 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
                 activeHoverColor="hover:bg-orange-400/10"
               />
 
-              <FeatureToggle
-                Icon={GitMerge}
-                IconToggled={GitBranch}
-                textToggled="Tools.NarrativeArcs.On"
-                isActive={multipleArcs}
-                onClick={() => setMultipleArcs(!multipleArcs)}
-                activeColor="text-purple-400"
-                activeBorderColor="border-purple-400/20"
-                activeHoverColor="hover:bg-purple-400/10"
-                loadingColor="text-purple-300"
-              />
-              
-              <FeatureToggle
-                Icon={ZapOff}
-                IconToggled={Zap}
-                textToggled="Tools.ConflictGenerator.On"
-                isActive={withConflicts}
-                onClick={() => setWithConflicts(!withConflicts)}
-                activeColor="text-red-500"
-                activeBorderColor="border-red-500/20"
-                activeHoverColor="hover:bg-red-500/10"
-                loadingColor="text-red-300"
-              />
+              <Button
+                size="toolIcon"
+                variant="ghost"
+                className={cn("border-2 border-gray-500/20 hover:bg-gray-500/10", {
+                  "bg-blue-600/10 hover:bg-blue-600/10 text-blue-400": moreSettings
+                })}
+                onClick={() => setMoreSettings(!moreSettings)}
+                disabled={isGenerating}
+              >
+                <Cog className={cn("transition-all", {
+                  "rotate-180 text-blue-400": moreSettings
+                })} />
+              </Button>
             </div>
 
             <div className="flex items-center gap-1">
-              <FeatureToggle 
-                Icon={Mic} 
-                IconToggled={MicOff} 
-                textToggled="Record.Stop" 
-                isActive={recording} 
-                onClick={handleRecordToggle} 
+              <FeatureToggle
+                Icon={Mic}
+                IconToggled={MicOff}
+                textToggled="Record.Stop"
+                isActive={recording}
+                onClick={handleRecordToggle}
                 disabled={isGenerating || !user || userLoading}
                 activeColor="text-red-400"
                 activeBorderColor="border-red-400/20"
@@ -197,6 +229,52 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
                 {isGenerating ? <Loader className="animate-spin" /> : <ArrowUp />}
                 {isInputValid && t("Send")}
               </Button>
+            </div>
+          </div>
+
+          <div className={cn("p-2 mx-2 mb-2", { "hidden": !moreSettings })}>
+            <div className="flex flex-col gap-2">
+              <SettingsCard
+                title="Tools.NarrativeArcs.On"
+                description={t("Tools.NarrativeArcs.Description")}
+                textEnable="Tools.EnableTool"
+                icon={GitMerge}
+                toggledIcon={GitBranch}
+                isActive={multipleArcs}
+                onClick={() => setMultipleArcs(!multipleArcs)}
+                activeColor="text-purple-400"
+                activeBorderColor="border-purple-400/20"
+                activeHoverColor="hover:bg-purple-400/10"
+                loadingColor="text-purple-300"
+              />
+              
+              <SettingsCard
+                title="Tools.Characters.On"
+                description={t("Tools.Characters.Description")}
+                textEnable="Tools.EnableTool"
+                icon={Users}
+                toggledIcon={Brain}
+                isActive={betterCharacters}
+                onClick={() => setBetterCharacters(!betterCharacters)}
+                activeColor="text-orange-400"
+                activeBorderColor="border-orange-400/20"
+                activeHoverColor="hover:bg-orange-400/10"
+                loadingColor="text-orange-300"
+              />
+
+              <SettingsCard
+                title="Tools.ConflictGenerator.On"
+                description={t("Tools.ConflictGenerator.Description")}
+                textEnable="Tools.EnableTool"
+                icon={ZapOff}
+                toggledIcon={Zap}
+                isActive={withConflicts}
+                onClick={() => setWithConflicts(!withConflicts)}
+                activeColor="text-red-500"
+                activeBorderColor="border-red-500/20"
+                activeHoverColor="hover:bg-red-500/10"
+                loadingColor="text-red-300"
+              />
             </div>
           </div>
         </div>

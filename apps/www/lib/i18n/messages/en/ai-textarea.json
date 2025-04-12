@@ -4,6 +4,8 @@
     "Send": "Generate story",
 
     "Tools": {
+      "EnableTool": "I want to use this tool",
+
       "Children": {
         "On": "For children",
         "Off": "For anyone"
@@ -14,15 +16,18 @@
       },
       "Characters": {
         "On": "Brainstorm characters",
-        "Off": "Basic characters"
+        "Off": "Basic characters",
+        "Description": "Characters are the heart of the story, driving the plot and engaging the audience. With brainstorming, the characters are more developed and complex than basic characters."
       },
       "NarrativeArcs": {
         "On": "Narrative arcs",
-        "Off": "No narrative arcs"
+        "Off": "No narrative arcs",
+        "Description": "Narrative arcs are the structure of the story, guiding the plot and character development. With narrative arcs, the story has a clear beginning, middle, and end, with character growth and conflict resolution."
       },
       "ConflictGenerator": {
-        "On": "Conflict generator",
-        "Off": "No conflict generator"
+        "On": "Fighting",
+        "Off": "No fighting",
+        "Description": "Conflict is the driving force of the story, creating tension and drama. With fighting, the story has action and excitement, with characters facing challenges and overcoming obstacles."
       }
     },
 
