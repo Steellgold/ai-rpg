@@ -12,7 +12,8 @@
       },
       "Items": {
         "On": "Items",
-        "Off": "No items"
+        "Off": "No items",
+        "Description": "Items are the tools and resources that characters use to navigate the world. With items, the story has a sense of adventure and exploration, with characters discovering new abilities and powers."
       },
       "Characters": {
         "On": "Brainstorm characters",

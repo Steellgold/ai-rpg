@@ -162,27 +162,6 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
                 activeHoverColor="hover:bg-teal-400/10"
               />
 
-              <FeatureToggle
-                Icon={PocketKnife}
-                textToggled="Tools.Items.On"
-                isActive={withItems}
-                onClick={() => setWithItems(!withItems)}
-                activeColor="text-indigo-400"
-                activeBorderColor="border-indigo-400/20"
-                activeHoverColor="hover:bg-indigo-400/10"
-              />
-
-              <FeatureToggle
-                Icon={Users}
-                IconToggled={Brain}
-                textToggled="Tools.Characters.On"
-                isActive={betterCharacters}
-                onClick={() => setBetterCharacters(!betterCharacters)}
-                activeColor="text-orange-400"
-                activeBorderColor="border-orange-400/20"
-                activeHoverColor="hover:bg-orange-400/10"
-              />
-
               <Button
                 size="toolIcon"
                 variant="ghost"
@@ -246,6 +225,20 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
                 activeBorderColor="border-purple-400/20"
                 activeHoverColor="hover:bg-purple-400/10"
                 loadingColor="text-purple-300"
+              />
+              
+              <SettingsCard
+                title="Tools.Items.On"
+                description={t("Tools.Items.Description")}
+                textEnable="Tools.EnableTool"
+                icon={PocketKnife}
+                toggledIcon={Users}
+                isActive={withItems}
+                onClick={() => setWithItems(!withItems)}
+                activeColor="text-indigo-400"
+                activeBorderColor="border-indigo-400/20"
+                activeHoverColor="hover:bg-indigo-400/10"
+                loadingColor="text-indigo-300"
               />
               
               <SettingsCard
