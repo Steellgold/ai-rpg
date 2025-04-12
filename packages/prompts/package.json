@@ -1,0 +1,6 @@
+{
+  "name": "@imagine/prompts",
+  "exports": {
+    "./index": "./index.ts"
+  }
+}
