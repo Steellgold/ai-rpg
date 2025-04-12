@@ -22,8 +22,21 @@ const characterSchema = z.object({
   flaws: z.array(FlawSchema),
   backstory: BackstorySchema,
   // 
-  age: z.number().int().min(1)
+  age: z.number().int().min(1),
+  //
+  main: z.boolean().default(false)
 });
+
+export const getCharacterSchema = (brainstorming: boolean = false) => {
+  if (brainstorming) return characterSchema;
+
+  return characterSchema.extend({
+    personality_traits: characterSchema.shape.personality_traits.optional(),
+    motivations: characterSchema.shape.motivations.optional(),
+    flaws: characterSchema.shape.flaws.optional(),
+    backstory: characterSchema.shape.backstory.optional(),
+  });
+}
 
 export type CharacterType = z.infer<typeof characterSchema>;
 export { characterSchema };
