@@ -39,4 +39,14 @@ export const getCharacterSchema = (brainstorming: boolean = false) => {
 }
 
 export type CharacterType = z.infer<typeof characterSchema>;
-export { characterSchema };
+export {
+  characterSchema,
+  PersonalityTypeEnum,
+  AbilitySchema,
+  RelationshipSchema,
+  MotivationSchema,
+  BackgroundSchema,
+  BackstorySchema,
+  OutfitSchema,
+  FlawSchema
+};
