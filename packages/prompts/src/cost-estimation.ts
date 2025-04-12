@@ -12,34 +12,59 @@ export const TOKEN_PRICES = {
   DALLE3_1792: 3,
 };
 
-export function estimateStoryCost(options: {
-  textLength: number;
-  hasItems: boolean;
-  withImages: boolean;
-  characterCount?: number;
-}): number {
-  const { textLength, hasItems, withImages, characterCount = 2 } = options;
+export function estimateStoryCost(
+  options: {
+    textLength: number;
+    hasItems: boolean;
+    withImages: boolean;
+    characters: {
+      principal: number;
+      secondary: number;
+      // 
+      brainstorming: boolean;
+    }
+  }
+): number {
+  const {
+    textLength,
+    hasItems,
+    withImages,
+    characters = {
+      principal: 1,
+      secondary: 1,
+      brainstorming: false
+    }
+  } = options;
   
   const inputTokens = Math.ceil(textLength / 4);
   
   const outputTokens = hasItems ? MAX_TOKENS.STORY : Math.ceil(MAX_TOKENS.STORY * 0.8);
-  
+
   let cost = (inputTokens / 1000) * TOKEN_PRICES.GPT4_INPUT + 
              (outputTokens / 1000) * TOKEN_PRICES.GPT4_OUTPUT;
-  
+
   if (withImages) {
     cost += TOKEN_PRICES.DALLE3_1792;
-    if (characterCount > 0) cost += characterCount * TOKEN_PRICES.DALLE3_1024;
+    if (characters.principal > 0) cost += characters.principal * TOKEN_PRICES.DALLE3_1024;
+    if (characters.secondary > 0) cost += characters.secondary * TOKEN_PRICES.DALLE3_1024;
+    if (hasItems) cost += TOKEN_PRICES.DALLE3_1024;
+  }
+
+  if (characters.brainstorming) {
+    cost += (inputTokens / 1000) * TOKEN_PRICES.GPT4_MINI_INPUT +
+            (outputTokens / 1000) * TOKEN_PRICES.GPT4_MINI_OUTPUT;
   }
   
   return Math.ceil(cost);
 }
 
-export function estimateSceneCost(options: {
-  withImage: boolean;
-  withDialogues: boolean;
-  newItemCount?: number;
-}): number {
+export function estimateSceneCost(
+  options: {
+    withImage: boolean;
+    withDialogues: boolean;
+    newItemCount?: number;
+  }
+): number {
   const { withImage, withDialogues, newItemCount = 0 } = options;
 
   let cost = 0;
