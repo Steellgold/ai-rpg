@@ -1,4 +1,4 @@
-import { ItemPromptOptions } from './prompt/types';
+import { ItemPromptOptions } from "./types";
 
 export function getItemImagePrompt(options: ItemPromptOptions): string {
   const { itemName, itemType, description = '' } = options;

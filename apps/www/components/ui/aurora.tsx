@@ -142,7 +142,7 @@ export default function Aurora(props: AuroraProps) {
     gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
     gl.canvas.style.backgroundColor = "transparent";
 
-    let program: Program | undefined;
+    let program: Program | undefined = undefined;
 
     function resize() {
       if (!ctn) return;
@@ -158,7 +158,9 @@ export default function Aurora(props: AuroraProps) {
     const geometry = new Triangle(gl);
     if (geometry.attributes.uv) {
       // TypeScript may require a type assertion here.
-      delete (geometry.attributes as any).uv;
+      if ('uv' in geometry.attributes) {
+        delete geometry.attributes.uv;
+      }
     }
 
     const colorStopsArray = colorStops.map((hex) => {

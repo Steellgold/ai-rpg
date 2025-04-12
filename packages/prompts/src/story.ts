@@ -1,4 +1,4 @@
-import { StoryPromptOptions } from './prompt/types';
+import { StoryPromptOptions } from './types';
 import { getLanguageInstructions } from './language';
 import { MAX_TOKENS } from './constants';
 

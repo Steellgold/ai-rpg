@@ -1,4 +1,4 @@
-import { ScenePromptOptions } from './prompt/types';
+import { ScenePromptOptions } from './types';
 import { getLanguageInstructions } from './language';
 import { MAX_TOKENS } from './constants';
 
