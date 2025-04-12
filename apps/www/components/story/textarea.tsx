@@ -26,10 +26,12 @@ const SettingsCard: Component<{
   activeBorderColor: string;
   activeHoverColor: string;
   loadingColor?: string;
+  isLoading?: boolean;
 }> = ({
     title, description, textEnable,
     icon: Icon, toggledIcon: ToggledIcon,
-    isActive, onClick, activeColor, activeBorderColor, activeHoverColor, loadingColor
+    isActive, onClick, activeColor, activeBorderColor, activeHoverColor,
+    loadingColor, isLoading
   }) => {
   return (
     <div className={cn("flex flex-col justify-between gap-2 border border-gray-500/20 p-2 rounded-md", {
@@ -49,6 +51,7 @@ const SettingsCard: Component<{
           activeHoverColor={activeHoverColor}
           loadingColor={loadingColor}
           className={"rounded-md"}
+          disabled={isLoading}
         />
       </div>
     </div>
@@ -211,7 +214,10 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
             </div>
           </div>
 
-          <div className={cn("p-2 mx-2 mb-2", { "hidden": !moreSettings })}>
+          <div className={cn("p-2 mx-2 mb-2", {
+            "hidden": !moreSettings,
+            "opacity-50": isGenerating
+          })}>
             <div className="flex flex-col gap-2">
               <SettingsCard
                 title="Tools.NarrativeArcs.On"
@@ -225,6 +231,7 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
                 activeBorderColor="border-purple-400/20"
                 activeHoverColor="hover:bg-purple-400/10"
                 loadingColor="text-purple-300"
+                isLoading={isGenerating}
               />
               
               <SettingsCard
@@ -239,6 +246,7 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
                 activeBorderColor="border-indigo-400/20"
                 activeHoverColor="hover:bg-indigo-400/10"
                 loadingColor="text-indigo-300"
+                isLoading={isGenerating}
               />
               
               <SettingsCard
@@ -253,6 +261,7 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
                 activeBorderColor="border-orange-400/20"
                 activeHoverColor="hover:bg-orange-400/10"
                 loadingColor="text-orange-300"
+                isLoading={isGenerating}
               />
 
               <SettingsCard
