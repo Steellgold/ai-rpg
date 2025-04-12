@@ -1,0 +1,8 @@
+{
+  "LanguageDialog": {
+    "Title": "Changer de langue",
+    "Description": "Sélectionnez la langue de votre choix pour l'interface.",
+    "ApplyButton": "Appliquer",
+    "CancelButton": "Annuler"
+  }
+}

@@ -43,7 +43,8 @@ const europe = [
 ];
 
 export const supportedLanguages: SupportedLangs = {
-  en: "en"
+  en: "en",
+  fr: "fr"
 };
 
 export type SupportedLangs = Record<string, ISOLang>;

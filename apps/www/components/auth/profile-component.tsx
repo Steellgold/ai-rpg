@@ -1,6 +1,6 @@
 "use client"
 
-import { User, ChevronDown, LogOut, LibraryBig, Wallet } from "lucide-react"
+import { User, ChevronDown, LogOut, LibraryBig, Wallet, Earth } from "lucide-react"
 import { useTranslations } from "next-intl"
 
 import {
@@ -20,6 +20,7 @@ import { redirect } from "next/navigation"
 import Link from "next/link"
 import { useCredits } from "@/lib/hooks/use-credits"
 import Image from "next/image"
+import { LanguageDialog } from "../dialogs/language.dialog"
 
 interface ProfileComponentProps {
   variant?: "default" | "navbar"
@@ -87,16 +88,16 @@ export function ProfileComponent({ variant = "default", className }: ProfileComp
           </div>
         </DropdownMenuItem>
 
-        {/* <LanguageDialog>
+        <LanguageDialog>
           <DropdownMenuItem className="p-0 cursor-pointer" onSelect={(e) => e.preventDefault()}>
             <div className="flex items-center justify-between w-full px-2 py-1.5">
               <div className="flex items-center gap-2">
-                <Globe size={16} />
+                <Earth size={16} />
                 <span>{t("Language")}</span>
               </div>
             </div>
           </DropdownMenuItem>
-        </LanguageDialog> */}
+        </LanguageDialog>
 
         <DropdownMenuSeparator />
 

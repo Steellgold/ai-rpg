@@ -1,0 +1,40 @@
+{
+  "AiTextarea": {
+    "Placeholder": "Une quête épique dans un royaume magique où chaque choix compte. Courage, magie, destins entrelacés et aventures extraordinaires attendent le héros",
+    "Send": "Générer une histoire",
+
+    "Tools": {
+      "EnableTool": "Je veux utiliser cet outil",
+
+      "Children": {
+        "On": "Pour enfants",
+        "Off": "Pour tous"
+      },
+      "Items": {
+        "On": "Objets",
+        "Off": "Sans objets",
+        "Description": "Les objets sont les outils et les ressources que les personnages utilisent pour naviguer dans le monde. Avec des objets, l'histoire offre un sentiment d'aventure et d'exploration, les personnages découvrant de nouvelles capacités et pouvoirs."
+      },
+      "Characters": {
+        "On": "Développer les personnages",
+        "Off": "Personnages simples",
+        "Description": "Les personnages sont le cœur de l'histoire, faisant avancer l'intrigue et captivant l'audience. Avec un développement approfondi, les personnages sont plus élaborés et complexes que des personnages basiques."
+      },
+      "NarrativeArcs": {
+        "On": "Arcs narratifs",
+        "Off": "Sans arcs narratifs",
+        "Description": "Les arcs narratifs sont la structure de l'histoire, guidant l'intrigue et le développement des personnages. Avec des arcs narratifs, l'histoire a un début, un milieu et une fin clairs, avec une évolution des personnages et une résolution des conflits."
+      },
+      "ConflictGenerator": {
+        "On": "Combats",
+        "Off": "Sans combats",
+        "Description": "Le conflit est la force motrice de l'histoire, créant tension et drame. Avec des combats, l'histoire contient de l'action et de l'excitation, avec des personnages qui affrontent des défis et surmontent des obstacles."
+      }
+    },
+
+    "Record": {
+      "Record": "Enregistrer",
+      "Stop": "Arrêter"
+    }
+  }
+}

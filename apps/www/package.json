@@ -10,8 +10,8 @@
   },
   "dependencies": {
     "@imagine/ai": "workspace:*",
-    "@imagine/prompts": "workspace:*",
     "@imagine/database": "workspace:*",
+    "@imagine/prompts": "workspace:*",
     "@imagine/schemas": "workspace:*",
     "@imagine/types": "workspace:*",
     "@radix-ui/react-avatar": "^1.1.4",
@@ -38,7 +38,8 @@
     "react-dom": "^19.0.0",
     "tailwind-merge": "^3.2.0",
     "tailwindcss-animate": "^1.0.7",
-    "tw-animate-css": "^1.2.5"
+    "tw-animate-css": "^1.2.5",
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

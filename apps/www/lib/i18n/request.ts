@@ -1,9 +1,10 @@
 import { getRequestConfig } from "next-intl/server";
 import { cookies } from "next/headers";
-import { ISOLang, SupportedLangs } from "@imagine/types/lang";
+import { ISOLang, SupportedLangs, supportedLanguages } from "@imagine/types/lang";
 
 const FILES = [
-  "home-page", "ai-textarea", "navbar"
+  "home-page", "ai-textarea",
+  "navbar", "dialogs"
 ];
 
 const detectLanguage = (
@@ -27,19 +28,11 @@ const detectLanguage = (
 export default getRequestConfig(async () => {
   const cookieStore = cookies();
   
-  const supportedLanguages: SupportedLangs = {
-    en: "en"
-  };
-
   const store = await cookieStore;
 
   const storedLanguage = store.get("language")?.value;
   const fallbackLocale = store.get("locale")?.value;
-  const browserLocale = detectLanguage(
-    store.get("accept-language")?.value ?? null,
-    supportedLanguages,
-    "en"
-  );
+  const browserLocale = detectLanguage(store.get("accept-language")?.value ?? null, supportedLanguages, "en");
 
   const locale = (storedLanguage || fallbackLocale || browserLocale) as ISOLang;
 
