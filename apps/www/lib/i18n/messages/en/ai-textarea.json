@@ -15,6 +15,14 @@
       "Characters": {
         "On": "Brainstorm characters",
         "Off": "Basic characters"
+      },
+      "NarrativeArcs": {
+        "On": "Narrative arcs",
+        "Off": "No narrative arcs"
+      },
+      "ConflictGenerator": {
+        "On": "Conflict generator",
+        "Off": "No conflict generator"
       }
     },
 

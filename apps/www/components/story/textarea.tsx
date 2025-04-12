@@ -7,7 +7,7 @@ import { ShineBorder } from "../ui/magicui/shine-border";
 import { CustomScrollbar } from "../ui/scrollbar";
 import { useTranslations } from "next-intl";
 import { Button } from "../ui/button";
-import { ArrowUp, Baby, Brain, Loader, Mic, MicOff, PersonStanding, PocketKnife, Users } from "lucide-react";
+import { ArrowUp, Baby, Brain, GitBranch, GitMerge, Loader, Mic, MicOff, PersonStanding, PocketKnife, Users, Zap, ZapOff } from "lucide-react";
 import { useDraft } from "@/lib/hooks/use-draft";
 import { useRecordVoice } from "@/lib/hooks/use-record";
 import { useSession } from "@/lib/hooks/use-session";
@@ -26,8 +26,10 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
   const [forChildren, setForChildren] = useState<boolean>(false);
   const [withItems, setWithItems] = useState<boolean>(false);
   const [betterCharacters, setBetterCharacters] = useState<boolean>(false);
+  const [multipleArcs, setMultipleArcs] = useState<boolean>(false);
+  const [withConflicts, setWithConflicts] = useState(false);
 
-  const shineColors = useShineColors({ forChildren, withItems, betterCharacters });
+  const shineColors = useShineColors({ forChildren, withItems, betterCharacters, multipleArcs, withConflicts });
 
   const [prompt, setPrompt] = useDraft({
     key: "ai-textarea-prompt",
@@ -120,7 +122,7 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
 
               <FeatureToggle
                 Icon={PocketKnife}
-                text="Tools.Items.On"
+                textToggled="Tools.Items.On"
                 isActive={withItems}
                 onClick={() => setWithItems(!withItems)}
                 activeColor="text-indigo-400"
@@ -131,12 +133,36 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
               <FeatureToggle
                 Icon={Users}
                 IconToggled={Brain}
-                text="Tools.Characters.On"
+                textToggled="Tools.Characters.On"
                 isActive={betterCharacters}
                 onClick={() => setBetterCharacters(!betterCharacters)}
                 activeColor="text-orange-400"
                 activeBorderColor="border-orange-400/20"
                 activeHoverColor="hover:bg-orange-400/10"
+              />
+
+              <FeatureToggle
+                Icon={GitMerge}
+                IconToggled={GitBranch}
+                textToggled="Tools.NarrativeArcs.On"
+                isActive={multipleArcs}
+                onClick={() => setMultipleArcs(!multipleArcs)}
+                activeColor="text-purple-400"
+                activeBorderColor="border-purple-400/20"
+                activeHoverColor="hover:bg-purple-400/10"
+                loadingColor="text-purple-300"
+              />
+              
+              <FeatureToggle
+                Icon={ZapOff}
+                IconToggled={Zap}
+                textToggled="Tools.ConflictGenerator.On"
+                isActive={withConflicts}
+                onClick={() => setWithConflicts(!withConflicts)}
+                activeColor="text-red-500"
+                activeBorderColor="border-red-500/20"
+                activeHoverColor="hover:bg-red-500/10"
+                loadingColor="text-red-300"
               />
             </div>
 
