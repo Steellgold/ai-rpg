@@ -7,7 +7,7 @@ import { ShineBorder } from "../ui/magicui/shine-border";
 import { CustomScrollbar } from "../ui/scrollbar";
 import { useTranslations } from "next-intl";
 import { Button } from "../ui/button";
-import { ArrowUp, Baby, Brain, Cog, GitBranch, GitMerge, Loader, LucideIcon, Mic, MicOff, PersonStanding, PocketKnife, Users, Zap, ZapOff } from "lucide-react";
+import { ArrowUp, Baby, Brain, Cog, GitBranch, GitMerge, Loader, Mic, MicOff, PersonStanding, PocketKnife, Users, Zap, ZapOff } from "lucide-react";
 import { useDraft } from "@/lib/hooks/use-draft";
 import { useRecordVoice } from "@/lib/hooks/use-record";
 import { useSession } from "@/lib/hooks/use-session";
@@ -15,50 +15,7 @@ import { FeatureToggle } from "./feature.button";
 import { useShineColors } from "@/lib/hooks/use-shine-colors";
 import { Badge } from "../ui/badge";
 import { estimateStoryCost } from "@imagine/prompts/index"
-
-const SettingsCard: Component<{
-  title: string;
-  description: string;
-  textEnable: string;
-  icon: LucideIcon;
-  toggledIcon?: LucideIcon;
-  isActive: boolean;
-  onClick: () => void;
-  activeColor: string;
-  activeBorderColor: string;
-  activeHoverColor: string;
-  loadingColor?: string;
-  isLoading?: boolean;
-}> = ({
-    title, description, textEnable,
-    icon: Icon, toggledIcon: ToggledIcon,
-    isActive, onClick, activeColor, activeBorderColor, activeHoverColor,
-    loadingColor, isLoading
-  }) => {
-  return (
-    <div className={cn("flex flex-col justify-between gap-2 border border-gray-500/20 p-2 rounded-md", {
-      [`bg-${activeColor.split('-')[1]}-500/10 border-${activeColor.split('-')[1]}-400/20`]: isActive
-    })}>
-      <span className="text-sm text-gray-400">{description}</span>
-      <div>
-        <FeatureToggle
-          Icon={Icon}
-          IconToggled={ToggledIcon}
-          text={textEnable}
-          textToggled={title}
-          isActive={isActive}
-          onClick={onClick}
-          activeColor={activeColor}
-          activeBorderColor={activeBorderColor}
-          activeHoverColor={activeHoverColor}
-          loadingColor={loadingColor}
-          className={"rounded-md"}
-          disabled={isLoading}
-        />
-      </div>
-    </div>
-  );
-};
+import { FeatureCard } from "./feature.card";
 
 export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ className }): ReactElement => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -234,12 +191,11 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
             "opacity-50": isGenerating
           })}>
             <div className="flex flex-col gap-2">
-              <SettingsCard
+              <FeatureCard
                 title="Tools.NarrativeArcs.On"
                 description={t("Tools.NarrativeArcs.Description")}
-                textEnable="Tools.EnableTool"
-                icon={GitMerge}
-                toggledIcon={GitBranch}
+                text="Tools.EnableTool"
+                icons={{ Icon: GitMerge, IconToggled: GitBranch }}
                 isActive={multipleArcs}
                 onClick={() => setMultipleArcs(!multipleArcs)}
                 activeColor="text-purple-400"
@@ -247,14 +203,14 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
                 activeHoverColor="hover:bg-purple-400/10"
                 loadingColor="text-purple-300"
                 isLoading={isGenerating}
+                className={cn({"bg-purple-500/10 border-purple-400/20": multipleArcs})}
               />
               
-              <SettingsCard
+              <FeatureCard
                 title="Tools.Items.On"
                 description={t("Tools.Items.Description")}
-                textEnable="Tools.EnableTool"
-                icon={PocketKnife}
-                toggledIcon={Users}
+                text="Tools.EnableTool"
+                icons={{ Icon: PocketKnife, IconToggled: Users }}
                 isActive={withItems}
                 onClick={() => setWithItems(!withItems)}
                 activeColor="text-indigo-400"
@@ -262,14 +218,14 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
                 activeHoverColor="hover:bg-indigo-400/10"
                 loadingColor="text-indigo-300"
                 isLoading={isGenerating}
+                className={cn({"bg-indigo-500/10 border-indigo-400/20": withItems})}
               />
               
-              <SettingsCard
+              <FeatureCard
                 title="Tools.Characters.On"
                 description={t("Tools.Characters.Description")}
-                textEnable="Tools.EnableTool"
-                icon={Users}
-                toggledIcon={Brain}
+                text="Tools.EnableTool"
+                icons={{ Icon: Users, IconToggled: Brain }}
                 isActive={betterCharacters}
                 onClick={() => setBetterCharacters(!betterCharacters)}
                 activeColor="text-orange-400"
@@ -277,20 +233,22 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
                 activeHoverColor="hover:bg-orange-400/10"
                 loadingColor="text-orange-300"
                 isLoading={isGenerating}
+                className={cn({"bg-orange-500/10 border-orange-400/20": betterCharacters})}
               />
 
-              <SettingsCard
+              <FeatureCard
                 title="Tools.ConflictGenerator.On"
                 description={t("Tools.ConflictGenerator.Description")}
-                textEnable="Tools.EnableTool"
-                icon={ZapOff}
-                toggledIcon={Zap}
+                text="Tools.EnableTool"
+                icons={{ Icon: ZapOff, IconToggled: Zap }}
                 isActive={withConflicts}
                 onClick={() => setWithConflicts(!withConflicts)}
                 activeColor="text-red-500"
                 activeBorderColor="border-red-500/20"
                 activeHoverColor="hover:bg-red-500/10"
                 loadingColor="text-red-300"
+                isLoading={isGenerating}
+                className={cn({"bg-red-500/10 border-red-500/20": withConflicts})}
               />
             </div>
           </div>
