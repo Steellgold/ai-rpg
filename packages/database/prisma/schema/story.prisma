@@ -70,6 +70,7 @@ model Story {
   credit_cost      Int                 @default(0)
   transactions     CreditTransaction[]
   usedFeatures     StoryFeature[]
+  Usage            Usage[]
 
   @@index([creatorId])
 }

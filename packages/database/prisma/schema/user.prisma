@@ -1,73 +1,122 @@
 model User {
-  id                   String              @id @default(uuid())
-  email                String              @unique
-  display_name         String              @default("User")
-  image_url            String?
+  id                    String              @id @default(uuid())
+  email                 String              @unique
+  display_name          String              @default("User")
+  image_url             String?
   //
-  credits              Int                 @default(5)
-  last_credits_refresh DateTime?
+  credits               Int                 @default(5)
+  last_credits_refresh  DateTime?
   //
-  stripe_customer_id   String?
-  // 
-  stories              Story[]
-  jobs                 Job[]
+  stripe_customer_id    String?
+  stripe_connect_id     String?
+  stripe_connect_status String?
+  stripe_connect_date   DateTime?
+  can_receive_payments  Boolean             @default(false)
   //
-  creditTransactions   CreditTransaction[]
-  payments             Payment[]
+  stories               Story[]
+  jobs                  Job[]
   //
-  createdAt            DateTime            @default(now())
-  updatedAt            DateTime            @default(now()) @updatedAt
+  plugins               Plugin[]
+  purchasedPlugins      PluginPurchase[]
+  reviews               Review[]
+  collection            Collection[]
+  //
+  creditTransactions    CreditTransaction[]
+  payments              Payment[]
+  payouts               Payout[]
+  //
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @default(now()) @updatedAt
 }
 
 model Payment {
-  id              String   @id @default(cuid())
-  userId          String
-  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  // 
-  amount          Int
-  currency        String   @default("EUR")
-  description     String
-  status          String
-  // 
-  provider        String
-  provider_id     String
-  // 
-  credits_amount  Int?
-  is_subscription Boolean  @default(false)
-  // 
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @default(now()) @updatedAt
+  id                     String   @id @default(cuid())
+  userId                 String
+  user                   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  //
+  amount                 Int
+  currency               String   @default("EUR")
+  description            String
+  status                 String
+  //
+  provider               String   @default("stripe")
+  provider_id            String
+  //
+  credits_amount         Int?
+  is_subscription        Boolean  @default(false)
+  //
+  pluginPurchase         Boolean  @default(false)
+  pluginId               String?
+  //
+  application_fee_amount Float?
+  transfer_amount        Float?
+  transfer_id            String?
+  //
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @default(now()) @updatedAt
 
+  //
   @@index([userId])
   @@index([provider_id])
   @@index([status])
+  @@index([pluginId])
+}
+
+model Payout {
+  id                 String    @id @default(cuid())
+  userId             String
+  user               User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  //
+  amount             Float
+  currency           String    @default("EUR")
+  status             String
+  //
+  stripe_payout_id   String
+  stripe_transfer_id String?
+  //
+  pluginIds          String[]
+  periodStart        DateTime
+  periodEnd          DateTime
+  //
+  createdAt          DateTime  @default(now())
+  paidAt             DateTime?
+
+  //
+  @@index([userId])
+  @@index([status])
+  @@index([stripe_payout_id])
 }
 
 model CreditTransaction {
-  id              String          @id @default(cuid())
-  userId          String
-  user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  // 
-  amount          Int
-  balanceAfter    Int
-  description     String
-  transactionType TransactionType
-  // 
-  featureId       String?
-  storyId         String?
-  story           Story?          @relation(fields: [storyId], references: [id], onDelete: SetNull)
-  jobId           String?
-  job             Job?            @relation(fields: [jobId], references: [id], onDelete: SetNull)
-  // 
-  paymentId       String?
-  paymentProvider String?
-  // 
-  createdAt       DateTime        @default(now())
-  updatedAt       DateTime        @default(now()) @updatedAt
+  id               String          @id @default(cuid())
+  userId           String
+  user             User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  //
+  amount           Int
+  balanceAfter     Int
+  description      String
+  transactionType  TransactionType
+  //
+  featureId        String?
+  storyId          String?
+  story            Story?          @relation(fields: [storyId], references: [id], onDelete: SetNull)
+  jobId            String?
+  job              Job?            @relation(fields: [jobId], references: [id], onDelete: SetNull)
+  //
+  pluginId         String?
+  pluginPurchaseId String?
+  //
+  paymentId        String?
+  paymentProvider  String?
+  //
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @default(now()) @updatedAt
 
+  //
   @@index([userId])
   @@index([storyId])
   @@index([jobId])
+  @@index([pluginId])
   @@index([transactionType])
   @@index([createdAt])
 }
