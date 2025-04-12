@@ -11,6 +11,7 @@ import { ArrowUp, Baby, Loader, Mic, MicOff, PersonStanding } from "lucide-react
 import { useDraft } from "@/lib/hooks/use-draft";
 import { useRecordVoice } from "@/lib/hooks/use-record";
 import { useSession } from "@/lib/hooks/use-session";
+import { FeatureToggle } from "./feature.button";
 
 export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ className }): ReactElement => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -104,54 +105,33 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
           
           <div className="flex items-center justify-between p-2 mx-2 mb-2">
             <div className="flex items-center flex-wrap gap-1.5">
-              <Button
-                size={"toolText"}
-                variant={"ghost"}
-                onClick={() => setForChildren(!forChildren)}
-                className={cn(
-                  "!border rounded-full cursor-pointer", {
-                    "border-teal-400/20 hover:bg-teal-400/10": forChildren,
-                    "border-gray-400/20 hover:bg-gray-400/10": !forChildren
-                  }
-                )}
-              >
-                {forChildren
-                  ? <Baby className="text-teal-400" />
-                  : <PersonStanding className="text-gray-200" />
-                }
-
-                <span className={cn({ "text-teal-400": forChildren, "text-gray-200": !forChildren })}>
-                  {t("Tools.Children." + (forChildren ? "On" : "Off"))}
-                </span>
-              </Button>
+              <FeatureToggle 
+                Icon={PersonStanding} 
+                IconToggled={Baby} 
+                text="Tools.Children.Off" 
+                textToggled="Tools.Children.On" 
+                isActive={forChildren} 
+                onClick={() => setForChildren(!forChildren)} 
+                activeColor="text-teal-400"
+                activeBorderColor="border-teal-400/20"
+                activeHoverColor="hover:bg-teal-400/10"
+              />
             </div>
 
             <div className="flex items-center gap-1">
-              <Button
-                size={"toolText"}
-                variant={"ghost"}
-                onClick={handleRecordToggle}
+              <FeatureToggle 
+                Icon={Mic} 
+                IconToggled={MicOff} 
+                textToggled="Record.Stop" 
+                isActive={recording} 
+                onClick={handleRecordToggle} 
                 disabled={isGenerating || !user || userLoading}
-                className={cn(
-                  "cursor-pointer", {
-                    "!border border-red-400/20 hover:bg-red-400/10": recording,
-                    "border-gray-400/20 hover:bg-gray-400/10": !recording
-                  }
-                )}
-              >
-                {recording 
-                  ? <MicOff className="text-red-400" /> 
-                  : recordLoading
-                    ? <Loader className="text-gray-200 animate-spin" />
-                    : <Mic className="text-gray-200" />
-                }
-
-                {recording && (
-                  <span className={cn({ "text-red-400": recording, "text-gray-200": !recording })}>
-                    {t("Record.Stop")}
-                  </span>
-                )}
-              </Button>
+                activeColor="text-red-400"
+                activeBorderColor="border-red-400/20"
+                activeHoverColor="hover:bg-red-400/10"
+                loading={recordLoading}
+                loadingColor="text-gray-200"
+              />
 
               <Button
                 size={isInputValid ? "toolText" : "toolIcon"}
