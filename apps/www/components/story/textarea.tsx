@@ -13,6 +13,8 @@ import { useRecordVoice } from "@/lib/hooks/use-record";
 import { useSession } from "@/lib/hooks/use-session";
 import { FeatureToggle } from "./feature.button";
 import { useShineColors } from "@/lib/hooks/use-shine-colors";
+import { Badge } from "../ui/badge";
+import { estimateStoryCost } from "@imagine/prompts/index"
 
 const SettingsCard: Component<{
   title: string;
@@ -211,6 +213,19 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
                 {isGenerating ? <Loader className="animate-spin" /> : <ArrowUp />}
                 {isInputValid && t("Send")}
               </Button>
+
+              <Badge>
+                {estimateStoryCost({
+                  hasItems: true,
+                  textLength: prompt.length,
+                  withImages: false,
+                  characters: {
+                    brainstorming: betterCharacters,
+                    principal: 3,
+                    secondary: 1
+                  }
+                })}
+              </Badge>
             </div>
           </div>
 

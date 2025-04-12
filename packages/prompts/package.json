@@ -2,5 +2,11 @@
   "name": "@imagine/prompts",
   "exports": {
     "./index": "./index.ts"
+  },
+  "dependencies": {
+    "zod": "^3.24.2"
+  },
+  "peerDependencies": {
+    "@imagine/schemas": "workspace:*"
   }
 }

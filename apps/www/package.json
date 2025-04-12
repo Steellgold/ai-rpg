@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@imagine/ai": "workspace:*",
+    "@imagine/prompts": "workspace:*",
     "@imagine/database": "workspace:*",
     "@imagine/schemas": "workspace:*",
     "@imagine/types": "workspace:*",

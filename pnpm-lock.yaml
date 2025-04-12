@@ -26,6 +26,9 @@ importers:
       '@imagine/database':
         specifier: workspace:*
         version: link:../../packages/database
+      '@imagine/prompts':
+        specifier: workspace:*
+        version: link:../../packages/prompts
       '@imagine/schemas':
         specifier: workspace:*
         version: link:../../packages/schemas
@@ -170,6 +173,15 @@ importers:
       stripe:
         specifier: ^18.0.0
         version: 18.0.0
+
+  packages/prompts:
+    dependencies:
+      '@imagine/schemas':
+        specifier: workspace:*
+        version: link:../schemas
+      zod:
+        specifier: ^3.24.2
+        version: 3.24.2
 
   packages/schemas:
     dependencies:
