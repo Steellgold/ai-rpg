@@ -7,6 +7,14 @@
       "Children": {
         "On": "For children",
         "Off": "For anyone"
+      },
+      "Items": {
+        "On": "Items",
+        "Off": "No items"
+      },
+      "Characters": {
+        "On": "Brainstorm characters",
+        "Off": "Basic characters"
       }
     },
 

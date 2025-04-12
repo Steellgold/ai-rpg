@@ -7,11 +7,12 @@ import { ShineBorder } from "../ui/magicui/shine-border";
 import { CustomScrollbar } from "../ui/scrollbar";
 import { useTranslations } from "next-intl";
 import { Button } from "../ui/button";
-import { ArrowUp, Baby, Loader, Mic, MicOff, PersonStanding } from "lucide-react";
+import { ArrowUp, Baby, Brain, Loader, Mic, MicOff, PersonStanding, PocketKnife, Users } from "lucide-react";
 import { useDraft } from "@/lib/hooks/use-draft";
 import { useRecordVoice } from "@/lib/hooks/use-record";
 import { useSession } from "@/lib/hooks/use-session";
 import { FeatureToggle } from "./feature.button";
+import { useShineColors } from "@/lib/hooks/use-shine-colors";
 
 export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ className }): ReactElement => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -23,6 +24,10 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
 
   const [forChildren, setForChildren] = useState<boolean>(false);
+  const [withItems, setWithItems] = useState<boolean>(false);
+  const [betterCharacters, setBetterCharacters] = useState<boolean>(false);
+
+  const shineColors = useShineColors({ forChildren, withItems, betterCharacters });
 
   const [prompt, setPrompt] = useDraft({
     key: "ai-textarea-prompt",
@@ -85,11 +90,7 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
         <div className={cn("relative z-20 border-2 rounded-xl overflow-hidden w-full", className, {
           "bg-[#070910] border border-[#173a8940]": true
         })}>
-          <ShineBorder className="rounded-xl border-2" shineColor={
-            forChildren
-              ? ["#fff", "#0f9b8e", "#0f9b8e", "#fff"]
-              : ["#fff", "#1447e6", "#193cb8", "#fff"]
-          } />
+          <ShineBorder className="rounded-xl border-2" shineColor={shineColors} />
           <textarea
             ref={textareaRef}
             value={prompt}
@@ -105,16 +106,37 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
           
           <div className="flex items-center justify-between p-2 mx-2 mb-2">
             <div className="flex items-center flex-wrap gap-1.5">
-              <FeatureToggle 
-                Icon={PersonStanding} 
-                IconToggled={Baby} 
-                text="Tools.Children.Off" 
-                textToggled="Tools.Children.On" 
-                isActive={forChildren} 
-                onClick={() => setForChildren(!forChildren)} 
+              <FeatureToggle
+                Icon={PersonStanding}
+                IconToggled={Baby}
+                text="Tools.Children.Off"
+                textToggled="Tools.Children.On"
+                isActive={forChildren}
+                onClick={() => setForChildren(!forChildren)}
                 activeColor="text-teal-400"
                 activeBorderColor="border-teal-400/20"
                 activeHoverColor="hover:bg-teal-400/10"
+              />
+
+              <FeatureToggle
+                Icon={PocketKnife}
+                text="Tools.Items.On"
+                isActive={withItems}
+                onClick={() => setWithItems(!withItems)}
+                activeColor="text-indigo-400"
+                activeBorderColor="border-indigo-400/20"
+                activeHoverColor="hover:bg-indigo-400/10"
+              />
+
+              <FeatureToggle
+                Icon={Users}
+                IconToggled={Brain}
+                text="Tools.Characters.On"
+                isActive={betterCharacters}
+                onClick={() => setBetterCharacters(!betterCharacters)}
+                activeColor="text-orange-400"
+                activeBorderColor="border-orange-400/20"
+                activeHoverColor="hover:bg-orange-400/10"
               />
             </div>
 
