@@ -61,6 +61,8 @@ export type Plugin = {
   stripePriceId?: string;
 }
 
+export type PluginStatus = "PENDING" | "APPROVED" | "REJECTED";
+
 export type SearchPluginsParams = {
   query?: string;
   type?: PluginType;
