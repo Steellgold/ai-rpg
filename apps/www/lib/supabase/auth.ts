@@ -21,16 +21,16 @@ export const auth = cache(async (): Promise<UserSession | null> => {
   const supabase = await createClient();
 
   try {
-    const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+    const { data: { user }, error: sessionError } = await supabase.auth.getUser();
     
-    if (sessionError || !session) {
+    if (sessionError || !user) {
       return null;
     }
 
     const { data: userData, error: userError } = await supabase
       .from("User")
       .select("id, email, display_name, image_url, credits")
-      .eq("id", session.user.id)
+      .eq("id", user.id)
       .single();
 
     if (userError || !userData) {
