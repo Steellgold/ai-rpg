@@ -18,13 +18,14 @@ import { Component } from "@/lib/types/component";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PluginType } from "@imagine/types/plugin";
 import { useDebounce } from "@/lib/hooks/use-debounce";
-import { countLikedPlugins, searchPlugins, UIPlugin } from "@/lib/actions/plugin-search";
+import { getLikedPlugins, searchPlugins, UIPlugin } from "@/lib/actions/plugin-search";
 import { useTranslations } from "next-intl";
 import { capitalizeFirstLetter, cn } from "@/lib/utils";
 import { PluginCard } from "../plugins/plugin.card";
 import { Separator } from "../ui/separator";
 import { Badge } from "../ui/badge";
 import { useSession } from "@/lib/hooks/use-session";
+import { PluginView } from "../plugins/plugin.view";
 
 type PluginMarketplaceProps = {
   open: boolean
@@ -53,17 +54,21 @@ export const PluginMarketplace: Component<PluginMarketplaceProps> = ({
   const [page, setPage] = useState(1);
   const [isPending, startTransition] = useTransition();
   const [initialLoading, setInitialLoading] = useState(true);
-
+  // 
   const [likedCount, setLikedCount] = useState(0);
+  const [likedList, setLikedList] = useState<string[]>([]);
+  // 
+  const [pluginView, setPluginView] = useState<UIPlugin | null>(null);
 
-  const debouncedQuery = useDebounce(searchQuery, 300)
+  const debouncedQuery = useDebounce(searchQuery, 300);
 
   const loadLikedCount = async () => {
     if (!user?.id) return;
     
     try {
-      const count = await countLikedPlugins(user.id);
+      const { count, likedPlugins } = await getLikedPlugins(user.id);
       setLikedCount(count);
+      setLikedList(likedPlugins);
     } catch (error) {
       console.error("Error loading liked count:", error);
     }
@@ -84,11 +89,8 @@ export const PluginMarketplace: Component<PluginMarketplaceProps> = ({
         liked: category === "LIKED"
       });
 
-      if (append) {
-        setPlugins(prev => [...prev, ...result.plugins])
-      } else {
-        setPlugins(result.plugins)
-      }
+      if (append) setPlugins(prev => [...prev, ...result.plugins])
+      else setPlugins(result.plugins)
 
       setTotal(result.total)
       setInitialLoading(false)
@@ -150,150 +152,172 @@ export const PluginMarketplace: Component<PluginMarketplaceProps> = ({
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog
+      open={open}
+      onOpenChange={(open) => {
+        if (!open) {
+          onOpenChange(false)
+          setPluginView(null)
+        }
+      }}
+    >
       <DialogContent
         className="max-w-6xl min-w-[60vw] max-h-screen overflow-y-auto p-0 bg-[#0a0b14] text-white border-[#2a2c3a]"
         onInteractOutside={(e) => e.preventDefault()}
         showCloseButton={false}
       >
-        <div className="flex flex-col h-[85vh] md:flex-row">
-          {/* Left sidebar */}
-          <div className="w-full md:w-64 border-r border-[#2a2c3a] p-6">
-            <h3 className="text-lg font-semibold mb-4">{t("Sidebar.Title")}</h3>
-            <div className="md:hidden">
-              <ScrollArea className="w-96 whitespace-nowrap rounded-md border border-[#2a2c3a] bg-[#12131f]">
-                <div className="flex w-max space-x-4 p-2">
+        <div className="h-[85vh]">
+          {pluginView ? (
+            <PluginView
+              plugin={pluginView}
+              onClose={() => setPluginView(null)}
+              onAdd={handleAddPlugin}
+              onRemove={handleRemovePlugin}
+              onView={setPluginView}
+            />
+          ) : (
+            <div className="flex flex-col md:flex-row h-full">
+              {/* Left sidebar */}
+              <div className="w-full md:w-64 border-r border-[#2a2c3a] p-6">
+                <h3 className="text-lg font-semibold mb-4">{t("Sidebar.Title")}</h3>
+                <div className="md:hidden">
+                  <ScrollArea className="w-96 whitespace-nowrap rounded-md border border-[#2a2c3a] bg-[#12131f]">
+                    <div className="flex w-max space-x-4 p-2">
+                      <CategoriesButtons
+                        setActiveCategory={(category) => setActiveCategory(category)}
+                        activeCategory={activeCategory}
+                        likedCount={likedCount}
+                      />
+                    </div>
+                    <ScrollBar orientation="horizontal" />
+                  </ScrollArea>
+                </div>
+
+                <div className="hidden md:flex md:flex-col space-y-1">
                   <CategoriesButtons
                     setActiveCategory={(category) => setActiveCategory(category)}
                     activeCategory={activeCategory}
                     likedCount={likedCount}
                   />
                 </div>
-                <ScrollBar orientation="horizontal" />
-              </ScrollArea>
-            </div>
-
-            <div className="hidden md:flex md:flex-col space-y-1">
-              <CategoriesButtons
-                setActiveCategory={(category) => setActiveCategory(category)}
-                activeCategory={activeCategory}
-                likedCount={likedCount}
-              />
-            </div>
-          </div>
-
-          {/* Main content */}
-          <div className="flex-1 flex flex-col">
-            <div className="p-6 border-b border-[#2a2c3a]">
-              <div className="flex flex-col md:flex-row items-center justify-between mb-6 border border-[#2a2c3a] rounded-lg p-4 bg-[#12131f]">
-                <div>
-                  <h2 className="text-2xl font-bold">{t("Creator.Title")}</h2>
-                  <p className="text-gray-400 mt-1 max-w-2xl">
-                    {t("Creator.Description")}
-                  </p>
-                </div>
-                <Button className="mt-4 md:mt-0 md:ml-4 bg-indigo-600 hover:bg-indigo-700 text-white" onClick={() => onOpenChange(false)}>
-                  {t("Creator.Button")}
-                </Button>
               </div>
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                <Input
-                  type="search"
-                  placeholder={t("Search.Placeholder")}
-                  className="pl-10 bg-[#1a1b29] border-[#2a2c3a] text-white placeholder:text-gray-400 focus-visible:ring-indigo-500"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-                {isPending && (
-                  <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                    <Loader2 className="h-4 w-4 animate-spin text-gray-400" />
-                  </div>
-                )}
-              </div>
-            </div>
 
-            <div className="flex-1 overflow-hidden">
-              <ScrollArea className="h-full">
-                <div className="p-6">
-                  <div className="flex items-center justify-between mb-6">
-                    <h3 className="text-xl font-semibold">
-                      {t("Categories." + capitalizeFirstLetter(activeCategory, true))}
-                    </h3>
-
-                    <div className="text-sm text-gray-400">
-                      {t("PluginCount", { count: total })}
-                    </div>
-                  </div>
-
-                  {initialLoading ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                      {[...Array(6)].map((_, i) => (
-                        <PluginCardSkeleton key={i} />
-                      ))}
-                    </div>
-                  ) : plugins.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center py-12 text-center">
-                      <div className="w-16 h-16 bg-[#2a2c3a] rounded-full flex items-center justify-center mb-4">
-                        <Search className="h-8 w-8 text-gray-400" />
-                      </div>
-                      <h4 className="text-lg font-medium mb-2">{t("NoResults.Title")}</h4>
-                      <p className="text-gray-400 max-w-md">
-                        {t("NoResults.Description")}
+              {/* Main content */}
+              <div className="flex-1 flex flex-col">
+                <div className="p-6 border-b border-[#2a2c3a]">
+                  <div className="flex flex-col md:flex-row items-center justify-between mb-6 border border-[#2a2c3a] rounded-lg p-4 bg-[#12131f]">
+                    <div>
+                      <h2 className="text-2xl font-bold">{t("Creator.Title")}</h2>
+                      <p className="text-gray-400 mt-1 max-w-2xl">
+                        {t("Creator.Description")}
                       </p>
                     </div>
-                  ) : (
-                    <>
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {plugins.map((plugin) => (
-                          <PluginCard
-                            key={plugin.id}
-                            plugin={plugin}
-                            isSelected={isPluginSelected(plugin.id)}
-                            onAdd={handleAddPlugin}
-                            onRemove={handleRemovePlugin}
-                          />
-                        ))}
+                    <Button className="mt-4 md:mt-0 md:ml-4 bg-indigo-600 hover:bg-indigo-700 text-white" onClick={() => onOpenChange(false)}>
+                      {t("Creator.Button")}
+                    </Button>
+                  </div>
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <Input
+                      type="search"
+                      placeholder={t("Search.Placeholder")}
+                      className="pl-10 bg-[#1a1b29] border-[#2a2c3a] text-white placeholder:text-gray-400 focus-visible:ring-indigo-500"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                    {isPending && (
+                      <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                        <Loader2 className="h-4 w-4 animate-spin text-gray-400" />
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex-1 overflow-hidden">
+                  <ScrollArea className="h-full">
+                    <div className="p-6">
+                      <div className="flex items-center justify-between mb-6">
+                        <h3 className="text-xl font-semibold">
+                          {t("Categories." + capitalizeFirstLetter(activeCategory, true))}
+                        </h3>
+
+                        <div className="text-sm text-gray-400">
+                          {t("PluginCount", { count: total })}
+                        </div>
                       </div>
 
-                      {plugins.length < total && (
-                        <div className="mt-8 flex justify-center">
-                          <Button
-                            variant="outline"
-                            className="border-[#2a2c3a] text-white hover:bg-[#2a2c3a]"
-                            onClick={handleLoadMore}
-                            disabled={isPending}
-                          >
-                            {isPending ? (
-                              <>
-                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                {t("LoadMore.Loading")}
-                              </>
-                            ) : (
-                              t("LoadMore.Button")
-                            )}
-                          </Button>
+                      {initialLoading ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                          {[...Array(6)].map((_, i) => (
+                            <PluginCardSkeleton key={i} />
+                          ))}
                         </div>
-                      )}
-                    </>
-                  )}
-                </div>
-              </ScrollArea>
-            </div>
+                      ) : plugins.length === 0 ? (
+                        <div className="flex flex-col items-center justify-center py-12 text-center">
+                          <div className="w-16 h-16 bg-[#2a2c3a] rounded-full flex items-center justify-center mb-4">
+                            <Search className="h-8 w-8 text-gray-400" />
+                          </div>
+                          <h4 className="text-lg font-medium mb-2">{t("NoResults.Title")}</h4>
+                          <p className="text-gray-400 max-w-md">
+                            {t("NoResults.Description")}
+                          </p>
+                        </div>
+                      ) : (
+                        <>
+                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {plugins.map((plugin) => (
+                              <PluginCard
+                                key={plugin.id}
+                                plugin={plugin}
+                                isSelected={isPluginSelected(plugin.id)}
+                                onAdd={handleAddPlugin}
+                                onRemove={handleRemovePlugin}
+                                onView={setPluginView}
+                                liked={likedList.includes(plugin.id)}
+                              />
+                            ))}
+                          </div>
 
-            <div className="p-4 border-t border-[#2a2c3a] bg-[#12131f]">
-              <div className="flex items-center justify-between">
-                <p className="text-sm text-gray-400">{t("Footer.Selected", { count: selectedPlugins.length })}</p>
-                <Button
-                  variant="outline"
-                  onClick={() => onOpenChange(false)}
-                  className="bg-[#1a1b29] text-white border-[#2a2c3a] hover:bg-[#2a2c3a] hover:text-white"
-                >
-                  {t("Footer.Done")}
-                </Button>
+                          {plugins.length < total && (
+                            <div className="mt-8 flex justify-center">
+                              <Button
+                                variant="outline"
+                                className="border-[#2a2c3a] text-white hover:bg-[#2a2c3a]"
+                                onClick={handleLoadMore}
+                                disabled={isPending}
+                              >
+                                {isPending ? (
+                                  <>
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    {t("LoadMore.Loading")}
+                                  </>
+                                ) : (
+                                  t("LoadMore.Button")
+                                )}
+                              </Button>
+                            </div>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  </ScrollArea>
+                </div>
+
+                <div className="p-4 border-t border-[#2a2c3a] bg-[#12131f]">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm text-gray-400">{t("Footer.Selected", { count: selectedPlugins.length })}</p>
+                    <Button
+                      variant="outline"
+                      onClick={() => onOpenChange(false)}
+                      className="bg-[#1a1b29] text-white border-[#2a2c3a] hover:bg-[#2a2c3a] hover:text-white"
+                    >
+                      {t("Footer.Done")}
+                    </Button>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </DialogContent>
     </Dialog>
