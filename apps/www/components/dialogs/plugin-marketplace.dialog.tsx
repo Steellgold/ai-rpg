@@ -13,7 +13,7 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Component } from "@/lib/types/component";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PluginType } from "@imagine/types/plugin";
@@ -21,7 +21,7 @@ import { useDebounce } from "@/lib/hooks/use-debounce";
 import { searchPlugins } from "@/lib/actions/plugin-search";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
-import { capitalizeFirstLetter } from "@/lib/utils";
+import { capitalizeFirstLetter, cn } from "@/lib/utils";
 
 export type Plugin = {
   id: string
@@ -55,12 +55,13 @@ type PluginMarketplaceProps = {
   selectedPlugins?: string[]
 }
 
+type Category = "NARRATIVE" | "INTRIGUE" | "CHARACTER" | "WORLD" | "OBJECT" | "THEME" | "STYLE" | "MECHANICS" | "all";
+
 export const PluginMarketplace: Component<PluginMarketplaceProps> = ({
   open, onOpenChange,
   onAdd, onRemove,
   selectedPlugins = [],
 }) => {
-  type Category = "NARRATIVE" | "INTRIGUE" | "CHARACTER" | "WORLD" | "OBJECT" | "THEME" | "STYLE" | "MECHANICS" | "all"
 
   const t = useTranslations("MarketplaceDialog");
 
@@ -71,24 +72,24 @@ export const PluginMarketplace: Component<PluginMarketplaceProps> = ({
   const [page, setPage] = useState(1)
   const [isPending, startTransition] = useTransition()
   const [initialLoading, setInitialLoading] = useState(true)
-  
+
   const debouncedQuery = useDebounce(searchQuery, 300)
-  
+
   const loadPlugins = async (query: string, category: string, pageNum: number = 1, append: boolean = false) => {
     try {
       let pluginType: PluginType | undefined
       if (category !== "all") {
         pluginType = category.toUpperCase() as PluginType
       }
-      
+
       const result = await searchPlugins({ query, type: pluginType, limit: 12, offset: (pageNum - 1) * 12 })
-      
+
       if (append) {
         setPlugins(prev => [...prev, ...result.plugins])
       } else {
         setPlugins(result.plugins)
       }
-      
+
       setTotal(result.total)
       setInitialLoading(false)
     } catch (error) {
@@ -96,20 +97,20 @@ export const PluginMarketplace: Component<PluginMarketplaceProps> = ({
       setInitialLoading(false)
     }
   }
-  
+
   useEffect(() => {
     if (open) loadPlugins("", "all")
   }, [open])
-  
+
   useEffect(() => {
     if (!open) return
-    
+
     setPage(1)
     startTransition(() => {
       loadPlugins(debouncedQuery, activeCategory)
     })
   }, [debouncedQuery, activeCategory, open])
-  
+
   const handleLoadMore = () => {
     const nextPage = page + 1
     setPage(nextPage)
@@ -133,64 +134,45 @@ export const PluginMarketplace: Component<PluginMarketplaceProps> = ({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className="max-w-6xl min-w-[60vw] p-0 overflow-hidden bg-[#0a0b14] text-white border-[#2a2c3a]"
+        className="max-w-6xl min-w-[60vw] max-h-screen overflow-y-auto p-0 bg-[#0a0b14] text-white border-[#2a2c3a]"
         onInteractOutside={(e) => e.preventDefault()}
         showCloseButton={false}
       >
-        <div className="flex h-[85vh]">
+        <div className="flex flex-col h-[85vh] md:flex-row">
           {/* Left sidebar */}
-          <div className="w-64 border-r border-[#2a2c3a] p-6">
+          <div className="w-full md:w-64 border-r border-[#2a2c3a] p-6">
             <h3 className="text-lg font-semibold mb-4">{t("Sidebar.Title")}</h3>
-            <div className="space-y-1">
-              <PluginCategoryButton
-                onClick={() => setActiveCategory("all")}
-                icon={Globe} label={t("Categories.All")} isActive={activeCategory === "all"} />
+            <div className="md:hidden">
+              <ScrollArea className="w-96 whitespace-nowrap rounded-md border border-[#2a2c3a] bg-[#12131f]">
+                <div className="flex w-max space-x-4 p-2">
+                  <CategoriesButtons
+                    setActiveCategory={(category) => setActiveCategory(category)}
+                    activeCategory={activeCategory}
+                  />
+                </div>
+                <ScrollBar orientation="horizontal" />
+              </ScrollArea>
+            </div>
 
-              <PluginCategoryButton
-                onClick={() => setActiveCategory("NARRATIVE")}
-                icon={FileText} label={t("Categories.Narrative")} isActive={activeCategory === "NARRATIVE"} />
-
-              <PluginCategoryButton
-                onClick={() => setActiveCategory("INTRIGUE")}
-                icon={MessageCircleQuestion} label={t("Categories.Intrigue")} isActive={activeCategory === "INTRIGUE"} />
-
-              <PluginCategoryButton
-                onClick={() => setActiveCategory("CHARACTER")}
-                icon={User} label={t("Categories.Character")} isActive={activeCategory === "CHARACTER"} />
-
-              <PluginCategoryButton
-                onClick={() => setActiveCategory("WORLD")}
-                icon={MountainSnow} label={t("Categories.World")} isActive={activeCategory === "WORLD"} />
-
-              <PluginCategoryButton
-                onClick={() => setActiveCategory("OBJECT")}
-                icon={PencilRuler} label={t("Categories.Object")} isActive={activeCategory === "OBJECT"} />
-
-              <PluginCategoryButton
-                onClick={() => setActiveCategory("THEME")}
-                icon={SwatchBook} label={t("Categories.Theme")} isActive={activeCategory === "THEME"} />
-
-              <PluginCategoryButton
-                onClick={() => setActiveCategory("STYLE")}
-                icon={Briefcase} label={t("Categories.Style")} isActive={activeCategory === "STYLE"} />
-
-              <PluginCategoryButton
-                onClick={() => setActiveCategory("MECHANICS")}
-                icon={Wand} label={t("Categories.Mechanics")} isActive={activeCategory === "MECHANICS"} />
+            <div className="hidden md:flex md:flex-col space-y-1">
+              <CategoriesButtons
+                setActiveCategory={(category) => setActiveCategory(category)}
+                activeCategory={activeCategory}
+              />
             </div>
           </div>
 
           {/* Main content */}
           <div className="flex-1 flex flex-col">
             <div className="p-6 border-b border-[#2a2c3a]">
-              <div className="flex items-center justify-between mb-6 border border-[#2a2c3a] rounded-lg p-4 bg-[#12131f]">
+              <div className="flex flex-col md:flex-row items-center justify-between mb-6 border border-[#2a2c3a] rounded-lg p-4 bg-[#12131f]">
                 <div>
                   <h2 className="text-2xl font-bold">{t("Creator.Title")}</h2>
                   <p className="text-gray-400 mt-1 max-w-2xl">
                     {t("Creator.Description")}
                   </p>
                 </div>
-                <Button className="bg-indigo-600 hover:bg-indigo-700 text-white" onClick={() => onOpenChange(false)}>
+                <Button className="mt-4 md:mt-0 md:ml-4 bg-indigo-600 hover:bg-indigo-700 text-white" onClick={() => onOpenChange(false)}>
                   {t("Creator.Button")}
                 </Button>
               </div>
@@ -218,7 +200,7 @@ export const PluginMarketplace: Component<PluginMarketplaceProps> = ({
                     <h3 className="text-xl font-semibold">
                       {t("Categories." + capitalizeFirstLetter(activeCategory, true))}
                     </h3>
-                    
+
                     <div className="text-sm text-gray-400">
                       {t("PluginCount", { count: total })}
                     </div>
@@ -253,11 +235,11 @@ export const PluginMarketplace: Component<PluginMarketplaceProps> = ({
                           />
                         ))}
                       </div>
-                      
+
                       {plugins.length < total && (
                         <div className="mt-8 flex justify-center">
-                          <Button 
-                            variant="outline" 
+                          <Button
+                            variant="outline"
                             className="border-[#2a2c3a] text-white hover:bg-[#2a2c3a]"
                             onClick={handleLoadMore}
                             disabled={isPending}
@@ -298,6 +280,55 @@ export const PluginMarketplace: Component<PluginMarketplaceProps> = ({
   )
 }
 
+type CategoriesButtonsProps = {
+  setActiveCategory: (category: Category) => void;
+  activeCategory: string;
+}
+
+const CategoriesButtons: Component<CategoriesButtonsProps> = ({ setActiveCategory, activeCategory }) => {
+  const t = useTranslations("MarketplaceDialog");
+
+  return (
+    <>
+      <PluginCategoryButton
+      onClick={() => setActiveCategory("all")}
+      icon={Globe} label={t("Categories.All")} isActive={activeCategory === "all"} />
+
+      <PluginCategoryButton
+        onClick={() => setActiveCategory("NARRATIVE")}
+        icon={FileText} label={t("Categories.Narrative")} isActive={activeCategory === "NARRATIVE"} />
+
+      <PluginCategoryButton
+        onClick={() => setActiveCategory("INTRIGUE")}
+        icon={MessageCircleQuestion} label={t("Categories.Intrigue")} isActive={activeCategory === "INTRIGUE"} />
+
+      <PluginCategoryButton
+        onClick={() => setActiveCategory("CHARACTER")}
+        icon={User} label={t("Categories.Character")} isActive={activeCategory === "CHARACTER"} />
+
+      <PluginCategoryButton
+        onClick={() => setActiveCategory("WORLD")}
+        icon={MountainSnow} label={t("Categories.World")} isActive={activeCategory === "WORLD"} />
+
+      <PluginCategoryButton
+        onClick={() => setActiveCategory("OBJECT")}
+        icon={PencilRuler} label={t("Categories.Object")} isActive={activeCategory === "OBJECT"} />
+
+      <PluginCategoryButton
+        onClick={() => setActiveCategory("THEME")}
+        icon={SwatchBook} label={t("Categories.Theme")} isActive={activeCategory === "THEME"} />
+
+      <PluginCategoryButton
+        onClick={() => setActiveCategory("STYLE")}
+        icon={Briefcase} label={t("Categories.Style")} isActive={activeCategory === "STYLE"} />
+
+      <PluginCategoryButton
+        onClick={() => setActiveCategory("MECHANICS")}
+        icon={Wand} label={t("Categories.Mechanics")} isActive={activeCategory === "MECHANICS"} />
+    </>
+  )
+}
+
 type PluginCardProps = {
   plugin: Plugin
   isSelected: boolean
@@ -310,10 +341,10 @@ const PluginCard: Component<PluginCardProps> = ({
   onAdd, onRemove,
 }) => {
   const t = useTranslations("MarketplaceDialog");
-  
+
   const renderPrice = () => {
     if (!plugin.pricing) return null;
-    
+
     switch (plugin.pricing) {
       case 'FREE':
         return (
@@ -363,8 +394,8 @@ const PluginCard: Component<PluginCardProps> = ({
           <div className="w-5 h-5 rounded-full bg-indigo-600 flex items-center justify-center text-xs mr-2">
             {plugin.author.avatar ? (
               <Image
-                src={plugin.author.avatar} 
-                alt={plugin.author.name} 
+                src={plugin.author.avatar}
+                alt={plugin.author.name}
                 className="w-full h-full rounded-full object-cover"
                 width={20}
                 height={20}
@@ -376,13 +407,13 @@ const PluginCard: Component<PluginCardProps> = ({
           <span className="text-sm text-gray-400">{plugin.author.name}</span>
         </div>
         <p className="text-sm text-gray-300 mb-4 line-clamp-2">{plugin.description}</p>
-        
+
         {plugin.tags && plugin.tags.length > 0 && (
           <div className="flex flex-wrap gap-1 mb-3">
             {plugin.tags.slice(0, 3).map(tag => (
-              <Badge 
-                key={tag.id} 
-                variant="outline" 
+              <Badge
+                key={tag.id}
+                variant="outline"
                 className="text-xs bg-[#1a1b29] border-[#2a2c3a] text-gray-300"
               >
                 {tag.name}
@@ -395,7 +426,7 @@ const PluginCard: Component<PluginCardProps> = ({
             )}
           </div>
         )}
-        
+
         <div className="flex items-center justify-between mt-auto">
           <div className="flex items-center space-x-3">
             <div className="flex items-center text-gray-400 text-sm">
@@ -437,7 +468,8 @@ const PluginCard: Component<PluginCardProps> = ({
           className="w-full bg-[#1a1b29] text-gray-300 hover:bg-[#2a2c3a]"
           onClick={() => window.open(`/plugins/${plugin.id}`, "_blank")}
         >
-          {t("Plugin.Actions.View")}
+          <span className="hidden sm:inline">{t("Plugin.Actions.ViewFull")}</span>
+          <span className="inline sm:hidden">{t("Plugin.Actions.View")}</span>
         </Button>
       </div>
     </div>
@@ -478,11 +510,16 @@ type CategoryButtonProps = {
 const PluginCategoryButton: Component<CategoryButtonProps> = ({ icon: Icon, label, isActive, onClick }) => {
   return (
     <button
-      className={`flex items-center w-full rounded-md px-3 py-2 text-sm ${isActive ? "bg-[#3b3d51] text-white" : "text-gray-300 hover:bg-[#2a2c3a]"}`}
+      className={cn(
+        "flex items-center w-full rounded-md px-3 py-2 text-sm",
+        `${isActive ? "bg-[#3b3d51] text-white" : "text-gray-300 hover:bg-[#2a2c3a]"}`
+      )}
       onClick={onClick}
     >
-      <Icon className="mr-2 h-4 w-4" />
-      {label}
+      <div className="flex items-center">
+        <Icon className="mr-2 h-4 w-4" />
+        <span className="truncate">{label}</span>
+      </div>
     </button>
   )
 }

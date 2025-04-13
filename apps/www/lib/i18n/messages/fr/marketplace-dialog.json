@@ -47,7 +47,8 @@
       "Actions": {
         "Add": "Ajouter",
         "Remove": "Retirer",
-        "View": "Voir le plugin"
+        "ViewFull": "Voir le plugin",
+        "View": "Voir"
       }
     }
   }
