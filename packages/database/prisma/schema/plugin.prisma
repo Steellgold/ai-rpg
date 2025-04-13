@@ -32,7 +32,8 @@ model Plugin {
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt
   downloads         Int                @default(0)
-  likes             Int                @default(0)
+  likes             PluginLike[]
+  views             Int                @default(0)
   rating            Float?
   //
   author            User               @relation(fields: [authorId], references: [id], onDelete: Cascade)
@@ -78,6 +79,20 @@ model Plugin {
   @@index([status])
   @@index([featured])
   @@index([pricing])
+}
+
+model PluginLike {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  // 
+  plugin    Plugin   @relation(fields: [pluginId], references: [id], onDelete: Cascade)
+  pluginId  String
+  // 
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+
+  @@unique([pluginId, userId])
+  @@index([pluginId])
 }
 
 model PluginPurchase {

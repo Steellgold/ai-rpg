@@ -20,6 +20,7 @@ model User {
   purchasedPlugins      PluginPurchase[]
   reviews               Review[]
   collection            Collection[]
+  pluginLikes           PluginLike[]
   //
   creditTransactions    CreditTransaction[]
   payments              Payment[]
