@@ -1,4 +1,7 @@
-import { PluginType } from "@imagine/types/plugin"
+import { PluginType as DBPluginType } from "@imagine/database/prisma-client";
+import { PluginType as UIPluginType } from "@imagine/types/plugin";
+
+type PluginType = UIPluginType | DBPluginType | string;
 
 export const getPluginGradient = (type: PluginType): string => {
   const gradients: Record<PluginType, string> = {
