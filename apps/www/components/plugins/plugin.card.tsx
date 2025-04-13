@@ -8,15 +8,18 @@ import { UIPlugin } from "@/lib/actions/plugin-search";
 import { Button } from "../ui/button";
 
 type PluginCardProps = {
-  plugin: UIPlugin
-  isSelected: boolean
-  onAdd: (plugin: UIPlugin) => void
-  onRemove: (pluginId: string) => void
+  plugin: UIPlugin;
+  isSelected: boolean;
+  onAdd: (plugin: UIPlugin) => void;
+  onRemove: (pluginId: string) => void;
+  onView?: (plugin: UIPlugin) => void;
+  liked?: boolean;
 }
 
 export const PluginCard: Component<PluginCardProps> = ({
   plugin, isSelected,
-  onAdd, onRemove,
+  onAdd, onRemove, onView,
+  liked = false
 }) => {
   const t = useTranslations("MarketplaceDialog");
 
@@ -107,10 +110,16 @@ export const PluginCard: Component<PluginCardProps> = ({
 
         <div className="flex items-center justify-between mt-auto">
           <div className="flex items-center space-x-3">
-            <div className="flex items-center text-gray-400 text-sm">
-              <Heart className="h-3.5 w-3.5 mr-1" />
-              {plugin._count.likes.toLocaleString()}
-            </div>
+            {liked ? (
+              <Badge className="bg-red-500 text-white border-none" variant={"outline"}>
+                <Heart className="fill-current h-3.5 w-3.5 mr-1" /> {plugin._count.likes.toLocaleString()}
+              </Badge>
+            ) : (
+              <div className="flex items-center text-gray-400 text-sm">
+                <Heart className="h-3.5 w-3.5 mr-1" />
+                {plugin._count.likes.toLocaleString()}
+              </div>
+            )}
             <div className="flex items-center text-gray-400 text-sm">
               <BarChart3 className="h-3.5 w-3.5 mr-1" />
               {plugin.downloads.toLocaleString()}
@@ -144,7 +153,7 @@ export const PluginCard: Component<PluginCardProps> = ({
         <Button
           variant="ghost"
           className="w-full bg-[#1a1b29] text-gray-300 hover:bg-[#2a2c3a]"
-          onClick={() => window.open(`/plugins/${plugin.id}`, "_blank")}
+          onClick={() => onView ? onView(plugin) : window.open(`/plugin/${plugin.id}`, "_blank")}
         >
           <span className="hidden sm:inline">{t("Plugin.Actions.ViewFull")}</span>
           <span className="inline sm:hidden">{t("Plugin.Actions.View")}</span>
