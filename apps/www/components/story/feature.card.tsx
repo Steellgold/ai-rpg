@@ -36,28 +36,22 @@ export const FeatureCard: Component<FeatureCardProps> = ({
     className
 }) => {
   return (
-    <div className={cn("flex flex-col justify-between gap-2 border border-gray-500/20 p-2 rounded-md", className
-      // {
-      //   [`bg-${activeColor.split('-')[1]}-500/10 border-${activeColor.split('-')[1]}-400/20`]: isActive
-      // }
-    )}>
+    <div className={cn("flex flex-col justify-between gap-2 border border-gray-500/20 p-2 rounded-md", className)}>
       <span className="text-sm text-gray-400">{description}</span>
-      <div>
-        <FeatureToggle
-          Icon={Icon}
-          IconToggled={IconToggled}
-          text={text}
-          textToggled={title}
-          isActive={isActive}
-          onClick={onClick}
-          activeColor={activeColor}
-          activeBorderColor={activeBorderColor}
-          activeHoverColor={activeHoverColor}
-          loadingColor={loadingColor}
-          className={"rounded-md"}
-          disabled={isLoading}
-        />
-      </div>
+      <FeatureToggle
+        Icon={Icon}
+        IconToggled={IconToggled}
+        text={text}
+        textToggled={title}
+        isActive={isActive}
+        onClick={onClick}
+        activeColor={activeColor}
+        activeBorderColor={activeBorderColor}
+        activeHoverColor={activeHoverColor}
+        loadingColor={loadingColor}
+        className={"rounded-md"}
+        disabled={isLoading}
+      />
     </div>
   );
 };
