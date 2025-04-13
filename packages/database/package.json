@@ -7,7 +7,9 @@
   "exports": {
     "./prisma": "./src/prisma/index.ts",
     "./supabase": "./src/supabase/index.ts",
-    "./supabase-types": "./src/supabase/types.ts"
+    "./supabase-types": "./src/supabase/types.ts",
+
+    "./prisma-client": "./prisma/generated/client.js"
   },
   "prisma": {
     "schema": "./prisma/schema"
