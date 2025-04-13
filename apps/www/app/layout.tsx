@@ -8,6 +8,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { metadata as defaultMetadata } from "@/components/metadata";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { Navbar } from "@/components/naviguation/navbar";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
@@ -24,6 +25,7 @@ const RootLayout: AsyncComponent<PropsWithChildren> = async({ children }) => {
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} forcedTheme="dark" disableTransitionOnChange>
           <NextIntlClientProvider messages={messages} locale={locale}>
             <Navbar />
+            <Toaster richColors />
 
             {children}
           </NextIntlClientProvider>
