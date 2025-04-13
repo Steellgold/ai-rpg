@@ -16,10 +16,9 @@ model User {
   stories               Story[]
   jobs                  Job[]
   //
-  plugins               Plugin[]
+  ownedPlugins          Plugin[]
   purchasedPlugins      PluginPurchase[]
   reviews               Review[]
-  collection            Collection[]
   pluginLikes           PluginLike[]
   //
   creditTransactions    CreditTransaction[]

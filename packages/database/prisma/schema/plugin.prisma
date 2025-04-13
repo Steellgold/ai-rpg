@@ -17,67 +17,54 @@ enum PluginType {
 
 enum Pricing {
   FREE
-  PREMIUM
+  CREDITS
   PAID
 }
 
 model Plugin {
-  id                String             @id @default(cuid())
+  id                String           @id @default(cuid())
   title             String
-  description       String             @db.Text
-  icon              String?
-  banner            String?
+  description       String           @db.Text
+  emoji             String           @default("🪶")
   //
-  version           String             @default("1.0.0")
-  createdAt         DateTime           @default(now())
-  updatedAt         DateTime           @updatedAt
-  downloads         Int                @default(0)
+  downloads         Int              @default(0)
   likes             PluginLike[]
-  views             Int                @default(0)
+  views             Int              @default(0)
   rating            Float?
   //
-  author            User               @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  author            User             @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId          String
+  // 
   reviews           Review[]
   usages            Usage[]
-  collections       CollectionPlugin[]
   purchases         PluginPurchase[]
   //
-  configuration     Json
-  code              String             @db.Text
-  examples          String?            @db.Text
-  //
-  type              PluginType         @default(NARRATIVE)
+  type              PluginType       @default(NARRATIVE)
   tags              Tag[]
   //
-  status            PluginStatus       @default(PENDING)
-  approved          Boolean            @default(false)
-  featured          Boolean            @default(false)
-  isOfficial        Boolean            @default(false)
+  status            PluginStatus     @default(PENDING)
+  approved          Boolean          @default(false)
+  isFeatured        Boolean          @default(false)
+  isOfficial        Boolean          @default(false)
   //
-  prompt            String?            @db.Text
+  prompt            String?          @db.Text
   parameters        Json?
   //
-  pricing           Pricing            @default(FREE)
-  creditPrice       Int?
-  dollarPrice       Float?
-  usageCredits      Int?
-  promptTokens      Int?
+  pricing           Pricing          @default(FREE)
+  price             Int?
+  usage             Int?
   //
   stripe_product_id String?
   stripe_price_id   String?
   //
-  creditsEarned     Int                @default(0)
-  moneyEarned       Float              @default(0)
-  purchaseCount     Int                @default(0)
-  //
-  testCases         TestCase[]
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
 
   //
   @@index([type])
   @@index([authorId])
   @@index([status])
-  @@index([featured])
+  @@index([isFeatured])
   @@index([pricing])
 }
 
@@ -97,14 +84,16 @@ model PluginLike {
 
 model PluginPurchase {
   id                        String    @id @default(cuid())
+  // 
   plugin                    Plugin    @relation(fields: [pluginId], references: [id])
   pluginId                  String
+  // 
   user                      User      @relation(fields: [userId], references: [id])
   userId                    String
+  // 
   purchaseDate              DateTime  @default(now())
   pricing                   Pricing
-  creditsSpent              Int?
-  moneySpent                Float?
+  spent                     Int?
   //
   hasBeenUsed               Boolean   @default(false)
   firstUsedAt               DateTime?
@@ -158,41 +147,4 @@ model Usage {
   //
   @@index([pluginId])
   @@index([storyId])
-}
-
-model Collection {
-  id          String             @id @default(cuid())
-  name        String
-  description String?            @db.Text
-  public      Boolean            @default(true)
-  createdAt   DateTime           @default(now())
-  updatedAt   DateTime           @updatedAt
-  user        User               @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId      String
-  plugins     CollectionPlugin[]
-
-  //
-  @@index([userId])
-}
-
-model CollectionPlugin {
-  collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
-  collectionId String
-  plugin       Plugin     @relation(fields: [pluginId], references: [id], onDelete: Cascade)
-  pluginId     String
-  addedAt      DateTime   @default(now())
-
-  //
-  @@id([collectionId, pluginId])
-}
-
-model TestCase {
-  id       String @id @default(cuid())
-  input    Json
-  expected Json
-  plugin   Plugin @relation(fields: [pluginId], references: [id], onDelete: Cascade)
-  pluginId String
-
-  //
-  @@index([pluginId])
 }
