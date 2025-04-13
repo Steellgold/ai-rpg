@@ -15,14 +15,6 @@ enum PluginType {
   MECHANICS
 }
 
-enum PluginRarity {
-  COMMON
-  UNCOMMON
-  RARE
-  EPIC
-  LEGENDARY
-}
-
 enum Pricing {
   FREE
   PREMIUM
@@ -56,7 +48,6 @@ model Plugin {
   //
   type              PluginType         @default(NARRATIVE)
   tags              Tag[]
-  rarity            PluginRarity       @default(COMMON)
   //
   status            PluginStatus       @default(PENDING)
   approved          Boolean            @default(false)
@@ -68,7 +59,7 @@ model Plugin {
   //
   pricing           Pricing            @default(FREE)
   creditPrice       Int?
-  euroPrice         Float?
+  dollarPrice       Float?
   usageCredits      Int?
   promptTokens      Int?
   //
