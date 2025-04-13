@@ -12,7 +12,7 @@ export const getPluginGradient = (type: PluginType): string => {
     OBJECT: "from-yellow-500 via-amber-500 to-orange-600",
     THEME: "from-violet-600 via-purple-600 to-indigo-500",
     STYLE: "from-fuchsia-500 via-pink-600 to-rose-500",
-    MECHANICS: "from-slate-600 via-gray-500 to-blue-gray-600"
+    MECHANICS: "from-purple-500 via-indigo-500 to-blue-600"
   }
   
   return gradients[type] || "from-blue-500 to-purple-600"

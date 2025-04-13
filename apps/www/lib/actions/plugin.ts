@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { auth } from "../supabase/auth";
 import { prisma } from "@imagine/database/prisma";
+import { Prisma } from "@imagine/database/prisma-client";
 
 export const fetchPluginDetails = async(pluginId: string) => {
   try {
@@ -63,11 +64,12 @@ export const fetchPluginDetails = async(pluginId: string) => {
 
     const relatedPlugins = await prisma.plugin.findMany({
       where: {
-        id: { not: pluginId }, // Exclude current plugin
+        id: { not: pluginId },
         approved: true,
         OR: [
           { type: plugin.type },
-          { tags: {
+          {
+            tags: {
               some: {
                 id: {
                   in: plugin.tags.map(tag => tag.id)
@@ -98,10 +100,10 @@ export const fetchPluginDetails = async(pluginId: string) => {
         }
       },
       orderBy: [
-        { featured: "desc" },
+        { isFeatured: "desc" },
         { downloads: "desc" }
       ],
-      take: 5 // Limit to 5 related plugins for performance
+      take: 5 // Limit to 5 related plugins
     });
 
     let isPurchased = false;
@@ -109,34 +111,33 @@ export const fetchPluginDetails = async(pluginId: string) => {
     let userCredits = 0;
 
     if (userId) {
-      const [purchase, like] = await Promise.all([
-        prisma.pluginPurchase.findUnique({
-          where: {
-            pluginId_userId: {
-              pluginId,
-              userId,
-            },
+      const purchase = await prisma.pluginPurchase.findUnique({
+        where: {
+          pluginId_userId: {
+            pluginId: plugin.id,
+            userId,
           },
-        }),
-        prisma.pluginLike.findUnique({
-          where: {
-            pluginId_userId: {
-              pluginId,
-              userId
-            },
-          },
-        })
-      ]);
-
-      const user = await prisma.user.findUnique({
-        where: { id: userId },
-        select: {
-          credits: true,
         },
       });
 
-      userCredits = user?.credits || 0; // Default to 0 if user not found
       isPurchased = !!purchase;
+
+      const user = await prisma.user.findUnique({
+        where: { id: userId },
+        select: { credits: true },
+      });
+
+      userCredits = user?.credits || 0;
+
+      const like = await prisma.pluginLike.findUnique({
+        where: {
+          pluginId_userId: {
+            pluginId: plugin.id,
+            userId,
+          },
+        },
+      });
+
       isLiked = !!like;
     }
 
@@ -152,11 +153,114 @@ export const fetchPluginDetails = async(pluginId: string) => {
         isLiked,
       },
       relatedPlugins,
-      userCredits
+      userCredits,
     };
   } catch (error) {
     console.error("Error fetching plugin details:", error);
     throw new Error("Failed to load plugin details");
+  }
+}
+
+export type RelatedPlugin = Prisma.PluginGetPayload<{
+  include: {
+    author: {
+      select: {
+        id: true;
+        display_name: true;
+        image_url: true;
+      };
+    };
+    tags: {
+      select: {
+        id: true;
+        name: true;
+      };
+    };
+    _count: {
+      select: {
+        likes: true;
+      };
+    };
+  };
+}>;
+
+export type FetchRelatedPluginsResult = RelatedPlugin[];
+
+export const fetchRelatedPlugins = async(pluginId: string): Promise<FetchRelatedPluginsResult> => {
+  try {
+    const session = await auth();
+    const userId = session?.user?.id;
+
+    const referencePlugin = await prisma.plugin.findUnique({
+      where: {
+        id: pluginId,
+        OR: [
+          { approved: true },
+          { authorId: userId }
+        ]
+      },
+      select: {
+        type: true,
+        tags: {
+          select: {
+            id: true
+          }
+        }
+      }
+    });
+
+    if (!referencePlugin) {
+      throw new Error("Plugin not found or not accessible");
+    }
+
+    const relatedPlugins = await prisma.plugin.findMany({
+      where: {
+        id: { not: pluginId },
+        approved: true,
+        OR: [
+          { type: referencePlugin.type },
+          {
+            tags: {
+              some: {
+                id: {
+                  in: referencePlugin.tags.map(tag => tag.id)
+                }
+              }
+            }
+          }
+        ]
+      },
+      include: {
+        author: {
+          select: {
+            id: true,
+            display_name: true,
+            image_url: true
+          }
+        },
+        tags: {
+          select: {
+            id: true,
+            name: true
+          }
+        },
+        _count: {
+          select: {
+            likes: true
+          }
+        }
+      },
+      orderBy: [
+        { isFeatured: "desc" },
+        { downloads: "desc" }
+      ],
+      take: 5
+    });
+
+    return relatedPlugins;
+  } catch (error) {
+    console.error("Error fetching related plugins:", error);
+    throw new Error("Failed to load related plugins");
   }
 }
 

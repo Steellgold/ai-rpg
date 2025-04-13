@@ -132,23 +132,39 @@ export const searchPlugins = async ({
   }
 }
 
-export const countLikedPlugins = async (userId?: string): Promise<number> => {
-  if (!userId) return 0;
+export const getLikedPlugins = async (userId?: string): Promise<{ count: number, likedPlugins: string[] }> => {
+  if (!userId) return { count: 0, likedPlugins: [] };
   
   try {
-    const count = await prisma.pluginLike.count({
+    // const count = await prisma.pluginLike.count({
+    //   where: {
+    //     userId: userId,
+    //     plugin: {
+    //       approved: true,
+    //       status: "APPROVED"
+    //     }
+    //   }
+    // });
+
+    const likedPlugins = await prisma.pluginLike.findMany({
       where: {
         userId: userId,
         plugin: {
           approved: true,
           status: "APPROVED"
         }
+      },
+      select: {
+        pluginId: true
       }
     });
-    
-    return count;
+
+    return {
+      count: likedPlugins.length,
+      likedPlugins: likedPlugins.map(like => like.pluginId)
+    }
   } catch (error) {
     console.error("Error counting liked plugins:", error);
-    return 0;
+    return { count: 0, likedPlugins: [] };
   }
 }
