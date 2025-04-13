@@ -9,11 +9,15 @@ export const useRecordVoice = (): {
   stopRecording: () => void;
   loading: boolean;
   text: string;
+  error: string | null;
+  disabled: boolean;
 } => {
   const [text, setText] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
   const [recording, setRecording] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [disabled, setDisabled] = useState<boolean>(false);
   const isRecording = useRef<boolean>(false);
   const chunks = useRef<Blob[]>([]);
 
@@ -22,11 +26,13 @@ export const useRecordVoice = (): {
       isRecording.current = true;
       mediaRecorder.start();
       setRecording(true);
+    } else {
+      setError("MediaRecorder not initialized. Please check your microphone access.");
     }
   };
 
   const stopRecording = (): void => {
-    if (mediaRecorder) {
+    if (mediaRecorder && mediaRecorder.state !== 'inactive') {
       isRecording.current = false;
       mediaRecorder.stop();
       setRecording(false);
@@ -39,6 +45,7 @@ export const useRecordVoice = (): {
     if (!base64data) {
       console.error("No audio data available");
       setLoading(false);
+      setError("No audio data available. Please try again.");
       return;
     }
     
@@ -58,6 +65,7 @@ export const useRecordVoice = (): {
         const errorData = await response.json();
         console.error("API error:", errorData);
         setLoading(false);
+        setError(`Error API: ${response.status}`);
         throw new Error(`API error: ${response.status}`);
       }
       
@@ -65,7 +73,9 @@ export const useRecordVoice = (): {
       setText(data.text);
       setLoading(false);
     } catch (error) {
+      setError(`Erreur: ${error instanceof Error ? error.message : "Unknown error"}`);
       console.error("Error in getText:", error);
+      setLoading(false);
     }
   };
 
@@ -76,7 +86,6 @@ export const useRecordVoice = (): {
     recorder.onstart = (): void => {
       console.log("Recording started");
       createMediaStream(stream, isRecording.current, (peak) => {
-        // Optionally use peak levels for UI updates
         console.log("Audio peak:", peak);
       });
       chunks.current = [];
@@ -99,16 +108,26 @@ export const useRecordVoice = (): {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
+      console.log("Checking for microphone support");
+      
+      if (!navigator.mediaDevices) {
+        console.error("MediaDevices API not supported");
+        setError("API MediaDevices not supported. Please check your browser.");
+        setDisabled(true);
+        return;
+      }
+      
       console.log("Requesting microphone access");
       navigator.mediaDevices
         .getUserMedia({ audio: true })
         .then(initialMediaRecorder)
         .catch(error => {
           console.error("Error accessing microphone:", error);
+          setError("Error accessing microphone. Please check permissions.");
+          setDisabled(true);
         });
     }
     
-    // Cleanup function
     return () => {
       if (mediaRecorder && mediaRecorder.state !== 'inactive') {
         mediaRecorder.stop();
@@ -116,5 +135,5 @@ export const useRecordVoice = (): {
     };
   }, []);
 
-  return { recording, startRecording, stopRecording, text, loading };
+  return { recording, startRecording, stopRecording, text, loading, error, disabled };
 };

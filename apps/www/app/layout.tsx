@@ -21,7 +21,7 @@ const RootLayout: AsyncComponent<PropsWithChildren> = async({ children }) => {
   return (
     <html lang={locale} style={{ scrollBehavior: "smooth"}} suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}>
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} forcedTheme="dark" disableTransitionOnChange>
           <NextIntlClientProvider messages={messages} locale={locale}>
             <Navbar />
 
