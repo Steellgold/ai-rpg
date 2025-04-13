@@ -33,7 +33,7 @@ export type UIPlugin = {
   featured?: boolean
   pricing?: string
   creditPrice: number | null | undefined
-  euroPrice: number | null | undefined
+  dollarPrice: number | null | undefined
   usageCredits: number | null | undefined
   tags?: Array<{ id: string; name: string }>
   gradientColors: string
@@ -87,6 +87,11 @@ export const searchPlugins = async ({
               name: true
             }
           },
+          _count: {
+            select: {
+              likes: true
+            }
+          }
         },
         orderBy: [
           { featured: "desc" },
@@ -108,7 +113,7 @@ export const searchPlugins = async ({
         name: plugin.author.display_name,
         image_url: plugin.author.image_url || undefined
       },
-      likes: plugin.likes,
+      likes: plugin._count.likes,
       downloads: plugin.downloads,
       type: plugin.type as unknown as UIPluginType,
       isOfficial: plugin.isOfficial,
