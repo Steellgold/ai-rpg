@@ -1,48 +1,51 @@
 "use server"
 
-import { getPluginGradient } from "@/lib/plugin-gradients";
-import { prisma as db } from "@imagine/database/prisma";
+import { prisma } from "@imagine/database/prisma";
 import { PluginType, Pricing, Prisma } from "@imagine/database/prisma-client";
-import { PluginType as UIPluginType, Pricing as UIPricing } from "@imagine/types/plugin";
 
 export type SearchPluginsParams = {
-  query?: string
-  type?: UIPluginType
-  pricing?: UIPricing
-  authorId?: string
-  featured?: boolean
-  tags?: string[]
-  limit?: number
-  offset?: number
+  query?: string;
+  type?: PluginType;
+  pricing?: Pricing;
+  authorId?: string;
+  featured?: boolean;
+  tags?: string[];
+  limit?: number;
+  offset?: number;
+  liked?: boolean;
 }
 
-export type UIPlugin = {
-  id: string
-  title: string
-  description: string
-  icon: string | React.ReactNode
-  author: {
-    id: string
-    name: string
-    image_url?: string
+export type UIPlugin = Prisma.PluginGetPayload<{
+  include: {
+    _count: {
+      select: { likes: true }
+    },
+    author: {
+      select: {
+        id: true;
+        display_name: true;
+        image_url: true
+      }
+    },
+    tags: {
+      select: {
+        id: true;
+        name: true
+      }
+    },
+    likes: {
+      select: {
+        id: true;
+        userId: true
+      }
+    }
   }
-  likes: number
-  downloads: number
-  type: UIPluginType
-  isOfficial: boolean
-  featured?: boolean
-  pricing?: string
-  creditPrice: number | null | undefined
-  dollarPrice: number | null | undefined
-  usageCredits: number | null | undefined
-  tags?: Array<{ id: string; name: string }>
-  gradientColors: string
-}
+}>
 
 export const searchPlugins = async ({
   query = "", type, pricing,
   authorId, featured = false,
-  tags = [], limit = 20, offset = 0
+  tags = [], limit = 20, offset = 0, liked = false
 }: SearchPluginsParams): Promise<{
   plugins: UIPlugin[];
   total: number;
@@ -52,6 +55,14 @@ export const searchPlugins = async ({
     const where: Prisma.PluginWhereInput = {
       approved: true,
       status: "APPROVED",
+    }
+
+    if (liked) {
+      where.likes = {
+        some: {
+          userId: authorId,
+        }
+      }
     }
     
     if (query) {
@@ -64,14 +75,14 @@ export const searchPlugins = async ({
     if (type) where.type = type as unknown as PluginType
     if (pricing) where.pricing = pricing as unknown as Pricing
     if (authorId) where.authorId = authorId
-    if (featured) where.featured = true
+    if (featured) where.isFeatured = true
 
     if (tags.length > 0) {
       where.tags = { some: { name: { in: tags } } }
     }
     
     const [plugins, total] = await Promise.all([
-      db.plugin.findMany({
+      prisma.plugin.findMany({
         where,
         include: {
           author: {
@@ -91,43 +102,26 @@ export const searchPlugins = async ({
             select: {
               likes: true
             }
+          },
+          likes: {
+            select: {
+              id: true,
+              userId: true
+            }
           }
         },
         orderBy: [
-          { featured: "desc" },
+          { isFeatured: "desc" },
           { downloads: "desc" }
         ],
         skip: offset,
         take: limit
       }),
-      db.plugin.count({ where })
+      prisma.plugin.count({ where })
     ])
     
-    const formattedPlugins: UIPlugin[] = plugins.map(plugin => ({
-      id: plugin.id,
-      title: plugin.title,
-      description: plugin.description,
-      icon: plugin.icon || "🧩",
-      author: {
-        id: plugin.author.id,
-        name: plugin.author.display_name,
-        image_url: plugin.author.image_url || undefined
-      },
-      likes: plugin._count.likes,
-      downloads: plugin.downloads,
-      type: plugin.type as unknown as UIPluginType,
-      isOfficial: plugin.isOfficial,
-      featured: plugin.featured,
-      pricing: plugin.pricing as unknown as string,
-      creditPrice: plugin.creditPrice || null,
-      euroPrice: plugin.dollarPrice || null,
-      usageCredits: plugin.usageCredits || null,
-      tags: plugin.tags,
-      gradientColors: getPluginGradient(plugin.type as unknown as UIPluginType || UIPluginType.NARRATIVE)
-    }))
-    
     return {
-      plugins: formattedPlugins,
+      plugins,
       total,
       pageCount: Math.ceil(total / limit)
     }
@@ -135,5 +129,26 @@ export const searchPlugins = async ({
   } catch (error) {
     console.error("Error while searching plugins:", error)
     throw new Error("Failed to search plugins")
+  }
+}
+
+export const countLikedPlugins = async (userId?: string): Promise<number> => {
+  if (!userId) return 0;
+  
+  try {
+    const count = await prisma.pluginLike.count({
+      where: {
+        userId: userId,
+        plugin: {
+          approved: true,
+          status: "APPROVED"
+        }
+      }
+    });
+    
+    return count;
+  } catch (error) {
+    console.error("Error counting liked plugins:", error);
+    return 0;
   }
 }

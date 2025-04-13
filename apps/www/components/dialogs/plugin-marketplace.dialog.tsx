@@ -3,59 +3,39 @@
 import type React from "react";
 import { useState, useEffect, useTransition } from "react";
 import {
-  Search, Heart, BarChart3, Globe, FileText,
+  Search, Globe, FileText,
   User, Loader2, LucideIcon, PencilRuler,
   SwatchBook, MountainSnow, MessageCircleQuestion,
-  Wand, Briefcase
+  Wand, Briefcase,
+  Heart
 } from "lucide-react";
 
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Component } from "@/lib/types/component";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PluginType } from "@imagine/types/plugin";
 import { useDebounce } from "@/lib/hooks/use-debounce";
-import { searchPlugins } from "@/lib/actions/plugin-search";
-import Image from "next/image";
+import { countLikedPlugins, searchPlugins, UIPlugin } from "@/lib/actions/plugin-search";
 import { useTranslations } from "next-intl";
 import { capitalizeFirstLetter, cn } from "@/lib/utils";
-
-export type Plugin = {
-  id: string
-  title: string
-  description: string
-  icon: React.ReactNode | string
-  author: {
-    id: string
-    name: string
-    avatar?: string
-  }
-  likes: number
-  downloads: number
-  type: PluginType
-  isOfficial: boolean
-  featured?: boolean
-  pricing?: string
-  creditPrice?: number | null
-  euroPrice?: number | null
-  usageCredits?: number | null
-  tags?: Array<{ id: string; name: string }>
-  gradientColors: string
-}
+import { PluginCard } from "../plugins/plugin.card";
+import { Separator } from "../ui/separator";
+import { Badge } from "../ui/badge";
+import { useSession } from "@/lib/hooks/use-session";
 
 type PluginMarketplaceProps = {
   open: boolean
   onOpenChange: (open: boolean) => void
-  onAdd?: (plugin: Plugin) => void
+  onAdd?: (plugin: UIPlugin) => void
   onRemove?: (pluginId: string) => void
   children?: React.ReactNode
   selectedPlugins?: string[]
 }
 
-type Category = "NARRATIVE" | "INTRIGUE" | "CHARACTER" | "WORLD" | "OBJECT" | "THEME" | "STYLE" | "MECHANICS" | "all";
+type Category = "NARRATIVE" | "INTRIGUE" | "CHARACTER" | "WORLD" | "OBJECT" | "THEME" | "STYLE" | "MECHANICS" | "all" | "LIKED"
 
 export const PluginMarketplace: Component<PluginMarketplaceProps> = ({
   open, onOpenChange,
@@ -64,16 +44,30 @@ export const PluginMarketplace: Component<PluginMarketplaceProps> = ({
 }) => {
 
   const t = useTranslations("MarketplaceDialog");
+  const { loading, user } = useSession();
 
-  const [searchQuery, setSearchQuery] = useState("")
-  const [activeCategory, setActiveCategory] = useState<Category>("all")
-  const [plugins, setPlugins] = useState<Plugin[]>([])
-  const [total, setTotal] = useState(0)
-  const [page, setPage] = useState(1)
-  const [isPending, startTransition] = useTransition()
-  const [initialLoading, setInitialLoading] = useState(true)
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeCategory, setActiveCategory] = useState<Category>("all");
+  const [plugins, setPlugins] = useState<UIPlugin[]>([]);
+  const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(1);
+  const [isPending, startTransition] = useTransition();
+  const [initialLoading, setInitialLoading] = useState(true);
+
+  const [likedCount, setLikedCount] = useState(0);
 
   const debouncedQuery = useDebounce(searchQuery, 300)
+
+  const loadLikedCount = async () => {
+    if (!user?.id) return;
+    
+    try {
+      const count = await countLikedPlugins(user.id);
+      setLikedCount(count);
+    } catch (error) {
+      console.error("Error loading liked count:", error);
+    }
+  };
 
   const loadPlugins = async (query: string, category: string, pageNum: number = 1, append: boolean = false) => {
     try {
@@ -82,7 +76,13 @@ export const PluginMarketplace: Component<PluginMarketplaceProps> = ({
         pluginType = category.toUpperCase() as PluginType
       }
 
-      const result = await searchPlugins({ query, type: pluginType, limit: 12, offset: (pageNum - 1) * 12 })
+      const result = await searchPlugins({
+        query,
+        type: category === "LIKED" ? undefined : pluginType,
+        limit: 12,
+        offset: (pageNum - 1) * 12,
+        liked: category === "LIKED"
+      });
 
       if (append) {
         setPlugins(prev => [...prev, ...result.plugins])
@@ -98,6 +98,12 @@ export const PluginMarketplace: Component<PluginMarketplaceProps> = ({
     }
   }
 
+  useEffect(() => {
+    if (open && user?.id) {
+      loadLikedCount();
+    }
+  }, [open, user?.id]);
+  
   useEffect(() => {
     if (open) loadPlugins("", "all")
   }, [open])
@@ -119,7 +125,7 @@ export const PluginMarketplace: Component<PluginMarketplaceProps> = ({
     })
   }
 
-  const handleAddPlugin = (plugin: Plugin) => {
+  const handleAddPlugin = (plugin: UIPlugin) => {
     if (onAdd) onAdd(plugin)
   }
 
@@ -129,6 +135,18 @@ export const PluginMarketplace: Component<PluginMarketplaceProps> = ({
 
   const isPluginSelected = (pluginId: string) => {
     return selectedPlugins.includes(pluginId)
+  }
+
+  if (loading) {
+    return (
+      <Dialog open={open} onOpenChange={onOpenChange}>
+        <DialogContent className="max-w-6xl min-w-[60vw] max-h-screen overflow-y-auto p-0 bg-[#0a0b14] text-white border-[#2a2c3a]">
+          <div className="flex items-center justify-center h-full">
+            <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
+          </div>
+        </DialogContent>
+      </Dialog>
+    )
   }
 
   return (
@@ -148,6 +166,7 @@ export const PluginMarketplace: Component<PluginMarketplaceProps> = ({
                   <CategoriesButtons
                     setActiveCategory={(category) => setActiveCategory(category)}
                     activeCategory={activeCategory}
+                    likedCount={likedCount}
                   />
                 </div>
                 <ScrollBar orientation="horizontal" />
@@ -158,6 +177,7 @@ export const PluginMarketplace: Component<PluginMarketplaceProps> = ({
               <CategoriesButtons
                 setActiveCategory={(category) => setActiveCategory(category)}
                 activeCategory={activeCategory}
+                likedCount={likedCount}
               />
             </div>
           </div>
@@ -283,16 +303,25 @@ export const PluginMarketplace: Component<PluginMarketplaceProps> = ({
 type CategoriesButtonsProps = {
   setActiveCategory: (category: Category) => void;
   activeCategory: string;
+  likedCount?: number;
 }
 
-const CategoriesButtons: Component<CategoriesButtonsProps> = ({ setActiveCategory, activeCategory }) => {
+const CategoriesButtons: Component<CategoriesButtonsProps> = ({ setActiveCategory, activeCategory, likedCount }) => {
   const t = useTranslations("MarketplaceDialog");
 
   return (
     <>
       <PluginCategoryButton
-      onClick={() => setActiveCategory("all")}
-      icon={Globe} label={t("Categories.All")} isActive={activeCategory === "all"} />
+        onClick={() => setActiveCategory("all")}
+        icon={Globe} label={t("Categories.All")} isActive={activeCategory === "all"} />
+        
+      <PluginCategoryButton
+        onClick={() => setActiveCategory("LIKED")}
+        icon={Heart} label={t("Categories.Liked")} isActive={activeCategory === "LIKED"}
+        info={likedCount ? likedCount : undefined}
+      />
+
+      <Separator className="my-2 border-[#2a2c3a]" />
 
       <PluginCategoryButton
         onClick={() => setActiveCategory("NARRATIVE")}
@@ -329,153 +358,6 @@ const CategoriesButtons: Component<CategoriesButtonsProps> = ({ setActiveCategor
   )
 }
 
-type PluginCardProps = {
-  plugin: Plugin
-  isSelected: boolean
-  onAdd: (plugin: Plugin) => void
-  onRemove: (pluginId: string) => void
-}
-
-const PluginCard: Component<PluginCardProps> = ({
-  plugin, isSelected,
-  onAdd, onRemove,
-}) => {
-  const t = useTranslations("MarketplaceDialog");
-
-  const renderPrice = () => {
-    if (!plugin.pricing) return null;
-
-    switch (plugin.pricing) {
-      case 'FREE':
-        return (
-          <Badge className="bg-green-700 text-white border-none">
-            {plugin.usageCredits ? t("Plugin.Price.CreditsPerUse", { credits: plugin.usageCredits }) : t("Plugin.Price.Free")}
-          </Badge>
-        );
-      case 'PREMIUM':
-        return (
-          <Badge className="bg-indigo-700 text-white border-none">
-            {t("Plugin.Price.Credits", { credits: plugin.creditPrice ?? 0 })}
-          </Badge>
-        );
-      case 'PAID':
-        return (
-          <Badge className="bg-amber-700 text-white border-none">
-            {t("Plugin.Price.Euros", { price: plugin.euroPrice?.toFixed(2) ?? 0 })}
-          </Badge>
-        );
-      default:
-        return null;
-    }
-  };
-
-  return (
-    <div className="flex flex-col rounded-lg overflow-hidden border border-[#2a2c3a]">
-      <div className={`h-16 bg-gradient-to-r ${plugin.gradientColors} relative p-4`}>
-        {plugin.featured && (
-          <Badge className="absolute top-2 left-2 bg-amber-700 border-none text-white">
-            {t("Plugin.Featured")}
-          </Badge>
-        )}
-        <div className="absolute bottom-0 left-4 transform translate-y-1/2">
-          <div className="bg-[#0a0b14] rounded-full p-3 w-12 h-12 flex items-center justify-center text-xl border border-[#2a2c3a] select-none">
-            {typeof plugin.icon === 'string' ? plugin.icon : plugin.icon}
-          </div>
-        </div>
-        <div className="absolute top-2 right-2">
-          {renderPrice()}
-        </div>
-      </div>
-      <div className="p-4 pt-8 flex-1 bg-[#12131f]">
-        <div className="flex items-center mb-1">
-          <h4 className="font-semibold text-lg">{plugin.title}</h4>
-        </div>
-        <div className="flex items-center mb-3">
-          <div className="w-5 h-5 rounded-full bg-indigo-600 flex items-center justify-center text-xs mr-2">
-            {plugin.author.avatar ? (
-              <Image
-                src={plugin.author.avatar}
-                alt={plugin.author.name}
-                className="w-full h-full rounded-full object-cover"
-                width={20}
-                height={20}
-              />
-            ) : (
-              plugin.author.name.charAt(0)
-            )}
-          </div>
-          <span className="text-sm text-gray-400">{plugin.author.name}</span>
-        </div>
-        <p className="text-sm text-gray-300 mb-4 line-clamp-2">{plugin.description}</p>
-
-        {plugin.tags && plugin.tags.length > 0 && (
-          <div className="flex flex-wrap gap-1 mb-3">
-            {plugin.tags.slice(0, 3).map(tag => (
-              <Badge
-                key={tag.id}
-                variant="outline"
-                className="text-xs bg-[#1a1b29] border-[#2a2c3a] text-gray-300"
-              >
-                {tag.name}
-              </Badge>
-            ))}
-            {plugin.tags.length > 3 && (
-              <Badge variant="outline" className="text-xs bg-[#1a1b29] border-[#2a2c3a] text-gray-300">
-                +{plugin.tags.length - 3}
-              </Badge>
-            )}
-          </div>
-        )}
-
-        <div className="flex items-center justify-between mt-auto">
-          <div className="flex items-center space-x-3">
-            <div className="flex items-center text-gray-400 text-sm">
-              <Heart className="h-3.5 w-3.5 mr-1" />
-              {plugin.likes.toLocaleString()}
-            </div>
-            <div className="flex items-center text-gray-400 text-sm">
-              <BarChart3 className="h-3.5 w-3.5 mr-1" />
-              {plugin.downloads.toLocaleString()}
-            </div>
-          </div>
-          {plugin.isOfficial && (
-            <Badge className={`${plugin.isOfficial ? "bg-[#2a2c3a]" : "bg-[#2a2c3a]"} text-gray-300 border-none`}>
-              {t("Plugin.Official")}
-            </Badge>
-          )}
-        </div>
-      </div>
-      <div className="p-3 bg-[#12131f] border-t border-[#2a2c3a] flex flex-row gap-2">
-        {isSelected ? (
-          <Button
-            variant="destructive"
-            className="w-full bg-red-600 hover:bg-red-700 text-white"
-            onClick={() => onRemove(plugin.id)}
-          >
-            {t("Plugin.Actions.Remove")}
-          </Button>
-        ) : (
-          <Button
-            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white"
-            onClick={() => onAdd(plugin)}
-          >
-            {t("Plugin.Actions.Add")}
-          </Button>
-        )}
-
-        <Button
-          variant="ghost"
-          className="w-full bg-[#1a1b29] text-gray-300 hover:bg-[#2a2c3a]"
-          onClick={() => window.open(`/plugins/${plugin.id}`, "_blank")}
-        >
-          <span className="hidden sm:inline">{t("Plugin.Actions.ViewFull")}</span>
-          <span className="inline sm:hidden">{t("Plugin.Actions.View")}</span>
-        </Button>
-      </div>
-    </div>
-  )
-}
-
 const PluginCardSkeleton = () => {
   return (
     <div className="flex flex-col rounded-lg overflow-hidden border border-[#2a2c3a]">
@@ -502,16 +384,17 @@ const PluginCardSkeleton = () => {
 
 type CategoryButtonProps = {
   icon: LucideIcon;
-  label: string
-  isActive: boolean
-  onClick: () => void
+  label: string;
+  isActive: boolean;
+  info?: string | number | undefined;
+  onClick: () => void;
 }
 
-const PluginCategoryButton: Component<CategoryButtonProps> = ({ icon: Icon, label, isActive, onClick }) => {
+const PluginCategoryButton: Component<CategoryButtonProps> = ({ icon: Icon, label, isActive, onClick, info }) => {
   return (
     <button
       className={cn(
-        "flex items-center w-full rounded-md px-3 py-2 text-sm",
+        "flex items-center justify-between w-full rounded-md px-3 py-2 text-sm",
         `${isActive ? "bg-[#3b3d51] text-white" : "text-gray-300 hover:bg-[#2a2c3a]"}`
       )}
       onClick={onClick}
@@ -520,6 +403,16 @@ const PluginCategoryButton: Component<CategoryButtonProps> = ({ icon: Icon, labe
         <Icon className="mr-2 h-4 w-4" />
         <span className="truncate">{label}</span>
       </div>
+
+      {info && (
+        <Badge
+          variant="secondary"
+          className="ml-2 text-xs font-medium"
+          style={{ backgroundColor: "#3b3d51", color: "#fff" }}
+        >
+          {info}
+        </Badge>
+      )}
     </button>
   )
 }
