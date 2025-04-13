@@ -17,6 +17,7 @@ import { Badge } from "../ui/badge";
 import { estimateStoryCost } from "@imagine/prompts/index"
 import { FeatureCard } from "./feature.card";
 import { Plugin, PluginMarketplace } from "../dialogs/plugin-marketplace.dialog";
+import useIsMobile from "@/lib/hooks/is-mobile";
 
 export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ className }): ReactElement => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -37,6 +38,8 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
   const [plugins, setPlugins] = useState<Plugin[]>([]);
   const [selectedPlugin, setSelectedPlugin] = useState<string[]>([]);
   const [isPluginMarketplaceOpen, setIsPluginMarketplaceOpen] = useState(false);
+
+  const isMobile = useIsMobile();
 
   const shineColors = useShineColors({ forChildren, withItems, betterCharacters, multipleArcs, withConflicts });
 
@@ -132,18 +135,20 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
 
             <div className={cn("flex items-center justify-between p-2 mx-2", { "mb-2": !moreSettings })}>
               <div className="flex items-center flex-wrap gap-1.5">
-                <Button
-                  size={plugins.length > 0 ? "toolText" : "toolIcon"}
-                  onClick={() => setIsPluginMarketplaceOpen(true)} disabled={isGenerating}
-                  className={cn(
-                    "bg-gradient-to-tl",
-                    "from-blue-700 via-blue-950 to-blue-950",
-                    "hover:from-blue-600 hover:via-blue-800 hover:to-blue-900"
-                  )}
-                >
-                  <Store />
-                  {plugins.length > 0 && <span className="text-sm">{plugins.length}</span>}
-                </Button>
+                {!isMobile && (
+                  <Button
+                    size={plugins.length > 0 ? "toolText" : "toolIcon"}
+                    onClick={() => setIsPluginMarketplaceOpen(true)} disabled={isGenerating}
+                    className={cn(
+                      "bg-gradient-to-tl",
+                      "from-blue-700 via-blue-950 to-blue-950",
+                      "hover:from-blue-600 hover:via-blue-800 hover:to-blue-900"
+                    )}
+                  >
+                    <Store />
+                    {plugins.length > 0 && <span className="text-sm">{plugins.length}</span>}
+                  </Button>
+                )}
 
                 <FeatureToggle
                   Icon={PersonStanding}
