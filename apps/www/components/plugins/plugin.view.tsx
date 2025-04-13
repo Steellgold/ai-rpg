@@ -17,7 +17,7 @@ type PluginViewProps = {
   onClose?: () => void;
 };
 
-export const PluginView: Component<PluginViewProps> = ({ plugin, onAdd, onRemove, onView, onClose }) => {
+export const PluginView: Component<PluginViewProps> = ({ plugin, onClose }) => {
   const [relatedPlugins, setRelatedPlugins] = useState<RelatedPlugin[]>([]);
 
   const fetchPlugin = async () => {
@@ -89,6 +89,11 @@ export const PluginView: Component<PluginViewProps> = ({ plugin, onAdd, onRemove
               </Badge>
             </div>
           </div>
+
+          <pre>
+            {JSON.stringify(plugin, null, 2)}
+            {JSON.stringify(relatedPlugins, null, 2)}
+          </pre>
         </div>
       </div>
     </div>

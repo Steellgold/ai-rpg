@@ -11,7 +11,6 @@ import {
 } from "lucide-react";
 
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Component } from "@/lib/types/component";
@@ -26,6 +25,7 @@ import { Separator } from "../ui/separator";
 import { Badge } from "../ui/badge";
 import { useSession } from "@/lib/hooks/use-session";
 import { PluginView } from "../plugins/plugin.view";
+import { Input } from "../ui/input";
 
 type PluginMarketplaceProps = {
   open: boolean
@@ -162,7 +162,7 @@ export const PluginMarketplace: Component<PluginMarketplaceProps> = ({
       }}
     >
       <DialogContent
-        className="max-w-6xl min-w-[60vw] max-h-screen overflow-y-auto p-0 bg-[#0a0b14] text-white border-[#2a2c3a]"
+        className="max-w-6xl min-w-[80vw] max-h-screen overflow-y-auto p-0 bg-[#0a0b14] text-white border-[#2a2c3a]"
         onInteractOutside={(e) => e.preventDefault()}
         showCloseButton={false}
       >
@@ -178,8 +178,26 @@ export const PluginMarketplace: Component<PluginMarketplaceProps> = ({
           ) : (
             <div className="flex flex-col md:flex-row h-full">
               {/* Left sidebar */}
-              <div className="w-full md:w-64 border-r border-[#2a2c3a] p-6">
-                <h3 className="text-lg font-semibold mb-4">{t("Sidebar.Title")}</h3>
+              <div className="w-full md:w-64 border-r border-[#2a2c3a] p-4 flex flex-col h-full">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <Input
+                    type="search"
+                    placeholder={t("Search.Placeholder")}
+                    className="pl-10 bg-[#1a1b29] border-[#2a2c3a] text-white placeholder:text-gray-400 focus-visible:ring-indigo-500"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                  
+                  {isPending && (
+                    <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                      <Loader2 className="h-4 w-4 animate-spin text-gray-400" />
+                    </div>
+                  )}
+                </div>
+
+                <Separator className="hidden md:block my-2 border-[#2a2c3a]" />
+
                 <div className="md:hidden">
                   <ScrollArea className="w-96 whitespace-nowrap rounded-md border border-[#2a2c3a] bg-[#12131f]">
                     <div className="flex w-max space-x-4 p-2">
@@ -193,46 +211,32 @@ export const PluginMarketplace: Component<PluginMarketplaceProps> = ({
                   </ScrollArea>
                 </div>
 
-                <div className="hidden md:flex md:flex-col space-y-1">
+                <div className="hidden md:flex md:flex-col space-y-1 flex-grow">
                   <CategoriesButtons
                     setActiveCategory={(category) => setActiveCategory(category)}
                     activeCategory={activeCategory}
                     likedCount={likedCount}
                   />
                 </div>
+                
+                <div className={cn(
+                  "hidden md:block mt-auto p-4 border-2 border-[#2a2c3a] rounded-md",
+                  "bg-gradient-to-tl from-[#12131f] to-[#1a1b29]"
+                )}>
+                  <p className="text-sm text-white mb-2">{t("Creator.Title")}</p>
+                  <p className="text-xs text-gray-400 mb-4">{t("Creator.Description")}</p>
+
+                  <Button
+                    variant="outline"
+                    className="w-full flex items-center justify-center bg-indigo-600 hover:bg-indigo-700 text-white border-0"
+                  >
+                    <PencilRuler className="h-4 w-4" />
+                    {t("Creator.Button")}
+                  </Button>
+                </div>
               </div>
 
-              {/* Main content */}
               <div className="flex-1 flex flex-col">
-                <div className="p-6 border-b border-[#2a2c3a]">
-                  <div className="flex flex-col md:flex-row items-center justify-between mb-6 border border-[#2a2c3a] rounded-lg p-4 bg-[#12131f]">
-                    <div>
-                      <h2 className="text-2xl font-bold">{t("Creator.Title")}</h2>
-                      <p className="text-gray-400 mt-1 max-w-2xl">
-                        {t("Creator.Description")}
-                      </p>
-                    </div>
-                    <Button className="mt-4 md:mt-0 md:ml-4 bg-indigo-600 hover:bg-indigo-700 text-white" onClick={() => onOpenChange(false)}>
-                      {t("Creator.Button")}
-                    </Button>
-                  </div>
-                  <div className="relative">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                    <Input
-                      type="search"
-                      placeholder={t("Search.Placeholder")}
-                      className="pl-10 bg-[#1a1b29] border-[#2a2c3a] text-white placeholder:text-gray-400 focus-visible:ring-indigo-500"
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                    />
-                    {isPending && (
-                      <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                        <Loader2 className="h-4 w-4 animate-spin text-gray-400" />
-                      </div>
-                    )}
-                  </div>
-                </div>
-
                 <div className="flex-1 overflow-hidden">
                   <ScrollArea className="h-full">
                     <div className="p-6">
@@ -264,7 +268,7 @@ export const PluginMarketplace: Component<PluginMarketplaceProps> = ({
                         </div>
                       ) : (
                         <>
-                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                             {plugins.map((plugin) => (
                               <PluginCard
                                 key={plugin.id}
@@ -345,7 +349,7 @@ const CategoriesButtons: Component<CategoriesButtonsProps> = ({ setActiveCategor
         info={likedCount ? likedCount : undefined}
       />
 
-      <Separator className="my-2 border-[#2a2c3a]" />
+      <Separator className="hidden md:block my-2 border-[#2a2c3a]" />
 
       <PluginCategoryButton
         onClick={() => setActiveCategory("NARRATIVE")}
