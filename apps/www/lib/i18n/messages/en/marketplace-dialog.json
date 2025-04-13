@@ -1,0 +1,54 @@
+{
+  "MarketplaceDialog": {
+    "Sidebar": {
+      "Title": "Categories"
+    },
+    "Categories": {
+      "All": "All plugins",
+      "Narrative": "Narrative",
+      "Intrigue": "Intrigue",
+      "Character": "Character",
+      "World": "World",
+      "Object": "Object",
+      "Theme": "Theme",
+      "Style": "Style",
+      "Mechanics": "Mechanics"
+    },
+    "Creator": {
+      "Title": "Become a plugin creator",
+      "Description": "Share your narrative ideas with the community. Our simplified tools allow you to easily create and publish your own narrative plugins.",
+      "Button": "Access creator tools"
+    },
+    "Search": {
+      "Placeholder": "Search plugins..."
+    },
+    "PluginCount": "{count} plugins found",
+    "NoResults": {
+      "Title": "No plugins found",
+      "Description": "We couldn't find any plugins matching your search. Try with different terms or categories."
+    },
+    "LoadMore": {
+      "Button": "Load more plugins",
+      "Loading": "Loading..."
+    },
+    "Footer": {
+      "Selected": "{count} plugins selected",
+      "Done": "Done"
+    },
+    "Plugin": {
+      "Featured": "Featured",
+      "Official": "Official",
+      "Price": {
+        "Free": "Free",
+        "CreditsPerUse": "{credits} credits/use",
+        "Credits": "{credits} credits",
+        "Euros": "€{price}"
+      },
+      "Actions": {
+        "Add": "Add",
+        "Remove": "Remove",
+        "View": "View plugin"
+      }
+    }
+  }
+}
