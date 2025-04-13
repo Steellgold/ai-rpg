@@ -11,8 +11,8 @@ export enum PluginType {
 
 export enum Pricing {
   FREE = "FREE",
-  PREMIUM = "PREMIUM",
-  PAID = "PAID"
+  CREDITS = "CREDITS",
+  PAID = "PAID",
 }
 
 export type Plugin = {
