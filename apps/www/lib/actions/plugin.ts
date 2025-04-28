@@ -291,9 +291,6 @@ export const likePlugin = async(pluginId: string) => {
           },
         },
       });
-
-      revalidatePath(`/plugin/${pluginId}`);
-      return { success: true, liked: false };
     } else {
       await prisma.pluginLike.create({
         data: {
@@ -301,10 +298,14 @@ export const likePlugin = async(pluginId: string) => {
           userId,
         },
       });
-
-      revalidatePath(`/plugin/${pluginId}`);
-      return { success: true, liked: true };
     }
+
+    const likeCount = await prisma.pluginLike.count({
+      where: { pluginId },
+    });
+
+    revalidatePath(`/plugin/${pluginId}`);
+    return { success: true, liked: !existingLike, likeCount };
   } catch (error) {
     console.error("Error liking plugin:", error);
     return { success: false, error: "Failed to process like action" };
