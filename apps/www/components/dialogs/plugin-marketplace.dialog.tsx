@@ -219,7 +219,7 @@ export const PluginMarketplace: Component<PluginMarketplaceProps> = ({
                   />
                 </div>
                 
-                <div className={cn(
+                {/* <div className={cn(
                   "hidden md:block mt-auto p-4 border-2 border-[#2a2c3a] rounded-md",
                   "bg-gradient-to-tl from-[#12131f] to-[#1a1b29]"
                 )}>
@@ -233,7 +233,7 @@ export const PluginMarketplace: Component<PluginMarketplaceProps> = ({
                     <PencilRuler className="h-4 w-4" />
                     {t("Creator.Button")}
                   </Button>
-                </div>
+                </div> */}
               </div>
 
               <div className="flex-1 flex flex-col">
