@@ -229,7 +229,7 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
               "hidden": !moreSettings,
               "opacity-50": isGenerating
             })}>
-              <div className="flex flex-col gap-2">
+              <div className="grid grid-cols-2 gap-2">
                 <FeatureCard
                   title="Tools.NarrativeArcs.On"
                   description={t("Tools.NarrativeArcs.Description")}
