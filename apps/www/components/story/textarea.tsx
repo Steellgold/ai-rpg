@@ -16,8 +16,9 @@ import { useShineColors } from "@/lib/hooks/use-shine-colors";
 import { Badge } from "../ui/badge";
 import { estimateStoryCost } from "@imagine/prompts/index"
 import { FeatureCard } from "./feature.card";
-import { Plugin, PluginMarketplace } from "../dialogs/plugin-marketplace.dialog";
+import { PluginMarketplace } from "../dialogs/plugin-marketplace.dialog";
 import useIsMobile from "@/lib/hooks/is-mobile";
+import { UIPlugin } from "@/lib/actions/plugin-search";
 
 export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ className }): ReactElement => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -35,7 +36,7 @@ export const AiTextarea: Component<HTMLAttributes<HTMLDivElement>> = ({ classNam
 
   const [moreSettings, setMoreSettings] = useState<boolean>(false);
 
-  const [plugins, setPlugins] = useState<Plugin[]>([]);
+  const [plugins, setPlugins] = useState<UIPlugin[]>([]);
   const [selectedPlugin, setSelectedPlugin] = useState<string[]>([]);
   const [isPluginMarketplaceOpen, setIsPluginMarketplaceOpen] = useState(false);
 
