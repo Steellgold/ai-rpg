@@ -30,7 +30,6 @@ export const FeatureCard: Component<FeatureCardProps> = ({
     onClick, 
     activeColor, 
     activeBorderColor, 
-    activeHoverColor,
     loadingColor, 
     isLoading,
     className
@@ -38,7 +37,6 @@ export const FeatureCard: Component<FeatureCardProps> = ({
   const t = useTranslations("AiTextarea");
   const CurrentIcon = isActive && IconToggled ? IconToggled : Icon;
   
-  // Style de couleur pour l'état inactif - basé sur la couleur active mais désaturée
   const inactiveColorClass = activeColor.replace("400", "500/30").replace("500", "500/30");
   const inactiveBorderClass = activeBorderColor.replace("400/20", "400/5").replace("500/20", "500/5");
   
@@ -48,12 +46,10 @@ export const FeatureCard: Component<FeatureCardProps> = ({
         "flex flex-col justify-between gap-2 p-3 rounded-md transition-all duration-200 cursor-pointer",
         "border hover:shadow-md",
         {
-          // Styles lorsque la carte est active
           [activeBorderColor]: isActive,
           "bg-gradient-to-br from-transparent to-opacity-10": isActive,
           [`to-${activeColor.split('-')[1]}-500/10`]: isActive,
           
-          // Styles lorsque la carte est inactive
           [inactiveBorderClass]: !isActive,
           "hover:border-gray-500/30": !isActive,
           "bg-gray-800/30": !isActive,
