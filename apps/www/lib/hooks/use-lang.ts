@@ -1,3 +1,5 @@
+"use client"
+
 import { ISOLang } from "@imagine/types/lang";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
