@@ -68,7 +68,7 @@ export const PluginView: Component<PluginViewProps> = ({ plugin, onAdd, onRemove
             onClick={handleRemove}
             className="bg-red-900 hover:bg-red-800 text-white"
           >
-            Supprimer de l'histoire
+            Supprimer de l&apos;histoire
           </Button>
         ) : (
           <Button 
