@@ -162,7 +162,12 @@ export const PluginMarketplace: Component<PluginMarketplaceProps> = ({
       }}
     >
       <DialogContent
-        className="max-w-6xl min-w-[80vw] max-h-screen overflow-y-auto p-0 bg-[#0a0b14] text-white border-[#2a2c3a]"
+        className={cn(
+          "max-w-6xl min-w-[80vw] max-h-screen overflow-y-auto p-0 text-white border-[#2a2c3a]", {
+            "bg-[#0a0b14]": !pluginView,
+            "bg-background": pluginView
+          }
+        )}
         onInteractOutside={(e) => e.preventDefault()}
         showCloseButton={false}
       >
