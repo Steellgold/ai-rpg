@@ -6,6 +6,8 @@ import { Users, BookOpen, Swords, ShoppingBag, Baby, ChevronDown, ChevronUp, Coi
 import { cn } from "@/lib/utils";
 import { ShineBorder } from "../ui/magicui/shine-border";
 import { Component } from "@/lib/types/component";
+import { useStoryCredits } from "@/lib/hooks/use-story-credits";
+import { toast } from "sonner";
 
 export type StoryToolsConfig = {
   forChildren: boolean;
@@ -34,33 +36,29 @@ const getToolShineColors = (toolType: keyof StoryToolsConfig): string[] => {
   return colorMaps[toolType];
 };
 
-const getToolCost = (toolType: keyof StoryToolsConfig): number => {
-  const costs = {
-    forChildren: 2,
-    withItems: 5,
-    betterCharacters: 8,
-    multipleArcs: 12,
-    withConflicts: 6,
-  };
-  return costs[toolType];
-};
-
 export const StoryTools: Component<StoryToolsProps> = ({ config, onChange, className, locked }) => {
   const t = useTranslations("AiTextarea");
   const [expanded, setExpanded] = useState(false);
+  const { calculateTotalCost, hasEnoughCredits } = useStoryCredits();
 
   const toggleFeature = (feature: keyof StoryToolsConfig) => {
     if (locked) return;
-    onChange({ ...config, [feature]: !config[feature] });
+    
+    const newConfig = { ...config, [feature]: !config[feature] };
+    
+    if (!config[feature] && !hasEnoughCredits(newConfig)) {
+      toast.error(t("Errors.NotEnoughCredits"));
+      return;
+    }
+    
+    onChange(newConfig);
   };
 
   const toggleExpanded = () => {
     setExpanded(!expanded);
   };
 
-  const totalCost = Object.entries(config).reduce((sum, [key, value]) => {
-    return value ? sum + getToolCost(key as keyof StoryToolsConfig) : sum;
-  }, 0);
+  const totalCost = calculateTotalCost(config);
 
   const renderTool = (
     icon: React.ReactNode,
@@ -167,7 +165,7 @@ export const StoryTools: Component<StoryToolsProps> = ({ config, onChange, class
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium text-gray-300">
-            Outils narratifs
+            {t("Tools.Title")}
           </span>
         </div>
         
@@ -179,7 +177,7 @@ export const StoryTools: Component<StoryToolsProps> = ({ config, onChange, class
               : "bg-gray-800 text-gray-500 border border-gray-700"
           )}>
             <Coins size={12} />
-            <span>{totalCost} crédits</span>
+            <span>{t("Tools.Credits", { cost: totalCost })}</span>
           </div>
           
           <button
@@ -189,12 +187,12 @@ export const StoryTools: Component<StoryToolsProps> = ({ config, onChange, class
           >
             {expanded ? (
               <>
-                <span>Réduire</span>
+                <span>{t("Tools.Collapse")}</span>
                 <ChevronUp size={14} />
               </>
             ) : (
               <>
-                <span>Étendre</span>
+                <span>{t("Tools.Expand")}</span>
                 <ChevronDown size={14} />
               </>
             )}
