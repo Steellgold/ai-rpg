@@ -4,6 +4,10 @@
     "Send": "Générer une histoire",
 
     "Tools": {
+      "Title": "Outils narratifs",
+      "Expand": "Étendre",
+      "Collapse": "Réduire",
+      "Credits": "{cost} crédits",
       "EnableTool": "Je veux utiliser cet outil",
 
       "Children": {
@@ -35,6 +39,10 @@
     "Record": {
       "Record": "Enregistrer",
       "Stop": "Arrêter"
+    },
+
+    "Errors": {
+      "NotEnoughCredits": "Vous n'avez pas assez de crédits pour activer cette fonctionnalité"
     }
   }
 }

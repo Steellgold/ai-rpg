@@ -4,6 +4,10 @@
     "Send": "Generate story",
 
     "Tools": {
+      "Title": "Narrative tools",
+      "Expand": "Expand",
+      "Collapse": "Collapse",
+      "Credits": "{cost} credits",
       "EnableTool": "I want to use this tool",
 
       "Children": {
@@ -35,6 +39,10 @@
     "Record": {
       "Record": "Record",
       "Stop": "Stop"
+    },
+
+    "Errors": {
+      "NotEnoughCredits": "You don't have enough credits to enable this feature"
     }
   }
 }
