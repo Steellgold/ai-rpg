@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
-import { ArrowUp, Loader, Mic, MicOff } from "lucide-react";
+import { ArrowUp, Mic, MicOff } from "lucide-react";
 import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
@@ -12,8 +12,10 @@ import { FlickeringGrid } from "@/components/ui/magicui/flickering-grid";
 import { useRecordVoice } from "@/lib/hooks/use-record";
 import { useDraft } from "@/lib/hooks/use-draft";
 import { StoryTools, StoryToolsConfig } from "./story-tool";
+import { useStoryCredits } from "@/lib/hooks/use-story-credits";
 import { cn } from "@/lib/utils";
 import { Levitate } from "../levitate";
+import { toast } from "sonner";
 
 export function AiTextarea() {
   const t = useTranslations("AiTextarea");
@@ -24,9 +26,7 @@ export function AiTextarea() {
     initialValue: "",
   });
 
-  const [isLoading, setIsLoading] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
-  const [result, setResult] = useState<string | null>(null);
 
   const [toolsConfig, setToolsConfig] = useState<StoryToolsConfig>({
     forChildren: false,
@@ -36,13 +36,14 @@ export function AiTextarea() {
     withConflicts: true,
   });
 
+  const { checkAndDeductCredits, isChecking } = useStoryCredits();
+
   const {
     recording,
     startRecording,
     stopRecording,
     text: recordedText,
     loading: recordLoading,
-    error: recordError,
     disabled: recordDisabled
   } = useRecordVoice();
 
@@ -63,21 +64,22 @@ export function AiTextarea() {
   }, [prompt]);
 
   const handleGenerateStory = async () => {
-    if (!prompt.trim() || isGenerating) return;
+    if (!prompt.trim() || isGenerating || isChecking) return;
+
+    const hasCredits = await checkAndDeductCredits(toolsConfig);
+    if (!hasCredits) {
+      toast.error(t("Errors.NotEnoughCredits"));
+      return;
+    }
 
     setIsGenerating(true);
-    setIsLoading(true);
 
     try {
       await new Promise(resolve => setTimeout(resolve, 2000));
-
-      setResult(`Once upon a time, in a world where ${prompt}, the story unfolds...`);
-
       clearPrompt();
     } catch (error) {
       console.error('Error generating story:', error);
     } finally {
-      setIsLoading(false);
       setIsGenerating(false);
     }
   };
@@ -95,7 +97,7 @@ export function AiTextarea() {
           />
         </div>
 
-        <div className="relative z-10 space-y-4">
+        <div className="relative z-10">
           <StoryTools config={toolsConfig} onChange={setToolsConfig} className="mb-2" />
 
           <div className="space-y-3">
@@ -119,6 +121,7 @@ export function AiTextarea() {
                 })}
                 onClick={recording ? stopRecording : startRecording}
                 disabled={recordDisabled || isGenerating || recordLoading}
+                aria-label={recording ? t("Record.Stop") : t("Record.Record")}
               >
                 {recordLoading ? (
                   <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-500 border-t-white" />
@@ -130,16 +133,23 @@ export function AiTextarea() {
               </Button>
 
               <Button
-                onClick={handleGenerateStory}
-                disabled={!prompt.trim() || isGenerating}
-                className={cn("transition-all", {
-                  "bg-blue-700 hover:bg-blue-800": !isLoading && !isGenerating,
-                  "bg-gray-700 hover:bg-gray-800": isLoading || isGenerating
+                variant="default"
+                size="toolText"
+                className={cn(
+                  "rounded-full bg-indigo-500 hover:bg-indigo-600 text-white transition-all",
+                  {
+                    "opacity-50 cursor-not-allowed": !prompt.trim() || isGenerating || isChecking
                   }
                 )}
-                size="toolText"
+                onClick={handleGenerateStory}
+                disabled={!prompt.trim() || isGenerating || isChecking}
+                aria-label={t("Send")}
               >
-                {isLoading ? <Loader className="animate-spin h-5 w-5" /> : <ArrowUp className="h-5 w-5" />}
+                {isGenerating ? (
+                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                ) : (
+                  <ArrowUp size={16} />
+                )}
               </Button>
             </div>
           </div>
