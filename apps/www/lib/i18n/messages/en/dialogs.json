@@ -12,6 +12,40 @@
     "History": "Transaction History",
     "NoTransactions": "No transactions yet",
     "CloseButton": "Close",
-    "BuyCredits": "Buy Credits"
+    "BuyCredits": "Buy Credits",
+    "StripeDashboard": "Manage Billing"
+  },
+  "CreditPackagesDialog": {
+    "Title": "Recharge your credits",
+    "Description": "Choose the credit pack that suits you best to start or continue creating captivating stories.",
+    "Popular": "Popular",
+    "Credits": "credits",
+    "BuyButton": "Recharge now",
+    "Loading": "Processing...",
+    "Footer": {
+      "SecurePayment": "Secure payment with"
+    },
+    "Errors": {
+      "InvalidPack": "Invalid package",
+      "PaymentFailed": "Payment failed"
+    },
+    "Packages": {
+      "decouverte": {
+        "Name": "Discovery Pack",
+        "Description": "Take your first steps into a universe of infinite possibilities"
+      },
+      "aventurier": {
+        "Name": "Adventurer Pack",
+        "Description": "Unleash your imagination and start shaping your stories"
+      },
+      "createur": {
+        "Name": "Creator Pack",
+        "Description": "Create unique worlds, unforgettable characters, vibrant stories"
+      },
+      "narrateur": {
+        "Name": "Storyteller Pack",
+        "Description": "Master the art of storytelling, the legend begins here"
+      }
+    }
   }
 }
