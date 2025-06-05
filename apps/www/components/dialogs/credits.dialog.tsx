@@ -1,9 +1,8 @@
 "use client"
 
 import type { PropsWithChildren } from "react"
-import { Wallet, Plus } from "lucide-react"
+import { Wallet, Plus, ExternalLink } from "lucide-react"
 import Image from "next/image"
-import { useRouter } from "next/navigation"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -17,18 +16,16 @@ import {
 } from "@/components/ui/dialog"
 import { useCredits } from "@/lib/hooks/use-credits"
 import { useTransactions } from "@/lib/hooks/use-transactions"
+import { useStripePortal } from "@/lib/hooks/use-stripe-portal"
 import { Component } from "@/lib/types/component"
 import { useTranslations } from "next-intl"
+import { CreditPackagesDialog } from "./credit-packages.dialog"
 
 export const CreditsDialog: Component<PropsWithChildren> = ({ children }) => {
   const { credits, loading } = useCredits();
   const { transactions, loading: transactionsLoading } = useTransactions(5);
-  const router = useRouter();
+  const { openCustomerPortal, loading: portalLoading } = useStripePortal();
   const t = useTranslations("CreditsDialog");
-
-  const handleBuyCredits = () => {
-    router.push("/credits/buy");
-  };
 
   return (
     <Dialog>
@@ -60,14 +57,28 @@ export const CreditsDialog: Component<PropsWithChildren> = ({ children }) => {
                 </span>
               </div>
             </div>
-            <Button onClick={handleBuyCredits} size="sm" className="gap-2">
-              <Plus size={16} />
-              {t("BuyCredits")}
-            </Button>
+            <CreditPackagesDialog>
+              <Button size="sm" className="gap-2">
+                <Plus size={16} />
+                {t("BuyCredits")}
+              </Button>
+            </CreditPackagesDialog>
           </div>
 
           <div className="space-y-2">
-            <h3 className="text-sm font-medium">{t("History")}</h3>
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-medium">{t("History")}</h3>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={openCustomerPortal}
+                disabled={portalLoading}
+                className="gap-2"
+              >
+                <ExternalLink size={14} />
+                {t("StripeDashboard")}
+              </Button>
+            </div>
             {transactionsLoading ? (
               <div className="rounded-lg border p-4 text-center text-sm text-muted-foreground">
                 Loading...
