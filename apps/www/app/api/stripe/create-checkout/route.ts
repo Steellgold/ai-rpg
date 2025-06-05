@@ -49,6 +49,7 @@ export async function POST(request: Request) {
             product_data: {
               name: creditPackage.name,
               description: creditPackage.description,
+              images: [`${process.env.NEXT_PUBLIC_BASE_URL}${creditPackage.image}`],
             },
             unit_amount: Math.round(creditPackage.price * 100), // Convert to cents
           },
