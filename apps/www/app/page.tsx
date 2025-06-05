@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import { PageLayout } from "./_l";
-import { AiTextarea } from "@/components/story/textarea";
+import { AiTextarea } from "@/components/story/textarea/index";
 import { Syne } from "next/font/google";
 import { getTranslations } from "next-intl/server";
 
