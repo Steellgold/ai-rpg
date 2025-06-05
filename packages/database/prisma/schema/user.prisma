@@ -93,7 +93,8 @@ model CreditTransaction {
   user             User            @relation(fields: [userId], references: [id], onDelete: Cascade)
   //
   amount           Int
-  balanceAfter     Int
+  balanceBefore    Int             @default(0)
+  balanceAfter     Int             @default(0)
   description      String
   transactionType  TransactionType
   //
