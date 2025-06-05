@@ -41,6 +41,16 @@
       "Stop": "Stop"
     },
 
+    "Suggestions": {
+      "Show": "Show suggestions",
+      "Hide": "Hide suggestions",
+      "All": "All",
+      "Plot": "Plot",
+      "Characters": "Characters",
+      "Setting": "Setting",
+      "Themes": "Themes"
+    },
+
     "Errors": {
       "NotEnoughCredits": "You don't have enough credits to enable this feature"
     }

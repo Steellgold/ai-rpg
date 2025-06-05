@@ -41,6 +41,16 @@
       "Stop": "Arrêter"
     },
 
+    "Suggestions": {
+      "Show": "Afficher les suggestions",
+      "Hide": "Masquer les suggestions",
+      "All": "Tout",
+      "Plot": "Intrigue",
+      "Characters": "Personnages",
+      "Setting": "Décors",
+      "Themes": "Thèmes"
+    },
+
     "Errors": {
       "NotEnoughCredits": "Vous n'avez pas assez de crédits pour activer cette fonctionnalité"
     }

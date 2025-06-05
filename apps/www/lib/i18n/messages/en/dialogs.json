@@ -4,5 +4,14 @@
     "Description": "Select your preferred language for the interface.",
     "ApplyButton": "Apply",
     "CancelButton": "Cancel"
+  },
+  "CreditsDialog": {
+    "Title": "Your Credits",
+    "Description": "View your credit balance and transaction history.",
+    "Balance": "Current Balance",
+    "History": "Transaction History",
+    "NoTransactions": "No transactions yet",
+    "CloseButton": "Close",
+    "BuyCredits": "Buy Credits"
   }
 }

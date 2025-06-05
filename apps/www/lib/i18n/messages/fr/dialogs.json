@@ -4,5 +4,14 @@
     "Description": "Sélectionnez la langue de votre choix pour l'interface.",
     "ApplyButton": "Appliquer",
     "CancelButton": "Annuler"
+  },
+  "CreditsDialog": {
+    "Title": "Vos Crédits",
+    "Description": "Consultez votre solde de crédits et l'historique des transactions.",
+    "Balance": "Solde Actuel",
+    "History": "Historique des Transactions",
+    "NoTransactions": "Aucune transaction",
+    "CloseButton": "Fermer",
+    "BuyCredits": "Acheter des Crédits"
   }
 }
