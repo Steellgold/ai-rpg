@@ -1,5 +1,6 @@
 import { cache } from "react"
 import { createClient } from "./server";
+import { unauthorized } from "next/navigation";
 
 export type UserSession = {
   user: {
@@ -53,12 +54,12 @@ export const auth = cache(async (): Promise<UserSession | null> => {
   }
 });
 
-export async function requireAuth() {
+export const requireAuth = cache(async (): Promise<UserSession> => {
   const session = await auth();
-  
-  if (!session?.user) {
-    throw new Error("Authentication required");
+ 
+  if (!session || !session.user) {
+    unauthorized();
   }
-  
+
   return session;
-}
+});
