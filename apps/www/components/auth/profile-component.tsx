@@ -21,6 +21,7 @@ import Link from "next/link"
 import { useCredits } from "@/lib/hooks/use-credits"
 import Image from "next/image"
 import { LanguageDialog } from "../dialogs/language.dialog"
+import { CreditsDialog } from "../dialogs/credits.dialog"
 
 interface ProfileComponentProps {
   variant?: "default" | "navbar"
@@ -54,6 +55,7 @@ export function ProfileComponent({ variant = "default", className }: ProfileComp
           <ChevronDown size={16} />
         </Button>
       </DropdownMenuTrigger>
+      
       <DropdownMenuContent align="end" className="w-56">
         <div className="flex flex-col -space-y-1 mb-1.5">
           <DropdownMenuLabel>{user.display_name}</DropdownMenuLabel>
@@ -71,22 +73,24 @@ export function ProfileComponent({ variant = "default", className }: ProfileComp
           </Link>
         </DropdownMenuItem>
 
-        <DropdownMenuItem className="p-0" onSelect={(e) => e.preventDefault()}>
-          <div className="flex items-center justify-between w-full px-2 py-1.5">
-            <div className="flex items-center gap-2">
-              <Wallet size={16} />
-              <span>{t("Credits")}</span>
-            </div>
+        <CreditsDialog>
+          <DropdownMenuItem className="p-0 cursor-pointer" onSelect={(e) => e.preventDefault()}>
+            <div className="flex items-center justify-between w-full px-2 py-1.5">
+              <div className="flex items-center gap-2">
+                <Wallet size={16} />
+                <span>{t("Credits")}</span>
+              </div>
 
-            <span className="border border-border px-2 rounded-md flex items-center">
-              <Image src="/assets/coin.webp" alt="Coin" width={16} height={16} className="inline-block mr-1" />
-              {credits.toLocaleString("en-US", {
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 0,
-              })}
-            </span>
-          </div>
-        </DropdownMenuItem>
+              <span className="border border-border px-2 rounded-md flex items-center">
+                <Image src="/assets/coin.webp" alt="Coin" width={16} height={16} className="inline-block mr-1" />
+                {credits.toLocaleString("en-US", {
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 0,
+                })}
+              </span>
+            </div>
+          </DropdownMenuItem>
+        </CreditsDialog>
 
         <LanguageDialog>
           <DropdownMenuItem className="p-0 cursor-pointer" onSelect={(e) => e.preventDefault()}>
@@ -102,7 +106,7 @@ export function ProfileComponent({ variant = "default", className }: ProfileComp
         <DropdownMenuSeparator />
 
         {/* Logout */}
-        <DropdownMenuItem onClick={async () => {
+        <DropdownMenuItem className="p-0 cursor-pointer" onSelect={async () => {
           const { error } = await signOut()
           if (error) {
             console.error(error)
@@ -111,8 +115,10 @@ export function ProfileComponent({ variant = "default", className }: ProfileComp
         
           redirect(process.env.NEXT_PUBLIC_BASE_URL!)
         }}>
-          <LogOut size={16} />
-          {t("SignIn.Label.Out")}
+          <div className="flex items-center gap-2 px-2 py-1.5">
+            <LogOut size={16} />
+            {t("SignIn.Label.Out")}
+          </div>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
