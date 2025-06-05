@@ -4,7 +4,8 @@ import { ISOLang, SupportedLangs, supportedLanguages } from "@imagine/types/lang
 
 const FILES = [
   "home-page", "ai-textarea",
-  "navbar", "dialogs", "marketplace-dialog"
+  "navbar", "dialogs",
+  // "marketplace-dialog"
 ];
 
 const detectLanguage = (
