@@ -17,7 +17,6 @@ import { toast } from "sonner";
 
 import { StoryInput } from "./input";
 import { VoiceRecorder } from "./voice-recorder";
-import { Suggestions } from "./suggestions";
 import { Component } from "@/lib/types/component";
 
 export const AiTextarea: Component<ReactElement> = () => {
@@ -28,7 +27,6 @@ export const AiTextarea: Component<ReactElement> = () => {
   });
 
   const [isGenerating, setIsGenerating] = useState(false);
-  const [showSuggestions, setShowSuggestions] = useState(false);
 
   const [toolsConfig, setToolsConfig] = useState<StoryToolsConfig>({
     forChildren: false,
@@ -68,13 +66,6 @@ export const AiTextarea: Component<ReactElement> = () => {
     });
   };
 
-  const handleSuggestionSelect = (suggestion: string) => {
-    setPrompt(prev => {
-      const newText = prev ? `${prev} ${suggestion}` : suggestion;
-      return newText;
-    });
-  };
-
   return (
     <div className="w-full space-y-4 relative">
       <Card className="relative overflow-hidden border bg-[#070910] border-[#1e293b] p-4 z-10">
@@ -98,50 +89,32 @@ export const AiTextarea: Component<ReactElement> = () => {
               disabled={isGenerating}
             />
 
-            <div className="flex justify-between items-center">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setShowSuggestions(!showSuggestions)}
-                className="text-gray-400 hover:text-gray-200"
-              >
-                {showSuggestions ? t("Suggestions.Hide") : t("Suggestions.Show")}
-              </Button>
-
-              <div className="flex gap-2">
-                <VoiceRecorder
-                  onTextRecorded={handleTextRecorded}
-                  disabled={isGenerating}
-                />
-
-                <Button
-                  variant="default"
-                  size="toolText"
-                  className={cn(
-                    "rounded-full bg-indigo-500 hover:bg-indigo-600 text-white transition-all",
-                    {
-                      "opacity-50 cursor-not-allowed": !prompt.trim() || isGenerating || isChecking
-                    }
-                  )}
-                  onClick={handleGenerateStory}
-                  disabled={!prompt.trim() || isGenerating || isChecking}
-                  aria-label={t("Send")}
-                >
-                  {isGenerating ? (
-                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                  ) : (
-                    <ArrowUp size={16} />
-                  )}
-                </Button>
-              </div>
-            </div>
-
-            {showSuggestions && (
-              <Suggestions
-                onSelect={handleSuggestionSelect}
-                className="mt-4"
+            <div className="flex justify-end items-center gap-2">
+              <VoiceRecorder
+                onTextRecorded={handleTextRecorded}
+                disabled={isGenerating}
               />
-            )}
+
+              <Button
+                variant="default"
+                size="toolText"
+                className={cn(
+                  "rounded-full bg-indigo-500 hover:bg-indigo-600 text-white transition-all",
+                  {
+                    "opacity-50 cursor-not-allowed": !prompt.trim() || isGenerating || isChecking
+                  }
+                )}
+                onClick={handleGenerateStory}
+                disabled={!prompt.trim() || isGenerating || isChecking}
+                aria-label={t("Send")}
+              >
+                {isGenerating ? (
+                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                ) : (
+                  <ArrowUp size={16} />
+                )}
+              </Button>
+            </div>
           </div>
         </div>
       </Card>
@@ -162,7 +135,7 @@ export const AiTextarea: Component<ReactElement> = () => {
         className="absolute top-10 -left-45 rotate-12 select-none pointer-events-none hidden lg:block"
       />
 
-      <Levitate speed={1.5}>
+      <Levitate>
         <Image
           src={"/assets/illustrations/potion.svg"}
           alt="potion"

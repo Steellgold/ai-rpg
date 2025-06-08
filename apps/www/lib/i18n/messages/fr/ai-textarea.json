@@ -20,8 +20,8 @@
         "Description": "Les objets sont les outils et les ressources que les personnages utilisent pour naviguer dans le monde. Avec des objets, l'histoire offre un sentiment d'aventure et d'exploration, les personnages découvrant de nouvelles capacités et pouvoirs."
       },
       "Characters": {
-        "On": "Développer les personnages",
-        "Off": "Personnages simples",
+        "On": "Personnages détaillés",
+        "Off": "Personnages basiques",
         "Description": "Les personnages sont le cœur de l'histoire, faisant avancer l'intrigue et captivant l'audience. Avec un développement approfondi, les personnages sont plus élaborés et complexes que des personnages basiques."
       },
       "NarrativeArcs": {
@@ -39,16 +39,6 @@
     "Record": {
       "Record": "Enregistrer",
       "Stop": "Arrêter"
-    },
-
-    "Suggestions": {
-      "Show": "Afficher les suggestions",
-      "Hide": "Masquer les suggestions",
-      "All": "Tout",
-      "Plot": "Intrigue",
-      "Characters": "Personnages",
-      "Setting": "Décors",
-      "Themes": "Thèmes"
     },
 
     "Errors": {
