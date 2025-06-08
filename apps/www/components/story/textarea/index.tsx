@@ -12,12 +12,12 @@ import { useDraft } from "@/lib/hooks/use-draft";
 import { StoryTools, StoryToolsConfig } from "../story-tool";
 import { useStoryCredits } from "@/lib/hooks/use-story-credits";
 import { cn } from "@/lib/utils";
-import { Levitate } from "../../levitate";
 import { toast } from "sonner";
 
 import { StoryInput } from "./input";
 import { VoiceRecorder } from "./voice-recorder";
 import { Component } from "@/lib/types/component";
+import { Levitate } from "@/components/ui/levitate";
 
 export const AiTextarea: Component<ReactElement> = () => {
   const t = useTranslations("AiTextarea");
