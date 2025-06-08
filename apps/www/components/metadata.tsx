@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     icon: "/favicon.ico",
     apple: "/apple-icon.png",
   },
-  manifest: "/site.webmanifest",
+  // manifest: "/site.webmanifest",
   keywords: ["interactive story", "adventure", "storytelling", "AI", "text", "role-playing", "choices", "fiction"],
   authors: [
     { name: "Gaëtan Huszovits" }
