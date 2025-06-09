@@ -1,0 +1,14 @@
+{
+  "name": "@imagine/ai",
+  "exports": {
+    "./openai": "./src/openai.ts",
+    "./audio-utils": "./src/audio/index.ts"
+  },
+  "dependencies": {
+    "ai": "^4.3.5",
+    "openai": "^4.93.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0"
+  }
+}

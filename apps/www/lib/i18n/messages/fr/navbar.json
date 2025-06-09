@@ -1,0 +1,17 @@
+{
+  "Navbar": {
+    "Links": {
+      "Stories": "Histoires"
+    },
+
+    "Credits": "Crédits",
+    "Language": "Langue de l'interface",
+
+    "SignIn": {
+      "Label": {
+        "Out": "Déconnexion",
+        "In": "Connexion"
+      }
+    }
+  }
+}

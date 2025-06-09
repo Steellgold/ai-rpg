@@ -1,0 +1,150 @@
+enum PluginStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum PluginType {
+  NARRATIVE
+  INTRIGUE
+  CHARACTER
+  WORLD
+  OBJECT
+  THEME
+  STYLE
+  MECHANICS
+}
+
+enum Pricing {
+  FREE
+  CREDITS
+  PAID
+}
+
+model Plugin {
+  id                String           @id @default(cuid())
+  title             String
+  description       String           @db.Text
+  emoji             String           @default("🪶")
+  //
+  downloads         Int              @default(0)
+  likes             PluginLike[]
+  views             Int              @default(0)
+  rating            Float?
+  //
+  author            User             @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId          String
+  // 
+  reviews           Review[]
+  usages            Usage[]
+  purchases         PluginPurchase[]
+  //
+  type              PluginType       @default(NARRATIVE)
+  tags              Tag[]
+  //
+  status            PluginStatus     @default(PENDING)
+  approved          Boolean          @default(false)
+  isFeatured        Boolean          @default(false)
+  isOfficial        Boolean          @default(false)
+  //
+  prompt            String?          @db.Text
+  parameters        Json?
+  //
+  pricing           Pricing          @default(FREE)
+  price             Int?
+  usage             Int?
+  //
+  stripe_product_id String?
+  stripe_price_id   String?
+  //
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+
+  //
+  @@index([type])
+  @@index([authorId])
+  @@index([status])
+  @@index([isFeatured])
+  @@index([pricing])
+}
+
+model PluginLike {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  // 
+  plugin    Plugin   @relation(fields: [pluginId], references: [id], onDelete: Cascade)
+  pluginId  String
+  // 
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+
+  @@unique([pluginId, userId])
+  @@index([pluginId])
+}
+
+model PluginPurchase {
+  id                        String    @id @default(cuid())
+  // 
+  plugin                    Plugin    @relation(fields: [pluginId], references: [id])
+  pluginId                  String
+  // 
+  user                      User      @relation(fields: [userId], references: [id])
+  userId                    String
+  // 
+  purchaseDate              DateTime  @default(now())
+  pricing                   Pricing
+  spent                     Int?
+  //
+  hasBeenUsed               Boolean   @default(false)
+  firstUsedAt               DateTime?
+  refunded                  Boolean   @default(false)
+  refundedAt                DateTime?
+  //
+  stripe_payment_intent_id  String?
+  stripe_charge_id          String?
+  stripe_transfer_id        String?
+  stripe_application_fee_id String?
+
+  //
+  @@unique([pluginId, userId])
+  @@index([userId])
+  @@index([pluginId])
+  @@index([stripe_payment_intent_id])
+}
+
+model Tag {
+  id      String   @id @default(cuid())
+  name    String   @unique
+  plugins Plugin[]
+
+  //
+  @@index([name])
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  content   String?  @db.Text
+  rating    Int
+  createdAt DateTime @default(now())
+  plugin    Plugin   @relation(fields: [pluginId], references: [id], onDelete: Cascade)
+  pluginId  String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+
+  //
+  @@unique([pluginId, userId])
+}
+
+model Usage {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  plugin      Plugin   @relation(fields: [pluginId], references: [id], onDelete: Cascade)
+  pluginId    String
+  story       Story    @relation(fields: [storyId], references: [id], onDelete: Cascade)
+  storyId     String
+  creditsUsed Int?
+
+  //
+  @@index([pluginId])
+  @@index([storyId])
+}
