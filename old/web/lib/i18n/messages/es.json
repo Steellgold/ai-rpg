@@ -1,0 +1,673 @@
+{
+  "Page": {
+    "Title": "Imagina una historia",
+    "Description": "Donde tus elecciones dan forma a la aventura y cada decisión cuenta.",
+    "Buttons": {
+      "GetStarted": "Comenzar",
+      "LearnMore": "Más información",
+      "WriteNow": "Continuar al editor",
+      "PlayNow": "Jugar ahora"
+    },
+    "Marketplace": {
+      "Title": "Comunidad",
+      "Description": "Explora aventuras creadas por otros jugadores.",
+      "Button": "Ir al mercado",
+      "CommingSoon": "Próximamente",
+      "NoStories": "No se encontraron historias"
+    },
+    "Login": {
+      "Why": "Necesitas una cuenta para comenzar una nueva aventura.",
+      "Button": "Iniciar sesión"
+    }
+  },
+  "Pages": {
+    "Continue": {
+      "Title": "Continúa tu aventura",
+      "Description": "Retoma donde lo dejaste y continúa tu viaje.",
+      "Continue": "Continuar",
+      "NoGame": "No se encontró ningún juego guardado",
+      "NoGameDescription": "No tienes ningún juego guardado. Comienza una nueva aventura para crear uno.",
+      "NewGame": "Comenzar una nueva aventura"
+    },
+    "New": {
+      "Title": "Crear una nueva aventura",
+      "Description": "Embárcate en una nueva historia y forja tu propio destino.",
+      "GeneratingTitle": "Generación de la historia",
+      "GeneratingDescription": "Puedes hacer algo más mientras generamos tu historia, puede llevar unos minutos.",
+      "BackToCreator": "Volver al creador",
+      "GeneratingSteps": {
+        "Pending": "Preparando tu historia...",
+        "DetectingLanguage": "Detectando el idioma de la historia...",
+        "Processing": "Generando el universo y los personajes...",
+        "GeneratingItems": "Creando objetos e ítems...",
+        "GeneratingScenes": "Construyendo tu primera escena...",
+        "GeneratingImages": "Creando ilustraciones...",
+        "Completed": "Finalizando tu aventura...",
+        "Error": "Ha ocurrido un error"
+      },
+      "AiTextarea": {
+        "SelectGenres": "Seleccionar temas",
+        "NoGenresFound": "No se encontraron géneros",
+        "Placeholder": "Una búsqueda épica en un reino mágico donde cada elección importa. Coraje, magia, destinos entrelazados y aventuras extraordinarias esperan al héroe.",
+        "Generate": "Generar historia",
+        "Loading": "Generación en progreso..., esto puede llevar un minuto",
+        "Clear": "Limpiar",
+        "SignIn": "Iniciar sesión",
+        "OpenEditor": "Abrir el editor",
+        "OpenEditorDescription": "El editor te permite personalizar completamente tu historia, crear personajes, elegir objetos y modificar escenas.",
+        "ChildModeOff": "Para niños",
+        "PublicModeOn": "Público",
+        "PublicModeOff": "Privado",
+        "ItemsEnabled": "Objetos habilitados",
+        "ItemsDisabled": "Objetos deshabilitados"
+      }
+    },
+    "Story": {
+      "Dialogue": {
+        "emotion": {
+          "happy": "feliz",
+          "sad": "triste",
+          "angry": "enojado",
+          "surprised": "sorprendido",
+          "confused": "confundido",
+          "afraid": "asustado",
+          "neutral": "neutral"
+        },
+        "expand": "Expandir",
+        "collapse": "Colapsar"
+      },
+      "SceneImage": "Imagen de la escena",
+      "Scenes": {
+        "Title": "Escenas",
+        "Description": "Aquí puedes ver las escenas de tu historia y volver a ellas (aunque no podrás cambiar una elección ya hecha)."
+      },
+      "Choose": "¿Qué quieres hacer?",
+      "Consequences": "Consecuencias",
+      "Confirm": "Quiero hacer esto",
+      "CustomChoice": "Elección personalizada",
+      "PersonalizedChoice": "Elección temática",
+      "CustomChoicePlaceholder": "Escribe tu elección aquí...",
+      "ChildrenStory": "Historia para niños",
+      "DiceRoll": {
+        "Title": "Tirada de dados",
+        "Description": "El resultado de los dados determinará el impacto de tu elección en la historia",
+        "Result": "Resultado:",
+        "Roll": "Tirar los dados",
+        "Rolling": "Tirando los dados...",
+        "Continue": "Continuar la historia",
+        "ImpactMinor": "Impacto menor en la historia",
+        "ImpactMedium": "Impacto medio en la historia",
+        "ImpactMajor": "Impacto mayor en la historia"
+      },
+      "Generating": "Generación",
+      "Previous": {
+        "Choices": "Elecciones anteriores",
+        "ChoiceSelected": "Elección seleccionada"
+      },
+      "Notes": {
+        "Title": "Notas",
+        "Saving": "Guardando...",
+        "Notes": "Notas ({count} palabra(s))",
+        "NoNotes": "Notas"
+      },
+      "CharacterCard": {
+        "type": {
+          "Main": "Personaje principal",
+          "Secondary": "Personaje secundario"
+        },
+        "age": "{age} años",
+        "abilities": "Habilidades",
+        "description": "Descripción",
+        "personality": "Personalidad",
+        "outfit": "Atuendo",
+        "background": "Antecedentes",
+        "relationships": "Relaciones",
+        "motivations": "Motivaciones",
+        "flaws": "Defectos",
+        "backstory": "Historia de fondo"
+      },
+      "ItemCard": {
+        "description": "Descripción",
+        "effect": "Efecto",
+        "uses": "Usos",
+        "unlimited_uses": "Usos ilimitados",
+        "remaining_uses": "{count} uso(s) restante(s)",
+        "quantity": "Cantidad",
+        "rarity_description": "Rareza",
+        "type_description": "Tipo de objeto",
+        "status": {
+          "equipped": "Equipado",
+          "unequipped": "Desequipado"
+        },
+        "rarity": {
+          "common": "Común",
+          "uncommon": "Poco común",
+          "rare": "Raro",
+          "epic": "Épico",
+          "legendary": "Legendario"
+        },
+        "rarity_desc": {
+          "common": "Un objeto ordinario, fácil de encontrar.",
+          "uncommon": "Un objeto de calidad superior, algo buscado.",
+          "rare": "Un objeto valioso que es difícil de obtener.",
+          "epic": "Un objeto excepcional con propiedades notables.",
+          "legendary": "Un objeto mítico con poderes extraordinarios."
+        },
+        "type": {
+          "weapon": "Arma",
+          "armor": "Armadura",
+          "potion": "Poción",
+          "key": "Llave",
+          "tool": "Herramienta",
+          "document": "Documento",
+          "quest": "Objeto de misión",
+          "misc": "Misceláneo"
+        },
+        "type_desc": {
+          "weapon": "Un objeto diseñado para infligir daño o defenderse.",
+          "armor": "Un objeto diseñado para proteger a su portador.",
+          "potion": "Un líquido con propiedades mágicas o alquímicas.",
+          "key": "Un objeto que abre una cerradura o permite el acceso a un lugar.",
+          "tool": "Una herramienta útil que facilita ciertas acciones.",
+          "document": "Un escrito que contiene información importante.",
+          "quest": "Un objeto relacionado con una misión o un objetivo específico.",
+          "misc": "Un objeto con propiedades diversas o no clasificables."
+        }
+      },
+      "Inventory": {
+        "title": "Inventario",
+        "search_placeholder": "Buscar un objeto...",
+        "all_items": "Todos los objetos",
+        "no_items_found": "Ningún objeto coincide con tu búsqueda",
+        "empty_inventory": "Tu inventario está vacío",
+        "equip": "Equipar",
+        "unequip": "Desequipar",
+        "use": "Usar",
+        "type": {
+          "weapon": "Armas",
+          "armor": "Armaduras",
+          "potion": "Pociones",
+          "key": "Llaves",
+          "tool": "Herramientas",
+          "document": "Documentos",
+          "quest": "Objetos de misión",
+          "misc": "Misceláneo"
+        }
+      }
+    },
+    "Account": {
+      "title": "Cuenta",
+      "description": "Administra tu configuración, créditos y suscripción",
+      "profile": {
+        "title": "Tu perfil",
+        "description": "Ver y editar tu información de perfil",
+        "edit": "Editar perfil"
+      },
+      "credits": {
+        "title": "Créditos",
+        "description": "Administra tus créditos de creación de historias",
+        "balance": "Saldo",
+        "buy": "Comprar créditos",
+        "popular": "Popular",
+        "bestValue": "Mejor valor",
+        "credits": "créditos",
+        "bonus": "bonificación",
+        "processing": "Procesando...",
+        "select": "Seleccionar",
+        "recentTransactions": "Transacciones recientes",
+        "noTransactions": "No hay transacciones recientes",
+        "buyDialog": {
+          "title": "Comprar créditos",
+          "description": "Selecciona un paquete de créditos para mejorar tu experiencia narrativa"
+        }
+      },
+      "subscription": {
+        "title": "Suscripción",
+        "description": "Administra tu plan de suscripción",
+        "status": {
+          "active": "Activo",
+          "inactive": "Inactivo"
+        },
+        "renewsOn": "Renueva el {date}",
+        "expiresOn": "Expira el {date}",
+        "change": "Cambiar plan",
+        "subscribe": "Suscribirse",
+        "monthly": "Mensual",
+        "yearly": "Anual",
+        "save": "Guardar",
+        "month": "mes",
+        "billedAs": "Facturado como {amount}/año",
+        "processing": "Procesando...",
+        "current": "Plan actual",
+        "select": "Seleccionar",
+        "canceling": "Cancelando...",
+        "cancelSubscription": "Cancelar suscripción",
+        "cancelDescription": "Todavía tendrás acceso hasta el final de tu período de facturación",
+        "included": "Incluido en tu plan",
+        "popular": "Popular",
+        "subscribeDialog": {
+          "title": "Elegir un plan de suscripción",
+          "description": "Selecciona el plan que mejor se adapte a tus necesidades narrativas"
+        }
+      },
+      "payment": {
+        "success": {
+          "title": "Pago exitoso",
+          "description": "Gracias por tu compra",
+          "processing": "Procesando tu transacción...",
+          "complete": "Tu transacción se ha completado con éxito.",
+          "goToAccount": "Ir a la cuenta"
+        },
+        "cancel": {
+          "title": "Pago cancelado",
+          "description": "Tu pago no se completó",
+          "message": "No se realizaron cargos a tu cuenta. Puedes intentarlo de nuevo cuando estés listo.",
+          "home": "Volver a inicio",
+          "tryAgain": "Intentar de nuevo"
+        }
+      }
+    }
+  },
+  "Navbar": {
+    "Credits": "Créditos",
+    "Language": "Idioma de la interfaz",
+    "LanguageSelector": {
+      "Placeholder": "Seleccionar un idioma",
+      "Label": "Idioma",
+      "Options": {
+        "en": "Inglés",
+        "fr": "Francés"
+      }
+    },
+    "SignIn": {
+      "Label": {
+        "Out": "Cerrar sesión",
+        "In": "Iniciar sesión con Discord"
+      }
+    }
+  },
+  "Components": {
+    "EnhancedSendButton": {
+      "credit": "crédito{s}",
+      "creditDetails": "Detalles del crédito",
+      "feature": "{name}",
+      "credits": "{count} crédito{s}",
+      "promptLength": "Longitud del prompt",
+      "availableCredits": "Créditos disponibles",
+      "creditsAmount": "{count} crédito{s}"
+    }
+  },
+  "Utils": {
+    "Credits": {
+      "Errors": {
+        "UserNotFound": "Usuario no encontrado",
+        "InsufficientCredits": "Créditos insuficientes",
+        "NoActiveSubscription": "No hay suscripción activa",
+        "AlreadyRefreshed": "Créditos ya actualizados este mes",
+        "PaymentError": "Error de pago",
+        "UnknownError": "Ha ocurrido un error desconocido"
+      },
+      "Transactions": {
+        "StoryGeneration": "Generación de historia",
+        "SubscriptionCredits": "Créditos de suscripción",
+        "CreditPurchase": "Compra de créditos",
+        "CreditRefund": "Reembolso de créditos",
+        "AdminAdjustment": "Ajuste administrativo",
+        "CreditBonus": "Créditos de bonificación"
+      }
+    },
+    "Languages": {
+      "selectLanguage": "Seleccionar idioma",
+      "storyLanguage": "Idioma de la historia",
+      "auto": "Autodetectar",
+      "en": "Inglés",
+      "fr": "Francés",
+      "es": "Español",
+      "it": "Italiano",
+      "de": "Alemán"
+    },
+    "Suggestions": {
+      "TKOK": {
+        "Label": "El Reino de Kiyomitsugawa",
+        "Prompt": "La historia tiene lugar en el reino de Kiyomitsugawa, una nación próspera bañada por ríos sagrados, con paisajes adornados con milenarios cerezos en flor y majestuosas montañas. Este reino, impregnado de serenidad y sabiduría ancestral, es gobernado por un rey benevolente que busca mantener la paz y la armonía entre su pueblo. Sin embargo, fuerzas oscuras amenazan con perturbar la tranquilidad de Kiyomitsugawa, y un joven héroe debe emprender un peligroso viaje para proteger su tierra natal y descubrir los secretos de su herencia ancestral."
+      },
+      "TSC": {
+        "Label": "Las Crónicas de la Sombra",
+        "Prompt": "En el oscuro reino de Umbra, donde el sol nunca brilla y la luna emite un resplandor eterno, una sociedad secreta de hechiceros conocidos como los Guardianes de la Sombra protege el frágil equilibrio entre la luz y la oscuridad. Cuando un poderoso artefacto es robado, amenazando con sumir al mundo en el caos, una joven aprendiz llamada Elara debe navegar por la traicionera política del Consejo de la Sombra y desentrañar los misterios del relicario robado antes de que sea demasiado tarde. A lo largo de su viaje, descubre verdades ocultas sobre su propio pasado y sobre la verdadera naturaleza de las sombras que la rodean."
+      },
+      "DRA": {
+        "Label": "El Despertar de los Dragones",
+        "Prompt": "En el mundo dividido de Drakoria, donde los dragones fueron considerados leyendas durante mil años, escamas relucientes comienzan a aparecer en las montañas del norte. Una joven cartógrafa llamada Lyra descubre que posee el raro don de comunicarse con estas majestuosas criaturas. Nacida con una marca de nacimiento en forma de escama en su muñeca, comprende que su destino está ligado al antiguo pacto roto entre humanos y dragones. Mientras los reinos humanos se preparan para la guerra contra estos seres que temen, Lyra debe viajar a los cinco nidos ancestrales para entender por qué los dragones están despertando ahora y convertirse en mediadora entre las dos especies antes de que estalle una guerra devastadora y consuma todo el mundo."
+      },
+      "APO": {
+        "Label": "Crónicas del Páramo",
+        "Prompt": "En el año 2157, cincuenta años después del Gran Colapso, la humanidad sobrevive en asentamientos dispersos por un desolado páramo. Los recursos son escasos y el peligro acecha en cada esquina. Eres un Recolector, nacido en las ruinas de lo que alguna vez fue una metrópolis próspera. Cuando el purificador de agua de tu comunidad falla, debes embarcarte en una peligrosa expedición por el páramo para encontrar las piezas necesarias. En el camino, te encontrarás con facciones rivales, vida silvestre mutada y los restos de tecnología pre-colapso. Pero tu viaje toma un giro inesperado cuando descubres una misteriosa señal que sugiere que el colapso podría no haber sido un accidente después de todo."
+      },
+      "SOG": {
+        "Label": "El Encantamiento de la Mansión Blackwood",
+        "Prompt": "El pequeño pueblo costero de Ravenport siempre ha susurrado sobre la Mansión Blackwood, la imponente mansión victoriana que domina el mar. Abandonada durante décadas después de la misteriosa desaparición de toda la familia Blackwood en 1963, la mansión se ha convertido en el tema de leyendas locales y cuentos de fantasmas. Cuando heredas la propiedad de un pariente lejano que nunca supiste que existía, decides pasar un mes allí para decidir qué hacer con ella. Los sucesos extraños comienzan de inmediato: susurros en habitaciones vacías, objetos que se mueven solos y atisbos de figuras que desaparecen al acercarse. A medida que descubres la oscura historia de la mansión y la verdad sobre tu conexión con la familia Blackwood, te das cuenta de que algunos secretos estaban destinados a permanecer enterrados y algunas puertas nunca deberían abrirse."
+      },
+      "VOY": {
+        "Label": "Odisea Estelar",
+        "Prompt": "El año es 2389. La humanidad ha colonizado el sistema solar y ha comenzado a aventurarse en el espacio interestelar. Eres el nuevo capitán de la Odisea, la nave de exploración más avanzada de la Tierra, equipada con un motor experimental más rápido que la luz. Tu misión: liderar una expedición de cinco años más allá de los límites del espacio conocido. Cuando un escaneo rutinario de un planeta inexplorado detecta signos de una antigua civilización alienígena, lideras un equipo a la superficie para investigar. Lo que descubres allí no solo desafiará todo lo que la humanidad cree saber sobre el universo, sino que también presentará una amenaza inminente para la propia Tierra. Con recursos limitados y una tripulación dividida sobre cómo proceder, tus decisiones determinarán el destino no solo de tu nave, sino potencialmente de toda la civilización humana."
+      },
+      "NEO": {
+        "Label": "Horizonte Neón",
+        "Prompt": "En 2087, las megacorporaciones gobiernan la metrópolis en expansión de Nueva Shanghái, donde la brecha entre los ultra-ricos y las masas en apuros se amplía cada día. Eres un 'corredor' – parte hacker, parte mercenario – que se gana la vida en las sombras aceptando trabajos que existen fuera de la ley. Cuando un cliente misterioso te ofrece una enorme suma para extraer datos de los servidores fuertemente custodiados de Helix Corporation, el trabajo parece demasiado bueno para rechazarlo a pesar de los riesgos evidentes. La extracción se realiza sin problemas – demasiado sin problemas – y pronto te encuentras en posesión de información que múltiples entidades poderosas matarían por obtener. Con las fuerzas de seguridad corporativa y los corredores rivales cazándote por las calles iluminadas con neón y las redes digitales de la ciudad, debes navegar por una red de traición y engaño para descubrir la verdad detrás de los datos y decidir qué hacer con un secreto que podría reconfigurar el equilibrio de poder para siempre."
+      },
+      "CLK": {
+        "Label": "La Conspiración del Relojero",
+        "Prompt": "Londres, 1889. El Imperio Británico está en la cúspide de su poder, y una revolución tecnológica está transformando la sociedad. Eres un detective de Scotland Yard, conocido por resolver casos que otros consideran imposibles. Cuando una serie de inventores y científicos prominentes comienzan a aparecer muertos, cada uno con un peculiar dispositivo de relojería cerca de sus cuerpos, te llaman a investigar. La pista te lleva a través de las calles envueltas en niebla de Londres, desde los brillantes salones de baile de la alta sociedad hasta los peligrosos muelles y los laboratorios experimentales de la Royal Society. A medida que descubres conexiones entre las víctimas y rumores de una nueva invención revolucionaria que podría cambiar el curso de la historia, te encuentras atrapado en una conspiración que llega a los niveles más altos del gobierno y amenaza el futuro del Imperio mismo."
+      },
+      "EXP": {
+        "Label": "Expedición al Pico Perdido",
+        "Prompt": "En las remotas montañas del Himalaya se encuentra el Pico Kalathar, una montaña que no aparece en ningún mapa oficial. Durante siglos, las leyendas locales han hablado de una civilización antigua que alguna vez prosperó allí, poseyendo conocimientos y tecnología muy avanzados para su tiempo. Como arqueólogo renombrado especializado en civilizaciones perdidas, has pasado tu carrera buscando evidencia de la existencia de Kalathar. Cuando un montañista moribundo entrega un extraño artefacto a tu oficina universitaria junto con las coordenadas del mítico pico, rápidamente reúnes un equipo de expedición. El arduo viaje a través de pasos de montaña inexplorados pone a prueba los límites de tu resistencia y la lealtad de tu equipo. Pero lo que te espera en la cima es más allá de cualquier cosa que pudieras haber imaginado: un descubrimiento que no solo reescribirá la historia, sino que también podría contener la clave del futuro de la humanidad. La pregunta es: ¿estamos listos para tal conocimiento?"
+      },
+      "ROM": {
+        "Label": "Entre Dos Mundos",
+        "Prompt": "En el pintoresco pueblo costero de Mistwood Cove, la realidad y la magia han coexistido en secreto durante siglos. Elena Winters, quien recientemente heredó la librería de su abuela, cree que vive en un mundo ordinario – hasta que descubre un antiguo libro que solo puede abrirse a medianoche bajo la luna llena. Dentro, encuentra la historia de Jonathan Blackwood, un hombre que parece existir en otro reino paralelo al suyo. A medida que Elena lee más de la historia de Jonathan cada noche, suceden cosas extrañas: objetos de su mundo aparecen en el de ella, y descubre que puede escribir en el libro para comunicarse con él. A medida que su conexión se profundiza a través de los mundos, descubren una amenaza compartida que podría destruir ambas realidades. Juntos, deben encontrar una manera de reunirse en persona y detener las fuerzas que quieren mantener sus mundos separados para siempre – mientras confrontan la pregunta de si el amor puede realmente unir la brecha entre diferentes realidades."
+      },
+      "STM": {
+        "Label": "Los Engranajes de la Revolución",
+        "Prompt": "En un siglo XIX alternativo donde la energía de vapor ha avanzado mucho más allá de nuestra línea de tiempo, el Imperio Británico domina el globo con sus maravillas tecnológicas: dirigibles que oscurecen los cielos, soldados mecánicos que patrullan las calles y fábricas gigantescas que expulsan humo día y noche. Eres el hijo de un brillante inventor cuyo diseño de motor revolucionario podría romper el monopolio del imperio sobre la energía de vapor. Cuando tu padre es arrestado por traición, apenas escapas con la única copia del diseño. En fuga de agentes imperiales, encuentras refugio con la Alianza Cogwork, una red clandestina de ingenieros, filósofos y revolucionarios que luchan por una distribución más equitativa de la tecnología. A medida que aumentan las tensiones políticas y la amenaza de una guerra global se cierne, debes navegar por un mundo de espionaje, traición y ambigüedad moral. El poder para liberar – o destruir – la civilización puede estar en tus manos, y el tiempo se agota para decidir cómo usarlo."
+      },
+      "HER": {
+        "Label": "El Amanecer de los Héroes",
+        "Prompt": "El mundo cambió para siempre en lo que se conoció como el Día de la Emergencia – cuando un evento cósmico inexplicado dotó aproximadamente a uno de cada millón de personas con habilidades extraordinarias. Diez años después, aquellos con poderes han sido tanto celebrados como temidos, con algunos usando sus dones para ayudar a la humanidad y otros buscando ganancias personales o poder. Descubriste tus habilidades – manipular la energía electromagnética – durante una situación que amenazaba tu vida, y las has mantenido en secreto mientras intentas vivir una vida normal. Pero cuando una serie de ataques coordinados por individuos con poderes aterroriza a tu ciudad, las autoridades comienzan a registrar y restringir a todos los que tienen habilidades. Atrapado entre facciones opuestas – fuerzas gubernamentales que buscan control, héroes vigilantes que luchan por la justicia a su manera y grupos revolucionarios que exigen derechos para los dotados – debes decidir dónde te encuentras. A medida que las teorías de conspiración sobre el verdadero origen del Día de la Emergencia ganan tracción y nueva evidencia sugiere una segunda ola de poderes emergiendo, tus elecciones ayudarán a dar forma a la futura relación entre los humanos ordinarios y aquellos con dones extraordinarios."
+      },
+      "TMT": {
+        "Label": "Fracturas en el Tiempo",
+        "Prompt": "La Dra. Elena Martínez, una brillante física cuántica, ha logrado lo que muchos pensaban imposible: ha construido una máquina del tiempo funcional. Pero su primera activación tiene consecuencias catastróficas, creando fracturas en la línea de tiempo que se están propagando y amenazando el tejido mismo de la realidad. Como su asistente de investigación, presencias el accidente y te encuentras misteriosamente no afectado por los cambios que ocurren a tu alrededor. Con la línea de tiempo cada vez más inestable, debes usar el transmisor temporal de prototipo de Elena para saltar entre diferentes eras, intentando reparar los puntos de fractura críticos. Cada salto te lleva a un momento crucial en la historia donde algo ha salido terriblemente mal: eventos que se desarrollan de manera diferente a como deberían, personas que existen cuando no deberían, o que faltan cuando deberían estar presentes. A medida que trabajas para restaurar el flujo adecuado del tiempo, descubres una verdad impactante: el accidente no fue un accidente en absoluto, sino un sabotaje. Alguien está deliberadamente tratando de reescribir la historia, y siempre parece estar un paso por delante de ti. ¿Puedes descubrir su identidad y sus verdaderos motivos antes de que la línea de tiempo se altere más allá de la reparación?"
+      },
+      "WG": {
+        "Label": "El Jardín de los Deseos",
+        "Prompt": "La historia tiene lugar en el pequeño pueblo de Roseville, rodeado de bosques encantados y cruzado por un río cristalino. En el centro del pueblo se encuentra un misterioso jardín donde, según se dice, las flores mágicas conceden los deseos de los niños de corazón puro. Cuando las flores comienzan a perder sus colores y su magia, Emma, una niña de 8 años que siempre ha creído en la magia del jardín, descubre que puede escuchar los susurros de las plantas. Acompañada por su amigo Lucas y una ardilla parlante llamada Hazel, Emma debe viajar a través del bosque encantado para encontrar las cuatro esencias de las estaciones y devolver la vida al Jardín de los Deseos antes de que toda la magia desaparezca del pueblo. Durante su viaje, aprenderá la importancia de la amistad, el coraje y la protección de la naturaleza."
+      },
+      "SL": {
+        "Label": "Los Guardianes del Faro Estelar",
+        "Prompt": "En la isla de Lumina, un antiguo y majestuoso faro brilla con una luz especial que guía no solo a los barcos, sino también a las estrellas en el cielo nocturno. Durante generaciones, la familia de Martin, un niño de 9 años, ha mantenido este faro y se ha asegurado de que su luz nunca se apague. Cuando extrañas nubes oscuras comienzan a cubrir la isla y las estrellas desaparecen una por una del cielo, Martin descubre un mensaje secreto dejado por su abuelo: el faro es en realidad un vínculo entre nuestro mundo y el de las constelaciones. Con la ayuda de su nueva vecina Lily y un pequeño dragón estelar caído del cielo, Martin debe resolver antiguos acertijos escondidos en la isla, reiniciar los mecanismos olvidados del faro y restaurar la conexión con el reino de las estrellas antes de que la oscuridad cubra por completo el cielo y los navegantes ya no puedan encontrar su camino."
+      },
+      "AO": {
+        "Label": "La Orquesta Animal",
+        "Prompt": "En el armonioso valle de Melodia, los animales y los humanos siempre han vivido en perfecta armonía gracias a la música mágica tocada durante el Gran Concierto de las Estaciones. Cada animal posee un instrumento único que, cuando se toca en orquesta, mantiene el equilibrio de la naturaleza. Pero cuando los instrumentos comienzan a desaparecer misteriosamente y el valle gradualmente cae en el silencio, las plantas se marchitan y las relaciones entre los animales y los humanos se tensan. Sophie, una niña apasionada por la música que puede entender el lenguaje de los animales a través de su flauta encantada, es elegida por el sabio búho Maestro para encontrar los instrumentos perdidos. Acompañada por sus nuevos amigos animales – un conejo percusionista, un violinista nutria y un clarinetista zorro – Sophie debe viajar a través de las cuatro regiones del valle, enfrentar sus miedos y descubrir quién está tratando de romper la armonía de Melodia, mientras aprende que la música más hermosa proviene de la cooperación y la amistad."
+      },
+      "FF": {
+        "Label": "Amigos Fieles",
+        "Prompt": "Max, de diez años, acaba de mudarse a una nueva ciudad, dejando atrás a todos sus amigos y sus alrededores familiares. Sintiéndose solo en su nuevo hogar, descubre un libro polvoriento en el ático titulado 'La Guía de la Amistad'. Cuando lo abre, para su asombro, el libro comienza a brillar y de él salta Scout, una pequeña criatura peluda que se presenta como un Zorro de la Amistad. Scout explica que su trabajo es ayudar a los niños a hacer nuevos amigos, pero necesita la ayuda de Max también: hay otras criaturas mágicas como él dispersas por la ciudad que han perdido el camino a casa en el libro. Juntos, Max y Scout emprenden una serie de aventuras por el vecindario, resolviendo acertijos y completando desafíos que no solo les ayudan a encontrar a los amigos de Scout, sino que también presentan a Max a los niños locales. Con cada nuevo amigo que hacen, tanto en el mundo humano como en el mágico, Max aprende valiosas lecciones sobre la empatía, el coraje y lo que realmente significa ser un buen amigo."
+      },
+      "MF": {
+        "Label": "Voladores Lunares",
+        "Prompt": "En el futuro cercano, un pequeño grupo de niños son seleccionados para ser los primeros niños en visitar la nueva colonia lunar, Artemis Base. Entre ellos se encuentra Zara, de 11 años, que sueña con seguir los pasos de su madre astronauta. Durante lo que debería ser un recorrido rutinario por los invernaderos lunares, Zara y sus nuevos amigos Jaime y Yuki descubren una planta misteriosa a diferencia de cualquier cosa cultivada en la Tierra o en la Luna. Cuando accidentalmente rompen una vaina de semillas, se sorprenden al descubrir que las semillas producen burbujas que, al estallar sobre una persona, otorgan temporalmente la capacidad de volar en la baja gravedad de la Luna. Manteniendo su descubrimiento en secreto de los adultos, los niños exploran áreas restringidas de la base por la noche y descubren evidencia de que algo está amenazando los sistemas de soporte vital de la colonia. Usando sus nuevas habilidades de vuelo, los niños deben trabajar juntos para navegar por los peligros del entorno lunar, resolver el misterio y salvar a todos en la base antes de que se agote el oxígeno. A lo largo del camino, aprenden importantes lecciones sobre la responsabilidad, el trabajo en equipo y el delicado equilibrio necesario para crear nuevos hogares más allá de la Tierra."
+      },
+      "SE": {
+        "Label": "Los Exploradores de Peluche",
+        "Prompt": "Todas las noches, cuando Lily, de ocho años, se va a dormir, sus peluches cobran vida y emprenden aventuras alrededor de su casa. Liderados por el Capitán Whiskers, un valiente oso de peluche con un sombrero de capitán, los exploradores de peluche protegen a Lily de las sombras y preocupaciones que se arrastran en la oscuridad. El equipo incluye a Stitches, el elefante de retazos conocido por su sabiduría; Zoom, el guepardo de peluche súper rápido; Fluff, el conejo cauteloso; y el miembro más nuevo, Sparkles, el unicornio que aún no cree que pertenece al grupo. Cuando Lily comienza a tener pesadillas sobre empezar en una nueva escuela, los exploradores de peluche descubren una forma de entrar en sus sueños a través de un portal mágico debajo de su cama. Dentro del mundo de los sueños, encuentran que los miedos de Lily han tomado la forma de un castillo de nubes oscuras en expansión que amenaza con engullir todos sus sueños felices. Los exploradores de peluche deben viajar a través de paisajes oníricos, resolver acertijos basados en los recuerdos de Lily y ayudarla a enfrentar sus miedos antes de que las pesadillas se vuelvan demasiado poderosas. A lo largo del camino, cada peluche descubre su fortaleza única, y Sparkles aprende que ser diferente es lo que la hace especial para el equipo."
+      },
+      "ED": {
+        "Label": "Los Detectives Encantados",
+        "Prompt": "En el aparentemente ordinario pueblo de Maplewood, los gemelos de 12 años Theo y Thea tienen un don especial: pueden ver criaturas mágicas que otros no pueden. La mayoría de estos seres viven pacíficamente junto a los humanos, pero ocasionalmente el misterio mágico interrumpe el pueblo, y es entonces cuando los gemelos se convierten en Los Detectives Encantados. Usando el diario de conocimiento mágico de su abuelo y una colección de herramientas de detective encantadas que él les dejó, resuelven misterios fantásticos que desconciertan a los adultos. Cuando las tareas de los estudiantes comienzan a desaparecer misteriosamente por todo el pueblo justo antes de un gran examen de fin de año, Theo y Thea sospechan de la participación mágica. Su investigación los lleva a descubrir un grupo de gusanos de libro – literalmente gusanos brillantes diminutos que comen información y se vuelven más inteligentes al consumir palabras escritas. Los gemelos deben averiguar por qué los gusanos de libro se han vuelto tan activos de repente, rastrear su nido en la biblioteca de la escuela y encontrar una manera de resolver el problema sin dañar a las criaturas. Con la ayuda de su nueva amiga Pari, que no ve a los seres mágicos pero es excepcionalmente buena en el razonamiento lógico, los gemelos necesitan recuperar el conocimiento robado antes de que toda la escuela falle en sus exámenes."
+      },
+      "DI": {
+        "Label": "Isla de los Tejedores de Sueños",
+        "Prompt": "Todos los niños saben que los sueños provienen de algún lugar especial, pero pocos descubren dónde. Oliver, de nueve años, lo descubre después de recibir una cámara antigua y misteriosa como regalo de cumpleaños de su abuela. Cuando toma fotos con ella y las coloca debajo de su almohada por la noche, la cámara lo transporta mientras duerme a la Isla de los Tejedores de Sueños: un lugar mágico donde se crean los sueños y se envían al mundo. En la isla, Oliver conoce a los Tejedores de Sueños, criaturas coloridas que elaboran sueños a partir de polvo de estrellas, recuerdos e imaginación. Le explican que su trabajo está en peligro porque el Rey de las Pesadillas está robando materiales de sueños felices para crear sueños aterradores en su lugar. Los Tejedores de Sueños creen que la cámara especial de Oliver, que puede capturar momentos de alegría y asombro puros, es la clave para restaurar el equilibrio. Con la ayuda de Fizzle, un aprendiz de Tejedor de Sueños, Oliver emprende una búsqueda alrededor de la isla para fotografiar las Siete Maravillas de los Sueños antes de que se desvanezcan por completo. Cada fotografía fortalece el poder de los Tejedores de Sueños y empuja hacia atrás las sombras que se avecinan. A lo largo del camino, Oliver aprende sobre la conexión entre nuestras experiencias despiertos y nuestros sueños, y descubre que incluso las pesadillas tienen un propósito importante cuando se equilibran con sueños felices."
+      },
+      "MM": {
+        "Label": "El Mago de Medianoche",
+        "Prompt": "Cuando Ellie, de 10 años, se muda a la antigua casa victoriana de su tía abuela, descubre un reloj de bolsillo misterioso escondido en un compartimento secreto de la pared de su dormitorio. El reloj no indica la hora; en cambio, exactamente a medianoche, le permite realizar magia real durante una hora. Con sus nuevos poderes, Ellie comienza a ayudar a vecinos y compañeros de clase con sus problemas, disfrazándose como 'El Mago de Medianoche' para que nadie conozca su identidad. Pero la magia siempre viene con reglas: cada hechizo debe lanzarse con buenas intenciones, y cualquier magia realizada durante la hora de la medianoche desaparece al amanecer a menos que la persona afectada haya aprendido realmente algo de la experiencia. A medida que la reputación de Ellie como el misterioso Mago de Medianoche crece, un compañero de clase sospechoso llamado Felix se vuelve decidido a descubrir su secreto. Mientras tanto, Ellie descubre que su tía abuela también era una maga de medianoche, y hay una razón por la que el reloj llegó a ella ahora: una sombra ha estado creciendo en el pueblo, alimentándose de sueños olvidados y esperanzas descartadas, y solo una maga de medianoche puede detenerla. Con Felix convirtiéndose inesperadamente en su aliado después de descubrir su secreto, Ellie debe dominar sus habilidades mágicas y encontrar la conexión entre el pasado de su tía abuela y la sombra creciente antes de que se vuelva demasiado poderosa para contenerla."
+      },
+      "JS": {
+        "Label": "Viaje al Palacio del Sol",
+        "Prompt": "Todos los días al amanecer, la Princesa del Sol conduce su carruaje dorado a través del cielo, trayendo calor y luz al mundo. Todas las tardes, regresa al magnífico Palacio del Sol que flota sobre las nubes. Al menos, así es como se supone que funciona. Pero una mañana, el sol no sale completamente; en cambio, se queda atascado a medio camino en el horizonte, dejando al mundo en una extraña media luz. Ray, de once años, que vive en un faro junto al mar, recibe un visitante inesperado: Spark, un pequeño fénix brillante que sirve como mensajero del Palacio del Sol. Spark explica que la Princesa del Sol ha enfermado, y sin su guía, el sol no puede completar su viaje. Lo que es peor, si no se recupera antes del próximo eclipse solar, el mundo podría sumirse en la oscuridad para siempre. Ray, que sabe todo sobre cuerpos celestes por ayudar en el faro, es invitado a viajar al Palacio del Sol para ayudar. Con Spark como guía, Ray viaja a través del siempre cambiante Reino de las Nubes, cruza el resplandeciente Puente del Crepúsculo y pasa los remolinos de las Dudas. A lo largo del camino, recogen ingredientes raros para un remedio: gotas de rocío del arcoíris más brillante, una pluma del águila del viento y luz de estrellas capturada en una botella. Cuando finalmente llegan al Palacio del Sol, descubren la verdadera causa de la enfermedad de la Princesa: está sola y ha perdido su alegría. Ray le muestra que la gente de la Tierra aprecia y celebra su trabajo todos los días, reavivando su espíritu justo a tiempo para evitar la oscuridad eterna."
+      },
+      "IB": {
+        "Label": "El Inspector Buzz y el Misterio del Jardín",
+        "Prompt": "En un ajetreado jardín lleno de plantas y criaturas de todo tipo, el Inspector Buzz (un detective abeja con una lupa diminuta y un sombrero de cazador) resuelve misterios para los residentes del jardín. Cuando las preciadas rosas del jardín comienzan a perder su color durante la noche, volviéndose de vibrantes rojos y rosas a un pálido blanco, el preocupado jardinero piensa que están enfermas y amenaza con reemplazarlas con flores artificiales. La Reina de las Rosas le pide al Inspector Buzz que resuelva el caso antes de que sea demasiado tarde. Con la ayuda de su asistente Watson (una oruga estudiosa que lleva un pequeño cuaderno), el Inspector Buzz entrevista a testigos del jardín: una familia de mariposas que notó luces extrañas alrededor de las rosas por la noche, un sapo gruñón que se queja de ruidos inusuales que interrumpen su sueño y una colonia de hormigas que informa haber visto polvo colorido siendo llevado. Siguiendo las pistas, el Inspector Buzz y Watson descubren un grupo de jóvenes hadas de la luz de luna que han estado 'tomando prestados' colores de las rosas para pintar el cielo nocturno para el próximo Festival de las Hadas, sin darse cuenta de los problemas que están causando. En lugar de regañarlas, el Inspector Buzz ayuda a negociar un compromiso: las hadas ayudarán a polinizar el jardín y compartirán algo de su polvo mágico de hadas para hacer que las rosas sean aún más espectaculares, y a cambio, se les permite tomar (no llevar) un poco de color cada noche, devolviéndolo antes del amanecer. Con el misterio resuelto, las rosas recuperan su vibrante color, el jardinero decide no reemplazarlas con flores artificiales y los residentes del jardín aprenden sobre la comunicación y el compartir."
+      },
+      "TT": {
+        "Label": "El Árbol Parlante",
+        "Prompt": "En medio del Bosque Susurrante se encuentra un antiguo roble que, según se dice, ha estado allí desde el principio de los tiempos. La leyenda local dice que solo habla con los niños que realmente necesitan su sabiduría. A sus siete años, Mia no cree en los árboles parlantes, pero después de que su familia se muda a una nueva casa junto al bosque tras la separación de sus padres, se encuentra atraída por el enorme roble. Para su asombro, cuando se sienta debajo de sus ramas y comienza a llorar por extrañar su antiguo hogar, el árbol le habla con una voz suave y retumbante. El Árbol Parlante le cuenta a Mia que ha sido testigo de innumerables cambios a lo largo de su larga vida y comparte historias de resiliencia y adaptación que la consuelan. Pronto, Mia comienza a visitar el árbol regularmente, llevando a su hermano menor Sam, que también tiene dificultades para adaptarse a su nueva realidad. El árbol les da pequeñas misiones alrededor del bosque: encontrar ciertas plantas, ayudar a animales necesitados o observar los cambios de las estaciones, cada una conteniendo lecciones que les ayudan a enfrentar el cambio. Cuando un promotor inmobiliario amenaza con talar parte del bosque, incluido el antiguo roble, Mia y Sam deben usar todo lo que han aprendido del Árbol Parlante para unir a la comunidad y proteger a su sabio amigo y el bosque que guarda. A través de sus esfuerzos para salvar el árbol, Mia y su hermano no solo preservan un tesoro natural, sino que también ayudan a construir el sentido de pertenencia que han estado extrañando en su nuevo hogar."
+      },
+      "VG": {
+        "Label": "Búsqueda Virtual",
+        "Prompt": "Jamie, de doce años, recibe un paquete misterioso que contiene lo que parece ser un auricular de realidad virtual ordinario para su cumpleaños. La única cosa inusual es la nota adjunta: 'Cuando la realidad se vuelve demasiado dura, a veces una nueva perspectiva ayuda'. Cuando Jamie se pone el auricular para jugar un nuevo juego llamado 'Búsqueda Virtual', se sorprende al encontrarse transportado a un mundo digital fantástico mucho más inmersivo que cualquier juego que haya jugado antes. Dentro del juego, conoce a Nova, una guía de IA que le explica que este no es un juego ordinario: es un mundo especial diseñado para ayudar a los niños a superar los desafíos de la vida real a través de aventuras virtuales. En el mundo real, Jamie ha estado luchando con mudarse a una nueva escuela y lidiar con una leve dislexia que lo hace sentir diferente de sus compañeros de clase. En Búsqueda Virtual, puede personalizar su avatar, elegir sus fortalezas y emprender misiones específicamente diseñadas para desarrollar la confianza, la resolución de problemas y la resiliencia. A medida que Jamie avanza a través de niveles de juego cada vez más desafiantes – cruzando puentes de rompecabezas cambiantes, descifrando piedras de lenguaje mágico que reorganizan las letras como su dislexia, y liderando un equipo de compañeros digitales excéntricos – comienza a aplicar lo que aprende a sus situaciones de la vida real. Cuando un misterioso error comienza a corromper partes del mundo virtual, Jamie descubre que otros niños que usan los auriculares especiales también enfrentan sus propios desafíos en la vida real. Juntos, deben combinar sus habilidades únicas para salvar su santuario virtual compartido mientras se ayudan mutuamente a superar sus obstáculos en la vida real."
+      }
+    },
+    "Genres": {
+      "fantasy-medieval": {
+        "label": "Fantasía Medieval",
+        "description": "Mundo de magia y caballeros"
+      },
+      "post-apocalyptic": {
+        "label": "Post-Apocalíptico",
+        "description": "Mundo después de una catástrofe mayor"
+      },
+      "space-opera": {
+        "label": "Ópera Espacial",
+        "description": "Aventuras épicas en el espacio"
+      },
+      "cyberpunk": {
+        "label": "Ciberpunk",
+        "description": "Futuro distópico con alta tecnología"
+      },
+      "steampunk": {
+        "label": "Steampunk",
+        "description": "Tecnología de vapor en un entorno victoriano"
+      },
+      "horror": {
+        "label": "Terror",
+        "description": "Historias aterradoras y perturbadoras"
+      },
+      "mystery": {
+        "label": "Misterio",
+        "description": "Rompecabezas y secretos por descubrir"
+      },
+      "adventure": {
+        "label": "Aventura",
+        "description": "Exploración y descubrimientos"
+      },
+      "action": {
+        "label": "Acción",
+        "description": "Escenas de acción emocionantes"
+      },
+      "romance": {
+        "label": "Romance",
+        "description": "Relaciones amorosas en el centro de la trama"
+      },
+      "historical": {
+        "label": "Histórico",
+        "description": "Basado en períodos históricos reales"
+      },
+      "super-heroes": {
+        "label": "Superhéroes",
+        "description": "Personajes con habilidades extraordinarias"
+      },
+      "urban-fantasy": {
+        "label": "Fantasía Urbana",
+        "description": "Elementos fantásticos en un entorno moderno"
+      },
+      "western": {
+        "label": "Western",
+        "description": "Aventuras en el Oeste Americano"
+      },
+      "mythology": {
+        "label": "Mitología",
+        "description": "Historias basadas en mitos y leyendas"
+      },
+      "slice-of-life": {
+        "label": "Historias de la Vida",
+        "description": "Historias cotidianas y relaciones humanas"
+      },
+      "dark-fantasy": {
+        "label": "Fantasía Oscura",
+        "description": "Elementos oscuros y siniestros en un entorno fantástico"
+      },
+      "dystopian": {
+        "label": "Distopía",
+        "description": "Sociedades futuras opresivas y pesadillescas"
+      },
+      "paranormal": {
+        "label": "Paranormal",
+        "description": "Elementos sobrenaturales e inexplicables"
+      },
+      "time-travel": {
+        "label": "Viaje en el Tiempo",
+        "description": "Historias que involucran viajes a través del tiempo"
+      },
+      "fantasy": {
+        "label": "Fantasía",
+        "description": "Mundos imaginarios con magia y criaturas fantásticas"
+      },
+      "sci-fi": {
+        "label": "Ciencia Ficción",
+        "description": "Tecnología avanzada y futuros alternativos"
+      },
+      "thriller": {
+        "label": "Thriller",
+        "description": "Suspense y tensión en la trama"
+      },
+      "comedy": {
+        "label": "Comedia",
+        "description": "Historias humorísticas y entretenidas"
+      },
+      "drama": {
+        "label": "Drama",
+        "description": "Conflictos emocionales y relaciones humanas"
+      },
+      "family": {
+        "label": "Familia",
+        "description": "Historias centradas en las relaciones familiares"
+      },
+      "sports": {
+        "label": "Deportes",
+        "description": "Historias sobre deportes y competencia"
+      },
+      "music": {
+        "label": "Música",
+        "description": "Historias centradas en la música y los músicos"
+      },
+      "food": {
+        "label": "Comida",
+        "description": "Historias sobre comida y cocina"
+      },
+      "travel": {
+        "label": "Viajes",
+        "description": "Historias de exploración y descubrimiento de nuevos lugares"
+      },
+      "pets": {
+        "label": "Mascotas",
+        "description": "Historias centradas en mascotas y sus dueños"
+      },
+      "supernatural": {
+        "label": "Sobrenatural",
+        "description": "Elementos sobrenaturales y místicos en la trama"
+      }
+    },
+    "Features": {
+      "BasicStory": {
+        "Name": "Historia Básica",
+        "Description": "Generación de una historia interactiva con escenas, personajes y elecciones."
+      },
+      "ChildMode": {
+        "Name": "Modo Infantil",
+        "Description": "Contenido adecuado para niños, sin violencia ni temas adultos."
+      },
+      "ItemSystem": {
+        "Name": "Sistema de Objetos",
+        "Description": "Adición de objetos interactivos que el jugador puede usar en la historia."
+      },
+      "BannerImage": {
+        "Name": "Imagen de Portada",
+        "Description": "Generación de una imagen de portada para tu historia."
+      },
+      "SceneImage": {
+        "Name": "Imágenes de Escena",
+        "Description": "Generación de imágenes únicas para cada escena de la historia."
+      },
+      "CharacterAvatar": {
+        "Name": "Avatares de Personajes",
+        "Description": "Generación de avatares para los personajes principales."
+      },
+      "ItemImage": {
+        "Name": "Imágenes de Objetos",
+        "Description": "Generación de imágenes para los objetos del inventario."
+      },
+      "LongStory": {
+        "Name": "Historia Larga",
+        "Description": "Aumenta el número máximo de escenas posibles en la historia."
+      },
+      "ComplexCharacters": {
+        "Name": "Personajes Complejos",
+        "Description": "Personajes más detallados con motivaciones y antecedentes más ricos."
+      },
+      "CustomTheme": {
+        "Name": "Tema Personalizado",
+        "Description": "Personaliza el estilo visual y la atmósfera de tu historia."
+      },
+      "BranchingPaths": {
+        "Name": "Múltiples Caminos",
+        "Description": "Crea una historia con más ramificaciones y finales alternativos."
+      },
+      "Cost": {
+        "Free": "Gratis",
+        "Credits": "{credits} crédito"
+      },
+      "Categories": {
+        "Basic": "Básico",
+        "Visual": "Visual",
+        "Advanced": "Avanzado",
+        "Special": "Especial"
+      }
+    },
+    "CreditPacks": {
+      "Dialog": {
+        "Title": "Recarga tus créditos",
+        "Description": "Elige el paquete de créditos que mejor se adapte a ti para comenzar o continuar creando historias cautivadoras.",
+        "Popular": "Popular",
+        "credits": "crédito{s}",
+        "Button": "Recargar ahora",
+        "Stripe": "Pago seguro con",
+        "Processing": "Procesando..."
+      },
+      "Small": {
+        "Name": "Paquete de Descubrimiento",
+        "Description": "Da tu primer paso en un mundo de posibilidades infinitas"
+      },
+      "Medium": {
+        "Name": "Paquete de Aventurero",
+        "Description": "Desata tu imaginación y comienza a crear epopeyas épicas"
+      },
+      "Large": {
+        "Name": "Paquete de Creador",
+        "Description": "Construye mundos únicos, personajes inolvidables y historias vibrantes"
+      },
+      "XLarge": {
+        "Name": "Paquete de Narrador",
+        "Description": "Domina el arte de contar historias; tu leyenda comienza aquí"
+      }
+    }
+  },
+  "Footer": {
+    "about": {
+      "title": "Acerca de",
+      "description": "Imagine.place es una plataforma de narración interactiva impulsada por IA que te permite crear y experimentar aventuras inmersivas donde tus elecciones dan forma a la narrativa."
+    },
+    "links": {
+      "title": "Enlaces",
+      "home": "Inicio",
+      "stories": "Mis Historias",
+      "account": "Mi Cuenta"
+    },
+    "legal": {
+      "title": "Legal",
+      "terms": "Términos de Servicio",
+      "privacy": "Política de Privacidad"
+    },
+    "contact": {
+      "title": "Contacto",
+      "form": "Formulario de Contacto",
+      "support": "Soporte Técnico",
+      "feedback": "Enviar Comentarios"
+    },
+    "copyright": "Todos los derechos reservados."
+  }
+}
