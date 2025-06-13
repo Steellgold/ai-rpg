@@ -1,9 +1,0 @@
-{
-  "name": "@imagine/payments",
-  "exports": {
-    "./stripe": "./src/openai.ts"
-  },
-  "dependencies": {
-    "stripe": "^18.0.0"
-  }
-}
