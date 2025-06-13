@@ -34,7 +34,7 @@ export const AudioPlayer: Component<AudioPlayerProps> = ({
       <>
         <Button
           variant="default"
-          size={"sm9"}
+          size={"md"}
           onClick={isPlaying ? onPause : onPlay}
           className="rounded-l-full bg-blue-500/20 text-blue-400 hover:bg-blue-600/20 relative overflow-hidden inline-flex items-center gap-2 px-4 py-2"
         >

@@ -53,7 +53,7 @@ export const VoiceRecorder = () => {
           <div className="relative inline-block">
             <Button
               variant="default"
-              size={isRecording ? "sm9" : "ycon"}
+              size={isRecording ? "md" : "ycon"}
               onClick={handleClick}
               aria-label={isRecording ? "Arrêter l'enregistrement" : "Commencer l'enregistrement"}
               className={cn(
