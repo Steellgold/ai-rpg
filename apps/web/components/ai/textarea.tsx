@@ -164,7 +164,9 @@ export const AiTextarea = () => {
             <StoryInput value={inputValue} onChange={setInputValue} disabled={isGenerating} />
 
             <div className="flex justify-between items-center">
-              <VoiceRecorder />
+              <div className="flex items-center gap-1">
+                <VoiceRecorder />
+              </div>
 
               <Button
                 onClick={handleGenerate}
