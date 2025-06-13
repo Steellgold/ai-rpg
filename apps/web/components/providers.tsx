@@ -1,5 +1,3 @@
-"use client"
-
 import { ThemeProvider as NextThemesProvider } from "next-themes"
 import { getMessages } from "next-intl/server";
 import { AsyncComponent } from "@/lib/component";
