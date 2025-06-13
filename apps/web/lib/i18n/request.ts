@@ -2,7 +2,7 @@ import { getRequestConfig } from "next-intl/server";
 import { cookies } from "next/headers";
 import { ISOLang, SupportedLangs, supportedLanguages } from "@workspace/ui/types/lang";
 
-const FILES = ["navigation"];
+const FILES = ["navigation", "home"] as const;
 
 const detectLanguage = (
   acceptLanguage: string | null,

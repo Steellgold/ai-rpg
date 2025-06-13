@@ -14,8 +14,6 @@ export const PageLayout: Component<PropsWithChildren> = ({ children, aurora = ["
       </div>
 
       {children}
-
-      <div className="mt-12 h-[60px]" />
     </main>
   );
 }
