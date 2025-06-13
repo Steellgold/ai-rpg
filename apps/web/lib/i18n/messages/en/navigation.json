@@ -1,0 +1,10 @@
+{
+  "Navbar": {
+    "Stories": {
+      "label": "Stories"
+    },
+    "SignOut": {
+      "label": "Sign Out"
+    }
+  }
+}
