@@ -15,6 +15,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@workspace/ui/components/av
 // import { useSession } from "@/lib/hooks/use-session"
 import { redirect } from "next/navigation"
 import Link from "next/link"
+import { Component } from "@/lib/component"
 // import { useCredits } from "@/lib/hooks/use-credits"
 // import Image from "next/image"
 // import { LanguageDialog } from "../dialogs/language.dialog"
@@ -27,7 +28,13 @@ const user = {
   avatar_url: "https://placehold.co/350x350/000000/FFFFFF/png?text=JD",
 }
 
-export const ProfileComponent = () => {
+type ProfileComponentProps = {
+  variant?: "default" | "navbar";
+}
+
+export const ProfileComponent: Component<ProfileComponentProps> = ({
+  variant = "default"
+}) => {
   const t = useTranslations("Navbar");
 
   // const { session, simplifiedUser: user, loading, signOut } = useSession();
@@ -40,7 +47,7 @@ export const ProfileComponent = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button className={`flex items-center gap-2`}>
+        <Button className={`flex items-center gap-2`} variant={variant}>
           <Avatar className="h-6 w-6">
             {user.avatar_url && <AvatarImage src={user.avatar_url} alt={user.name ?? ""} />}
             <AvatarFallback>
