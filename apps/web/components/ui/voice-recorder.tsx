@@ -9,16 +9,12 @@ import React from "react"
 
 export const VoiceRecorder = () => {
   const {
-    status,
-    record,
-    stop,
-    play,
-    pause,
-    discard,
-    sendRecording,
-    elapsedTime,
-    audioDuration,
-    playbackProgress,
+    // State
+    status, elapsedTime,
+    audioDuration, playbackProgress,
+    // Functions
+    record, stop, play, pause,
+    discard, sendRecording,
   } = useRecorder()
 
   const isRecording = status === "RECORDING"
@@ -60,6 +56,7 @@ export const VoiceRecorder = () => {
                 "rounded-full transition-all bg-[#1a1a1a] text-gray-400 hover:bg-[#2a2a2a] relative overflow-hidden inline-flex items-center gap-2 px-4 py-2",
                 { "bg-red-500/20 text-red-400 hover:bg-red-600/20": isRecording },
               )}
+              disabled={status === "NOT_SUPPORTED"}
             >
               {isRecording && (
                 <div

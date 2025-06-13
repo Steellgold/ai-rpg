@@ -2,9 +2,9 @@
 
 import { useEffect, useRef, useState, useCallback } from "react"
 
-export const MAX_RECORDING_TIME = 5
+export const MAX_RECORDING_TIME = 170
 
-type RecorderStatus = "IDLE" | "RECORDING" | "PLAYING" | "PAUSED" | "RECORDED"
+type RecorderStatus = "IDLE" | "RECORDING" | "PLAYING" | "PAUSED" | "RECORDED" | "NOT_SUPPORTED"
 
 export const useRecorder = () => {
   const [status, setStatus] = useState<RecorderStatus>("IDLE")
@@ -23,17 +23,26 @@ export const useRecorder = () => {
   const animationRef = useRef<number | null>(null)
   const recordingDurationRef = useRef<number>(0)
 
-  // Fonction interne pour arrêter l'enregistrement sans dépendances
-  const stopRecording = useCallback(() => {
-    if (mediaRecorderRef.current) {
-      mediaRecorderRef.current.stop()
+  useEffect(() => {
+    if (
+      !navigator.mediaDevices ||
+      !navigator.mediaDevices.getUserMedia ||
+      typeof MediaRecorder === "undefined"
+    ) {
+      setStatus("NOT_SUPPORTED")
+    } else {
+      setStatus("IDLE")
     }
-    
+  }, [])
+
+  const stopRecording = useCallback(() => {
+    if (mediaRecorderRef.current) mediaRecorderRef.current.stop()
+
     if (intervalRef.current) {
       clearInterval(intervalRef.current)
       intervalRef.current = null
     }
-    
+
     if (animationRef.current) {
       cancelAnimationFrame(animationRef.current)
       animationRef.current = null
@@ -41,6 +50,7 @@ export const useRecorder = () => {
   }, [])
 
   const record = useCallback(async () => {
+    if (status === "NOT_SUPPORTED") return
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
       const mediaRecorder = new MediaRecorder(stream)
@@ -85,7 +95,6 @@ export const useRecorder = () => {
           const newTime = prev + 1
           recordingDurationRef.current = newTime
           if (newTime >= MAX_RECORDING_TIME) {
-            // Arrêt automatique - utilise la même fonction que l'arrêt forcé
             stopRecording()
             return MAX_RECORDING_TIME
           }
@@ -108,7 +117,7 @@ export const useRecorder = () => {
     } catch (error) {
       console.error("Error accessing microphone:", error)
     }
-  }, [stopRecording])
+  }, [stopRecording, status])
 
   const stop = useCallback(() => {
     if (mediaRecorderRef.current && status === "RECORDING") {
