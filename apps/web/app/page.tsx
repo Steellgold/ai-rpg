@@ -2,6 +2,7 @@ import { ReactElement } from "react";
 import { Syne } from "next/font/google";
 import { getTranslations } from "next-intl/server";
 import { PageLayout } from "@workspace/ui/components/page-layout";
+import { AiTextarea } from "@/components/ai/textarea";
 
 const syne = Syne({ subsets: ["latin"] });
 
@@ -20,7 +21,7 @@ const Page = async(): Promise<ReactElement>=> {
           <div className="h-6" />
 
           <div className="px-4 lg:px-0 w-full">
-            {/* <AiTextarea /> */}
+            <AiTextarea />
           </div>
         </section>
       </PageLayout>
