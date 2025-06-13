@@ -13,9 +13,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@workspace/ui/components/av
 
 // import { AuthButton } from "./auth-button"
 // import { useSession } from "@/lib/hooks/use-session"
-import { redirect } from "next/navigation"
 import Link from "next/link"
-import { Component } from "@/lib/component"
+import { Component } from "@workspace/ui/types/component"
 // import { useCredits } from "@/lib/hooks/use-credits"
 // import Image from "next/image"
 // import { LanguageDialog } from "../dialogs/language.dialog"
