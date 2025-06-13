@@ -26,6 +26,7 @@
     "@radix-ui/react-slot": "^1.1.2",
     "@radix-ui/react-switch": "^1.2.5",
     "@workspace/ui": "workspace:*",
+    "@workspace/ai": "workspace:*",
     "lucide-react": "^0.475.0",
     "next": "^15.2.3",
     "next-intl": "^4.1.0",
@@ -35,6 +36,7 @@
     "sonner": "^2.0.5"
   },
   "devDependencies": {
+    "tailwindcss": "^4.0.8",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
