@@ -17,6 +17,7 @@ export const metadata: Metadata = { ...defaultMetadata };
 
 const RootLayout: AsyncComponent<PropsWithChildren> = async({ children }) => {
   const locale = await getLocale();
+  if (!locale) throw new Error("Locale not found");
 
   return (
     <html lang={locale} style={{ scrollBehavior: "smooth"}} suppressHydrationWarning>
