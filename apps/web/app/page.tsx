@@ -12,7 +12,7 @@ const Page = async(): Promise<ReactElement>=> {
   return (
     <>
       <PageLayout>
-        <section className="flex flex-col items-center max-w-2xl mx-auto sm:mt-10">
+        <section className="flex flex-col items-center max-w-2xl mx-auto">
           <div className="flex flex-col items-center text-center">
             <h1 className={`${syne.className} text-2xl lg:text-4xl font-extrabold`}>{t("Top.title")}</h1>
             <p className={`${syne.className} text-sm lg:text-lg font-medium`}>{t("Top.subtitle")}</p>
