@@ -27,6 +27,10 @@
       "finalizing": "Finalizing the story",
       "ready": "Your story is ready!",
       "error": "An error occurred while processing your story, please try again later"
+    },
+
+    "Messages": {
+      "leave": "You can leave this page and come back later to see the progress of your story."
     }
   }
 }

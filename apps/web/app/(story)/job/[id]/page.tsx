@@ -2,7 +2,7 @@ import { ReactElement } from "react";
 import { Syne } from "next/font/google";
 import { getTranslations } from "next-intl/server";
 import { PageLayout } from "@workspace/ui/components/page-layout";
-import { Check, Loader } from "lucide-react";
+import { Check, Info, Loader } from "lucide-react";
 import { Card, CardContent } from "@workspace/ui/components/card";
 import { cn } from "@workspace/ui/lib/utils";
 
@@ -15,8 +15,15 @@ const status = [
   "creating_main_chars"
 ];
 
+const durations = {
+  initialized: 2,
+  detecting_language: 1.5,
+  generating_story: 3.8,
+  creating_main_chars: 2.4
+};
+
 const Page = async (): Promise<ReactElement> => {
-  const t = await getTranslations("Proccessing"); 
+  const t = await getTranslations("Proccessing");
 
   return (
     <>
@@ -47,6 +54,8 @@ const Page = async (): Promise<ReactElement> => {
               {[...status].reverse().map((s, index) => {
                 const isLast = index === 0;
                 const isCompleted = index !== 0;
+                // @ts-ignore
+                const duration = durations[s];
 
                 return (
                   <div
@@ -69,9 +78,17 @@ const Page = async (): Promise<ReactElement> => {
                       )}
                     </div>
 
-                    <span className={`text-sm lg:text-lg font-medium`}>
+                    <span className="text-sm lg:text-lg font-medium mr-2">
                       {t(`States.${s}`)}
                     </span>
+
+                    {!isLast && (
+                        <span className="text-xs text-gray-400">
+                        {duration > 60
+                          ? `(${Math.floor(duration / 60)}m ${(duration % 60)}s)`
+                          : `(${duration.toFixed(1)}s)`}
+                        </span>
+                    )}
                   </div>
                 );
               })}
@@ -79,6 +96,11 @@ const Page = async (): Promise<ReactElement> => {
           </Card>
         </section>
       </PageLayout>
+
+      <div className="absolute text-xs lg:text-sm text-gray-500 bottom-0 left-0 right-0 text-center p-4 flex items-center justify-center">
+        <Info className="inline mr-1" size={14} />
+        {t("Messages.leave")}
+      </div>
     </>
   );
 };
