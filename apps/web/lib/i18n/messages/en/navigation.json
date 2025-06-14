@@ -6,6 +6,12 @@
     "Session": {
       "in": "Sign in with {provider}",
       "out": "Sign Out"
+    },
+    "Preferences": {
+      "levitate": "Levitation",
+
+      "enabled": "On",
+      "disabled": "Off"
     }
   }
 }

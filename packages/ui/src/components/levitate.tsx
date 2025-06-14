@@ -32,10 +32,6 @@ export const Levitate: Component<LevitateProps> = ({
 }) => {
   const [floatPosition, setFloatPosition] = useState(0);
 
-  if (disabled) {
-    return <>{children}</>;
-  }
-
   useEffect(() => {
     let animationFrameId: number
     let startTime: number | null = null
@@ -70,6 +66,8 @@ export const Levitate: Component<LevitateProps> = ({
         return `translateY(${floatPosition}px)`
     }
   }
+  
+  if (disabled) return <>{children}</>;
 
   return (
     <div
