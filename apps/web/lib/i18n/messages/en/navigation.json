@@ -3,8 +3,9 @@
     "Stories": {
       "label": "Stories"
     },
-    "SignOut": {
-      "label": "Sign Out"
+    "Session": {
+      "in": "Sign in with {provider}",
+      "out": "Sign Out"
     }
   }
 }

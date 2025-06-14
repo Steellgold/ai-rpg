@@ -1,6 +1,6 @@
 "use client"
 
-import { User, ChevronDown, LogOut, LibraryBig } from "lucide-react"
+import { User, ChevronDown, LogOut, LibraryBig, Loader2 } from "lucide-react"
 import { useTranslations } from "next-intl"
 
 import {
@@ -15,17 +15,14 @@ import { Avatar, AvatarFallback, AvatarImage } from "@workspace/ui/components/av
 // import { useSession } from "@/lib/hooks/use-session"
 import Link from "next/link"
 import { Component } from "@workspace/ui/types/component"
+import { signOut, useSession } from "@/lib/auth-client"
+import { redirect } from "next/navigation"
+import { toast } from "sonner"
+import { AuthButton } from "./auth-button"
 // import { useCredits } from "@/lib/hooks/use-credits"
 // import Image from "next/image"
 // import { LanguageDialog } from "../dialogs/language.dialog"
 // import { CreditsDialog } from "../dialogs/credits.dialog"
-
-const user = {
-  display_name: "John Doe",
-  name: "John Doe",
-  email: "john@company.com",
-  avatar_url: "https://placehold.co/350x350/000000/FFFFFF/png?text=JD",
-}
 
 type ProfileComponentProps = {
   variant?: "default" | "navbar";
@@ -34,33 +31,44 @@ type ProfileComponentProps = {
 export const ProfileComponent: Component<ProfileComponentProps> = ({
   variant = "default"
 }) => {
+  const { data, isPending: loading } = useSession();
   const t = useTranslations("Navbar");
+  const err = useTranslations("Errors");
+
+  const user = data?.user;
+  if (!user || loading) {
+    return (
+      <Button variant={variant} className={`flex items-center gap-2`} disabled>
+        <Loader2 className="animate-spin" size={16} />
+      </Button>
+    )
+  }
 
   // const { session, simplifiedUser: user, loading, signOut } = useSession();
   // const { credits, loading: creditsLoading } = useCredits();
 
-  // if (!session || !user || loading || creditsLoading) {
-  //   return <AuthButton Navbar={variant === "navbar"} />
-  // }
+  if (!user || loading) {
+    return <AuthButton Navbar={variant === "navbar"} />
+  }
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button className={`flex items-center gap-2`} variant={variant}>
           <Avatar className="h-6 w-6">
-            {user.avatar_url && <AvatarImage src={user.avatar_url} alt={user.name ?? ""} />}
+            {user.image && <AvatarImage src={user.image} alt={user.name ?? ""} />}
             <AvatarFallback>
               <User size={16} />
             </AvatarFallback>
           </Avatar>
-          <span className="hidden sm:inline max-w-[100px] truncate">{user.display_name}</span>
+          <span className="hidden sm:inline max-w-[100px] truncate">{user.name}</span>
           <ChevronDown size={16} />
         </Button>
       </DropdownMenuTrigger>
       
       <DropdownMenuContent align="end" className="w-56">
         <div className="flex flex-col -space-y-1 mb-1.5">
-          <DropdownMenuLabel>{user.display_name}</DropdownMenuLabel>
+          <DropdownMenuLabel>{user.name}</DropdownMenuLabel>
           <p className="px-2 text-sm text-muted-foreground">{user.email}</p>
         </div>
 
@@ -109,17 +117,18 @@ export const ProfileComponent: Component<ProfileComponentProps> = ({
 
         {/* Logout */}
         <DropdownMenuItem className="p-0 cursor-pointer" onSelect={async () => {
-          // const { error } = await signOut()
-          // if (error) {
-          //   console.error(error)
-          //   return;
-          // }
+          const { error } = await signOut()
+          if (error) {
+            console.error(error)
+            toast.error(err("signout_failed"))
+            return;
+          }
         
-          // redirect(process.env.NEXT_PUBLIC_BASE_URL!)
+          redirect(process.env.NEXT_PUBLIC_BASE_URL!)
         }}>
           <div className="flex items-center gap-2 px-2 py-1.5">
             <LogOut size={16} />
-            {t("SignOut.label")}
+            {t("Session.out")}
           </div>
         </DropdownMenuItem>
       </DropdownMenuContent>
