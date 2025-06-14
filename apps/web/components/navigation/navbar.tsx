@@ -45,7 +45,7 @@ export const Navbar = () => {
                 <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary">
                   <Image src="/icon.webp" alt="Logo" width={32} height={32} className="object-contain p-1" />
                 </div>
-                <span className="text-lg font-bold">Website</span>
+                <span className="text-lg font-bold">Imagine</span>
               </Link>
             </div>
           </SheetContent>
