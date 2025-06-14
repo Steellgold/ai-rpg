@@ -1,6 +1,6 @@
 "use client"
 
-import { User, ChevronDown, LogOut, LibraryBig, Loader2 } from "lucide-react"
+import { User, ChevronDown, LogOut, LibraryBig, Loader2, Wind } from "lucide-react"
 import { useTranslations } from "next-intl"
 
 import {
@@ -18,7 +18,8 @@ import { Component } from "@workspace/ui/types/component"
 import { signOut, useSession } from "@/lib/auth-client"
 import { redirect } from "next/navigation"
 import { toast } from "sonner"
-import { AuthButton } from "./auth-button"
+import { usePreferences } from "@/app/contexts/user-preferences-context"
+import { Badge } from "@workspace/ui/components/badge"
 // import { useCredits } from "@/lib/hooks/use-credits"
 // import Image from "next/image"
 // import { LanguageDialog } from "../dialogs/language.dialog"
@@ -32,8 +33,6 @@ export const ProfileComponent: Component<ProfileComponentProps> = ({
   variant = "default"
 }) => {
   const { data, isPending: loading } = useSession();
-  const t = useTranslations("Navbar");
-  const err = useTranslations("Errors");
 
   const user = data?.user;
   if (!user || loading) {
@@ -43,13 +42,10 @@ export const ProfileComponent: Component<ProfileComponentProps> = ({
       </Button>
     )
   }
-
-  // const { session, simplifiedUser: user, loading, signOut } = useSession();
-  // const { credits, loading: creditsLoading } = useCredits();
-
-  if (!user || loading) {
-    return <AuthButton Navbar={variant === "navbar"} />
-  }
+  
+  const t = useTranslations("Navbar");
+  const err = useTranslations("Errors");
+  const { isEnabled, toggle } = usePreferences();
 
   return (
     <DropdownMenu>
@@ -81,6 +77,23 @@ export const ProfileComponent: Component<ProfileComponentProps> = ({
               <span>{t("Stories.label")}</span>
             </div>
           </Link>
+        </DropdownMenuItem>
+
+        <DropdownMenuSeparator />
+
+        <DropdownMenuItem className="p-0 cursor-pointer" onSelect={(e) => {
+          toggle("levitate");
+        }}>
+          <div className="flex items-center justify-between w-full px-2 py-1.5">
+            <div className="flex items-center gap-2">
+              <Wind size={16} />
+              <span>{t("Preferences.levitate")}</span>
+            </div>
+            
+            <Badge>
+              {isEnabled("levitate") ? t("Preferences.enabled") : t("Preferences.disabled")}
+            </Badge>
+          </div>
         </DropdownMenuItem>
 
         {/* <CreditsDialog>
