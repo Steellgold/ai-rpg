@@ -4,13 +4,17 @@ import type { Component } from "@workspace/ui/types/component"
 import { Textarea } from "@workspace/ui/components/textarea"
 import { Levitate } from "@workspace/ui/components/levitate"
 import { Button } from "@workspace/ui/components/button"
-import { ArrowUp, Type, Loader2 } from "lucide-react"
+import { ArrowUp, Type, Loader2, Images } from "lucide-react"
 import { VoiceRecorder } from "../ui/voice-recorder"
 import { Card } from "@workspace/ui/components/card"
 import { useEffect, useRef, useState } from "react"
 import { cn } from "@workspace/ui/lib/utils"
 import type React from "react"
 import Image from "next/image"
+import { FeatureConfigDialog } from "./feature-config-dialog"
+import { FeatureButton } from "./feature-button"
+import { useStoryContext } from "@/app/contexts/story-context"
+import { usePreferences } from "@/app/contexts/user-preferences-context"
 
 type StoryInputProps = {
   value?: string
@@ -18,11 +22,14 @@ type StoryInputProps = {
   disabled?: boolean
 }
 
-export const StoryInput: Component<StoryInputProps> = ({ value = "", onChange, disabled = false }) => {
+export const StoryInput: Component<StoryInputProps> = ({
+  value = "",
+  onChange,
+  disabled = false
+}) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null)
-  const [isFocused, setIsFocused] = useState(false)
   const [charCount, setCharCount] = useState(0)
-  const maxChars = 500
+  const maxChars = 2500
 
   useEffect(() => {
     if (textareaRef.current) {
@@ -40,15 +47,8 @@ export const StoryInput: Component<StoryInputProps> = ({ value = "", onChange, d
 
   return (
     <div className="relative">
-      <div
-        className={cn(
-          "relative rounded-xl border-2 transition-all duration-300",
-          isFocused
-            ? "border-indigo-500/50 shadow-lg shadow-indigo-500/10"
-            : "border-gray-700/50 hover:border-gray-600/50",
-        )}
-      >
-        <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-gray-800/30 to-gray-900/50 backdrop-blur-sm" />
+      <div className={"relative rounded-xl transition-all duration-300"}>
+        <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-gray-800/10 to-gray-900/20 backdrop-blur-sm" />
 
         <Textarea
           ref={textareaRef}
@@ -58,20 +58,17 @@ export const StoryInput: Component<StoryInputProps> = ({ value = "", onChange, d
               onChange(e.target.value)
             }
           }}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
           onKeyDown={handleKeyDown}
           placeholder="Décrivez votre histoire... Que voulez-vous créer aujourd'hui ?"
           className={cn(
-            "relative z-10 min-h-[140px] resize-none bg-transparent border-0",
+            "relative z-10 min-h-[150px] resize-none bg-transparent",
             "text-gray-100 placeholder:text-gray-400/70",
             "focus:ring-0 focus:outline-none",
-            "text-base leading-relaxed p-4",
-            "scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-600/50",
+            "text-base leading-relaxed p-4"
           )}
           disabled={disabled}
-          autoFocus
           maxLength={maxChars}
+          autoFocus
         />
 
         <div className="absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-gray-900/20 to-transparent pointer-events-none rounded-b-xl" />
@@ -108,6 +105,9 @@ export const StoryInput: Component<StoryInputProps> = ({ value = "", onChange, d
 export const AiTextarea = () => {
   const [inputValue, setInputValue] = useState("")
   const [isGenerating, setIsGenerating] = useState(false)
+  
+  const { isFeatureEnabled } = useStoryContext();
+  const { isEnabled } = usePreferences();
 
   const handleGenerate = () => {
     if (!inputValue.trim()) return
@@ -118,29 +118,33 @@ export const AiTextarea = () => {
   return (
     <div className="w-full space-y-4 relative">
       <div className="absolute inset-0 overflow-visible pointer-events-none">
-        <div className="absolute -top-[55px] -right-[35px] rotate-[31deg] select-none pointer-events-none hidden lg:block">
-          <Image
-            src={"/assets/illustrations/dragon-body.svg"}
-            alt="dragon"
-            width={90}
-            height={90}
-            className="drop-shadow-lg"
-          />
+        <div className="absolute -top-[55px] -right-[30px] rotate-[31deg] select-none pointer-events-none hidden lg:block">
+          <Levitate orientation="diagonal" speed={0.5} disabled={!isEnabled("levitate")}>
+            <Image
+              src={"/assets/illustrations/dragon-body.svg"}
+              alt="dragon"
+              width={90}
+              height={90}
+            />
+          </Levitate>
         </div>
 
         <div className="absolute top-15 -left-30 rotate-12 select-none pointer-events-none hidden lg:block">
-          <Image src={"/assets/illustrations/portal.svg"} alt="portal" width={200} height={200} />
+          <Levitate speed={0.8} disabled={!isEnabled("levitate")}>
+            <Image src={"/assets/illustrations/portal.svg"} alt="portal" width={200} height={200} />
+          </Levitate>
         </div>
 
-        <Levitate>
-          <Image
-            src={"/assets/illustrations/potion.svg"}
-            alt="potion"
-            width={75}
-            height={75}
-            className="absolute -bottom-70 -right-11 select-none pointer-events-none hidden lg:block drop-shadow-md"
-          />
-        </Levitate>
+        <div className="absolute -bottom-8 -right-13 rotate-12 select-none pointer-events-none hidden lg:block">
+          <Levitate disabled={!isEnabled("levitate")}>
+            <Image
+              src={"/assets/illustrations/potion.svg"}
+              alt="potion"
+              width={100}
+              height={100}
+            />
+          </Levitate>
+        </div>
       </div>
 
       <Card
@@ -153,12 +157,6 @@ export const AiTextarea = () => {
           <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 via-transparent to-purple-500/10" />
         </div>
 
-        <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-          <div className="absolute top-4 left-8 w-1 h-1 bg-indigo-400/30 rounded-full animate-pulse" />
-          <div className="absolute top-12 right-12 w-1 h-1 bg-purple-400/30 rounded-full animate-pulse delay-1000" />
-          <div className="absolute bottom-8 left-16 w-1 h-1 bg-blue-400/30 rounded-full animate-pulse delay-2000" />
-        </div>
-
         <div className="relative z-10 space-y-4">
           <div className="space-y-4">
             <StoryInput value={inputValue} onChange={setInputValue} disabled={isGenerating} />
@@ -166,6 +164,15 @@ export const AiTextarea = () => {
             <div className="flex justify-between items-center">
               <div className="flex items-center gap-1">
                 <VoiceRecorder />
+
+                <FeatureConfigDialog featureId="images">
+                  <FeatureButton
+                    colors={["#ef4444", "#f87171", "#dc2626"]}
+                    icon={<Images size={16} className="text-red-400" />}
+                    active={isFeatureEnabled("images")}
+                    locked={false}
+                  />
+                </FeatureConfigDialog>
               </div>
 
               <Button

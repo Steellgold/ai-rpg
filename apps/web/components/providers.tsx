@@ -3,6 +3,7 @@ import { getMessages } from "next-intl/server";
 import { AsyncComponent } from "@workspace/ui/types/component";
 import { PropsWithChildren } from "react";
 import { Locale, NextIntlClientProvider } from "next-intl";
+import { PreferencesProvider } from "@/app/contexts/user-preferences-context";
 
 type ProvidersProps = PropsWithChildren & {
   locale?: Locale;
@@ -20,7 +21,9 @@ export const Providers: AsyncComponent<ProvidersProps> = async ({ children, loca
       enableColorScheme
     >
       <NextIntlClientProvider messages={messages} locale={locale}>
-        {children}
+        <PreferencesProvider>
+          {children}
+        </PreferencesProvider>
       </NextIntlClientProvider>
     </NextThemesProvider>
   )
