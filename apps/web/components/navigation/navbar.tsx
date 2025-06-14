@@ -8,8 +8,11 @@ import { Sheet, SheetContent, SheetTrigger } from "@workspace/ui/components/shee
 import Image from "next/image"
 import { cn } from "@workspace/ui/lib/utils"
 import { ProfileComponent } from "@/components/session/profile-component"
+import { useSession } from "@/lib/auth-client"
+import { AuthButton } from "../session/auth-button"
 
 export const Navbar = () => {
+  const { data } = useSession();
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -57,7 +60,11 @@ export const Navbar = () => {
 
         <div className="ml-auto flex items-center gap-4">
           <div className="flex items-center">
-            <ProfileComponent variant="navbar" />
+            {data?.user ? (
+              <ProfileComponent variant="navbar" />
+            ) : (
+              <AuthButton Navbar />
+            )}
           </div>
         </div>
       </div>
