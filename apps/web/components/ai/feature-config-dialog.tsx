@@ -29,8 +29,7 @@ export const FeatureConfigDialog = ({ featureId, children }: FeatureConfigDialog
     getFeatureCost,
     toggleFeature,
     updateFeatureConfig,
-    resetFeatureConfig,
-    totalCost,
+    resetFeatureConfig
   } = useStoryContext()
 
   const [dialogState, setDialogState] = useState<DialogState>("closed")

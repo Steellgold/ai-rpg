@@ -33,6 +33,9 @@ export const ProfileComponent: Component<ProfileComponentProps> = ({
   variant = "default"
 }) => {
   const { data, isPending: loading } = useSession();
+  const t = useTranslations("Navbar");
+  const err = useTranslations("Errors");
+  const { isEnabled, toggle } = usePreferences();
 
   const user = data?.user;
   if (!user || loading) {
@@ -43,10 +46,6 @@ export const ProfileComponent: Component<ProfileComponentProps> = ({
     )
   }
   
-  const t = useTranslations("Navbar");
-  const err = useTranslations("Errors");
-  const { isEnabled, toggle } = usePreferences();
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

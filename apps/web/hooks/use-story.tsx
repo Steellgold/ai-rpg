@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useCallback, useMemo } from "react"
-import { Banana, ImageIcon } from "lucide-react"
+import { ImageIcon } from "lucide-react"
 import type { FeatureSchema, ConfigSchema, StoryConfig, ConfigValue } from "@/types/story-config"
 
 const FEATURES_SCHEMA: { [key: string]: FeatureSchema } = {
@@ -77,7 +77,7 @@ export const useStory = () => {
             break
           case "number":
           case "range":
-            defaultConfig[key] = configSchema.htmlProps?.min || 0
+            defaultConfig[key] = (configSchema.htmlProps as React.InputHTMLAttributes<HTMLInputElement>)?.min || 0
             break
           case "checkbox":
             defaultConfig[key] = false

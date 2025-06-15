@@ -24,7 +24,7 @@ type ConfigRendererProps = {
 }
 
 type BonusCreditProps = {
-  nbr: number;
+  nbr: number
 }
 
 const BadgeBonusCredit: Component<BonusCreditProps> = ({ nbr }) => (
@@ -45,10 +45,8 @@ export const ConfigRenderer = ({ schema, values, onChange, path = "", level = 0 
 
   const toggleGroup = (key: string) => {
     const newExpanded = new Set(expandedGroups)
-
     if (newExpanded.has(key)) newExpanded.delete(key)
     else newExpanded.add(key)
-
     setExpandedGroups(newExpanded)
   }
 
@@ -56,7 +54,7 @@ export const ConfigRenderer = ({ schema, values, onChange, path = "", level = 0 
     const fullPath = path ? `${path}.${key}` : key
     const isExpanded = expandedGroups.has(fullPath)
 
-    const getCost = () => {
+    const getCost = (): number => {
       if (typeof configSchema.cost === "function") {
         return configSchema.cost(value, values)
       }
@@ -74,8 +72,8 @@ export const ConfigRenderer = ({ schema, values, onChange, path = "", level = 0 
             <Input
               type={configSchema.type}
               value={(value as string) || ""}
-              onChange={(e) => onChange(key, e.target.value)}
-              {...configSchema.htmlProps}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(key, e.target.value)}
+              {...(configSchema.htmlProps as React.InputHTMLAttributes<HTMLInputElement>)}
             />
           )
 
@@ -85,8 +83,8 @@ export const ConfigRenderer = ({ schema, values, onChange, path = "", level = 0 
               type="number"
               value={(value as number) || 0}
               className="w-[150px]"
-              onChange={(e) => onChange(key, Number(e.target.value))}
-              {...configSchema.htmlProps}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(key, Number(e.target.value))}
+              {...(configSchema.htmlProps as React.InputHTMLAttributes<HTMLInputElement>)}
             />
           )
 
@@ -94,8 +92,8 @@ export const ConfigRenderer = ({ schema, values, onChange, path = "", level = 0 
           return (
             <Textarea
               value={(value as string) || ""}
-              onChange={(e) => onChange(key, e.target.value)}
-              {...configSchema.htmlProps}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onChange(key, e.target.value)}
+              {...(configSchema.htmlProps as React.TextareaHTMLAttributes<HTMLTextAreaElement>)}
             />
           )
 
@@ -104,10 +102,8 @@ export const ConfigRenderer = ({ schema, values, onChange, path = "", level = 0 
             <div className="flex items-center space-x-2">
               <Checkbox
                 checked={(value as boolean) || false}
-                onCheckedChange={(checked) => onChange(key, checked)}
-                {...configSchema.htmlProps}
+                onCheckedChange={(checked: boolean) => onChange(key, checked)}
               />
-
               <Label className="text-sm text-gray-300">
                 {configSchema.label}
               </Label>
@@ -116,7 +112,10 @@ export const ConfigRenderer = ({ schema, values, onChange, path = "", level = 0 
 
         case "select":
           return (
-            <Select value={(value as string) || ""} onValueChange={(newValue) => onChange(key, newValue)}>
+            <Select 
+              value={(value as string) || ""} 
+              onValueChange={(newValue: string) => onChange(key, newValue)}
+            >
               <SelectTrigger className="bg-gray-800/50 border-gray-700/50">
                 <SelectValue />
               </SelectTrigger>
@@ -127,7 +126,7 @@ export const ConfigRenderer = ({ schema, values, onChange, path = "", level = 0 
                       <span>{option.label}</span>
                       {option.cost && option.cost > 0 ? (
                         <BadgeBonusCredit nbr={option.cost} />
-                      ) : <></>}
+                      ) : null}
                     </div>
                   </SelectItem>
                 ))}
@@ -140,15 +139,12 @@ export const ConfigRenderer = ({ schema, values, onChange, path = "", level = 0 
             <div className="space-y-2">
               <Slider
                 value={[(value as number) || 0]}
-                onValueChange={
-                  ([newValue]) => onChange(key, newValue ?? 0)
-                }
-                min={configSchema.htmlProps?.min || 0}
-                max={configSchema.htmlProps?.max || 100}
-                step={configSchema.htmlProps?.step || 1}
+                onValueChange={([newValue]: number[]) => onChange(key, newValue ?? 0)}
+                min={Number((configSchema.htmlProps as React.InputHTMLAttributes<HTMLInputElement>)?.min) || 0}
+                max={Number((configSchema.htmlProps as React.InputHTMLAttributes<HTMLInputElement>)?.max) || 100}
+                step={Number((configSchema.htmlProps as React.InputHTMLAttributes<HTMLInputElement>)?.step) || 1}
                 className="w-full"
               />
-
               <div className="text-xs text-gray-400 text-center">
                 {(value as number) || 0}
               </div>
@@ -193,7 +189,7 @@ export const ConfigRenderer = ({ schema, values, onChange, path = "", level = 0 
                     <ConfigRenderer
                       schema={configSchema.itemConfig}
                       values={item || {}}
-                      onChange={(itemKey, itemValue) => {
+                      onChange={(itemKey: string, itemValue: ConfigValue) => {
                         const newArray = [...arrayValue]
                         newArray[index] = { ...newArray[index], [itemKey]: itemValue }
                         onChange(key, newArray)
@@ -211,10 +207,10 @@ export const ConfigRenderer = ({ schema, values, onChange, path = "", level = 0 
                   size="sm"
                   onClick={() => {
                     const newItem = configSchema.itemConfig
-                      ? Object.keys(configSchema.itemConfig).reduce((acc, k) => {
+                      ? Object.keys(configSchema.itemConfig).reduce((acc: Record<string, ConfigValue>, k) => {
                           acc[k] = configSchema.itemConfig![k]?.default || ""
                           return acc
-                        }, {} as any)
+                        }, {})
                       : {}
                     onChange(key, [...arrayValue, newItem])
                   }}
@@ -240,7 +236,6 @@ export const ConfigRenderer = ({ schema, values, onChange, path = "", level = 0 
                   ? <ChevronDown size={16} />
                   : <ChevronRight size={16} />
                 }
-
                 <span className="ml-2">{configSchema.label}</span>
               </Button>
 
@@ -248,9 +243,9 @@ export const ConfigRenderer = ({ schema, values, onChange, path = "", level = 0 
                 <div className="ml-4 pl-4 border-l-2 border-gray-700/50 space-y-4">
                   <ConfigRenderer
                     schema={configSchema.config}
-                    values={(value as { [key: string]: ConfigValue }) || {}}
-                    onChange={(subKey, subValue) => {
-                      const currentValue = (value as { [key: string]: ConfigValue }) || {}
+                    values={(value as Record<string, ConfigValue>) || {}}
+                    onChange={(subKey: string, subValue: ConfigValue) => {
+                      const currentValue = (value as Record<string, ConfigValue>) || {}
                       onChange(key, { ...currentValue, [subKey]: subValue })
                     }}
                     path={fullPath}
@@ -275,16 +270,17 @@ export const ConfigRenderer = ({ schema, values, onChange, path = "", level = 0 
         const selectedOption = configSchema.options.find((opt) => opt.value === value)
         if (selectedOption?.config) {
           const conditionalKey = `${key}_config`
-          const conditionalValue = (values[conditionalKey] as { [key: string]: ConfigValue }) || {}
+          const conditionalValue = (values[conditionalKey] as Record<string, ConfigValue>) || {}
 
           return (
             <div className="mt-3 ml-4 pl-4 border-l-2 border-indigo-500/30 space-y-3">
               <ConfigRenderer
                 schema={selectedOption.config}
                 values={conditionalValue}
-                onChange={(subKey, subValue) => {
+                onChange={(subKey: string, subValue: ConfigValue) => {
                   onChange(conditionalKey, {
-                    ...conditionalValue, [subKey]: subValue
+                    ...conditionalValue,
+                    [subKey]: subValue
                   })
                 }}
                 path={`${fullPath}_config`}
@@ -337,13 +333,13 @@ export const ConfigRenderer = ({ schema, values, onChange, path = "", level = 0 
           configSchema,
           values[key] !== undefined
             ? values[key]
-              : configSchema.type === "checkbox"
-                ? false
-                  : configSchema.type === "array"
-                    ? []
-                      : configSchema.type === "group"
-                        ? {}
-                          : ""
+            : configSchema.type === "checkbox"
+              ? false
+              : configSchema.type === "array"
+                ? []
+                : configSchema.type === "group"
+                  ? {}
+                  : ""
         )
       )}
     </div>
