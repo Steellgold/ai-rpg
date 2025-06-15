@@ -55,18 +55,19 @@ enum JobStage {
 }
 
 model Job {
-  id        String    @id
+  id        String     @id
   // 
   userId    String
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   // 
-  status    JobStatus @default(PENDING)
-  stage     JobStage  @default(INITIALIZED)
+  status    JobStatus  @default(PENDING)
+  stage     JobStage   @default(INITIALIZED)
+  stages    JobStage[] @default([]) // Stages history
   error     String?
   input     Json?
   // 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 
   @@map("job")
 }

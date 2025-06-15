@@ -1,18 +1,12 @@
 "use client"
 
-// ((((((((((())))))))))) //
-//                        //
-//       PROTOTYPE        //
-//                        //
-// ((((((((((())))))))))) //
-
 import type React from "react"
 
 import { useState, useEffect } from "react"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@workspace/ui/components/dialog"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@workspace/ui/components/dialog"
+import { Alert, AlertTitle, AlertDescription } from "@workspace/ui/components/alert"
 import { Button } from "@workspace/ui/components/button"
 import { Badge } from "@workspace/ui/components/badge"
-import { Card } from "@workspace/ui/components/card"
 import { Separator } from "@workspace/ui/components/separator"
 import { AlertTriangle, RotateCcw, Power, Save, X } from "lucide-react"
 import { cn } from "@workspace/ui/lib/utils"
@@ -49,19 +43,14 @@ export const FeatureConfigDialog = ({ featureId, children }: FeatureConfigDialog
   const baseCost = feature?.baseCost || 0
 
   useEffect(() => {
-    if (dialogState === "configuring") {
-      setTempConfig(currentConfig)
-    }
+    if (dialogState === "configuring") setTempConfig(currentConfig)
   }, [dialogState, currentConfig])
 
   const handleChildClick = () => {
     if (!feature) return
 
-    if (isEnabled) {
-      setDialogState("configuring")
-    } else {
-      setDialogState("confirming")
-    }
+    if (isEnabled) setDialogState("configuring")
+    else setDialogState("confirming")
   }
 
   const handleConfirmActivation = () => {
@@ -99,6 +88,7 @@ export const FeatureConfigDialog = ({ featureId, children }: FeatureConfigDialog
 
   return (
     <>
+      {/* Why <DialogTrigger /> does not work, so we use a div with onClick */}
       <div onClick={handleChildClick} className="cursor-pointer">
         {children}
       </div>
@@ -109,7 +99,6 @@ export const FeatureConfigDialog = ({ featureId, children }: FeatureConfigDialog
       >
         <DialogContent
           className={cn(
-            "bg-gray-900/95 border-gray-700/50 backdrop-blur-md",
             "w-[95vw] max-w-2xl max-h-[90vh] overflow-hidden",
             "sm:w-[90vw] sm:max-w-3xl",
             "md:w-[80vw] md:max-w-4xl",
@@ -124,47 +113,61 @@ export const FeatureConfigDialog = ({ featureId, children }: FeatureConfigDialog
                   <FeatureIcon size={20} className="text-indigo-400" />
                 </div>
                 <div>
-                  <DialogTitle className="text-xl text-gray-100">{feature.label}</DialogTitle>
-                  <p className="text-sm text-gray-400 mt-1">{feature.description}</p>
+                  <DialogTitle>{feature.label}</DialogTitle>
+                  <DialogDescription>{feature.description}</DialogDescription>
                 </div>
               </div>
 
-              <Button variant="ghost" size="sm" onClick={handleCancel} className="text-gray-400 hover:text-gray-300">
-                <X size={18} />
-              </Button>
+              <Badge className={cn({
+                "bg-green-500/20 text-green-400 border-green-500/30": isEnabled,
+                "bg-gray-500/20 text-gray-400 border-gray-500/30": !isEnabled
+              },
+                "rounded-lg text-xs gap-1 pr-0.5"
+              )}>
+                {isEnabled ? "Activé" : "Désactivé"}
+
+                {isEnabled && (
+                  <span className={cn(
+                    "ml-1 text-xs p-0.5 px-1",
+                    "rounded-md bg-gray-500/30",
+                    "border border-gray-500/50"
+                  )}> 
+                    {featureCost} crédits
+                  </span>
+                )}
+              </Badge>
             </div>
           </DialogHeader>
 
           <div className="flex-1 overflow-y-auto pr-2 max-h-[60vh]">
             {dialogState === "confirming" && (
               <div className="space-y-6">
-                <Card className="p-4 bg-yellow-500/10 border-yellow-500/30">
-                  <div className="flex items-start gap-3">
-                    <AlertTriangle size={20} className="text-yellow-400 mt-0.5" />
-                    <div>
-                      <h3 className="font-medium text-yellow-400 mb-2">Activer cette fonctionnalité ?</h3>
-                      <p className="text-sm text-gray-300 mb-3">
-                        Cette fonctionnalité ajoutera des capacités à votre génération d'histoire. Vous pourrez la
-                        configurer après activation.
-                      </p>
-                      <div className="flex items-center gap-2">
-                        <Badge className="bg-indigo-500/20 text-indigo-400 border-indigo-500/30">
-                          Coût de base: {baseCost} crédits
-                        </Badge>
-                        <Badge variant="outline" className="text-gray-400 border-gray-600">
-                          Total actuel: {totalCost} crédits
-                        </Badge>
-                      </div>
-                    </div>
+                <Alert className="p-4 bg-gray-500/10 border-gray-500/30 text-gray-400">
+                  <AlertTriangle size={20} className="text-gray-400" />
+                  <AlertTitle>
+                    Activer cette fonctionnalité ?
+                  </AlertTitle>
+                  <AlertDescription className="text-gray-300">
+                    Cette fonctionnalité ajoutera des capacités à votre génération d'histoire. Vous pourrez la configurer
+                    après activation.
+                  </AlertDescription>
+
+                  <div className="mt-3">
+                    <Badge className="bg-gray-500/20 text-gray-400 border-gray-500/30">
+                      Coût de base: {baseCost} crédits
+                    </Badge>
                   </div>
-                </Card>
+                </Alert>
 
                 <div className="flex gap-3 justify-end">
                   <Button variant="outline" onClick={handleCancel}>
                     Annuler
                   </Button>
-                  <Button onClick={handleConfirmActivation} className="bg-indigo-600 hover:bg-indigo-700">
-                    Activer la fonctionnalité
+                  <Button
+                    onClick={handleConfirmActivation}
+                    className="bg-gray-600 hover:bg-gray-700 text-gray-100"
+                  >
+                    Activer
                   </Button>
                 </div>
               </div>
@@ -172,30 +175,20 @@ export const FeatureConfigDialog = ({ featureId, children }: FeatureConfigDialog
 
             {dialogState === "configuring" && (
               <div className="space-y-6">
-                {/* Statut et coût */}
-                <Card className="p-4 bg-green-500/10 border-green-500/30">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                      <span className="text-green-400 font-medium">Fonctionnalité activée</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Badge className="bg-indigo-500/20 text-indigo-400 border-indigo-500/30">
-                        Coût: {featureCost.toFixed(1)} crédits
-                      </Badge>
-                    </div>
-                  </div>
-                </Card>
-
-                {/* Configuration */}
                 {feature.config && Object.keys(feature.config).length > 0 && (
                   <div className="space-y-4">
-                    <h3 className="text-lg font-medium text-gray-200">Configuration</h3>
-                    <ConfigRenderer schema={feature.config} values={tempConfig} onChange={updateTempConfig} />
+                    <h3 className="text-lg font-medium text-gray-200">
+                      Configuration
+                    </h3>
+                    
+                    <ConfigRenderer
+                      schema={feature.config}
+                      values={tempConfig}
+                      onChange={updateTempConfig}
+                    />
                   </div>
                 )}
 
-                {/* Actions */}
                 <Separator className="bg-gray-700/50" />
 
                 <div className="flex items-center justify-between">
@@ -206,26 +199,40 @@ export const FeatureConfigDialog = ({ featureId, children }: FeatureConfigDialog
                       onClick={handleReset}
                       className="text-gray-400 border-gray-600 hover:text-gray-300"
                     >
-                      <RotateCcw size={14} className="mr-1" />
-                      Reset
+                      <RotateCcw size={14} />
+                      Réinitialiser
                     </Button>
+
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={handleDisable}
                       className="text-red-400 border-red-600/50 hover:text-red-300 hover:border-red-500/50"
                     >
-                      <Power size={14} className="mr-1" />
+                      <Power size={14} />
                       Désactiver
                     </Button>
                   </div>
 
                   <div className="flex gap-2">
-                    <Button variant="outline" onClick={handleCancel}>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={handleCancel}>
                       Annuler
                     </Button>
-                    <Button onClick={handleSave} className="bg-indigo-600 hover:bg-indigo-700">
-                      <Save size={14} className="mr-1" />
+
+                    <Button
+                      onClick={handleSave}
+                      className="bg-indigo-500 hover:bg-indigo-600 text-white"
+                      size="sm"
+                      disabled={
+                        JSON.stringify(tempConfig)
+                          ===
+                        JSON.stringify(currentConfig)
+                      }
+                    >
+                      <Save size={14} />
                       Sauvegarder
                     </Button>
                   </div>

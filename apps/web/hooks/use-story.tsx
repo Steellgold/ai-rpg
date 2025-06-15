@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useCallback, useMemo } from "react"
-import { ImageIcon } from "lucide-react"
+import { Banana, ImageIcon } from "lucide-react"
 import type { FeatureSchema, ConfigSchema, StoryConfig, ConfigValue } from "@/types/story-config"
 
 const FEATURES_SCHEMA: { [key: string]: FeatureSchema } = {
@@ -42,7 +42,7 @@ const FEATURES_SCHEMA: { [key: string]: FeatureSchema } = {
           { value: "anime", label: "Anime", cost: 1 },
           { value: "oil_painting", label: "Oil Painting", cost: 2 },
         ],
-      },
+      }
     },
   }
 }
@@ -99,7 +99,6 @@ export const useStory = () => {
     return defaultConfig
   }
 
-  // Calcul récursif du coût
   const calculateFeatureCost = useCallback(
     (featureId: string): number => {
       const feature = FEATURES_SCHEMA[featureId]
@@ -235,10 +234,6 @@ export const useStory = () => {
         },
         {} as { [key: string]: { [key: string]: ConfigValue } },
       )
-
-    console.log("🎯 Génération d'histoire avec la configuration suivante:")
-    console.log("📊 Coût total:", totalCost, "crédits")
-    console.log("🔧 Features actives:", activeFeatures)
 
     return {
       config: activeFeatures,
