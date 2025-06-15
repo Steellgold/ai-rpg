@@ -10,5 +10,6 @@
   },
   "[json]": {
     "editor.tabSize": 2
-  }
+  },
+  "tailwindCSS.experimental.configFile": "packages/ui/src/styles/globals.css"
 }
