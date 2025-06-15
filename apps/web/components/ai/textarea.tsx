@@ -13,8 +13,8 @@ import type React from "react"
 import Image from "next/image"
 import { FeatureConfigDialog } from "./feature-config-dialog"
 import { FeatureButton } from "./feature-button"
-import { useStoryContext } from "@/app/contexts/story-context"
-import { usePreferences } from "@/app/contexts/user-preferences-context"
+import { useStoryContext } from "@/contexts/story-context"
+import { usePreferences } from "@/contexts/user-preferences-context"
 
 type StoryInputProps = {
   value?: string

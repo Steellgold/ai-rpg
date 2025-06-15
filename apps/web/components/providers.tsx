@@ -3,7 +3,7 @@ import { getMessages } from "next-intl/server";
 import { AsyncComponent } from "@workspace/ui/types/component";
 import { PropsWithChildren } from "react";
 import { Locale, NextIntlClientProvider } from "next-intl";
-import { PreferencesProvider } from "@/app/contexts/user-preferences-context";
+import { PreferencesProvider } from "@/contexts/user-preferences-context";
 
 type ProvidersProps = PropsWithChildren & {
   locale?: Locale;

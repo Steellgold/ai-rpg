@@ -3,7 +3,7 @@ import { Syne } from "next/font/google";
 import { getTranslations } from "next-intl/server";
 import { PageLayout } from "@workspace/ui/components/page-layout";
 import { AiTextarea } from "@/components/ai/textarea";
-import { StoryProvider } from "@/app/contexts/story-context";
+import { StoryProvider } from "@/contexts/story-context";
 
 const syne = Syne({ subsets: ["latin"] });
 

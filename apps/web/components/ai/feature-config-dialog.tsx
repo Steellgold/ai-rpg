@@ -12,7 +12,7 @@ import { AlertTriangle, RotateCcw, Power, Save, X } from "lucide-react"
 import { cn } from "@workspace/ui/lib/utils"
 import { ConfigRenderer } from "./config-renderer"
 import type { ConfigValue } from "@/types/story-config"
-import { useStoryContext } from "@/app/contexts/story-context"
+import { useStoryContext } from "@/contexts/story-context"
 
 type DialogState = "closed" | "confirming" | "configuring"
 
