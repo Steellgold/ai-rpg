@@ -14,6 +14,7 @@ import { Input } from "@workspace/ui/components/input"
 import { Label } from "@workspace/ui/components/label"
 import { Card } from "@workspace/ui/components/card"
 import { cn } from "@workspace/ui/lib/utils"
+import { useTranslations } from "next-intl"
 
 type ConfigRendererProps = {
   schema: { [key: string]: ConfigSchema }
@@ -41,6 +42,7 @@ const BadgeBonusCredit: Component<BonusCreditProps> = ({ nbr }) => (
 )
 
 export const ConfigRenderer = ({ schema, values, onChange, path = "", level = 0 }: ConfigRendererProps) => {
+  const t = useTranslations("ConfigRenderer")
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set())
 
   const toggleGroup = (key: string) => {
@@ -159,7 +161,7 @@ export const ConfigRenderer = ({ schema, values, onChange, path = "", level = 0 
                 <Card key={index} className="p-3 bg-gray-800/30 border-gray-700/50">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm font-medium text-gray-300">
-                      Élément
+                      {t("element")}
                       <span className={cn(
                         "ml-1",
                         "text-indigo-400",
@@ -217,7 +219,7 @@ export const ConfigRenderer = ({ schema, values, onChange, path = "", level = 0 
                   className="w-full border-dashed border-gray-600 text-gray-400 hover:text-gray-300"
                 >
                   <Plus size={14} />
-                  Ajouter un élément
+                  {t("add_element")}
                 </Button>
               )}
             </div>
@@ -259,7 +261,7 @@ export const ConfigRenderer = ({ schema, values, onChange, path = "", level = 0 
         default:
           return (
             <div className="text-red-400 text-sm">
-              Not supported type: {configSchema.type}
+              {t("not_supported", { type: configSchema.type })}
             </div>
           )
       }
@@ -308,7 +310,7 @@ export const ConfigRenderer = ({ schema, values, onChange, path = "", level = 0 
         <div className="flex items-center justify-between">
           <Label className="text-sm font-medium text-gray-300">
             {configSchema.label}
-            {configSchema.required && <span className="text-red-400 ml-1">*</span>}
+            {configSchema.required && <span className="text-red-400 ml-1">{t("required")}</span>}
           </Label>
 
           {getCost() > 0 && (

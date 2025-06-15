@@ -15,6 +15,7 @@ import { FeatureConfigDialog } from "./feature-config-dialog"
 import { FeatureButton } from "./feature-button"
 import { useStoryContext } from "@/contexts/story-context"
 import { usePreferences } from "@/contexts/user-preferences-context"
+import { useTranslations } from "next-intl"
 
 type StoryInputProps = {
   value?: string
@@ -30,6 +31,7 @@ export const StoryInput: Component<StoryInputProps> = ({
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const [charCount, setCharCount] = useState(0)
   const maxChars = 2500
+  const t = useTranslations("Textarea")
 
   useEffect(() => {
     if (textareaRef.current) {
@@ -59,7 +61,7 @@ export const StoryInput: Component<StoryInputProps> = ({
             }
           }}
           onKeyDown={handleKeyDown}
-          placeholder="Décrivez votre histoire... Que voulez-vous créer aujourd'hui ?"
+          placeholder={t("placeholder")}
           className={cn(
             "relative z-10 min-h-[150px] resize-none bg-transparent",
             "text-gray-100 placeholder:text-gray-400/70",
@@ -79,7 +81,7 @@ export const StoryInput: Component<StoryInputProps> = ({
           <div className="flex items-center gap-1">
             <Type size={12} />
             <span>
-              {charCount}&nbsp;/&nbsp;{maxChars}
+              {charCount}&nbsp;/&nbsp;{maxChars}&nbsp;{t("char_count")}
             </span>
           </div>
 
@@ -105,6 +107,7 @@ export const StoryInput: Component<StoryInputProps> = ({
 export const AiTextarea = () => {
   const [inputValue, setInputValue] = useState("")
   const [isGenerating, setIsGenerating] = useState(false)
+  const t = useTranslations("Textarea")
   
   const { isFeatureEnabled } = useStoryContext();
   const { isEnabled } = usePreferences();
@@ -188,11 +191,11 @@ export const AiTextarea = () => {
                 {isGenerating ? (
                   <div className="flex items-center gap-2">
                     <Loader2 size={14} className="animate-spin" />
-                    <span className="text-sm">Generating...</span>
+                    <span className="text-sm">{t("generate.loading")}</span>
                   </div>
                 ) : (
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium">Generate</span>
+                    <span className="text-sm font-medium">{t("generate.button")}</span>
                     <ArrowUp
                       size={14}
                       className={cn(

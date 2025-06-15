@@ -13,6 +13,7 @@ import { cn } from "@workspace/ui/lib/utils"
 import { ConfigRenderer } from "./config-renderer"
 import type { ConfigValue } from "@/types/story-config"
 import { useStoryContext } from "@/contexts/story-context"
+import { useTranslations } from "next-intl"
 
 type DialogState = "closed" | "confirming" | "configuring"
 
@@ -22,6 +23,8 @@ type FeatureConfigDialogProps = {
 }
 
 export const FeatureConfigDialog = ({ featureId, children }: FeatureConfigDialogProps) => {
+  const t = useTranslations("FeatureConfig.dialog")
+  
   const {
     isFeatureEnabled,
     getFeatureSchema,
@@ -99,9 +102,7 @@ export const FeatureConfigDialog = ({ featureId, children }: FeatureConfigDialog
         <DialogContent
           className={cn(
             "w-[95vw] max-w-2xl max-h-[90vh] overflow-hidden",
-            "sm:w-[90vw] sm:max-w-3xl",
-            "md:w-[80vw] md:max-w-4xl",
-            "lg:w-[70vw] lg:max-w-5xl",
+            "sm:w-[90vw] sm:max-w-1xl",
           )}
           showCloseButton={false}
         >
@@ -123,7 +124,7 @@ export const FeatureConfigDialog = ({ featureId, children }: FeatureConfigDialog
               },
                 "rounded-lg text-xs gap-1 pr-0.5"
               )}>
-                {isEnabled ? "Activé" : "Désactivé"}
+                {isEnabled ? t("enabled") : t("disabled")}
 
                 {isEnabled && (
                   <span className={cn(
@@ -131,7 +132,7 @@ export const FeatureConfigDialog = ({ featureId, children }: FeatureConfigDialog
                     "rounded-md bg-gray-500/30",
                     "border border-gray-500/50"
                   )}> 
-                    {featureCost} crédits
+                    {featureCost} {t("credits")}
                   </span>
                 )}
               </Badge>
@@ -144,29 +145,28 @@ export const FeatureConfigDialog = ({ featureId, children }: FeatureConfigDialog
                 <Alert className="p-4 bg-gray-500/10 border-gray-500/30 text-gray-400">
                   <AlertTriangle size={20} className="text-gray-400" />
                   <AlertTitle>
-                    Activer cette fonctionnalité ?
+                    {t("activate.title")}
                   </AlertTitle>
                   <AlertDescription className="text-gray-300">
-                    Cette fonctionnalité ajoutera des capacités à votre génération d'histoire. Vous pourrez la configurer
-                    après activation.
+                    {t("activate.description")}
                   </AlertDescription>
 
                   <div className="mt-3">
                     <Badge className="bg-gray-500/20 text-gray-400 border-gray-500/30">
-                      Coût de base: {baseCost} crédits
+                      {t("base_cost", { cost: baseCost })}
                     </Badge>
                   </div>
                 </Alert>
 
                 <div className="flex gap-3 justify-end">
                   <Button variant="outline" onClick={handleCancel}>
-                    Annuler
+                    {t("activate.cancel")}
                   </Button>
                   <Button
                     onClick={handleConfirmActivation}
                     className="bg-gray-600 hover:bg-gray-700 text-gray-100"
                   >
-                    Activer
+                    {t("activate.button")}
                   </Button>
                 </div>
               </div>
@@ -177,7 +177,7 @@ export const FeatureConfigDialog = ({ featureId, children }: FeatureConfigDialog
                 {feature.config && Object.keys(feature.config).length > 0 && (
                   <div className="space-y-4">
                     <h3 className="text-lg font-medium text-gray-200">
-                      Configuration
+                      {t("configuration.title")}
                     </h3>
                     
                     <ConfigRenderer
@@ -199,7 +199,7 @@ export const FeatureConfigDialog = ({ featureId, children }: FeatureConfigDialog
                       className="text-gray-400 border-gray-600 hover:text-gray-300"
                     >
                       <RotateCcw size={14} />
-                      Réinitialiser
+                      {t("configuration.reset")}
                     </Button>
 
                     <Button
@@ -209,7 +209,7 @@ export const FeatureConfigDialog = ({ featureId, children }: FeatureConfigDialog
                       className="text-red-400 border-red-600/50 hover:text-red-300 hover:border-red-500/50"
                     >
                       <Power size={14} />
-                      Désactiver
+                      {t("configuration.disable")}
                     </Button>
                   </div>
 
@@ -218,7 +218,7 @@ export const FeatureConfigDialog = ({ featureId, children }: FeatureConfigDialog
                       variant="outline"
                       size="sm"
                       onClick={handleCancel}>
-                      Annuler
+                      {t("configuration.cancel")}
                     </Button>
 
                     <Button
@@ -232,7 +232,7 @@ export const FeatureConfigDialog = ({ featureId, children }: FeatureConfigDialog
                       }
                     >
                       <Save size={14} />
-                      Sauvegarder
+                      {t("configuration.save")}
                     </Button>
                   </div>
                 </div>
