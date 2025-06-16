@@ -4,7 +4,7 @@ import type { Component } from "@workspace/ui/types/component"
 import { Textarea } from "@workspace/ui/components/textarea"
 import { Levitate } from "@workspace/ui/components/levitate"
 import { Button } from "@workspace/ui/components/button"
-import { ArrowUp, Type, Loader2, Images } from "lucide-react"
+import { ArrowUp, Type, Loader2 } from "lucide-react"
 import { VoiceRecorder } from "../ui/voice-recorder"
 import { Card } from "@workspace/ui/components/card"
 import { useEffect, useRef, useState } from "react"
@@ -18,6 +18,7 @@ import { usePreferences } from "@/contexts/user-preferences-context"
 import { useTranslations } from "next-intl"
 import { ShineColors } from "@/types/color"
 import { CreditsBadge } from "./credits-badge"
+import { FEATURES_SCHEMA } from "@/hooks/use-story"
 
 type StoryInputProps = {
   value?: string
@@ -166,15 +167,16 @@ export const AiTextarea = () => {
               <div className="flex items-center gap-1">
                 <VoiceRecorder />
 
-                <FeatureConfigDialog featureId="images">
-                  <FeatureButton
-                    colors={ShineColors.red}
-                    icon={Images}
-                    active={isFeatureEnabled("images")}
-                    color="red"
-                    locked={false}
-                  />
-                </FeatureConfigDialog>
+                {Object.values(FEATURES_SCHEMA).map((feature) => (
+                  <FeatureConfigDialog featureId={feature.id} key={feature.id}>
+                    <FeatureButton
+                      colors={ShineColors[feature.color]}
+                      icon={feature.icon}
+                      active={isFeatureEnabled(feature.id)}
+                      color={feature.color}
+                    />
+                  </FeatureConfigDialog>
+                ))}
               </div>
 
               <Button
