@@ -14,6 +14,7 @@ import { ConfigRenderer } from "./config-renderer"
 import type { ConfigValue } from "@/types/story-config"
 import { useStoryContext } from "@/contexts/story-context"
 import { useTranslations } from "next-intl"
+import { getColorStyles, getFeatureIconStyles } from "@/lib/colors"
 
 type DialogState = "closed" | "confirming" | "configuring"
 
@@ -109,32 +110,7 @@ export const FeatureConfigDialog = ({ featureId, children }: FeatureConfigDialog
           <DialogHeader className="pb-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className={cn(
-                  "p-2 rounded-lg border", {
-                    "text-red-400 bg-red-500/20 border-red-500/30": feature.color === "red",
-                    "text-orange-400 bg-orange-500/20 border-orange-500/30": feature.color === "orange",
-                    "text-amber-400 bg-amber-500/20 border-amber-500/30": feature.color === "amber",
-                    "text-yellow-400 bg-yellow-500/20 border-yellow-500/30": feature.color === "yellow",
-                    "text-lime-400 bg-lime-500/20 border-lime-500/30": feature.color === "lime",
-                    "text-green-400 bg-green-500/20 border-green-500/30": feature.color === "green",
-                    "text-emerald-400 bg-emerald-500/20 border-emerald-500/30": feature.color === "emerald",
-                    "text-teal-400 bg-teal-500/20 border-teal-500/30": feature.color === "teal",
-                    "text-cyan-400 bg-cyan-500/20 border-cyan-500/30": feature.color === "cyan",
-                    "text-sky-400 bg-sky-500/20 border-sky-500/30": feature.color === "sky",
-                    "text-blue-400 bg-blue-500/20 border-blue-500/30": feature.color === "blue",
-                    "text-indigo-400 bg-indigo-500/20 border-indigo-500/30": feature.color === "indigo",
-                    "text-violet-400 bg-violet-500/20 border-violet-500/30": feature.color === "violet",
-                    "text-purple-400 bg-purple-500/20 border-purple-500/30": feature.color === "purple",
-                    "text-fuchsia-400 bg-fuchsia-500/20 border-fuchsia-500/30": feature.color === "fuchsia",
-                    "text-pink-400 bg-pink-500/20 border-pink-500/30": feature.color === "pink",
-                    "text-rose-400 bg-rose-500/20 border-rose-500/30": feature.color === "rose",
-                    "text-slate-400 bg-slate-500/20 border-slate-500/30": feature.color === "slate",
-                    "text-gray-400 bg-gray-500/20 border-gray-500/30": feature.color === "gray",
-                    "text-zinc-400 bg-zinc-500/20 border-zinc-500/30": feature.color === "zinc",
-                    "text-neutral-400 bg-neutral-500/20 border-neutral-500/30": feature.color === "neutral",
-                    "text-stone-400 bg-stone-500/20 border-stone-500/30": feature.color === "stone"
-                  }
-                )}>
+                <div className={getFeatureIconStyles(feature.color)}>
                   <FeatureIcon size={20} />
                 </div>
                 <div>
@@ -168,15 +144,15 @@ export const FeatureConfigDialog = ({ featureId, children }: FeatureConfigDialog
           <div className="flex-1 overflow-y-auto pr-2 max-h-[60vh]">
             {dialogState === "confirming" && (
               <div className="space-y-6">
-                <Alert className="p-4 bg-gray-500/10 border-gray-500/30 text-gray-400">
-                  <AlertTriangle size={20} className="text-gray-400" />
+                <Alert className={getColorStyles(feature.color).container}>
+                  <AlertTriangle size={20} className={getColorStyles(feature.color).icon} />
                   <AlertTitle>{t("activate.title")}</AlertTitle>
-                  <AlertDescription className="text-gray-300">
+                  <AlertDescription className={getColorStyles(feature.color).text}>
                     {t("activate.description")}
                   </AlertDescription>
 
                   <div className="mt-3">
-                    <Badge className="bg-gray-500/20 text-gray-400 border-gray-500/30">
+                    <Badge className={getColorStyles(feature.color).badge}>
                       {t("base_cost", { cost: baseCost })}
                     </Badge>
                   </div>

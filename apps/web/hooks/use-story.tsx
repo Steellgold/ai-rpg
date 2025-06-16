@@ -39,14 +39,14 @@ export const FEATURES_SCHEMA: {
       }
     },
   },
-  // characters: {
-  //   id: "characters",
-  //   label: "Characters",
-  //   description: "Generate characters to illustrate your story",
-  //   icon: UsersIcon,
-  //   baseCost: 1,
-  //   color: "orange"
-  // }
+  characters: {
+    id: "characters",
+    label: "Characters",
+    description: "Generate characters to illustrate your story",
+    icon: UsersIcon,
+    baseCost: 1,
+    color: "orange"
+  }
 }
 
 export const useStory = () => {
