@@ -16,6 +16,7 @@ import { FeatureButton } from "./feature-button"
 import { useStoryContext } from "@/contexts/story-context"
 import { usePreferences } from "@/contexts/user-preferences-context"
 import { useTranslations } from "next-intl"
+import { ShineColors } from "@/types/color"
 
 type StoryInputProps = {
   value?: string
@@ -170,9 +171,10 @@ export const AiTextarea = () => {
 
                 <FeatureConfigDialog featureId="images">
                   <FeatureButton
-                    colors={["#ef4444", "#f87171", "#dc2626"]}
-                    icon={<Images size={16} className="text-red-400" />}
+                    colors={ShineColors.red}
+                    icon={Images}
                     active={isFeatureEnabled("images")}
+                    color="red"
                     locked={false}
                   />
                 </FeatureConfigDialog>
