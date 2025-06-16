@@ -120,7 +120,7 @@ export const FeatureConfigDialog = ({ featureId, children }: FeatureConfigDialog
               </div>
 
               <Badge className={cn({
-                "bg-green-500/20 text-green-400 border-green-500/30": isEnabled,
+                [colorClassMap[feature.color].badge]: isEnabled,
                 "bg-gray-500/20 text-gray-400 border-gray-500/30": !isEnabled
               },
                 "rounded-lg text-xs gap-1",
