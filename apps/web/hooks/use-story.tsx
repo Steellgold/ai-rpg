@@ -4,6 +4,19 @@ import { useState, useCallback, useMemo } from "react"
 import { ImagesIcon, UsersIcon } from "lucide-react"
 import type { FeatureSchema, ConfigSchema, StoryConfig, ConfigValue } from "@/types/story-config"
 
+const STYLE_OPTIONS = [
+  { value: "realistic", label: "Realistic" },
+  { value: "cartoon", label: "Cartoon" },
+  { value: "anime", label: "Anime" },
+  { value: "pixel_art", label: "Pixel Art" },
+]
+
+const QUALITY_OPTIONS = [
+  { value: "low", label: "Low Quality", cost: 0 },
+  { value: "medium", label: "Medium Quality", cost: 1 },
+  { value: "high", label: "High Quality", cost: 2 },
+]
+
 export const FEATURES_SCHEMA: {
   [key: string]: FeatureSchema
 } = {
@@ -19,11 +32,7 @@ export const FEATURES_SCHEMA: {
         type: "select",
         label: "Image Quality",
         default: "low",
-        options: [
-          { value: "low", label: "Low Quality", cost: 0 },
-          { value: "medium", label: "Medium Quality", cost: 1 },
-          { value: "high", label: "High Quality", cost: 2 },
-        ],
+        options: QUALITY_OPTIONS,
       },
       style: {
         type: "select",
@@ -31,10 +40,7 @@ export const FEATURES_SCHEMA: {
         default: "realistic",
         options: [
           { value: "auto", label: "Automatic", description: "Let the AI choose the style based on the scene and the story" },
-          { value: "realistic", label: "Realistic" },
-          { value: "cartoon", label: "Cartoon" },
-          { value: "anime", label: "Anime" },
-          { value: "oil_painting", label: "Oil Painting" },
+          ...STYLE_OPTIONS,
         ],
       }
     },
@@ -45,7 +51,46 @@ export const FEATURES_SCHEMA: {
     description: "Generate characters to illustrate your story",
     icon: UsersIcon,
     baseCost: 1,
-    color: "orange"
+    color: "orange",
+    config: {
+      generation_mode: {
+        type: "select",
+        label: "Character Generation Mode",
+        default: "auto",
+        options: [
+          { value: "auto", label: "Automatic", description: "Let the AI generate all characters" },
+          { value: "manual", label: "Manual", description: "Create characters yourself" },
+          { value: "hybrid", label: "Hybrid", description: "Create some characters and let AI generate others" },
+        ],
+      },
+      avatars: {
+        type: "checkbox",
+        label: "Generate Character Avatars",
+        default: true,
+        conditional: {
+          key: "avatars",
+          config: {
+            style: {
+              type: "select",
+              label: "Avatar Style",
+              default: "realistic",
+              options: [
+                { value: "auto", label: "Automatic", description: "Let the AI choose the style based on the character and the story" },
+                ...STYLE_OPTIONS,
+              ],
+            },
+            quality: {
+              type: "select",
+              label: "Avatar Quality",
+              default: "low",
+              options: [
+                ...QUALITY_OPTIONS,
+              ],
+            },
+          },
+        },
+      },
+    },
   }
 }
 
@@ -96,6 +141,13 @@ export const useStory = () => {
             break
         }
       }
+
+      if (configSchema.conditional) {
+        const condDefault = (configSchema as any).default ?? false;
+        if (condDefault === true) {
+          defaultConfig[`${key}_config`] = getDefaultConfig(configSchema.conditional.config);
+        }
+      }
     })
 
     return defaultConfig
@@ -140,6 +192,16 @@ export const useStory = () => {
 
           if (schema.config && typeof value === "object" && !Array.isArray(value)) {
             cost += calculateConfigCost(schema.config, value as { [key: string]: ConfigValue })
+          }
+
+          if (schema.conditional) {
+            const condKey = schema.conditional.key;
+            if (configValues[condKey] === true && typeof configValues[`${key}_config`] === "object") {
+              cost += calculateConfigCost(
+                schema.conditional.config,
+                configValues[`${key}_config`] as { [key: string]: ConfigValue }
+              );
+            }
           }
         })
 

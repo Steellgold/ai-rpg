@@ -55,6 +55,11 @@ export type ConfigSchema<T extends ConfigType = ConfigType> = {
 
   validation?: z.ZodSchema
   required?: boolean
+
+  conditional?: {
+    key: string
+    config: { [key: string]: ConfigSchema }
+  }
 }
 
 export type FeatureSchema = {

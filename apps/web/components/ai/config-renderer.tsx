@@ -1,7 +1,7 @@
 "use client"
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@workspace/ui/components/select"
-import { useState } from "react"
+import { useId, useState } from "react"
 import { Plus, Trash2, ChevronDown, ChevronRight } from "lucide-react"
 import type { ConfigSchema, ConfigValue } from "@/types/story-config"
 import { Textarea } from "@workspace/ui/components/textarea"
@@ -37,6 +37,7 @@ export const ConfigRenderer = ({ schema, values, onChange, path = "", level = 0 
   const renderSingleConfig = (key: string, configSchema: ConfigSchema, value: ConfigValue) => {
     const fullPath = path ? `${path}.${key}` : key
     const isExpanded = expandedGroups.has(fullPath)
+    const id = `${fullPath}-${configSchema.type}`
 
     const getCost = (): number => {
       if (typeof configSchema.cost === "function") {
@@ -87,8 +88,9 @@ export const ConfigRenderer = ({ schema, values, onChange, path = "", level = 0 
               <Checkbox
                 checked={(value as boolean) || false}
                 onCheckedChange={(checked: boolean) => onChange(key, checked)}
+                id={id}
               />
-              <Label className="text-sm text-gray-300">
+              <Label htmlFor={id} className="text-sm text-gray-300">
                 {configSchema.label}
               </Label>
             </div>
@@ -106,11 +108,16 @@ export const ConfigRenderer = ({ schema, values, onChange, path = "", level = 0 
               <SelectContent>
                 {configSchema.options?.map((option) => (
                   <SelectItem key={option.value} value={option.value}>
-                    <div className="flex items-center justify-between w-full">
-                      <span>{option.label}</span>
-                      {option.cost && option.cost > 0 ? (
-                        <BadgeBonusCredit nbr={option.cost} />
-                      ) : null}
+                    <div className="flex flex-col w-full">
+                      <div className="flex items-center justify-between w-full">
+                        <span>{option.label}</span>
+                        {option.cost && option.cost > 0 ? (
+                          <BadgeBonusCredit nbr={option.cost} />
+                        ) : null}
+                      </div>
+                      {option.description && (
+                        <span className="text-xs text-gray-400">{option.description}</span>
+                      )}
                     </div>
                   </SelectItem>
                 ))}
@@ -275,6 +282,33 @@ export const ConfigRenderer = ({ schema, values, onChange, path = "", level = 0 
           )
         }
       }
+
+      if (configSchema.conditional) {
+        const { key: conditionalKey, config: conditionalConfig } = configSchema.conditional
+        const isEnabled = values[conditionalKey] === true
+
+        if (isEnabled) {
+          const conditionalValue = (values[`${key}_config`] as Record<string, ConfigValue>) || {}
+
+          return (
+            <div className="mt-3 ml-4 pl-4 border-l-2 border-indigo-500/30 space-y-3">
+              <ConfigRenderer
+                schema={conditionalConfig}
+                values={conditionalValue}
+                onChange={(subKey: string, subValue: ConfigValue) => {
+                  onChange(`${key}_config`, {
+                    ...conditionalValue,
+                    [subKey]: subValue
+                  })
+                }}
+                path={`${fullPath}_config`}
+                level={level + 1}
+              />
+            </div>
+          )
+        }
+      }
+
       return null
     }
 
