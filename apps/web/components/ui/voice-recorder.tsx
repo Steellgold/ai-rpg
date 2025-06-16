@@ -32,6 +32,8 @@ export const VoiceRecorder = () => {
     return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`
   }
 
+  if (status === "NOT_SUPPORTED") return <></>;
+
   return (
     <>
       {hasRecording ? (
@@ -56,7 +58,6 @@ export const VoiceRecorder = () => {
                 "rounded-full transition-all bg-[#1a1a1a] text-gray-400 hover:bg-[#2a2a2a] relative overflow-hidden inline-flex items-center gap-2 px-4 py-2",
                 { "bg-red-500/20 text-red-400 hover:bg-red-600/20": isRecording },
               )}
-              disabled={status === "NOT_SUPPORTED"}
             >
               {isRecording && (
                 <div
