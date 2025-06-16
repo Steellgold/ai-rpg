@@ -158,13 +158,16 @@ export const FeatureConfigDialog = ({ featureId, children }: FeatureConfigDialog
                   </div>
                 </Alert>
 
-                <div className="flex gap-3 justify-end">
-                  <Button variant="outline" onClick={handleCancel}>
+                <div className="flex gap-2 justify-end">
+                  <Button variant="outline" size="sm" onClick={handleCancel}>
                     {t("activate.cancel")}
                   </Button>
+
                   <Button
+                    size="sm"
+                    variant="secondary"
                     onClick={handleConfirmActivation}
-                    className="bg-gray-600 hover:bg-gray-700 text-gray-100"
+                    className={getColorStyles(feature.color).container}
                   >
                     {t("activate.button")}
                   </Button>
@@ -222,8 +225,9 @@ export const FeatureConfigDialog = ({ featureId, children }: FeatureConfigDialog
                     </Button>
 
                     <Button
+                      variant="secondary"
                       onClick={handleSave}
-                      className="bg-indigo-500 hover:bg-indigo-600 text-white"
+                      className={getColorStyles(feature.color).container}
                       size="sm"
                       disabled={
                         JSON.stringify(tempConfig)
