@@ -6,15 +6,14 @@ import { Plus, Trash2, ChevronDown, ChevronRight } from "lucide-react"
 import type { ConfigSchema, ConfigValue } from "@/types/story-config"
 import { Textarea } from "@workspace/ui/components/textarea"
 import { Checkbox } from "@workspace/ui/components/checkbox"
-import { Component } from "@workspace/ui/types/component"
 import { Slider } from "@workspace/ui/components/slider"
 import { Button } from "@workspace/ui/components/button"
-import { Badge } from "@workspace/ui/components/badge"
 import { Input } from "@workspace/ui/components/input"
 import { Label } from "@workspace/ui/components/label"
 import { Card } from "@workspace/ui/components/card"
 import { cn } from "@workspace/ui/lib/utils"
 import { useTranslations } from "next-intl"
+import { BadgeBonusCredit } from "./credits-badge"
 
 type ConfigRendererProps = {
   schema: { [key: string]: ConfigSchema }
@@ -23,23 +22,6 @@ type ConfigRendererProps = {
   path?: string
   level?: number
 }
-
-type BonusCreditProps = {
-  nbr: number
-}
-
-const BadgeBonusCredit: Component<BonusCreditProps> = ({ nbr }) => (
-  <Badge
-    variant="secondary"
-    className={cn(
-      "ml-2 text-xs",
-      "bg-indigo-500/10 text-indigo-400",
-      "border border-indigo-500/30"
-    )}
-  >
-    +{nbr}
-  </Badge>
-)
 
 export const ConfigRenderer = ({ schema, values, onChange, path = "", level = 0 }: ConfigRendererProps) => {
   const t = useTranslations("ConfigRenderer")
@@ -153,8 +135,8 @@ export const ConfigRenderer = ({ schema, values, onChange, path = "", level = 0 
             </div>
           )
 
-        case "array":
-          const arrayValue = (value as any[]) || []
+        case "array": {
+          const arrayValue = (value as Record<string, ConfigValue>[]) || []
           return (
             <div className="space-y-3">
               {arrayValue.map((item, index) => (
@@ -224,6 +206,7 @@ export const ConfigRenderer = ({ schema, values, onChange, path = "", level = 0 
               )}
             </div>
           )
+        }
 
         case "group":
           return (
