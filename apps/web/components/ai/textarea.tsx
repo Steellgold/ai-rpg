@@ -30,10 +30,11 @@ export const StoryInput: Component<StoryInputProps> = ({
   onChange,
   disabled = false
 }) => {
-  const textareaRef = useRef<HTMLTextAreaElement>(null)
-  const [charCount, setCharCount] = useState(0)
-  const maxChars = 2500
   const t = useTranslations("Textarea")
+  const maxChars = 2500
+  
+  const [charCount, setCharCount] = useState(0)
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   useEffect(() => {
     if (textareaRef.current) {

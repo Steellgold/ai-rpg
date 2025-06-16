@@ -5,7 +5,8 @@
     },
     "Session": {
       "in": "Sign in with {provider}",
-      "out": "Sign Out"
+      "out": "Sign Out",
+      "credits": "{nbr} credits"
     },
     "Preferences": {
       "levitate": "Levitation",

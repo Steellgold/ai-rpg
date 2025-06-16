@@ -20,6 +20,7 @@ import { redirect } from "next/navigation"
 import { toast } from "sonner"
 import { usePreferences } from "@/contexts/user-preferences-context"
 import { Badge } from "@workspace/ui/components/badge"
+import Image from "next/image"
 // import { useCredits } from "@/lib/hooks/use-credits"
 // import Image from "next/image"
 // import { LanguageDialog } from "../dialogs/language.dialog"
@@ -33,9 +34,10 @@ export const ProfileComponent: Component<ProfileComponentProps> = ({
   variant = "default"
 }) => {
   const { data, isPending: loading } = useSession();
+  const { isEnabled, toggle } = usePreferences();
+
   const t = useTranslations("Navbar");
   const err = useTranslations("Errors");
-  const { isEnabled, toggle } = usePreferences();
 
   const user = data?.user;
   if (!user || loading) {
@@ -76,6 +78,15 @@ export const ProfileComponent: Component<ProfileComponentProps> = ({
               <span>{t("Stories.label")}</span>
             </div>
           </Link>
+        </DropdownMenuItem>
+
+        <DropdownMenuItem className="p-0 cursor-pointer" onSelect={(e) => e.preventDefault()}>
+          <div className="flex items-center justify-between w-full px-2 py-1.5">
+            <div className="flex items-center gap-2">
+              <Image src="/assets/coin.webp" alt="Coin" width={16} height={16} />
+              <span>{t("Session.credits", { nbr: user.credits })}</span>
+            </div>
+          </div>
         </DropdownMenuItem>
 
         <DropdownMenuSeparator />
@@ -128,7 +139,7 @@ export const ProfileComponent: Component<ProfileComponentProps> = ({
         <DropdownMenuSeparator />
 
         {/* Logout */}
-        <DropdownMenuItem className="p-0 cursor-pointer" onSelect={async () => {
+        <DropdownMenuItem className="group p-0 cursor-pointer text-red-300 hover:text-red-400" onSelect={async () => {
           const { error } = await signOut()
           if (error) {
             console.error(error)
@@ -138,8 +149,8 @@ export const ProfileComponent: Component<ProfileComponentProps> = ({
         
           redirect(process.env.NEXT_PUBLIC_BASE_URL!)
         }}>
-          <div className="flex items-center gap-2 px-2 py-1.5">
-            <LogOut size={16} />
+          <div className="flex items-center gap-2 px-2 py-1.5 text-red-300 group-hover:text-red-400">
+            <LogOut size={16} className="group-hover:text-red-400" />
             {t("Session.out")}
           </div>
         </DropdownMenuItem>
