@@ -17,6 +17,7 @@ import { useStoryContext } from "@/contexts/story-context"
 import { usePreferences } from "@/contexts/user-preferences-context"
 import { useTranslations } from "next-intl"
 import { ShineColors } from "@/types/color"
+import { CreditsBadge } from "./credits-badge"
 
 type StoryInputProps = {
   value?: string
@@ -94,12 +95,7 @@ export const StoryInput: Component<StoryInputProps> = ({
           </div> */}
         </div>
 
-        {/* <div className="flex items-center gap-2 text-xs text-gray-400">
-          <div className="flex items-center gap-1 px-2 py-1 bg-gray-800/50 border border-gray-700/50 rounded-full">
-            <Image src="/assets/coin.webp" alt="AI Icon" width={22} height={22} className="w-3.5 h-3.5" />
-            <span>2 credits</span>
-          </div>
-        </div> */}
+        <CreditsBadge />
       </div>
     </div>
   )

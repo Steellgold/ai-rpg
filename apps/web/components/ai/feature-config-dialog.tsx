@@ -8,7 +8,7 @@ import { Alert, AlertTitle, AlertDescription } from "@workspace/ui/components/al
 import { Button } from "@workspace/ui/components/button"
 import { Badge } from "@workspace/ui/components/badge"
 import { Separator } from "@workspace/ui/components/separator"
-import { AlertTriangle, RotateCcw, Power, Save, X } from "lucide-react"
+import { AlertTriangle, RotateCcw, Power, Save } from "lucide-react"
 import { cn } from "@workspace/ui/lib/utils"
 import { ConfigRenderer } from "./config-renderer"
 import type { ConfigValue } from "@/types/story-config"
