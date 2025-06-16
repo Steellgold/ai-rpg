@@ -8,13 +8,13 @@ import { Alert, AlertTitle, AlertDescription } from "@workspace/ui/components/al
 import { Button } from "@workspace/ui/components/button"
 import { Badge } from "@workspace/ui/components/badge"
 import { Separator } from "@workspace/ui/components/separator"
-import { AlertTriangle, RotateCcw, Power, Save } from "lucide-react"
+import { AlertTriangle, RotateCcw, Power, Save, CircleHelp } from "lucide-react"
 import { cn } from "@workspace/ui/lib/utils"
 import { ConfigRenderer } from "./config-renderer"
 import type { ConfigValue } from "@/types/story-config"
 import { useStoryContext } from "@/contexts/story-context"
 import { useTranslations } from "next-intl"
-import { getColorStyles, getFeatureIconStyles } from "@/lib/colors"
+import { colorClassMap } from "@/lib/colors"
 
 type DialogState = "closed" | "confirming" | "configuring"
 
@@ -110,7 +110,7 @@ export const FeatureConfigDialog = ({ featureId, children }: FeatureConfigDialog
           <DialogHeader className="pb-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className={getFeatureIconStyles(feature.color)}>
+                <div className={colorClassMap[feature.color].iconContainer}>
                   <FeatureIcon size={20} />
                 </div>
                 <div>
@@ -144,15 +144,15 @@ export const FeatureConfigDialog = ({ featureId, children }: FeatureConfigDialog
           <div className="flex-1 overflow-y-auto pr-2 max-h-[60vh]">
             {dialogState === "confirming" && (
               <div className="space-y-6">
-                <Alert className={getColorStyles(feature.color).container}>
-                  <AlertTriangle size={20} className={getColorStyles(feature.color).icon} />
+                <Alert className={colorClassMap[feature.color].container}>
+                  <CircleHelp />
                   <AlertTitle>{t("activate.title")}</AlertTitle>
-                  <AlertDescription className={getColorStyles(feature.color).text}>
+                  <AlertDescription className={colorClassMap[feature.color].text}>
                     {t("activate.description")}
                   </AlertDescription>
 
                   <div className="mt-3">
-                    <Badge className={getColorStyles(feature.color).badge}>
+                    <Badge className={colorClassMap[feature.color].badge}>
                       {t("base_cost", { cost: baseCost })}
                     </Badge>
                   </div>
@@ -165,9 +165,8 @@ export const FeatureConfigDialog = ({ featureId, children }: FeatureConfigDialog
 
                   <Button
                     size="sm"
-                    variant="secondary"
                     onClick={handleConfirmActivation}
-                    className={getColorStyles(feature.color).container}
+                    className={colorClassMap[feature.color].button}
                   >
                     {t("activate.button")}
                   </Button>
@@ -225,9 +224,8 @@ export const FeatureConfigDialog = ({ featureId, children }: FeatureConfigDialog
                     </Button>
 
                     <Button
-                      variant="secondary"
                       onClick={handleSave}
-                      className={getColorStyles(feature.color).container}
+                      className={colorClassMap[feature.color].button}
                       size="sm"
                       disabled={
                         JSON.stringify(tempConfig)

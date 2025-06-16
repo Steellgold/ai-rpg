@@ -1,7 +1,7 @@
 import { cn } from "@workspace/ui/lib/utils";
 import { Button } from "@workspace/ui/components/button";
 import { ShineBorder } from "@workspace/ui/components/shine-border";
-import { getFeatureButtonStyles, getFeatureIconColor } from "@/lib/colors";
+import { colorClassMap } from "@/lib/colors";
 import { Component } from "@workspace/ui/types/component";
 import { LucideIcon } from "lucide-react";
 import { COLOR } from "@/types/color";
@@ -23,7 +23,7 @@ export const FeatureButton: Component<FeatureButtonProps> = ({ colors, active, l
       size="ycon"
       className={cn(
         "relative overflow-hidden group transition-all duration-200 cursor-pointer",
-        getFeatureButtonStyles(color as any, active),
+        active && colorClassMap[color].container,
         locked && "cursor-not-allowed opacity-50"
       )}
       disabled={locked}
@@ -39,9 +39,9 @@ export const FeatureButton: Component<FeatureButtonProps> = ({ colors, active, l
         />
       )}
 
-      <Icon size={16} className={cn(
-        getFeatureIconColor(color, active)
-      )} />
+      <Icon size={16} className={cn(colorClassMap[color].icon, {
+        "text-gray-200": !active
+      })} />
     </Button>
   )
 }

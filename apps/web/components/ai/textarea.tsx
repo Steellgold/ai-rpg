@@ -174,6 +174,7 @@ export const AiTextarea = () => {
                       icon={feature.icon}
                       active={isFeatureEnabled(feature.id)}
                       color={feature.color}
+                      locked={false}
                     />
                   </FeatureConfigDialog>
                 ))}
