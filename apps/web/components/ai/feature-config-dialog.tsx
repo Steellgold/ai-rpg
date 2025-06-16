@@ -91,7 +91,7 @@ export const FeatureConfigDialog = ({ featureId, children }: FeatureConfigDialog
   return (
     <>
       {/* Why <DialogTrigger /> does not work, so we use a div with onClick */}
-      <div onClick={handleChildClick} className="cursor-pointer">
+      <div onClick={handleChildClick}>
         {children}
       </div>
 
