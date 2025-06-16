@@ -22,7 +22,7 @@ export const FeatureButton: Component<FeatureButtonProps> = ({ colors, active, l
       variant={active ? "default" : "outline"}
       size="ycon"
       className={cn(
-        "relative overflow-hidden group transition-all duration-200 cursor-pointer",
+        "relative overflow-hidden group transition-all duration-200 cursor-pointer hover:bg-transparent",
         active && colorClassMap[color].container,
         locked && "cursor-not-allowed opacity-50"
       )}
