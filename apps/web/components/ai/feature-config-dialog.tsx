@@ -122,7 +122,8 @@ export const FeatureConfigDialog = ({ featureId, children }: FeatureConfigDialog
                 "bg-green-500/20 text-green-400 border-green-500/30": isEnabled,
                 "bg-gray-500/20 text-gray-400 border-gray-500/30": !isEnabled
               },
-                "rounded-lg text-xs gap-1 pr-0.5"
+                "rounded-lg text-xs gap-1",
+                { "pr-0.5": isEnabled }
               )}>
                 {isEnabled ? t("enabled") : t("disabled")}
 
