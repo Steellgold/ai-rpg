@@ -281,7 +281,11 @@ export const ConfigRenderer = ({ schema, values, onChange, path = "", level = 0 
     if (configSchema.type === "checkbox") {
       return (
         <div key={key} className="space-y-2">
-          {renderInput()}
+          <div className="flex items-center">
+            {renderInput()}
+            {getCost() > 0 && <BadgeBonusCredit nbr={getCost()} />}
+          </div>
+
           {configSchema.description && <p className="text-xs text-gray-500">{configSchema.description}</p>}
           {renderConditionalConfig()}
         </div>

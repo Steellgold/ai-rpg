@@ -1,5 +1,7 @@
 import type { z } from "zod"
 import type React from "react"
+import { LucideIcon, LucideProps } from "lucide-react"
+import { COLOR } from "./color"
 
 export type ConfigType =
   | "text"
@@ -31,9 +33,9 @@ export type ConfigSchema<T extends ConfigType = ConfigType> = {
   type: T
   label: string
   description?: string
-  icon?: React.ComponentType<any>
-  cost?: number | ((value: any, config?: any) => number)
-  default?: any
+  icon?: React.ComponentType<LucideProps>
+  cost?: number | ((value: ConfigValue, config?: Record<string, ConfigValue>) => number)
+  default?: ConfigValue
 
   htmlProps?: HTMLPropsForType<T>
   config?: { [key: string]: ConfigSchema }
@@ -56,11 +58,15 @@ export type ConfigSchema<T extends ConfigType = ConfigType> = {
 }
 
 export type FeatureSchema = {
+  id: string
   label: string
   description: string
-  icon: React.ComponentType<any>
+  icon: LucideIcon
+  color: COLOR
   baseCost: number
-  config?: { [key: string]: ConfigSchema }
+  config?: {
+    [key: string]: ConfigSchema
+  }
 }
 
 export type ConfigValue = string | number | boolean | ConfigValue[] | { [key: string]: ConfigValue }
