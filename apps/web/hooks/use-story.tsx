@@ -1,50 +1,52 @@
 "use client"
 
 import { useState, useCallback, useMemo } from "react"
-import { ImageIcon } from "lucide-react"
+import { ImagesIcon, UsersIcon } from "lucide-react"
 import type { FeatureSchema, ConfigSchema, StoryConfig, ConfigValue } from "@/types/story-config"
 
-const FEATURES_SCHEMA: { [key: string]: FeatureSchema } = {
+export const FEATURES_SCHEMA: {
+  [key: string]: FeatureSchema
+} = {
   images: {
-    label: "Images",
-    description: "Generate images to illustrate your story",
-    icon: ImageIcon,
-    baseCost: 2,
+    id: "images",
+    label: "Scenes Images",
+    description: "Generate scenes images to illustrate your story",
+    icon: ImagesIcon,
+    baseCost: 1,
+    color: "rose",
     config: {
       quality: {
         type: "select",
         label: "Image Quality",
-        default: "standard",
+        default: "low",
         options: [
-          { value: "standard", label: "Standard", cost: 0 },
-          { value: "hd", label: "High Definition", cost: 1 },
-          { value: "ultra", label: "Ultra HD", cost: 3 },
+          { value: "low", label: "Low Quality", cost: 0 },
+          { value: "medium", label: "Medium Quality", cost: 1 },
+          { value: "high", label: "High Quality", cost: 2 },
         ],
-      },
-      count: {
-        type: "number",
-        label: "Number of Images",
-        default: 1,
-        cost: (value: number) => Math.max(0, (value - 1) * 0.5),
-        htmlProps: {
-          min: 1,
-          max: 10,
-          step: 1,
-        },
       },
       style: {
         type: "select",
         label: "Artistic Style",
         default: "realistic",
         options: [
-          { value: "realistic", label: "Realistic", cost: 0 },
-          { value: "cartoon", label: "Cartoon", cost: 0 },
-          { value: "anime", label: "Anime", cost: 1 },
-          { value: "oil_painting", label: "Oil Painting", cost: 2 },
+          { value: "auto", label: "Automatic", description: "Let the AI choose the style based on the scene and the story" },
+          { value: "realistic", label: "Realistic" },
+          { value: "cartoon", label: "Cartoon" },
+          { value: "anime", label: "Anime" },
+          { value: "oil_painting", label: "Oil Painting" },
         ],
       }
     },
-  }
+  },
+  // characters: {
+  //   id: "characters",
+  //   label: "Characters",
+  //   description: "Generate characters to illustrate your story",
+  //   icon: UsersIcon,
+  //   baseCost: 1,
+  //   color: "orange"
+  // }
 }
 
 export const useStory = () => {
@@ -117,7 +119,7 @@ export const useStory = () => {
           const value = configValues[key]
 
           if (typeof schema.cost === "function") {
-            cost += schema.cost(value, configValues)
+            cost += schema.cost(value as ConfigValue, configValues)
           } else if (typeof schema.cost === "number") {
             cost += schema.cost
           }
