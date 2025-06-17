@@ -58,6 +58,7 @@ export type ConfigSchema<T extends ConfigType = ConfigType> = {
 
   conditional?: {
     key: string
+    value: string | string[]
     config: { [key: string]: ConfigSchema }
   }
 }

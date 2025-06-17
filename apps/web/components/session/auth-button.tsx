@@ -1,6 +1,6 @@
 "use client";
 
-import { Loader2, LogOut, User } from "lucide-react";
+import { Loader2, LogOut } from "lucide-react";
 import { redirect } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { FaDiscord } from "react-icons/fa";

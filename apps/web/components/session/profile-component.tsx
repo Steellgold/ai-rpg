@@ -91,9 +91,7 @@ export const ProfileComponent: Component<ProfileComponentProps> = ({
 
         <DropdownMenuSeparator />
 
-        <DropdownMenuItem className="p-0 cursor-pointer" onSelect={(e) => {
-          toggle("levitate");
-        }}>
+        <DropdownMenuItem className="p-0 cursor-pointer" onSelect={() => toggle("levitate")}>
           <div className="flex items-center justify-between w-full px-2 py-1.5">
             <div className="flex items-center gap-2">
               <Wind size={16} />
