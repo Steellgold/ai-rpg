@@ -59,9 +59,30 @@ export const FEATURES_SCHEMA: {
         default: "auto",
         options: [
           { value: "auto", label: "Automatic", description: "Let the AI generate all characters" },
-          { value: "manual", label: "Manual", description: "Create characters yourself" },
-          { value: "hybrid", label: "Hybrid", description: "Create some characters and let AI generate others" },
+          { value: "manual", label: "Manual", description: "Create characters yourself" }
         ],
+        conditional: {
+          key: "generation_mode",
+          value: "manual",
+          config: {
+            character_creation: {
+              type: "array",
+              label: "",
+              itemConfig: {
+                name: {
+                  type: "text",
+                  label: "Character Name",
+                  default: "",
+                },
+                description: {
+                  type: "textarea",
+                  label: "Character Description",
+                  default: "",
+                }
+              }
+            }
+          }
+        }
       },
       avatars: {
         type: "checkbox",
@@ -69,11 +90,12 @@ export const FEATURES_SCHEMA: {
         default: true,
         conditional: {
           key: "avatars",
+          value: "true",
           config: {
             style: {
               type: "select",
               label: "Avatar Style",
-              default: "realistic",
+              default: "auto",
               options: [
                 { value: "auto", label: "Automatic", description: "Let the AI choose the style based on the character and the story" },
                 ...STYLE_OPTIONS,
@@ -95,18 +117,10 @@ export const FEATURES_SCHEMA: {
 }
 
 export const useStory = () => {
-  const [config, setConfig] = useState<StoryConfig>(() => {
-    const initialConfig: StoryConfig = {}
-    Object.keys(FEATURES_SCHEMA).forEach((featureId) => {
-      initialConfig[featureId] = {
-        enabled: false,
-        config: getDefaultConfig(FEATURES_SCHEMA[featureId]?.config || {}),
-      }
-    })
-    return initialConfig
-  })
-
-  function getDefaultConfig(schema: { [key: string]: ConfigSchema }): { [key: string]: ConfigValue } {
+  const getDefaultConfig = useCallback((
+    schema: { [key: string]: ConfigSchema },
+    currentValues: { [key: string]: ConfigValue } = {}
+  ): { [key: string]: ConfigValue } => {
     const defaultConfig: { [key: string]: ConfigValue } = {}
 
     Object.entries(schema).forEach(([key, configSchema]) => {
@@ -137,21 +151,37 @@ export const useStory = () => {
             defaultConfig[key] = []
             break
           case "group":
-            defaultConfig[key] = getDefaultConfig(configSchema.config || {})
+            defaultConfig[key] = getDefaultConfig(configSchema.config || {}, currentValues)
             break
         }
       }
 
       if (configSchema.conditional) {
-        const condDefault = (configSchema as any).default ?? false;
-        if (condDefault === true) {
-          defaultConfig[`${key}_config`] = getDefaultConfig(configSchema.conditional.config);
+        const { key: conditionalKey, value: conditionalValue } = configSchema.conditional;
+        const currentValue = currentValues[conditionalKey];
+        const isEnabled = Array.isArray(conditionalValue)
+          ? conditionalValue.includes(String(currentValue))
+          : String(currentValue) === conditionalValue;
+
+        if (isEnabled) {
+          defaultConfig[`${key}_config`] = getDefaultConfig(configSchema.conditional.config, currentValues);
         }
       }
     })
 
     return defaultConfig
-  }
+  }, [])
+
+  const [config, setConfig] = useState<StoryConfig>(() => {
+    const initialConfig: StoryConfig = {}
+    Object.keys(FEATURES_SCHEMA).forEach((featureId) => {
+      initialConfig[featureId] = {
+        enabled: false,
+        config: getDefaultConfig(FEATURES_SCHEMA[featureId]?.config || {}),
+      }
+    })
+    return initialConfig
+  })
 
   const calculateFeatureCost = useCallback(
     (featureId: string): number => {
@@ -221,7 +251,7 @@ export const useStory = () => {
     return Object.keys(FEATURES_SCHEMA).reduce((total, featureId) => {
       return total + calculateFeatureCost(featureId)
     }, 0)
-  }, [config, calculateFeatureCost])
+  }, [calculateFeatureCost])
 
   const toggleFeature = useCallback((featureId: string) => {
     setConfig((prev) => {
@@ -237,7 +267,7 @@ export const useStory = () => {
         },
       }
     })
-  }, [])
+  }, [getDefaultConfig])
 
   const updateFeatureConfig = useCallback((featureId: string, newConfig: { [key: string]: ConfigValue }) => {
     setConfig((prev) => {
@@ -264,7 +294,7 @@ export const useStory = () => {
         },
       }))
     }
-  }, [])
+  }, [getDefaultConfig])
 
   const updateConfigAtPath = useCallback((featureId: string, path: string, value: ConfigValue) => {
     setConfig((prev) => {
@@ -273,12 +303,18 @@ export const useStory = () => {
 
       const keys = path.split(".");
       
-      let current: any = newConfig[featureId].config
+      let current: { [key: string]: ConfigValue } = newConfig[featureId].config
 
       for (let i = 0; i < keys.length - 1; i++) {
         const key = keys[i] as string
-        if (!current[key]) current[key] = {}
-        current = current[key]
+        if (
+          !current[key] ||
+          typeof current[key] !== "object" ||
+          Array.isArray(current[key])
+        ) {
+          current[key] = {};
+        }
+        current = current[key] as { [key: string]: ConfigValue };
       }
 
       const lastKey = keys[keys.length - 1] as string
@@ -290,7 +326,7 @@ export const useStory = () => {
 
   const generate = useCallback(() => {
     const activeFeatures = Object.entries(config)
-      .filter(([_, featureConfig]) => featureConfig.enabled)
+      .filter(([, featureConfig]) => featureConfig.enabled)
       .reduce(
         (acc, [featureId, featureConfig]) => {
           acc[featureId] = featureConfig.config
