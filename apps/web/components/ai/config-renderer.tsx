@@ -1,7 +1,7 @@
 "use client"
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@workspace/ui/components/select"
-import { useId, useState } from "react"
+import { useState } from "react"
 import { Plus, Trash2, ChevronDown, ChevronRight } from "lucide-react"
 import type { ConfigSchema, ConfigValue } from "@/types/story-config"
 import { Textarea } from "@workspace/ui/components/textarea"
@@ -147,7 +147,7 @@ export const ConfigRenderer = ({ schema, values, onChange, path = "", level = 0 
           return (
             <div className="space-y-3">
               {arrayValue.map((item, index) => (
-                <Card key={index} className="p-3 bg-gray-800/30 border-gray-700/50">
+                <Card key={index} className="p-3">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm font-medium text-gray-300">
                       {t("element")}
@@ -216,6 +216,22 @@ export const ConfigRenderer = ({ schema, values, onChange, path = "", level = 0 
         }
 
         case "group":
+          if (!configSchema.label) {
+            return (
+              <div className="space-y-4">
+                <ConfigRenderer
+                  schema={configSchema.config || {}}
+                  values={(value as Record<string, ConfigValue>) || {}}
+                  onChange={(subKey: string, subValue: ConfigValue) => {
+                    const currentValue = (value as Record<string, ConfigValue>) || {}
+                    onChange(key, { ...currentValue, [subKey]: subValue })
+                  }}
+                  path={fullPath}
+                  level={level + 1}
+                />
+              </div>
+            )
+          }
           return (
             <div className="space-y-3">
               <Button
@@ -284,20 +300,24 @@ export const ConfigRenderer = ({ schema, values, onChange, path = "", level = 0 
       }
 
       if (configSchema.conditional) {
-        const { key: conditionalKey, config: conditionalConfig } = configSchema.conditional
-        const isEnabled = values[conditionalKey] === true
+        const { key: conditionalKey, value: conditionalValue, config: conditionalConfig } = configSchema.conditional
+        const currentValue = values[conditionalKey]
+        const isEnabled = Array.isArray(conditionalValue) 
+          ? conditionalValue.includes(String(currentValue))
+          : String(currentValue) === conditionalValue
 
         if (isEnabled) {
-          const conditionalValue = (values[`${key}_config`] as Record<string, ConfigValue>) || {}
+          const defaultConfig = getDefaultConfig(conditionalConfig);
+          const configValue = { ...defaultConfig, ...(values[`${key}_config`] as Record<string, ConfigValue> || {}) }
 
           return (
-            <div className="mt-3 ml-4 pl-4 border-l-2 border-indigo-500/30 space-y-3">
+            <div className="mt-3 ml-4 pl-2 border-l-2 border-indigo-500/30 space-y-3">
               <ConfigRenderer
                 schema={conditionalConfig}
-                values={conditionalValue}
+                values={configValue}
                 onChange={(subKey: string, subValue: ConfigValue) => {
                   onChange(`${key}_config`, {
-                    ...conditionalValue,
+                    ...configValue,
                     [subKey]: subValue
                   })
                 }}
@@ -367,4 +387,42 @@ export const ConfigRenderer = ({ schema, values, onChange, path = "", level = 0 
       )}
     </div>
   )
+}
+
+function getDefaultConfig(schema: { [key: string]: ConfigSchema }): { [key: string]: ConfigValue } {
+  const defaultConfig: { [key: string]: ConfigValue } = {};
+  Object.entries(schema).forEach(([key, configSchema]) => {
+    if (configSchema.default !== undefined) {
+      defaultConfig[key] = configSchema.default;
+    } else {
+      switch (configSchema.type) {
+        case "text":
+        case "textarea":
+        case "email":
+        case "password":
+        case "url":
+        case "tel":
+          defaultConfig[key] = "";
+          break;
+        case "number":
+        case "range":
+          defaultConfig[key] = (configSchema.htmlProps as React.InputHTMLAttributes<HTMLInputElement>)?.min || 0;
+          break;
+        case "checkbox":
+          defaultConfig[key] = false;
+          break;
+        case "select":
+        case "radio":
+          defaultConfig[key] = configSchema.options?.[0]?.value || "";
+          break;
+        case "array":
+          defaultConfig[key] = [];
+          break;
+        case "group":
+          defaultConfig[key] = getDefaultConfig(configSchema.config || {});
+          break;
+      }
+    }
+  });
+  return defaultConfig;
 }
