@@ -1,0 +1,18 @@
+{
+  "Navbar": {
+    "Stories": {
+      "label": "Stories"
+    },
+    "Session": {
+      "in": "Sign in with {provider}",
+      "out": "Sign Out",
+      "credits": "{nbr} credits"
+    },
+    "Preferences": {
+      "levitate": "Levitation",
+
+      "enabled": "On",
+      "disabled": "Off"
+    }
+  }
+}

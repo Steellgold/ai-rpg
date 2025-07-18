@@ -1,0 +1,36 @@
+{
+  "Home": {
+    "Top": {
+      "title": "Imagine your story",
+      "subtitle": "Where your choices shape the adventure, and every decision counts"
+    }
+  },
+  "Proccessing": {
+    "Top": {
+      "title": "Story processing",
+      "subtitle": "Your story is being processed, please wait a moment"
+    },
+
+    "States": {
+      "initialized": "Initialized the story",
+      "detecting_language": "Detecting language",
+      "generating_story": "Generating story",
+      "creating_story": "Creating story",
+      "creating_main_chars": "Creating main characters",
+      "creating_sec_chars": "Creating secondary characters",
+      "creating_first_scene": "Creating first scene",
+      "generating_items": "Generating items",
+      "generating_banner": "Generating banner",
+      "uploading_banner": "Uploading banner",
+      "generating_scene_img": "Generating scene image",
+      "uploading_scene_img": "Uploading scene image",
+      "finalizing": "Finalizing the story",
+      "ready": "Your story is ready!",
+      "error": "An error occurred while processing your story, please try again later"
+    },
+
+    "Messages": {
+      "leave": "You can leave this page and come back later to see the progress of your story."
+    }
+  }
+}

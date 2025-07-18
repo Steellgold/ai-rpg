@@ -1,56 +1,31 @@
-# Chronicles of Destiny: Interactive Storytelling Platform 📚
+# shadcn/ui monorepo template
 
-This interactive storytelling platform enables players to create and play through AI-generated narrative adventures ✨. The application leverages modern web technologies to provide an immersive experience where players' choices influence the direction and outcome of their unique stories 🛤️.
+This template is for creating a monorepo with shadcn/ui.
 
-[Demo video](https://www.youtube.com/watch?v=LS3gtutZYnU) - [Website URL (plz no spam :joy:)](https://ai-rpg.steellgold.fr)
+## Usage
 
-## Tech Stack 🛠️
+```bash
+pnpm dlx shadcn@latest init
+```
 
-### Frontend 💻
-- Next.js 15 - React framework with App Router 🔄
-- React 19 - JavaScript library for building user interfaces ⚛️
-- TypeScript - Static type checking 📝
-- Tailwind CSS 4 - Utility-first CSS framework 🎨
-- shadcn/ui - Reusable UI components built with Radix UI 🧩
-- next-intl - Internationalization for Next.js (English and French support) 🌍
-- Lucide React - Icon library 🔣
+## Adding components
 
-### Backend 🏗️
-- Supabase ⚡
-  - Authentication (Discord OAuth) 🔐
-  - Storage (for image hosting) 🖼️
-  - Database 💾
-  - Edge Functions for AI stories generations 🚀
-- Prisma and Supabase JS SDK 🔌
-- Next.js Server Actions - For handling server-side logic 🖥️
+To add components to your app, run the following command at the root of your `web` app:
 
-### AI Features 🤖
-- OpenAI API 🧠
-  - DALL-E 3 - For generating scene images and story covers 🎭
-- AI SDK - Interface for AI-assisted content creation with schemas 📋
-  - OpenAI integration 🔄
+```bash
+pnpm dlx shadcn@latest add button -c apps/web
+```
 
-### Environment & Configuration ⚙️
-- Server-only enforced environment variables 🔒
-- zod - Runtime validation of environment variables and data ✅
+This will place the ui components in the `packages/ui/src/components` directory.
 
-## Key Features 🔑
+## Tailwind
 
-- Interactive Storytelling: Dynamic narrative progression based on player choices 📖
-- AI-Generated Content: Stories, scenes, and images created using AI 🎨
-- Genre Selection: Players can select from multiple genres 📚
-- Dice Rolling: Random elements affecting story outcomes 🎲
-- Multilingual Support: English and French interfaces 🌐
-- Visual Theming: Dynamic theming with dark/light mode and visual effects 🌓
-- Progress Tracking: Save and continue stories at any point 💾
+Your `tailwind.config.ts` and `globals.css` are already set up to use the components from the `ui` package.
 
-## Authentication 🔐
-- The application uses Supabase Authentication with Discord OAuth for user login and session management, with custom middleware for session validation and user creation 👤
+## Using components
 
-## Internationalization 🌍
-- The application supports English and French languages using next-intl, with locale detection from browser preferences and persistent language selection 🗣️
+To use the components in your app, import them from the `ui` package.
 
-## Deployment 🚀
-- Vercel ▲
-
-Chronicles of Destiny © 2025 by Gaëtan Huszovits is licensed under [![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
+```tsx
+import { Button } from "@workspace/ui/components/button"
+```

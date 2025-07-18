@@ -1,0 +1,13 @@
+{
+  "Errors": {
+    "generic": "An error occurred. Please try again later.",
+    "not_found": "The requested resource was not found.",
+    "unauthorized": "You are not authorized to perform this action.",
+    "forbidden": "Access to this resource is forbidden.",
+    "server_error": "An internal server error occurred. Please try again later.",
+    "validation_error": "There were validation errors with your request.",
+    "signout_failed": "Sign out failed. Please try again.",
+    "network_error": "A network error occurred. Please check your connection and try again.",
+    "timeout_error": "The request timed out. Please try again later."
+  }
+}

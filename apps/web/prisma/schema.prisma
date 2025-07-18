@@ -1,0 +1,118 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id
+  name          String
+  email         String
+  emailVerified Boolean
+  image         String?
+  // 
+  sessions      Session[]
+  accounts      Account[]
+  // 
+  credits       Int       @default(5)
+  jobs          Job[]
+  // 
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @default(now())
+
+  @@unique([email])
+  @@map("user")
+}
+
+enum JobStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+}
+
+enum JobStage {
+  INITIALIZED
+  DETECTING_LANGUAGE
+  GENERATING_STORY
+  CREATING_STORY
+  CREATING_MAIN_CHARS
+  CREATING_SEC_CHARS
+  CREATING_FIRST_SCENE
+  GENERATING_ITEMS
+  GENERATING_BANNER
+  UPLOADING_BANNER
+  GENERATING_SCENE_IMG
+  UPLOADING_SCENE_IMG
+  FINALIZING
+}
+
+model Job {
+  id        String     @id
+  // 
+  userId    String
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // 
+  status    JobStatus  @default(PENDING)
+  stage     JobStage   @default(INITIALIZED)
+  stages    JobStage[] @default([]) // Stages history
+  error     String?
+  input     Json?
+  // 
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  @@map("job")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime
+  updatedAt DateTime
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime
+  updatedAt             DateTime
+
+  @@map("account")
+}
+
+model Verification {
+  id         String    @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime?
+  updatedAt  DateTime?
+
+  @@map("verification")
+}
